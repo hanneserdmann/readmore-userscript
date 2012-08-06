@@ -133,6 +133,7 @@ middleColumn = {
 			finishedPages : 0,
 			oldLimit : 0,
 			markPostColor : '#EEEEEE',
+			markPostColorRgb : 'rgb(238, 238, 238)',
 			unseenPosts : new Array(),
 		       
 			// Anzhal der aktuellen Posts ermitteln
@@ -151,18 +152,20 @@ middleColumn = {
 					contentType: 'text/html; charset=iso-8859-1;', 					
 					dataType: 'html',
 					success: function(data){
-						var posts = data.match(/\<tr class=\"post\_[^"]+\"\>[^]+?\<\/tr\>/g);
-						var footer = data.match(/\<tr class=\"cellheadercolor footer\_[^"]+\"\>[^]+?\<\/tr\>/g);
-						var oldPosts = (25 * middleColumn.forum.reloadPosts.finishedPages);
-						var postNumber = posts.length + oldPosts;
-						for (var i = middleColumn.forum.reloadPosts.postcount; i < postNumber; i++){
-							$('table.elf.forum.p2.bogray2').append(posts[i-oldPosts]);
-							$('table.elf.forum.p2.bogray2').append(footer[i-oldPosts]);
-							
-							middleColumn.forum.reloadPosts.unseenPosts.push(parseInt($('[class^=post_]:last').offset().top));
-							middleColumn.forum.reloadPosts.postcount++;
-							middleColumn.forum.reloadPosts.oldLimit = window.pageYOffset + (window.innerHeight * 0.75);
-						}						
+						var posts = data.match(/\<tr class=\"post\_[^"]+\"\>[^]+?\<\/tr\>/g);	
+						if (posts != null){
+							var footer = data.match(/\<tr class=\"cellheadercolor footer\_[^"]+\"\>[^]+?\<\/tr\>/g);
+							var oldPosts = (25 * middleColumn.forum.reloadPosts.finishedPages);						
+							var postNumber = posts.length + oldPosts;
+							for (var i = middleColumn.forum.reloadPosts.postcount; i < postNumber; i++){							
+								$('table.elf.forum.p2.bogray2').append(posts[i-oldPosts]);
+								$('table.elf.forum.p2.bogray2').append(footer[i-oldPosts]);
+
+								middleColumn.forum.reloadPosts.unseenPosts.push(parseInt($('[class^=post_]:last').offset().top));
+								middleColumn.forum.reloadPosts.postcount++;
+								middleColumn.forum.reloadPosts.oldLimit = window.pageYOffset + (window.innerHeight * 0.70);
+							}	
+						}
 					}
 				});
 								
@@ -171,9 +174,10 @@ middleColumn = {
 			
 			// Neue Posts markieren
 			markNewPosts : function(){
-				var numberOfNewPosts = middleColumn.forum.reloadPosts.unseenPosts.length;
-				
+				var numberOfNewPosts = middleColumn.forum.reloadPosts.unseenPosts.length;				
+								
 				for(var i = 1; i <= numberOfNewPosts; i++){
+					if ($.trim(($('[class^=post_]:eq(' + (middleColumn.forum.reloadPosts.postcount - i) + ')').css('background-color'))) == middleColumn.forum.reloadPosts.markPostColorRgb) break;					
 					$('[class^=post_]:eq(' + (middleColumn.forum.reloadPosts.postcount - i) + ')').css('background-color', middleColumn.forum.reloadPosts.markPostColor);
 				}
 				
@@ -209,6 +213,7 @@ middleColumn = {
 			
 			setMarkPostColor : function(){
 				middleColumn.forum.reloadPosts.markPostColor = options.options.middleColumn_forum_reloadPosts_markPostColor;
+				middleColumn.forum.reloadPosts.markPostColorRgb = "rgb(" + parseInt(middleColumn.forum.reloadPosts.markPostColor.substr(1, 2), 16).toString() + ", " + parseInt(middleColumn.forum.reloadPosts.markPostColor.substr(3, 2), 16).toString() + ", " + parseInt(middleColumn.forum.reloadPosts.markPostColor.substr(5, 2), 16).toString() + ")";
 				return false;
 			},
 			
@@ -614,7 +619,7 @@ if (section == 'forum'){
 		if (options.options.middleColumn_forum_reloadPosts_waitUntilReload.length > 0) middleColumn.forum.reloadPosts.setWaitUntilReload();	
 		if (options.options.middleColumn_forum_reloadPosts_markNewPosts == 'checked'){
 			if (options.options.middleColumn_forum_reloadPosts_markPostColor.length > 0) middleColumn.forum.reloadPosts.setMarkPostColor();
-			setInterval(function(){middleColumn.forum.reloadPosts.markNewPosts();}, 1000);
+			setInterval(function(){middleColumn.forum.reloadPosts.markNewPosts();}, 333);
 		}
 		
 		if (options.options.middleColumn_forum_reloadPosts_endlessPage == 'checked'){
