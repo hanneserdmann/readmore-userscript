@@ -119,7 +119,121 @@
 				<td align="left">Sonstiges ausblenden</td>
 				<td align="right"><input type="checkbox" style="padding:0px; margin:0px;" class="userscriptOptions" name="rightColumn_headlines_hideSonstiges" /></td>
 				<td align="right"><img src="http://thextor.de/readmore-userscript-v2/img/magnifying_glass_16x16.png" alt="info" title="Blendet die Sonstigen Schlagzeilen aus." /></td>
+			</tr>
+			<tr style="margin:0px; padding:0px; background-color:#fff">
+				<td align="left"><img onclick="$(\'.sub_rightColumn_forum_hideForum\').toggle();" src="http://thextor.de/readmore-userscript-v2/img/plus_alt_16x16.png" alt="more" title="Weitere Optionen" /></td>
+				<td align="left">Forum ausblenden und umsortieren</td>
+				<td align="right"></td>
+				<td align="right"><img src="http://thextor.de/readmore-userscript-v2/img/magnifying_glass_16x16.png" alt="info" title="Das Forum ausblenden oder umsortieren." /></td>
 			</tr>	
+			<tr style="display:none; margin:0px; padding:0px; background-color:#eee" class="sub_rightColumn_forum_hideForum">
+				<td align="left"></td>
+				<td align="left">Komplett ausblenden</td>
+				<td align="right"><input type="checkbox" style="padding:0px; margin:0px;" class="userscriptOptions" name="rightColumn_forum_hideForum" /></td>
+				<td align="right"><img src="http://thextor.de/readmore-userscript-v2/img/magnifying_glass_16x16.png" alt="info" title="Das komplette Forum ausblenden." /></td>
+			</tr>
+			<tr style="display:none; margin:0px; padding:0px; background-color:#eee" class="sub_rightColumn_forum_hideForum">
+				<td align="left"><img onclick="$(\'.sub_rightColumn_forum_sections\').toggle();" src="http://thextor.de/readmore-userscript-v2/img/plus_alt_16x16.png" alt="more" title="Weitere Optionen" /></td>
+				<td align="left">Foren umsortieren</td>
+				<td align="right"><input type="checkbox" style="padding:0px; margin:0px;" class="userscriptOptions" name="rightColumn_forum_sections" /></td>
+				<td align="right"><img src="http://thextor.de/readmore-userscript-v2/img/magnifying_glass_16x16.png" alt="info" title="Ermöglicht das Umsortieren des Forums." /></td>
+			</tr>
+			<tr style="display:none; margin:0px; padding:0px; background-color:#ddd" class="sub_rightColumn_forum_sections">
+				<td align="left"></td>
+				<td align="left">An erster Stelle</td>
+				<td align="right">
+					<select size="1" class="userscriptOptions" name="rightColumn_forum_hideForum_0" style="padding:0px; margin:0px;">
+						<option value="featuredthreads">Featured Threads</option>
+						<option value="Esportforen">eSport Foren</option>
+						<option value="technik">Technik</option>
+						<option value="offtopicforen">Offtopic Foren</option>
+						<option value="spiele">Spiele</option>
+						<option value="diablo">Diablo 3</option>
+						<option value="">Nichts anzeigen</option>
+					</select>
+				</td>
+				<td align="right"><img src="http://thextor.de/readmore-userscript-v2/img/magnifying_glass_16x16.png" alt="info" title="Erste Stelle bei der Anzeige der Foren." /></td>
+			</tr>	
+			<tr style="display:none; margin:0px; padding:0px; background-color:#ddd" class="sub_rightColumn_forum_sections">
+				<td align="left"></td>
+				<td align="left">An zweiter Stelle</td>
+				<td align="right">
+					<select size="1" class="userscriptOptions" name="rightColumn_forum_hideForum_1" style="padding:0px; margin:0px;">
+						<option value="featuredthreads">Featured Threads</option>
+						<option value="Esportforen">eSport Foren</option>
+						<option value="technik">Technik</option>
+						<option value="offtopicforen">Offtopic Foren</option>
+						<option value="spiele">Spiele</option>
+						<option value="diablo">Diablo 3</option>
+						<option value="">Nichts anzeigen</option>
+					</select>
+				</td>
+				<td align="right"><img src="http://thextor.de/readmore-userscript-v2/img/magnifying_glass_16x16.png" alt="info" title="Zweite Stelle bei der Anzeige der Foren." /></td>
+			</tr>
+			<tr style="display:none; margin:0px; padding:0px; background-color:#ddd" class="sub_rightColumn_forum_sections">
+				<td align="left"></td>
+				<td align="left">An dritter Stelle</td>
+				<td align="right">
+					<select size="1" class="userscriptOptions" name="rightColumn_forum_hideForum_2" style="padding:0px; margin:0px;">
+						<option value="featuredthreads">Featured Threads</option>
+						<option value="Esportforen">eSport Foren</option>
+						<option value="technik">Technik</option>
+						<option value="offtopicforen">Offtopic Foren</option>
+						<option value="spiele">Spiele</option>
+						<option value="diablo">Diablo 3</option>
+						<option value="">Nichts anzeigen</option>
+					</select>
+				</td>
+				<td align="right"><img src="http://thextor.de/readmore-userscript-v2/img/magnifying_glass_16x16.png" alt="info" title="Dritte Stelle bei der Anzeige der Foren." /></td>
+			</tr>
+			<tr style="display:none; margin:0px; padding:0px; background-color:#ddd" class="sub_rightColumn_forum_sections">
+				<td align="left"></td>
+				<td align="left">An vierter Stelle</td>
+				<td align="right">
+					<select size="1" class="userscriptOptions" name="rightColumn_forum_hideForum_3" style="padding:0px; margin:0px;">
+						<option value="featuredthreads">Featured Threads</option>
+						<option value="Esportforen">eSport Foren</option>
+						<option value="technik">Technik</option>
+						<option value="offtopicforen">Offtopic Foren</option>
+						<option value="spiele">Spiele</option>
+						<option value="diablo">Diablo 3</option>
+						<option value="">Nichts anzeigen</option>
+					</select>
+				</td>
+				<td align="right"><img src="http://thextor.de/readmore-userscript-v2/img/magnifying_glass_16x16.png" alt="info" title="Viere Stelle bei der Anzeige der Foren." /></td>
+			</tr>
+			<tr style="display:none; margin:0px; padding:0px; background-color:#ddd" class="sub_rightColumn_forum_sections">
+				<td align="left"></td>
+				<td align="left">An f&uuml;nfter Stelle</td>
+				<td align="right">
+					<select size="1" class="userscriptOptions" name="rightColumn_forum_hideForum_4" style="padding:0px; margin:0px;">
+						<option value="featuredthreads">Featured Threads</option>
+						<option value="Esportforen">eSport Foren</option>
+						<option value="technik">Technik</option>
+						<option value="offtopicforen">Offtopic Foren</option>
+						<option value="spiele">Spiele</option>
+						<option value="diablo">Diablo 3</option>
+						<option value="">Nichts anzeigen</option>
+					</select>
+				</td>
+				<td align="right"><img src="http://thextor.de/readmore-userscript-v2/img/magnifying_glass_16x16.png" alt="info" title="F&uuml;nfte Stelle bei der Anzeige der Foren." /></td>
+			</tr>
+			<tr style="display:none; margin:0px; padding:0px; background-color:#ddd" class="sub_rightColumn_forum_sections">
+				<td align="left"></td>
+				<td align="left">An sechster Stelle</td>
+				<td align="right">
+					<select size="1" class="userscriptOptions" name="rightColumn_forum_hideForum_5" style="padding:0px; margin:0px;">
+						<option value="featuredthreads">Featured Threads</option>
+						<option value="Esportforen">eSport Foren</option>
+						<option value="technik">Technik</option>
+						<option value="offtopicforen">Offtopic Foren</option>
+						<option value="spiele">Spiele</option>
+						<option value="diablo">Diablo 3</option>
+						<option value="">Nichts anzeigen</option>
+					</select>
+				</td>
+				<td align="right"><img src="http://thextor.de/readmore-userscript-v2/img/magnifying_glass_16x16.png" alt="info" title="Sechste Stelle bei der Anzeige der Foren." /></td>
+			</tr>
 			<tr>
 				<td colspan=4>&nbsp;</td>
 			</tr>
