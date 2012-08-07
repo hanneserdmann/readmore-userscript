@@ -412,9 +412,11 @@ middleColumn = {
 			
 			$('.center:last').css('display', 'none');
 			
-			middleColumn.forum.readThreadlink();
-			middleColumn.forum.readPage();
-			middleColumn.forum.reloadPosts.readPostcount();
+			if(middleColumn.forum.reloadPosts.postcount == 0){
+				middleColumn.forum.readThreadlink();
+				middleColumn.forum.readPage();
+				middleColumn.forum.reloadPosts.readPostcount();
+			}
 			
 			$.ajax({
 				type:'POST', 
