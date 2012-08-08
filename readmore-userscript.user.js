@@ -29,42 +29,43 @@ options = {
 		return false;
 	},
 	
+	// Speichert die Optionen im Localstorage
 	saveOptions : function(){
 		var userscriptOptions = new Object();
 		
-		$('input[type=checkbox].userscriptOptions').each(function(){
+		// Alle Checkboxen
+		$('input[type=checkbox].userscriptOptions').each(function(){	
 			var attr = $(this).attr('checked');
 			if (attr == true || attr == 'checked') userscriptOptions[$(this).attr('name')] = 'checked';		
 		});
 		
+		// Alle Textfelder
 		$('input[type=text].userscriptOptions').each(function(){
 			userscriptOptions[$(this).attr('name')] = $(this).val();			
 		});
 		
+		// Alle Selectfelder
 		$('select.userscriptOptions').each(function(){
 			userscriptOptions[$(this).attr('name')] = $(this).val();
 			console.log($(this).val());
 		});
 		
+		// Json-Speichern
 		localStorage.setItem('userscriptOptions', JSON.stringify(userscriptOptions));
 		return false;
 	},
 	
+	// Lädt die Optionen
 	loadOptions : function(){		
-		// Einstellungen zurücksetzen
-		var type = '';
-		$('#userscriptOptions input').each(function(){
-			type = $(this).attr('type');
-			if (type == 'checkbox') $(this).attr('checked', false);
-			if (type == 'text') $(this).val('');
-		});
-		
-		
-		// Einstellungen laden
+
+		var type = '';	
+
+		// Json auslesen und in Objekt umwandeln
 		var userscriptOptions = JSON.parse(localStorage.getItem('userscriptOptions'));		
 		$.each(userscriptOptions, function(index, value){
 			type = $('[name=' + index + ']').attr('type');
 			if (type == 'checkbox'){
+				// Checkboxen setzen
 				if (value == 'checked'){
 					$('[name=' + index + ']').attr('checked', true);
 					return true;
@@ -72,10 +73,12 @@ options = {
 			}
 			
 			if (type == 'text'){
+				// Textfelder füllen
 				$('[name=' + index + ']').val(value);
 				return true;
 			}
 			
+			// Selectboxen auswählen
 			if (index.match('rightColumn_forum_hideForum_') != null){
 				$('[name=' + index + ']').val(value);
 				return true;			
@@ -85,7 +88,9 @@ options = {
 		return false;
 	},
 	
+	// Optionen auslesen
 	readOptions : function(){
+		// Json auslesen und in Objekt umwandeln
 		options.options = JSON.parse(localStorage.getItem('userscriptOptions'));
 	}
 }
@@ -109,7 +114,7 @@ miscellaneous = {
 	// Sortiert den Titel um
 	reSortTitle : function(){
 		var title = $('title').text();
-		var pieces = title.split('\u00BB');
+		var pieces = title.split('\u00BB');	// Bei den Doppelpfeilen trennen
 		
 		title = pieces[2] + ' ' + '\u00BB' + pieces[1] + '\u00BB' + ' ' + pieces[0];
 		$('title').text(title);		
@@ -149,8 +154,8 @@ middleColumn = {
 			waitUntilReload : 5,
 			finishedPages : 0,
 			oldLimit : 0,
-			markPostColor : '#EEEEEE',
-			markPostColorRgb : 'rgb(238, 238, 238)',
+			markPostColor : '#EEEEEE',		// Hellgrau
+			markPostColorRgb : 'rgb(238, 238, 238)',// Hellgrau
 			unseenPosts : new Array(),
 		       
 			// Anzhal der aktuellen Posts ermitteln
@@ -178,7 +183,7 @@ middleColumn = {
 								$('table.elf.forum.p2.bogray2').append(posts[i-oldPosts]);
 								$('table.elf.forum.p2.bogray2').append(footer[i-oldPosts]);
 
-								middleColumn.forum.reloadPosts.unseenPosts.push(parseInt($('[class^=post_]:last').offset().top));
+								middleColumn.forum.reloadPosts.unseenPosts.push(parseInt($('[class^=post_]:last').offset().top));	// Zum markieren der neuen Posts
 								middleColumn.forum.reloadPosts.postcount++;
 								middleColumn.forum.reloadPosts.oldLimit = window.pageYOffset + (window.innerHeight * 0.55);
 							}	
@@ -194,20 +199,24 @@ middleColumn = {
 				var numberOfNewPosts = middleColumn.forum.reloadPosts.unseenPosts.length;				
 								
 				for(var i = 1; i <= numberOfNewPosts; i++){
+					// Überprüfen ob der Posts bereits markiert ist, wenn ja die Schleife verlassen
 					if ($.trim(($('[class^=post_]:eq(' + (middleColumn.forum.reloadPosts.postcount - i) + ')').css('background-color'))) == middleColumn.forum.reloadPosts.markPostColorRgb) break;					
 					$('[class^=post_]:eq(' + (middleColumn.forum.reloadPosts.postcount - i) + ')').css('background-color', middleColumn.forum.reloadPosts.markPostColor);
 				}
 				
+				// Demarkieren starten
 				middleColumn.forum.reloadPosts.unmarkNewPosts();
 				return false;
 			},
 			
+			// Entfernt die Markierung von (ehemals) neuen Posts
 			unmarkNewPosts : function(){
 				var i = 0;
 				var limit = window.pageYOffset + (window.innerHeight * 0.55);
 				var deleteArray = new Array();
 				
 				$(middleColumn.forum.reloadPosts.unseenPosts).each(function(index, value){
+					// Nur demarkieren, wenn wir das Limit überschritten und uns bewegt / gescrollt haben
 					if(value < limit && limit != middleColumn.forum.reloadPosts.oldLimit){
 						$('[class^=post_]:eq(' + (middleColumn.forum.reloadPosts.postcount - (middleColumn.forum.reloadPosts.unseenPosts.length) + i) + ')').css('background-color', '#FFF');
 						i++;
@@ -217,23 +226,29 @@ middleColumn = {
 				});
 				
 				$(deleteArray).each(function(index, value){
-					middleColumn.forum.reloadPosts.unseenPosts.splice (value, 1);
+					middleColumn.forum.reloadPosts.unseenPosts.splice (value, 1);	// Unmarkierte / Gelesene Posts aus dem Array entfernen
 				});
 				
 				return false;
 			},
 			
+			// Setzt die Zeit zwischen 2 Reloads
 			setWaitUntilReload : function(){
 				middleColumn.forum.reloadPosts.waitUntilReload = parseInt(options.options.middleColumn_forum_reloadPosts_waitUntilReload);
 				return false;
 			},
 			
+			// Setzt die Farbe (HEX + GRB) in der die neuen Posts markiert werden
 			setMarkPostColor : function(){
-				middleColumn.forum.reloadPosts.markPostColor = options.options.middleColumn_forum_reloadPosts_markPostColor;
-				middleColumn.forum.reloadPosts.markPostColorRgb = "rgb(" + parseInt(middleColumn.forum.reloadPosts.markPostColor.substr(1, 2), 16).toString() + ", " + parseInt(middleColumn.forum.reloadPosts.markPostColor.substr(3, 2), 16).toString() + ", " + parseInt(middleColumn.forum.reloadPosts.markPostColor.substr(5, 2), 16).toString() + ")";
+				// Nur wenn eine HEX-Zahl eingegeben wurde
+				if(options.options.middleColumn_forum_reloadPosts_markPostColor[0] == '#' && options.options.middleColumn_forum_reloadPosts_markPostColor.length == 7){
+					middleColumn.forum.reloadPosts.markPostColor = options.options.middleColumn_forum_reloadPosts_markPostColor;
+					middleColumn.forum.reloadPosts.markPostColorRgb = "rgb(" + parseInt(middleColumn.forum.reloadPosts.markPostColor.substr(1, 2), 16).toString() + ", " + parseInt(middleColumn.forum.reloadPosts.markPostColor.substr(3, 2), 16).toString() + ", " + parseInt(middleColumn.forum.reloadPosts.markPostColor.substr(5, 2), 16).toString() + ")";
+				}
 				return false;
 			},
 			
+			// Ermöglicht das unbegrenzte Erweitern einer Seite
 			endlessPage : function(){
 				if (middleColumn.forum.reloadPosts.postcount == (25 + (25 * middleColumn.forum.reloadPosts.finishedPages))){
 					middleColumn.forum.reloadPosts.finishedPages++;
@@ -244,16 +259,19 @@ middleColumn = {
 			}
 		},
 		
+		// Vorschau für Forenposts
 		preview : {			
 			userid : 0,
 			username : '',
 			previewIsEnabled : false,
 			
+			// HTML injekten
 			insertPreviewHtml : function(){
 				$('<br /><table border="0" id="previewtable" style="display: none"><tr><td valign="top" id="previewleft" style="border: solid 1px #dddddd; border-right: none; width:110px; height:auto; min-height: 150px;"></td><td valign="top" id="preview" style="font-size: 11px; border: solid 1px #dddddd; width:408px; height:auto; min-height: 150px;"></td><td><img style="border: none; marin: 0, padding: 0;" src="http://thextor.de/readmore-userscript-v2/img/minheight150.gif"></img></td></tr><tr><td colspan="2" style="border: solid 1px #dddddd; border-top: none; background-color: #DEDEDE; height: 12px;"></td><td style="border: none;"></td></table>').insertAfter('.center:last');
 				$('<input type="button" value="Vorschau ein-/ausblenden" class="form" id="triggerPreview" style="margin-left: 10px;">').appendTo('.center:last');
 			},
 			
+			// Grundgerüst des Preview (ohne den eigentlichen Post)
 			initializePreview : function(){
 				var d = new Date();
 				var datumzeit = new Object();
@@ -270,8 +288,8 @@ middleColumn = {
 					}
 				});
 
-				middleColumn.forum.preview.readUserid();
-				middleColumn.forum.preview.readUsername();
+				middleColumn.forum.preview.readUserid();	// User-ID auslesen
+				middleColumn.forum.preview.readUsername();	// Usernamen auslesen
 				
 				var firstRow = '<span style="font-size: 10px;"><a href="javascript:void(0)">#1337</a></span><br>';
 				var secontRow = '<span style="font-size: 10px;">' + datumzeit['day'] + '.' + datumzeit['month'] + '.' + datumzeit['year'] + ', ' + datumzeit['hours'] + ':' + datumzeit['minutes'] + '</span><br>';
@@ -283,16 +301,19 @@ middleColumn = {
 				return false;
 			},
 			
+			// User-ID auslesen
 			readUserid : function(){
 				middleColumn.forum.preview.userid = $('div.floatl.vcenter.elf.dgray:eq(1)').html().match(/id=(.+?)"/)[1];
 			},
 			
+			// Usernamen auslesen
 			readUsername : function(){
 				middleColumn.forum.preview.username = $('div.floatl.vcenter.elf.dgray:eq(1)').html().match(/">(.+?)<\/a>/)[1]
 			},
 			
+			// Den Post in die Preview umwandeln
 			convertToPreview : function(){
-					var previewTags = new Object();
+					var previewTags = new Object();					
 					previewTags['\\[b\\]'] = '<b>';
 					previewTags['\\[/b\\]'] = '</b>';
 					previewTags['\\[i\\]'] = '<i>';
@@ -321,6 +342,7 @@ middleColumn = {
 					
 					var text = String($('#c_comment').val().replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1'+ '<br>' +'$2'));
 		
+					// BB-Code ersetzen
 					$.each(previewTags, function(key, value){
 						var regEx = new RegExp(key, 'g');
 						text = text.replace(regEx, value);		
@@ -366,14 +388,17 @@ middleColumn = {
 					return false;
 			},
 			
+			// Preview starten / Ein- und ausblenden
 			triggerPreview : function(){
 				if(middleColumn.forum.preview.previewIsEnabled == true){
+					// Ausblenden
 					$('#previewtable').css('display', 'none');
 					$('#c_comment').unbind("keyup", middleColumn.forum.preview.convertToPreview);
 					$('#c_comment').unbind("focus", middleColumn.forum.preview.convertToPreview);
 					middleColumn.forum.preview.previewIsEnabled = false;					
 				}
 				else{
+					// Einblenden
 					middleColumn.forum.preview.initializePreview();
 					middleColumn.forum.preview.convertToPreview();
 					
@@ -385,6 +410,7 @@ middleColumn = {
 			}
 		},
 		
+		// Post im Hintergrund
 		postPerAjax : function(){
 			var post = $('form[name=submitpost]').serialize();
 			var replacePost = new Object();
@@ -422,20 +448,23 @@ middleColumn = {
 			replacePost['%C3%9B'] = '%DB';		// Û	
 			replacePost['%E2%82%AC'] = '%80';	// €
 			
-			
+			// Sonderzeichen ersetzen
 			$.each(replacePost, function(key, value){
 				var regEx = new RegExp(key, 'g');
 				post = post.replace(regEx, value);	
 			});
 			
+			// Während der Wartezeiten den Submit-Knopf ausblenden
 			$('.center:last').css('display', 'none');
 			
+			// Ist das Automatische neuladen deaktiviert, die nötigen Vorkehrungen dazu treffen
 			if(middleColumn.forum.reloadPosts.postcount == 0){
 				middleColumn.forum.readThreadlink();
 				middleColumn.forum.readPage();
 				middleColumn.forum.reloadPosts.readPostcount();
 			}
 			
+			// Der eigentliche Post
 			$.ajax({
 				type:'POST', 
 				url: '?cont=forum/do_reply', 
@@ -446,17 +475,21 @@ middleColumn = {
 				dataType: 'html',
 
 				success: function(response) {
+					// Prüft ob der Beitrag lang genug war
 					var error = response.match('Dein Beitrag muss aus mindestens 3 Zeichen bestehen.');
 					if(error != null){
+						// Fehlermeldung ausgeben
 						alert('Dein Beitrag muss mindestens aus 3 Zeichen bestehen!');
 					}
 					else{
+						// Nachricht aus dem Feld löschen und Posts neuladen
 						$('#c_comment').val('');						
 						middleColumn.forum.reloadPosts.readNewPosts();
 					}
 				}
 			});
 			
+			// Submit-Knopf wieder einblenden
 			$('.center:last').css('display', 'block');
 			return false;
 		}
@@ -636,6 +669,7 @@ rightColumn = {
 			return false;
 		},
 		
+		// Startet das umsortieren des Forums
 		initializeForum : function(){
 			var html = '';
 			sortForum = new Array();
