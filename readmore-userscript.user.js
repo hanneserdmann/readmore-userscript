@@ -86,6 +86,8 @@ options = {
 	readOptions : function(){
 		// Json auslesen und in Objekt umwandeln
 		options.options = JSON.parse(localStorage.getItem('userscriptOptions'));
+		if(options.options == null) options.options = new Array();
+		return false;
 	}
 }
 
