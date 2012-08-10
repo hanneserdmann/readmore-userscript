@@ -119,10 +119,7 @@ leftColumn = {
 	www : {
 		// Wer Wohin Warum ausblenden
 		hideWww : function(){
-			$('#leftc>div.block:eq(0)').css('display', 'none');			
-			$('div.line2:eq(0)').css('display', 'none');
-			$('div.line2:eq(1)').css('display', 'none');
-			
+			$('#leftc>div.block:eq(0), div.line2:eq(0), div.line2:eq(1)').css('display', 'none');			
 			return false;
 		}
 	},
@@ -130,10 +127,7 @@ leftColumn = {
 	streams : {
 		// Alle Streams ausblenden
 		hideStreams : function(){
-			$('#leftc>div.block:eq(1)').css('display', 'none');
-			$('#leftc>div.block:eq(2)').css('display', 'none');
-			$('.line2:eq(2)').css('display', 'none');
-			
+			$('#leftc>div.block:eq(1), #leftc>div.block:eq(2), .line2:eq(2)').css('display', 'none');			
 			return false;
 		},
 		
