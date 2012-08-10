@@ -38,7 +38,6 @@ options = {
 		// Alle Selectfelder
 		$('select.userscriptOptions').each(function(){
 			userscriptOptions[$(this).attr('name')] = $(this).val();
-			console.log($(this).val());
 		});
 		
 		// Json-Speichern
@@ -334,9 +333,7 @@ middleColumn = {
 					// Nur wenn wir uns auf der letzten seite befinden
 					if (lastpage.substr(lastpage.length-4) == '</b>') middleColumn.forum.reloadPosts.endlessPage();			
 				} 
-				
-				console.log(middleColumn.forum.threadlink + '&pagenum=' + middleColumn.forum.page);
-				
+								
 				// Der eigentliche Reaload
 				$.ajax({
 					type: 'POST',
@@ -926,73 +923,158 @@ rightColumn = {
 *********************************/
 
 // Bereich auf der Readmore.de Seite rausfinden
-var current_location = $(location).attr('href');
-if (current_location.match('forum/thread')) section = 'forum';
-else section = 'mainpage';
+var cont = '';
+var getVars = document.location.search.replace(/[?]/g, '').replace(/[&]/g, '=').split('=');
+$.each(getVars, function(index, value){
+	if (value == 'cont') cont = getVars[index+1];
+});
+
+var content = {
+	mainpage		: false,
+	profile			: false,
+	groups_new		: false,
+	groups_group_list	: false,
+	groups_show_group	: false,
+	msg			: false,
+	news_archive		: false,
+	headlines_overview	: false,
+	www			: false,
+	widget_create_ticker	: false,
+	guides			: false,
+	articles		: false,
+	news			: false,
+	search			: false,
+	match_overview		: false,
+	db			: false,
+	coverages		: false,
+	demo_overview_pov	: false,
+	demo_overview_hltv	: false,
+	demo_overview		: false,
+	video_overview		: false,
+	gallery_sets		: false,
+	forum_forum		: false,
+	forum_board		: false,
+	forum_thread		: false,
+	forum_edit		: false,
+	forum_newtopic		: false,
+	community		: false,
+	blog			: false,
+	poll_archive		: false,
+	rules			: false,
+	team			: false,
+	imprint			: false,
+	userstream		: false,
+	gallery_images		: false,
+	matches			: false
+};
+
+switch(cont){
+	case '':			content.mainpage = true; break;			
+	case 'profile':			content.profile = true; break;
+	case 'forum/thread':		content.forum_thread = true; break;
+	case 'forum/forum':		content.forum_forum = true; break;
+	case 'forum/board':		content.forum_board = true; break;	
+	case 'forum/edit':		content.forum_edit = true; break;
+	case 'groups/new':		content.groups_new = true; break;
+	case 'groups/group_list':	content.groups_group_list = true; break;
+	case 'groups/show_group':	content.groups_show_group = true; break;
+	case 'matches':			content.matches = true; break;
+	case 'msg':			content.msg = true; break;
+	case 'news_archive':		content.news_archive = true; break;
+	case 'headlines_overview':	content.headlines_overview = true; break;
+	case 'www':			content.www = true; break;
+	case 'widget/create_ticker':	content.widget_create_ticker = true; break;
+	case 'guides':			content.guides = true; break;
+	case 'articles':		content.articles = true; break;
+	case 'news':			content.news = true; break;
+	case 'search':			content.search = true; break;
+	case 'match_overview':		content.match_overview = true; break;
+	case 'db':			content.db = true; break;
+	case 'coverages':		content.coverages = true; break;
+	case 'demo_overview_pov':	content.demo_overview_pov = true; break;
+	case 'demo_overview_hltv':	content.demo_overview_hltv = true; break;
+	case 'demo_overview':		content.demo_overview = true; break;
+	case 'video_overview':		content.video_overview = true; break;
+	case 'gallery_sets':		content.gallery_sets = true; break;	
+	case 'forum/newtopic':		content.forum_newtopic = true; break;
+	case 'community':		content.community = true; break;
+	case 'blog':			content.blog = true; break;
+	case 'poll_archive':		content.poll_archive = true; break;
+	case 'rules':			content.rules = true; break;
+	case 'team':			content.team = true; break;
+	case 'imprint':			content.imprint = true; break;
+	case 'userstream':		content.userstream = true; break;
+	case 'gallery_images':		content.gallery_images = true; break;	
+	default:			content.mainpage = true; break;
+}
+
 
 // Optionen laden und Link in der Usereiste einfügen
 options.readOptions();
 options.insertOptionsLink();
 
-// WWW ausblenden
-if (options.options.leftColumn_www_hideWww == 'checked') leftColumn.www.hideWww();
+// WWW, Streams, Galerie, Ergebnisticker, Schlagzeilen und Forum angezeigt
+if (!content.profile && !content.guides){
+	// WWW ausblenden
+	if (options.options.leftColumn_www_hideWww == 'checked') leftColumn.www.hideWww();
 
-// Streams ausblenden
-if (options.options.leftColumn_streams_hideStreams == 'checked') leftColumn.streams.hideStreams();
-else{
-	if	(	
-			options.options.leftColumn_streams_hideSelectedStreams_bf3	== 'checked' || 
-			options.options.leftColumn_streams_hideSelectedStreams_cs	== 'checked' || 
-			options.options.leftColumn_streams_hideSelectedStreams_csgo	== 'checked' || 
-			options.options.leftColumn_streams_hideSelectedStreams_css	== 'checked' || 
-			options.options.leftColumn_streams_hideSelectedStreams_dota	== 'checked' || 
-			options.options.leftColumn_streams_hideSelectedStreams_dota2	== 'checked' || 
-			options.options.leftColumn_streams_hideSelectedStreams_d3	== 'checked' || 
-			options.options.leftColumn_streams_hideSelectedStreams_soccer	== 'checked' || 
-			options.options.leftColumn_streams_hideSelectedStreams_hon	== 'checked' || 
-			options.options.leftColumn_streams_hideSelectedStreams_lol	== 'checked' || 
-			options.options.leftColumn_streams_hideSelectedStreams_ql	== 'checked' || 
-			options.options.leftColumn_streams_hideSelectedStreams_sc	== 'checked' || 
-			options.options.leftColumn_streams_hideSelectedStreams_sc2	== 'checked' || 
-			options.options.leftColumn_streams_hideSelectedStreams_wc3	== 'checked' || 
-			options.options.leftColumn_streams_hideSelectedStreams_else	== 'checked'
-		){
-			leftColumn.streams.hideSelectedStreams();
+	// Streams ausblenden
+	if (options.options.leftColumn_streams_hideStreams == 'checked') leftColumn.streams.hideStreams();
+	else{
+		if	(	
+				options.options.leftColumn_streams_hideSelectedStreams_bf3	== 'checked' || 
+				options.options.leftColumn_streams_hideSelectedStreams_cs	== 'checked' || 
+				options.options.leftColumn_streams_hideSelectedStreams_csgo	== 'checked' || 
+				options.options.leftColumn_streams_hideSelectedStreams_css	== 'checked' || 
+				options.options.leftColumn_streams_hideSelectedStreams_dota	== 'checked' || 
+				options.options.leftColumn_streams_hideSelectedStreams_dota2	== 'checked' || 
+				options.options.leftColumn_streams_hideSelectedStreams_d3	== 'checked' || 
+				options.options.leftColumn_streams_hideSelectedStreams_soccer	== 'checked' || 
+				options.options.leftColumn_streams_hideSelectedStreams_hon	== 'checked' || 
+				options.options.leftColumn_streams_hideSelectedStreams_lol	== 'checked' || 
+				options.options.leftColumn_streams_hideSelectedStreams_ql	== 'checked' || 
+				options.options.leftColumn_streams_hideSelectedStreams_sc	== 'checked' || 
+				options.options.leftColumn_streams_hideSelectedStreams_sc2	== 'checked' || 
+				options.options.leftColumn_streams_hideSelectedStreams_wc3	== 'checked' || 
+				options.options.leftColumn_streams_hideSelectedStreams_else	== 'checked'
+			){
+				leftColumn.streams.hideSelectedStreams();
+			}
+	}
+
+	// Ticker ausblenden
+	if (options.options.rightColumn_ticker_hideTicker == 'checked')	rightColumn.ticker.hideTicker();
+
+	// Schlagzeilen ausblenden
+	if (options.options.rightColumn_headlines_hideHeadlines == 'checked') rightColumn.headlines.hideHeadlines();	// Alle
+	else{	// Individuell
+		if(options.options.rightColumn_headlines_hideCounterstrike == 'checked')	rightColumn.headlines.hideCounterstrike();
+		if(options.options.rightColumn_headlines_hideStarcraft == 'checked')		rightColumn.headlines.hideStarcraft();
+		if(options.options.rightColumn_headlines_hideDefenseOfTheAncients == 'checked') rightColumn.headlines.hideDefenseOfTheAncients();
+		if(options.options.rightColumn_headlines_hideLeagueOfLegends == 'checked')	rightColumn.headlines.hideLeagueOfLegends();
+		if(options.options.rightColumn_headlines_hideWarcraft3 == 'checked')		rightColumn.headlines.hideWarcraft3();		
+		if(options.options.rightColumn_headlines_hideSonstiges == 'checked')		rightColumn.headlines.hideSonstiges();
+	}
+
+	// Forum ausblenden
+	if (options.options.rightColumn_forum_hideForum == 'checked')	rightColumn.forum.hideForum();	// Komplett ausblenden
+	else{	// Individuell
+		if (options.options.rightColumn_forum_sections == 'checked'){
+			rightColumn.forum.initializeForum();
 		}
-}
-
-// Ticker ausblenden
-if (options.options.rightColumn_ticker_hideTicker == 'checked')	rightColumn.ticker.hideTicker();
-
-// Schlagzeilen ausblenden
-if (options.options.rightColumn_headlines_hideHeadlines == 'checked') rightColumn.headlines.hideHeadlines();	// Alle
-else{	// Individuell
-	if(options.options.rightColumn_headlines_hideCounterstrike == 'checked')	rightColumn.headlines.hideCounterstrike();
-	if(options.options.rightColumn_headlines_hideStarcraft == 'checked')		rightColumn.headlines.hideStarcraft();
-	if(options.options.rightColumn_headlines_hideDefenseOfTheAncients == 'checked') rightColumn.headlines.hideDefenseOfTheAncients();
-	if(options.options.rightColumn_headlines_hideLeagueOfLegends == 'checked')	rightColumn.headlines.hideLeagueOfLegends();
-	if(options.options.rightColumn_headlines_hideWarcraft3 == 'checked')		rightColumn.headlines.hideWarcraft3();		
-	if(options.options.rightColumn_headlines_hideSonstiges == 'checked')		rightColumn.headlines.hideSonstiges();
-}
-
-// Forum ausblenden
-if (options.options.rightColumn_forum_hideForum == 'checked')	rightColumn.forum.hideForum();	// Komplett ausblenden
-else{	// Individuell
-	if (options.options.rightColumn_forum_sections == 'checked'){
-		rightColumn.forum.initializeForum();
 	}
 }
   
 // Nur im Forum aktivieren
-if (section == 'forum'){
+if (content.forum_thread){
 	// Knopf zum hochscrollen							
-	if (options.options.miscellaneous_buttonScrollUp == 'checked' && section == 'forum')	miscellaneous.buttonScrollUp();	
+	if (options.options.miscellaneous_buttonScrollUp == 'checked')	miscellaneous.buttonScrollUp();	
 	
 	// Knopf zum runterscrollen
-	if (options.options.miscellaneous_buttonScrollDown == 'checked' && section == 'forum')	miscellaneous.buttonScrollDown();
+	if (options.options.miscellaneous_buttonScrollDown == 'checked')miscellaneous.buttonScrollDown();
 	
 	// Titel umsortieren
-	if (options.options.miscellaneous_reSortTitle == 'checked' && section == 'forum')		miscellaneous.reSortTitle();		
+	if (options.options.miscellaneous_reSortTitle == 'checked')	miscellaneous.reSortTitle();		
 	
 	// Vorschau
 	if (options.options.middleColumn_forum_preview == 'checked'){
