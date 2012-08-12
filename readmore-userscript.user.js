@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name           Readmore Userscript
-// @version        2.0.2
+// @version        2.0.2 
 // @description    Fügt der deutschen eSport-Webseite zuätzliche Funktionen hinzu
 // @author         thextor
 // @namespace      readmore
