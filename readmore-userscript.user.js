@@ -1159,7 +1159,5 @@ document.getElementById('toggle_sub_rightColumn_forum_hideForum').addEventListen
 document.getElementById('toggle_sub_rightColumn_forum_sections').addEventListener('click', function(){$('.sub_rightColumn_forum_sections').toggle();}, false);
 document.getElementById('toggle_sub_leftColumn_streams_hideStreams').addEventListener('click', function(){$('.sub_leftColumn_streams_hideStreams').toggle();}, false);
 
-
-//
 // Prüfen ob eine neue Version erschienen ist
 if (options.options.miscellaneous_checkVersion == 'checked') miscellaneous.checkVersion();
