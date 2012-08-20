@@ -402,10 +402,7 @@ middleColumn = {
 					if ($.trim(($('[class^=post_]:eq(' + (middleColumn.forum.reloadPosts.postcount - i) + ')').css('background-color'))) == middleColumn.forum.reloadPosts.markPostColorRgb) break;					
 					$('[class^=post_]:eq(' + (middleColumn.forum.reloadPosts.postcount - i) + ')').css('background-color', middleColumn.forum.reloadPosts.markPostColor);
 				}
-				
-				// Favicon ändern
-				if (options.options.middleColumn_forum_reloadPosts_showNewPostsTitle == 'checked') middleColumn.forum.reloadPosts.showNewPostsTitle();
-				
+							
 				// Demarkieren starten
 				middleColumn.forum.reloadPosts.unmarkNewPosts();			
 				return false;
@@ -429,10 +426,7 @@ middleColumn = {
 				$(deleteArray).each(function(index, value){
 					middleColumn.forum.reloadPosts.unseenPosts.splice(value, 1);	// Unmarkierte / Gelesene Posts aus dem Array entfernen
 				});
-				
-				// Ungelesene Posts im Titel / Tab anzeigen
-				if (options.options.middleColumn_forum_reloadPosts_changeFavicon == 'checked') middleColumn.forum.reloadPosts.changeFavicon();			
-				
+								
 				return false;
 			},
 			
@@ -1146,7 +1140,13 @@ if (content.forum_thread){
 			if (options.options.middleColumn_forum_reloadPosts_markPostColor.length > 0) middleColumn.forum.reloadPosts.setMarkPostColor();
 			
 			// 4x die Sekunde (de)-Markieren
-			setInterval(middleColumn.forum.reloadPosts.markNewPosts, 250);
+			setInterval(function(){middleColumn.forum.reloadPosts.markNewPosts()}, 250);
+			
+			// Favicon verändern
+			if (options.options.middleColumn_forum_reloadPosts_changeFavicon == 'checked') setInterval(middleColumn.forum.reloadPosts.changeFavicon, 1000);
+			
+			// Postanzahl im Tab anzeigen
+			if (options.options.middleColumn_forum_reloadPosts_showNewPostsTitle == 'checked') setInterval(middleColumn.forum.reloadPosts.showNewPostsTitle, 1000);
 		}
 		
 		// Den (in den Optionen) eingetragenen Wert im 1000 multiplizieren um auf Sekunden zu kommen
