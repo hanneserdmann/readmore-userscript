@@ -329,7 +329,7 @@ middleColumn = {
 		
 		// Aktuelle Seite ermitteln
 		readPage : function(){
-			 middleColumn.forum.page = parseInt($('div.floatl.m2.elf').html().match(/<b>(.+?)<\/b>/)[1]);
+			 middleColumn.forum.page = parseInt($('div.floatl.m2.elf').html().match(/<b>(.+?)<\/b>/)[1], 10);
 			 return false;
 		},
 	       
@@ -381,7 +381,7 @@ middleColumn = {
 								$('table.elf.forum.p2.bogray2').append(footer[i-oldPosts]);
 
 								var postuserid = posts[i-oldPosts].match(/href="index.php\?cont=profile&amp;id=(.+?)"/)[1];
-								if (postuserid != userid) middleColumn.forum.reloadPosts.unseenPosts.push(parseInt($('[class^=post_]:last').offset().top));	// Zum markieren der neuen Posts
+								if (postuserid != userid) middleColumn.forum.reloadPosts.unseenPosts.push(parseInt($('[class^=post_]:last').offset().top, 10));	// Zum markieren der neuen Posts
 								middleColumn.forum.reloadPosts.postcount++;								
 							}	
 							
@@ -427,7 +427,7 @@ middleColumn = {
 				});
 				
 				$(deleteArray).each(function(index, value){
-					middleColumn.forum.reloadPosts.unseenPosts.splice (value, 1);	// Unmarkierte / Gelesene Posts aus dem Array entfernen
+					middleColumn.forum.reloadPosts.unseenPosts.splice(value, 1);	// Unmarkierte / Gelesene Posts aus dem Array entfernen
 				});
 				
 				// Ungelesene Posts im Titel / Tab anzeigen
@@ -460,7 +460,7 @@ middleColumn = {
 			
 			// Setzt die Zeit zwischen 2 Reloads
 			setWaitUntilReload : function(){
-				middleColumn.forum.reloadPosts.waitUntilReload = parseInt(options.options.middleColumn_forum_reloadPosts_waitUntilReload);
+				middleColumn.forum.reloadPosts.waitUntilReload = parseInt(options.options.middleColumn_forum_reloadPosts_waitUntilReload, 10);
 				return false;
 			},
 			
@@ -1146,12 +1146,12 @@ if (content.forum_thread){
 			if (options.options.middleColumn_forum_reloadPosts_markPostColor.length > 0) middleColumn.forum.reloadPosts.setMarkPostColor();
 			
 			// 4x die Sekunde (de)-Markieren
-			setInterval(function(){middleColumn.forum.reloadPosts.markNewPosts()}, 250);
+			setInterval(middleColumn.forum.reloadPosts.markNewPosts, 250);
 		}
 		
 		// Den (in den Optionen) eingetragenen Wert im 1000 multiplizieren um auf Sekunden zu kommen
 		// Nachladen von Posts aktivieren
-		window.setInterval(function(){middleColumn.forum.reloadPosts.readNewPosts()}, parseInt(middleColumn.forum.reloadPosts.waitUntilReload) * 1000);
+		window.setInterval(function(){middleColumn.forum.reloadPosts.readNewPosts()}, parseInt(middleColumn.forum.reloadPosts.waitUntilReload, 10) * 1000);
 	}	
 }
 
