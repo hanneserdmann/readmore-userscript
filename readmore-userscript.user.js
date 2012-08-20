@@ -444,10 +444,17 @@ middleColumn = {
 				$('title').text(title);	
 			},
 			
+			// Ändert das Favicon wenn ungelesene Posts vorhanden sind
 			changeFavicon : function(){
 				var currentIcon = $('head>link[rel="shortcut icon"]').attr('href');
-				if (middleColumn.forum.reloadPosts.unseenPosts.length > 0 && currentIcon == '/favicon.ico') $('head>link[rel="shortcut icon"]').attr('href', 'http://thextor.de/readmore-userscript/img/favicon.ico');
-				if (middleColumn.forum.reloadPosts.unseenPosts.length == 0 && currentIcon == 'http://thextor.de/readmore-userscript/img/favicon.ico')  $('head>link[rel="shortcut icon"]').attr('href', '/favicon.ico');
+				if (middleColumn.forum.reloadPosts.unseenPosts.length > 0 && currentIcon == '/favicon.ico'){
+					$('head>link[rel="shortcut icon"]').remove();
+					$('head').append('<link rel="shortcut icon" type="image/png" href="http://thextor.de/readmore-userscript/img/favicon.png">');
+				} 
+				if (middleColumn.forum.reloadPosts.unseenPosts.length == 0 && currentIcon == 'http://thextor.de/readmore-userscript/img/favicon.png'){
+					$('head>link[rel="shortcut icon"]').remove();
+					$('head').append('<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">');
+				} 
 				return false;
 			},
 			
@@ -1139,12 +1146,12 @@ if (content.forum_thread){
 			if (options.options.middleColumn_forum_reloadPosts_markPostColor.length > 0) middleColumn.forum.reloadPosts.setMarkPostColor();
 			
 			// 4x die Sekunde (de)-Markieren
-			setInterval(function(){middleColumn.forum.reloadPosts.markNewPosts();}, 250);
+			setInterval(function(){middleColumn.forum.reloadPosts.markNewPosts()}, 250);
 		}
 		
 		// Den (in den Optionen) eingetragenen Wert im 1000 multiplizieren um auf Sekunden zu kommen
 		// Nachladen von Posts aktivieren
-		window.setInterval(function(){middleColumn.forum.reloadPosts.readNewPosts();}, parseInt(middleColumn.forum.reloadPosts.waitUntilReload) * 1000);
+		window.setInterval(function(){middleColumn.forum.reloadPosts.readNewPosts()}, parseInt(middleColumn.forum.reloadPosts.waitUntilReload) * 1000);
 	}	
 }
 
