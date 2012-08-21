@@ -168,153 +168,24 @@ leftColumn = {
 	},
 	
 	streams : {
+		// Array in dem die Streams-Images gepusht werden
+		streamsToHide : new Array(),
+		
 		// Alle Streams ausblenden
 		hideStreams : function(){
 			$('#leftc>div.block:eq(1), #leftc>div.block:eq(2), .line2:eq(2)').css('display', 'none');			
 			return false;
 		},
 		
-		hideSelectedStreams : function(){
-			var dota2	= options.options.leftColumn_streams_hideSelectedStreams_dota2	== 'checked';
-			var hon		= options.options.leftColumn_streams_hideSelectedStreams_hon	== 'checked';
-			var lol		= options.options.leftColumn_streams_hideSelectedStreams_lol	== 'checked';
-			var dota	= options.options.leftColumn_streams_hideSelectedStreams_dota	== 'checked';			
-			var sc2		= options.options.leftColumn_streams_hideSelectedStreams_sc2	== 'checked';
-			var d3		= options.options.leftColumn_streams_hideSelectedStreams_d3	== 'checked';
-			var wc3		= options.options.leftColumn_streams_hideSelectedStreams_wc3	== 'checked';
-			var cs		= options.options.leftColumn_streams_hideSelectedStreams_cs	== 'checked';
-			var sonstiges	= options.options.leftColumn_streams_hideSelectedStreams_else	== 'checked';
-			var ql		= options.options.leftColumn_streams_hideSelectedStreams_ql	== 'checked';
-			var css		= options.options.leftColumn_streams_hideSelectedStreams_css	== 'checked';
-			var sc		= options.options.leftColumn_streams_hideSelectedStreams_sc	== 'checked';			
-			var bf3		= options.options.leftColumn_streams_hideSelectedStreams_bf3	== 'checked';
-			var csgo	= options.options.leftColumn_streams_hideSelectedStreams_csgo	== 'checked';
-			var soccer	= options.options.leftColumn_streams_hideSelectedStreams_soccer	== 'checked'
-			
-			$('#leftc>div.block:eq(1)>div>div>img, #leftc>div.block:eq(2)>div>div>img').each(function(){
-				var image = $(this).attr('src');
-				
-				// Defense of the Ancients 2
-				if (dota2){
-					if (image == 'http://images.readmore.de/img/icons/dota2.png'){
-						$(this).parent().remove();	
-						return true;
-					}
-				}
-				
-				// Heroes of Newerth
-				if (hon){
-					if (image == 'http://images.readmore.de/img/icons/hon.png'){
-						$(this).parent().remove();	
-						return true;
-					}
-				}
-				
-				// Leage of Legends
-				if (lol){
-					if (image == 'http://images.readmore.de/img/icons/lol.png'){
-						$(this).parent().remove();	
-						return true;
-					}
-				}
-				
-				// Quake
-				if (ql){
-					if (image == 'http://images.readmore.de/img/icons/ql.png'){
-						$(this).parent().remove();	
-						return true;
-					}
-				}
-				
-				// Starcraft 2
-				if (sc2){
-					if (image == 'http://images.readmore.de/img/icons/sc2.png'){
-						$(this).parent().remove();	
-						return true;
-					}
-				}
-				
-				// Diablo 3
-				if (d3){
-					if (image == 'http://images.readmore.de/img/icons/d3.png'){
-						$(this).parent().remove();	
-						return true;
-					}
-				}
-				
-				// Warcraft 3
-				if (wc3){
-					if (image == 'http://images.readmore.de/img/icons/wc3.png'){
-						$(this).parent().remove();	
-						return true;
-					}
-				}
-				
-				// Counterstrike
-				if (cs){
-					if (image == 'http://images.readmore.de/img/icons/cs.png'){
-						$(this).parent().remove();	
-						return true;
-					}
-				}							
-				
-				// Sonstiges
-				if (sonstiges){
-					if (image == 'http://images.readmore.de/img/icons/else.png'){
-						$(this).parent().remove();	
-						return true;
-					}
-				}
-				
-				// Counterstrike Source
-				if (css){
-					if (image == 'http://images.readmore.de/img/icons/css.png'){
-						$(this).parent().remove();	
-						return true;
-					}
-				}
-				
-				// Starcraft
-				if (sc){
-					if (image == 'http://images.readmore.de/img/icons/sc.png'){
-						$(this).parent().remove();	
-						return true;
-					}
-				}								
-				
-				// Defense of the Ancients
-				if (dota){
-					if (image == 'http://images.readmore.de/img/icons/dota.png'){
-						$(this).parent().remove();	
-						return true;
-					}
-				}								
-				
-				// Battlefield 3
-				if (bf3){
-					if (image == 'http://images.readmore.de/img/icons/bf3.png'){
-						$(this).parent().remove();	
-						return true;
-					}
-				}
-				
-				// Counterstrike Global Offensive
-				if (csgo){
-					if (image == 'http://images.readmore.de/img/icons/csgo.png'){
-						$(this).parent().remove();	
-						return true;
-					}
-				}
-				
-				// Fußball
-				if (soccer){
-					if (image == 'http://images.readmore.de/img/icons/soccer.png'){
-						$(this).parent().remove();	
-						return true;
-					}
-				}
-				
+		hideSelectedStreams : function(){			
+			// Selector zusammensetzen
+			var selector = '';
+			$(leftColumn.streams.streamsToHide).each(function(index, value){
+				selector += '#leftc>div.block:eq(1)>div>div>img[src="http://images.readmore.de/img/icons/' + value + '"], #leftc>div.block:eq(2)>div>div>img[src="http://images.readmore.de/img/icons/' + value + '"], ';
 			});
+			
+			// Streams ausblenden, letztes ', ' entfernen
+			$(selector.substring(0, selector.length-2)).parent().remove();			
 		}
 	}
 };
@@ -1064,24 +935,25 @@ if (!content.profile && !content.guides){
 	// Streams ausblenden
 	if (options.options.leftColumn_streams_hideStreams == 'checked') leftColumn.streams.hideStreams();
 	else{
-		if	(	options.options.leftColumn_streams_hideSelectedStreams_bf3	== 'checked' || 
-				options.options.leftColumn_streams_hideSelectedStreams_cs	== 'checked' || 
-				options.options.leftColumn_streams_hideSelectedStreams_csgo	== 'checked' || 
-				options.options.leftColumn_streams_hideSelectedStreams_css	== 'checked' || 
-				options.options.leftColumn_streams_hideSelectedStreams_dota	== 'checked' || 
-				options.options.leftColumn_streams_hideSelectedStreams_dota2	== 'checked' || 
-				options.options.leftColumn_streams_hideSelectedStreams_d3	== 'checked' || 
-				options.options.leftColumn_streams_hideSelectedStreams_soccer	== 'checked' || 
-				options.options.leftColumn_streams_hideSelectedStreams_hon	== 'checked' || 
-				options.options.leftColumn_streams_hideSelectedStreams_lol	== 'checked' || 
-				options.options.leftColumn_streams_hideSelectedStreams_ql	== 'checked' || 
-				options.options.leftColumn_streams_hideSelectedStreams_sc	== 'checked' || 
-				options.options.leftColumn_streams_hideSelectedStreams_sc2	== 'checked' || 
-				options.options.leftColumn_streams_hideSelectedStreams_wc3	== 'checked' || 
-				options.options.leftColumn_streams_hideSelectedStreams_else	== 'checked'
-			){
-				leftColumn.streams.hideSelectedStreams();
-			}
+		// Damit die Überprüfung nur 1x notwendig ist, wird hier das Array mit den entsprechenden Bildern gefüllt,
+		// später werden dann genau diese ausgeblendet
+		if (options.options.leftColumn_streams_hideSelectedStreams_bf3 == 'checked') leftColumn.streams.streamsToHide.push('bf3.png');
+		if (options.options.leftColumn_streams_hideSelectedStreams_cs == 'checked') leftColumn.streams.streamsToHide.push('cs.png');
+		if (options.options.leftColumn_streams_hideSelectedStreams_csgo == 'checked') leftColumn.streams.streamsToHide.push('csgo.png');
+		if (options.options.leftColumn_streams_hideSelectedStreams_css == 'checked') leftColumn.streams.streamsToHide.push('css.png');
+		if (options.options.leftColumn_streams_hideSelectedStreams_dota == 'checked') leftColumn.streams.streamsToHide.push('dota.png');		
+		if (options.options.leftColumn_streams_hideSelectedStreams_dota2 == 'checked') leftColumn.streams.streamsToHide.push('dota2.png');
+		if (options.options.leftColumn_streams_hideSelectedStreams_d3 == 'checked') leftColumn.streams.streamsToHide.push('d3.png');
+		if (options.options.leftColumn_streams_hideSelectedStreams_soccer == 'checked') leftColumn.streams.streamsToHide.push('soccer.png');
+		if (options.options.leftColumn_streams_hideSelectedStreams_hon == 'checked') leftColumn.streams.streamsToHide.push('hon.png');		
+		if (options.options.leftColumn_streams_hideSelectedStreams_lol == 'checked') leftColumn.streams.streamsToHide.push('lol.png');
+		if (options.options.leftColumn_streams_hideSelectedStreams_ql == 'checked') leftColumn.streams.streamsToHide.push('ql.png');
+		if (options.options.leftColumn_streams_hideSelectedStreams_sc == 'checked') leftColumn.streams.streamsToHide.push('cs.png');
+		if (options.options.leftColumn_streams_hideSelectedStreams_sc2 == 'checked') leftColumn.streams.streamsToHide.push('sc2.png');
+		if (options.options.leftColumn_streams_hideSelectedStreams_wc3 == 'checked') leftColumn.streams.streamsToHide.push('wc3.png');
+		if (options.options.leftColumn_streams_hideSelectedStreams_else == 'checked') leftColumn.streams.streamsToHide.push('else.png');
+		
+		if (leftColumn.streams.streamsToHide.length > 0) leftColumn.streams.hideSelectedStreams();
 	}
 
 	// Ticker ausblenden
