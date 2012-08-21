@@ -43,6 +43,9 @@ options = {
 		
 		// Json-Speichern
 		localStorage.setItem('userscriptOptions', JSON.stringify(userscriptOptions));
+		
+		// Rückmeldung
+		alert('Die Optionen wurden gespeichert!');
 		return false;
 	},
 	
