@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name           Readmore Userscript
 // @version        2.0.5
-// @description    Fügt der deutschen eSport-Webseite zuätzliche Funktionen hinzu
+// @description    Fügt der deutschen eSport-Webseite zusätzliche Funktionen hinzu
 // @author         thextor
 // @namespace      readmore
 // @include        *.readmore.de/*
@@ -578,7 +578,7 @@ middleColumn = {
 					var error = response.match('Dein Beitrag muss aus mindestens 3 Zeichen bestehen.');
 					if(error != null){
 						// Fehlermeldung ausgeben
-						alert('Dein Beitrag muss mindestens aus 3 Zeichen bestehen!');
+						alert('Dein Beitrag muss aus mindestens 3 Zeichen bestehen!');
 					} else {
 						// Nachricht aus dem Feld löschen und Posts neuladen
 						$('#c_comment').val('');
