@@ -37,9 +37,15 @@ Features
  * Last-Page-Pfeil in der Navigation/Übersicht des Forums springt zum aktuellsten Post
  * RM Extrabuttons
 
+Credits
+-----------------
+
+ * Biki (RM Plus Chrome Addon)
+ * IllDependence (RM Extrabuttons)
+
 Links
 -----------------
 
-[Readmore Thread][1]
+[Readmore Userscript Thread][1]
 
 [1]: http://www.readmore.de/index.php?cont=forum/thread&threadid=111239
