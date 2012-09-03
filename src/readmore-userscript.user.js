@@ -181,172 +181,173 @@ var RMUS = {
 			if(lastpage != null) {
 				if (lastpage[0] == 'pagenum=lastpage') window.scrollTo(0, $('td.ten.vtop:last').offset().top-50);
 			}
-		}
-
-	},
-
-	extrabuttons: {
-		isNDM: function() {
-			return (new Date()).getHours() < 7;
 		},
-		getToolbar: function() {
-			return $('div.headline_bg', 'form[name=submitpost]');
-		},
-		getToolbarExtended: function() {
-			return $('div#rmus-toolbar-extended', RMUS.extrabuttons.getToolbar());
-		},
-		getCommentBox: function() {
-			return $('textarea#c_comment', 'form[name=submitpost]');
-		},
-		insertTag: function(tname, attr, endTag) {
-			if ('url' === tname) {
-				attr = prompt('Gib den gewünschten Link an: ', 'http://');
-			}
 
-			var commentBox = RMUS.extrabuttons.getCommentBox().get(0),
-			currText = commentBox.value,
-			pos1 = commentBox.selectionStart + tname.length + 2 + (attr ? (attr.length + 1) : 0),
-			pos2 = commentBox.selectionEnd + tname.length + 2 + (attr ? (attr.length + 1) : 0) + (endTag ? (tname.length + 3) : 0),
-			range = (commentBox.selectionStart != commentBox.selectionEnd);
-
-			commentBox.value = currText.substring(0, commentBox.selectionStart) + '[' + tname + (attr != 0 ? '=' + attr + '' : '') + ']' + (endTag ? currText.substring(commentBox.selectionStart, commentBox.selectionEnd) + '[/' + tname + ']' : '') + currText.substring(commentBox.selectionEnd, currText.length);
-			commentBox.focus();
-
-			if (range) {
-				commentBox.setSelectionRange(pos2, pos2);
-			} else {
-				commentBox.setSelectionRange(pos1, pos1);
-			}
-		},
-		insertText: function (text) {
-			var	commentBox = RMUS.extrabuttons.getCommentBox().get(0),
-				currText = commentBox.value,
-				pos = commentBox.selectionStart + text.length;
-
-			commentBox.value = currText.substring(0, commentBox.selectionStart) + text + currText.substring(commentBox.selectionEnd, currText.length);
-			commentBox.focus();
-			commentBox.setSelectionRange(pos, pos);
-		},
-		makeTag: function(img, text, tag, attr, endTag) {
-			return '<a href="" class="rmus-control-btn" data-btype="tag" data-params="' + tag + ',' + attr + ',' + endTag + '"><img style="vertical-align: text-top;" src="' + img + '" alt="' + text + '" title="' + text + '" /></a>';
-		},
-		makeText: function(img, text, insText) {
-			return '<a href="" class="rmus-control-btn" data-btype="txt" data-params="' + text + '"><img style="vertical-align: text-top;" src="'+img+'" alt="'+text+'" title="'+text+'" /></a>';
-		},
-		toggleToolbar: function() {
-			var	toolbar = RMUS.extrabuttons.getToolbarExtended(),
-				triggerBtn = $('span#rmus-extend-toolbar'),
-				txt = (triggerBtn.text() == '+') ? '-' : '+';
-
-			toolbar.toggle();
-			triggerBtn.text(txt);
-		},
-		colorSet:	[["#ff0000", "http://i.imgur.com/yK4UQ.png"],
-				["#ff8000", "http://i.imgur.com/xdj9r.png"],
-				["#ffff00", "http://i.imgur.com/cQrl0.png"],
-				["#80ff00", "http://i.imgur.com/KTpVX.png"],
-				["#00ff00", "http://i.imgur.com/NhpYN.png"],
-				["#00ff80", "http://i.imgur.com/D4JCR.png"],
-				["#00ffff", "http://i.imgur.com/jA74E.png"],
-				["#0080ff", "http://i.imgur.com/cQpDh.png"],
-				["#0000ff", "http://i.imgur.com/7DXlk.png"],
-				["#8000ff", "http://i.imgur.com/t79Yf.png"],
-				["#ff00ff", "http://i.imgur.com/IwKL1.png"],
-				["#ff0080", "http://i.imgur.com/cKrre.png"],
-				["#000000", "http://i.imgur.com/eeX1k.png"],
-				["#333333", "http://i.imgur.com/B4ToQ.png"],
-				["#666666", "http://i.imgur.com/OuClO.png"],
-				["#999999", "http://i.imgur.com/gc8Za.png"],
-				["#cccccc", "http://i.imgur.com/TwNb6.png"],
-				["#ffffff", "http://i.imgur.com/uq9mG.png"]],
-
-		toolbarButtonTags:	[["http://images.readmore.de/img/icons/ubb/b.png", "fett", "b", 0, true],
-						["http://images.readmore.de/img/icons/ubb/i.png", "kursiv", "i", 0, true],
-						["http://images.readmore.de/img/icons/ubb/u.png", "unterstrichen", "u", 0, true],
-						["http://images.readmore.de/img/icons/ubb/s.png", "durchgestrichen", "s", 0, true],
-						["http://i.imgur.com/yPNsn.png", "zentriert", "center", 0, true],
-						["http://i.imgur.com/74lEI.png", "hr", "hr", 0, false],
-						["http://images.readmore.de/img/icons/ubb/url2.png", "url", "url", 0, true],
-						["http://images.readmore.de/img/icons/ubb/quote.png", "quote", "quote", 0, true],
-						["http://images.readmore.de/img/icons/ubb/spoil.png", "spoiler", "spoiler", 0, true],
-						["http://images.readmore.de/img/icons/ubb/youtube.png", "youtube", "youtube", 0, true],
-						["http://i.imgur.com/ZQ5jN.png", "img", "img", 0, true]],
-
-		toolbarButtonTexts: [["http://i.imgur.com/I16Hg.png", "\x28\u256f\xb0\u25a1\xb0\uff09\u256f\ufe35\x20\u253b\u2501\u253b", "tableflip"],
-						["http://i.imgur.com/M92Ll.png", "[youtube]3WzB63CUOtc[/youtube]", "aha bye"],
-						["http://i.imgur.com/oOZFn.png", "[image]http://imgur.com/ERRRn[/image]", "mckay outfit"]],
-
-		getToolbarHtml: function() {
-			var	colorButtons = '',
-				btnTags = '',
-				btnTexts = ''
-				ndm = '';
-
-			$.each(RMUS.extrabuttons.colorSet, function(index, color) {
-				colorButtons += (index > 0 ? '&thinsp;' : '') + RMUS.extrabuttons.makeTag(color[1], color[0], 'color', color[0], true);
-			});
-
-			$.each(RMUS.extrabuttons.toolbarButtonTags, function(index, btnTag) {
-				btnTags += RMUS.extrabuttons.makeTag(btnTag[0], btnTag[1], btnTag[2], btnTag[3]) + '&nbsp;';
-			});
-
-			$.each(RMUS.extrabuttons.toolbarButtonTexts, function(index, btnText) {
-				btnTexts += RMUS.extrabuttons.makeText(btnText[0], btnText[1], btnText[2]) + '&nbsp;';
-			});
-
-			if (RMUS.extrabuttons.isNDM()) {
-				ndm = '<a href="?cont=forum/thread&threadid=99580&pagenum=lastpage" style="color: #ffffff;">ndm!</a> ';
-			}
-
-			return '<div id="rmus-container">Text' +
-			'<div id="rmus-toolbar" style="margin-right: 12px; float: right;">' +
-			'<div id="rmus-toolbar-main" style="margin-bottom: 1px;text-align:right;">' +
-
-			btnTags + '&emsp;' +
-			colorButtons +
-			'<span id="rmus-extend-toolbar" style="font-weight:normal; cursor: pointer; width: 15px; display: inline-block;" title="Show Extended Toolbar">+</span>' +
-			'</div>' +
-			'<div id="rmus-toolbar-extended" style="display:none;">' +
-			'<div style="float: left;">' +
-
-			btnTexts +
-
-			'</div>' +
-			'<div style="float: right; margin: 0px 0px 2px 0px;">' +
-			'&emsp;<span style="font-weight: normal"><span style="color: #ffffff;">-&gt; Quicklinks:</span> ' +
-			ndm +
-			'<a href="?cont=forum/thread&threadid=73247&pagenum=lastpage" style="color: #ffffff;">kfka</a> ' +
-			'<a href="?cont=forum/thread&threadid=108026&pagenum=lastpage" style="color: #ffffff;">csb</a> ' +
-			'<a href="?cont=forum/thread&threadid=109737&pagenum=lastpage" style="color: #ffffff;">ssb</a> ' +
-			'<a href="?cont=search&selected=forum" style="color: #ffffff;">sufu</a></span>' +
-			'</div>' +
-			'<div style="clear: both;"></div>' +
-			'</div>' +
-			'</div>' +
-			'<div style="clear: right;"></div></div>';
-		},
-		init: function() {
-			console.info('Extrabuttons started...');
-			RMUS.extrabuttons.getToolbar().css('height', 'auto').html(RMUS.extrabuttons.getToolbarHtml());
-
-			$('a.rmus-control-btn').click(function(e) {
-				e.preventDefault();
-
-				var btype = $(this).attr('data-btype'),
-				params = $(this).attr('data-params');
-
-				switch(btype) {
-					case 'tag':
-						params = params.split(',');
-						RMUS.extrabuttons.insertTag(params[0], params[1], params[2]);
-						break;
-					case 'txt':
-						RMUS.extrabuttons.insertText(params);
-						break;
+		extrabuttons: {
+			isNDM: function() {
+				return (new Date()).getHours() < 7;
+			},
+			getToolbar: function() {
+				return $('div.headline_bg', 'form[name=submitpost]');
+			},
+			getToolbarExtended: function() {
+				return $('div#rmus-toolbar-extended', RMUS.miscellaneous.extrabuttons.getToolbar());
+			},
+			getCommentBox: function() {
+				return $('textarea#c_comment', 'form[name=submitpost]');
+			},
+			insertTag: function(tname, attr, endTag) {
+				if ('url' === tname) {
+					attr = prompt('Gib den gewünschten Link an: ', 'http://');
 				}
-			});
-			$('span#rmus-extend-toolbar').click(RMUS.extrabuttons.toggleToolbar);
-		}
+
+				var commentBox = RMUS.miscellaneous.extrabuttons.getCommentBox().get(0),
+				currText = commentBox.value,
+				pos1 = commentBox.selectionStart + tname.length + 2 + (attr ? (attr.length + 1) : 0),
+				pos2 = commentBox.selectionEnd + tname.length + 2 + (attr ? (attr.length + 1) : 0) + (endTag ? (tname.length + 3) : 0),
+				range = (commentBox.selectionStart != commentBox.selectionEnd);
+
+				commentBox.value = currText.substring(0, commentBox.selectionStart) + '[' + tname + (attr != 0 ? '=' + attr + '' : '') + ']' + (endTag ? currText.substring(commentBox.selectionStart, commentBox.selectionEnd) + '[/' + tname + ']' : '') + currText.substring(commentBox.selectionEnd, currText.length);
+				commentBox.focus();
+
+				if (range) {
+					commentBox.setSelectionRange(pos2, pos2);
+				} else {
+					commentBox.setSelectionRange(pos1, pos1);
+				}
+			},
+			insertText: function (text) {
+				var	commentBox = RMUS.miscellaneous.extrabuttons.getCommentBox().get(0),
+					currText = commentBox.value,
+					pos = commentBox.selectionStart + text.length;
+
+				commentBox.value = currText.substring(0, commentBox.selectionStart) + text + currText.substring(commentBox.selectionEnd, currText.length);
+				commentBox.focus();
+				commentBox.setSelectionRange(pos, pos);
+			},
+			makeTag: function(img, text, tag, attr, endTag) {
+				return '<a href="" class="rmus-control-btn" data-btype="tag" data-params="' + tag + ',' + attr + ',' + endTag + '"><img style="vertical-align: text-top;" src="' + img + '" alt="' + text + '" title="' + text + '" /></a>';
+			},
+			makeText: function(img, text, insText) {
+				return '<a href="" class="rmus-control-btn" data-btype="txt" data-params="' + text + '"><img style="vertical-align: text-top;" src="'+img+'" alt="'+text+'" title="'+text+'" /></a>';
+			},
+			toggleToolbar: function() {
+				var	toolbar = RMUS.miscellaneous.extrabuttons.getToolbarExtended(),
+					triggerBtn = $('span#rmus-extend-toolbar'),
+					txt = (triggerBtn.text() == '+') ? '-' : '+';
+
+				toolbar.toggle();
+				triggerBtn.text(txt);
+			},
+			colorSet:	[["#ff0000", "http://i.imgur.com/yK4UQ.png"],
+					["#ff8000", "http://i.imgur.com/xdj9r.png"],
+					["#ffff00", "http://i.imgur.com/cQrl0.png"],
+					["#80ff00", "http://i.imgur.com/KTpVX.png"],
+					["#00ff00", "http://i.imgur.com/NhpYN.png"],
+					["#00ff80", "http://i.imgur.com/D4JCR.png"],
+					["#00ffff", "http://i.imgur.com/jA74E.png"],
+					["#0080ff", "http://i.imgur.com/cQpDh.png"],
+					["#0000ff", "http://i.imgur.com/7DXlk.png"],
+					["#8000ff", "http://i.imgur.com/t79Yf.png"],
+					["#ff00ff", "http://i.imgur.com/IwKL1.png"],
+					["#ff0080", "http://i.imgur.com/cKrre.png"],
+					["#000000", "http://i.imgur.com/eeX1k.png"],
+					["#333333", "http://i.imgur.com/B4ToQ.png"],
+					["#666666", "http://i.imgur.com/OuClO.png"],
+					["#999999", "http://i.imgur.com/gc8Za.png"],
+					["#cccccc", "http://i.imgur.com/TwNb6.png"],
+					["#ffffff", "http://i.imgur.com/uq9mG.png"]],
+
+			toolbarButtonTags:	[["http://images.readmore.de/img/icons/ubb/b.png", "fett", "b", 0, true],
+							["http://images.readmore.de/img/icons/ubb/i.png", "kursiv", "i", 0, true],
+							["http://images.readmore.de/img/icons/ubb/u.png", "unterstrichen", "u", 0, true],
+							["http://images.readmore.de/img/icons/ubb/s.png", "durchgestrichen", "s", 0, true],
+							["http://i.imgur.com/yPNsn.png", "zentriert", "center", 0, true],
+							["http://i.imgur.com/74lEI.png", "hr", "hr", 0, false],
+							["http://images.readmore.de/img/icons/ubb/url2.png", "url", "url", 0, true],
+							["http://images.readmore.de/img/icons/ubb/quote.png", "quote", "quote", 0, true],
+							["http://images.readmore.de/img/icons/ubb/spoil.png", "spoiler", "spoiler", 0, true],
+							["http://images.readmore.de/img/icons/ubb/youtube.png", "youtube", "youtube", 0, true],
+							["http://i.imgur.com/ZQ5jN.png", "img", "img", 0, true]],
+
+			toolbarButtonTexts: [["http://i.imgur.com/I16Hg.png", "\x28\u256f\xb0\u25a1\xb0\uff09\u256f\ufe35\x20\u253b\u2501\u253b", "tableflip"],
+							["http://i.imgur.com/M92Ll.png", "[youtube]3WzB63CUOtc[/youtube]", "aha bye"],
+							["http://i.imgur.com/oOZFn.png", "[image]http://imgur.com/ERRRn[/image]", "mckay outfit"]],
+
+			getToolbarHtml: function() {
+				var	colorButtons = '',
+					btnTags = '',
+					btnTexts = ''
+					ndm = '';
+
+				$.each(RMUS.miscellaneous.extrabuttons.colorSet, function(index, color) {
+					colorButtons += (index > 0 ? '&thinsp;' : '') + RMUS.miscellaneous.extrabuttons.makeTag(color[1], color[0], 'color', color[0], true);
+				});
+
+				$.each(RMUS.miscellaneous.extrabuttons.toolbarButtonTags, function(index, btnTag) {
+					btnTags += RMUS.miscellaneous.extrabuttons.makeTag(btnTag[0], btnTag[1], btnTag[2], btnTag[3]) + '&nbsp;';
+				});
+
+				$.each(RMUS.miscellaneous.extrabuttons.toolbarButtonTexts, function(index, btnText) {
+					btnTexts += RMUS.miscellaneous.extrabuttons.makeText(btnText[0], btnText[1], btnText[2]) + '&nbsp;';
+				});
+
+				if (RMUS.miscellaneous.extrabuttons.isNDM()) {
+					ndm = '<a href="?cont=forum/thread&threadid=99580&pagenum=lastpage" style="color: #ffffff;">ndm!</a> ';
+				}
+
+				return '<div id="rmus-container">Text' +
+				'<div id="rmus-toolbar" style="margin-right: 12px; float: right;">' +
+				'<div id="rmus-toolbar-main" style="margin-bottom: 1px;text-align:right;">' +
+
+				btnTags + '&emsp;' +
+				colorButtons +
+				'<span id="rmus-extend-toolbar" style="font-weight:normal; cursor: pointer; width: 15px; display: inline-block;" title="Show Extended Toolbar">+</span>' +
+				'</div>' +
+				'<div id="rmus-toolbar-extended" style="display:none;">' +
+				'<div style="float: left;">' +
+
+				btnTexts +
+
+				'</div>' +
+				'<div style="float: right; margin: 0px 0px 2px 0px;">' +
+				'&emsp;<span style="font-weight: normal"><span style="color: #ffffff;">-&gt; Quicklinks:</span> ' +
+				ndm +
+				'<a href="?cont=forum/thread&threadid=73247&pagenum=lastpage" style="color: #ffffff;">kfka</a> ' +
+				'<a href="?cont=forum/thread&threadid=108026&pagenum=lastpage" style="color: #ffffff;">csb</a> ' +
+				'<a href="?cont=forum/thread&threadid=109737&pagenum=lastpage" style="color: #ffffff;">ssb</a> ' +
+				'<a href="?cont=search&selected=forum" style="color: #ffffff;">sufu</a></span>' +
+				'</div>' +
+				'<div style="clear: both;"></div>' +
+				'</div>' +
+				'</div>' +
+				'<div style="clear: right;"></div></div>';
+			},
+			init: function() {
+				RMUS.log('Extrabuttons started...');
+
+				RMUS.miscellaneous.extrabuttons.getToolbar().css('height', 'auto').html(RMUS.miscellaneous.extrabuttons.getToolbarHtml());
+
+				$('a.rmus-control-btn').click(function(e) {
+					e.preventDefault();
+
+					var btype = $(this).attr('data-btype'),
+					params = $(this).attr('data-params');
+
+					switch(btype) {
+						case 'tag':
+							params = params.split(',');
+							RMUS.miscellaneous.extrabuttons.insertTag(params[0], params[1], params[2]);
+							break;
+						case 'txt':
+							RMUS.miscellaneous.extrabuttons.insertText(params);
+							break;
+					}
+				});
+				$('span#rmus-extend-toolbar').click(RMUS.miscellaneous.extrabuttons.toggleToolbar);
+			}
+		},
+
 	},
 
 	leftColumn: {
@@ -1309,7 +1310,7 @@ if (content.forum_thread){
 // In der Threadansicht, beim erstellen von neuen Threads oder beim Editieren einblenden
 if (content.forum_thread || content.forum_newtopic || content.forum_edit){
 	if (RMUS.options.options.miscellaneous_extraButtons == 'checked') {
-		RMUS.extrabuttons.init();
+		RMUS.miscellaneous.extrabuttons.init();
 	}
 }
 
