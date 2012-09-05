@@ -14,11 +14,11 @@
 var RMUS = {
 
     log : function(msg) {
-        console.log('[RMUS] ' + msg);
+        console.log('[RMUS-LOG] ' + msg);
     },
 
     info: function(msg) {
-        console.info('[RMUS] ' + msg);
+        console.info('[RMUS-INFO] ' + msg);
     },
 
     browser: {
@@ -188,23 +188,69 @@ var RMUS = {
                 return (new Date()).getHours() < 7;
             },
             getToolbar: function() {
-                return $('div.headline_bg', 'form[name=submitpost]');
+                var form = RMUS.miscellaneous.extrabuttons.getForm(),
+                    toolbar, container;
+
+                if (content.news || content.matches || content.profile) {
+                    container = form.parent('div.center');
+
+                    if ($('div.headline_bg', container).length === 0) {
+                        toolbar = $('<div class="headline_bg" />');
+                        toolbar.css('padding', '3px 0px');
+                        container.prepend(toolbar);
+                    }
+
+                    return $('div.headline_bg', container);
+                } else if (content.forum_thread || content.forum_edit || content.forum_newtopic) {
+                    return $('div.headline_bg', RMUS.miscellaneous.extrabuttons.getForm());
+                } else if (content.msg) {
+                    container = RMUS.miscellaneous.extrabuttons.getCommentBox().parent();
+
+                    if ($('div.headline_bg', container).length === 0) {
+                        toolbar = $('<div class="headline_bg" />');
+                        toolbar.css('padding', '3px 0px');
+                        container.prepend(toolbar);
+                    }
+
+                    return $('div.headline_bg', container);
+                }
+
+                return null;
+            },
+            getForm: function() {
+                if (content.news || content.matches || content.profile) {
+                    return $('form[name=form_comment]');
+                } else if (content.forum_thread || content.forum_newtopic) {
+                    return $('form[name=submitpost]');
+                } else if (content.forum_edit) {
+                    return $('form[name=submiteditthread]');
+                } else if (content.msg) {
+                    return $('td.text_h1_j form');
+                }
+
+                return null;
             },
             getToolbarExtended: function() {
                 return $('div#rmus-toolbar-extended', RMUS.miscellaneous.extrabuttons.getToolbar());
             },
             getCommentBox: function() {
-                return $('textarea#c_comment', 'form[name=submitpost]');
+                if (content.profile) {
+                    return $('textarea[name=comment]', RMUS.miscellaneous.extrabuttons.getForm());
+                } else if (content.msg) {
+                    return $('textarea[name=msg]', RMUS.miscellaneous.extrabuttons.getForm());
+                }
+
+                return $('textarea#c_comment', RMUS.miscellaneous.extrabuttons.getForm());
             },
             insertTag: function(tname, attr, endTag) {
                 if ('url' === tname) {
-                    attr = prompt('Gib den gewünschten Link an: ', 'http://');
+                    attr = prompt('Bitte gib den gewünschten Link an: ', 'http://');
                 }
 
                 var commentBox = RMUS.miscellaneous.extrabuttons.getCommentBox().get(0),
                     currText = commentBox.value,
-                    pos1 = commentBox.selectionStart + tname.length + 2 + (attr ? (attr.length + 1) : 0),
-                    pos2 = commentBox.selectionEnd + tname.length + 2 + (attr ? (attr.length + 1) : 0) + (endTag ? (tname.length + 3) : 0),
+                    pos1 = commentBox.selectionStart + tname.length + 2 + (attr != 0 ? (attr.length + 1) : 0),
+                    pos2 = commentBox.selectionEnd + tname.length + 2 + (attr != 0 ? (attr.length + 1) : 0) + (endTag ? (tname.length + 3) : 0),
                     range = (commentBox.selectionStart != commentBox.selectionEnd);
 
                 commentBox.value = currText.substring(0, commentBox.selectionStart) + '[' + tname + (attr != 0 ? '=' + attr + '' : '') + ']' + (endTag ? currText.substring(commentBox.selectionStart, commentBox.selectionEnd) + '[/' + tname + ']' : '') + currText.substring(commentBox.selectionEnd, currText.length);
@@ -233,52 +279,52 @@ var RMUS = {
             },
             toggleToolbar: function() {
                 var toolbar = RMUS.miscellaneous.extrabuttons.getToolbarExtended(),
-                    triggerBtn = $('span#rmus-extend-toolbar'),
-                    txt = (triggerBtn.text() == '+') ? '-' : '+';
+		    triggerBtn = $('span#rmus-extend-toolbar'),
+		    txt = (triggerBtn.text() == '+') ? '-' : '+';
 
                 toolbar.toggle();
                 triggerBtn.text(txt);
             },
             colorSet:	[["#ff0000", "http://i.imgur.com/yK4UQ.png"],
-                        ["#ff8000", "http://i.imgur.com/xdj9r.png"],
-                        ["#ffff00", "http://i.imgur.com/cQrl0.png"],
-                        ["#80ff00", "http://i.imgur.com/KTpVX.png"],
-                        ["#00ff00", "http://i.imgur.com/NhpYN.png"],
-                        ["#00ff80", "http://i.imgur.com/D4JCR.png"],
-                        ["#00ffff", "http://i.imgur.com/jA74E.png"],
-                        ["#0080ff", "http://i.imgur.com/cQpDh.png"],
-                        ["#0000ff", "http://i.imgur.com/7DXlk.png"],
-                        ["#8000ff", "http://i.imgur.com/t79Yf.png"],
-                        ["#ff00ff", "http://i.imgur.com/IwKL1.png"],
-                        ["#ff0080", "http://i.imgur.com/cKrre.png"],
-                        ["#000000", "http://i.imgur.com/eeX1k.png"],
-                        ["#333333", "http://i.imgur.com/B4ToQ.png"],
-                        ["#666666", "http://i.imgur.com/OuClO.png"],
-                        ["#999999", "http://i.imgur.com/gc8Za.png"],
-                        ["#cccccc", "http://i.imgur.com/TwNb6.png"],
-                        ["#ffffff", "http://i.imgur.com/uq9mG.png"]],
+			["#ff8000", "http://i.imgur.com/xdj9r.png"],
+			["#ffff00", "http://i.imgur.com/cQrl0.png"],
+			["#80ff00", "http://i.imgur.com/KTpVX.png"],
+			["#00ff00", "http://i.imgur.com/NhpYN.png"],
+			["#00ff80", "http://i.imgur.com/D4JCR.png"],
+			["#00ffff", "http://i.imgur.com/jA74E.png"],
+			["#0080ff", "http://i.imgur.com/cQpDh.png"],
+			["#0000ff", "http://i.imgur.com/7DXlk.png"],
+			["#8000ff", "http://i.imgur.com/t79Yf.png"],
+			["#ff00ff", "http://i.imgur.com/IwKL1.png"],
+			["#ff0080", "http://i.imgur.com/cKrre.png"],
+			["#000000", "http://i.imgur.com/eeX1k.png"],
+			["#333333", "http://i.imgur.com/B4ToQ.png"],
+			["#666666", "http://i.imgur.com/OuClO.png"],
+			["#999999", "http://i.imgur.com/gc8Za.png"],
+			["#cccccc", "http://i.imgur.com/TwNb6.png"],
+			["#ffffff", "http://i.imgur.com/uq9mG.png"]],
 
             toolbarButtonTags:	[["http://images.readmore.de/img/icons/ubb/b.png", "fett", "b", 0, true],
-                                ["http://images.readmore.de/img/icons/ubb/i.png", "kursiv", "i", 0, true],
-                                ["http://images.readmore.de/img/icons/ubb/u.png", "unterstrichen", "u", 0, true],
-                                ["http://images.readmore.de/img/icons/ubb/s.png", "durchgestrichen", "s", 0, true],
-                                ["http://i.imgur.com/yPNsn.png", "zentriert", "center", 0, true],
-                                ["http://i.imgur.com/74lEI.png", "hr", "hr", 0, false],
-                                ["http://images.readmore.de/img/icons/ubb/url2.png", "url", "url", 0, true],
-                                ["http://images.readmore.de/img/icons/ubb/quote.png", "quote", "quote", 0, true],
-                                ["http://images.readmore.de/img/icons/ubb/spoil.png", "spoiler", "spoiler", 0, true],
-                                ["http://images.readmore.de/img/icons/ubb/youtube.png", "youtube", "youtube", 0, true],
-                                ["http://i.imgur.com/ZQ5jN.png", "img", "img", 0, true]],
+				["http://images.readmore.de/img/icons/ubb/i.png", "kursiv", "i", 0, true],
+				["http://images.readmore.de/img/icons/ubb/u.png", "unterstrichen", "u", 0, true],
+				["http://images.readmore.de/img/icons/ubb/s.png", "durchgestrichen", "s", 0, true],
+				["http://i.imgur.com/yPNsn.png", "zentriert", "center", 0, true],
+				["http://i.imgur.com/74lEI.png", "hr", "hr", 0, false],
+				["http://images.readmore.de/img/icons/ubb/url2.png", "url", "url", 0, true],
+				["http://images.readmore.de/img/icons/ubb/quote.png", "quote", "quote", 0, true],
+				["http://images.readmore.de/img/icons/ubb/spoil.png", "spoiler", "spoiler", 0, true],
+				["http://images.readmore.de/img/icons/ubb/youtube.png", "youtube", "youtube", 0, true],
+				["http://i.imgur.com/ZQ5jN.png", "img", "img", 0, true]],
 
             toolbarButtonTexts: [["http://i.imgur.com/I16Hg.png", "\x28\u256f\xb0\u25a1\xb0\uff09\u256f\ufe35\x20\u253b\u2501\u253b", "tableflip"],
-                                ["http://i.imgur.com/M92Ll.png", "[youtube]3WzB63CUOtc[/youtube]", "aha bye"],
-                                ["http://i.imgur.com/oOZFn.png", "[image]http://imgur.com/ERRRn[/image]", "mckay outfit"]],
+				["http://i.imgur.com/M92Ll.png", "[youtube]3WzB63CUOtc[/youtube]", "aha bye"],
+				["http://i.imgur.com/oOZFn.png", "[image]http://imgur.com/ERRRn[/image]", "mckay outfit"]],
 
             getToolbarHtml: function() {
                 var colorButtons = '',
-                    btnTags = '',
-                    btnTexts = '',
-                    ndm = '';
+		    btnTags = '',
+		    btnTexts = '',
+		    ndm = '';
 
                 $.each(RMUS.miscellaneous.extrabuttons.colorSet, function(index, color) {
                     colorButtons += (index > 0 ? '&thinsp;' : '') + RMUS.miscellaneous.extrabuttons.makeTag(color[1], color[0], 'color', color[0], true);
@@ -296,7 +342,7 @@ var RMUS = {
                     ndm = '<a href="?cont=forum/thread&threadid=99580&pagenum=lastpage" style="color: #ffffff;">ndm!</a> ';
                 }
 
-                return '<div id="rmus-container">Text' +
+                return '<div id="rmus-container" style="text-align: left; color: #fff; font-weight: bold; padding-left: 5px; font-size: 11px;">Text' +
                 '<div id="rmus-toolbar" style="margin-right: 12px; float: right;">' +
                 '<div id="rmus-toolbar-main" style="margin-bottom: 1px;text-align:right;">' +
 
@@ -327,15 +373,19 @@ var RMUS = {
                 '<div style="clear: right;"></div></div>';
             },
             init: function() {
-                RMUS.log('Extrabuttons started...');
+                RMUS.info('Extrabuttons started...');
 
-                RMUS.miscellaneous.extrabuttons.getToolbar().css('height', 'auto').html(RMUS.miscellaneous.extrabuttons.getToolbarHtml());
+                try {
+                    RMUS.miscellaneous.extrabuttons.getToolbar().css('height', 'auto').html(RMUS.miscellaneous.extrabuttons.getToolbarHtml());
+                } catch (e) {
+		    // no element found to attach the toolbar
+                }
 
                 $('a.rmus-control-btn').click(function(e) {
                     e.preventDefault();
 
                     var btype = $(this).attr('data-btype'),
-                    params = $(this).attr('data-params');
+			params = $(this).attr('data-params');
 
                     switch(btype) {
                         case 'tag':
@@ -354,6 +404,7 @@ var RMUS = {
     },
 
     leftColumn: {
+
         www : {
             // Wer Wohin Warum ausblenden
             hideWww : function(){
@@ -388,8 +439,8 @@ var RMUS = {
     middleColumn: {
 
         /************************
-        *	FORUM		*
-        *************************/
+	*	FORUM		*
+	*************************/
         forum : {
 
             threadlink : '',
@@ -408,8 +459,8 @@ var RMUS = {
             },
 
             /************************
-            *	RELOAD POSTS        *
-            *************************/
+	    *	 RELOAD POSTS	    *
+	    *************************/
             reloadPosts : {
                 postcount : 0,
                 waitUntilReload : 5,
@@ -770,6 +821,7 @@ var RMUS = {
                     success: function(response) {
                         // Prüft ob der Beitrag lang genug war
                         var error = response.match('Dein Beitrag muss aus mindestens 3 Zeichen bestehen.');
+
                         if(error != null){
                             // Fehlermeldung ausgeben
                             alert('Dein Beitrag muss aus mindestens 3 Zeichen bestehen!');
@@ -792,8 +844,8 @@ var RMUS = {
     rightColumn: {
 
         /************************
-        *	TICKER		*
-        *************************/
+	*	TICKER		*
+	*************************/
         ticker : {
             // Blendet den Ticker komplett aus
             hideTicker : function(){
@@ -803,8 +855,8 @@ var RMUS = {
         },
 
         /************************
-        *	HEADLINES	*
-        *************************/
+	*	HEADLINES	*
+	*************************/
         headlines : {
             // Blendet die Schlagzeilen komplett aus
             hideHeadlines : function(){
@@ -851,8 +903,8 @@ var RMUS = {
         },
 
         /************************
-        *	FORUM		*
-        *************************/
+	*	FORUM		*
+	*************************/
         forum : {
 
             sections : new Array(),
@@ -878,7 +930,7 @@ var RMUS = {
             },
 
             // Setzt den entsprechenden HTML-Code in die Feafured-Threads Variable
-            readFeaturedThreads : function(){
+            readFeaturedThreads : function() {
                 var featuredthreads = '';
                 for (var i = RMUS.rightColumn.forum.sections[0]; i < RMUS.rightColumn.forum.sections[1]; i++){
                     var html = $('div.cont_box:last>:eq(' + i + ')').html();
@@ -979,31 +1031,31 @@ var RMUS = {
                     if(sortForum[i] == 'featuredthreads'){
                         html += RMUS.rightColumn.forum.featuredthreads + '<br>';
                         continue;
-                    } 
+                    }
                     if(sortForum[i] == 'esportforen'){
                         html += RMUS.rightColumn.forum.esportforen + '<br>';
                         continue;
-                    } 
+                    }
                     if(sortForum[i] == 'technik'){
                         html += RMUS.rightColumn.forum.technik + '<br>';
                         continue;
-                    } 
+                    }
                     if(sortForum[i] == 'offtopicforen'){
                         html += RMUS.rightColumn.forum.offtopicforen + '<br>';
                         continue;
-                    } 
+                    }
                     if(sortForum[i] == 'spiele'){
                         html += RMUS.rightColumn.forum.spiele + '<br>';
                         continue;
-                    } 
+                    }
                     if(sortForum[i] == 'diablo'){
                         html += RMUS.rightColumn.forum.diablo + '<br>';
                         continue;
-                    } 
+                    }
                     if(sortForum[i] == ''){
                         if(html.substring(html.length-8) == '<br><br>') html = html.substring(0, html.length-4);
                         continue;
-                    } 
+                    }
                 };
 
                 $('div.cont_box:last').html(html);
@@ -1036,8 +1088,8 @@ $.each(getVars, function(index, value) {
 
 var content = {
     mainpage                : false,
-    profile                 : false,
-    groups_new              : false,
+    profile		    : false,
+    groups_new		    : false,
     groups_group_list       : false,
     groups_show_group       : false,
     msg                     : false,
@@ -1225,12 +1277,12 @@ if (!content.profile && !content.guides) {
     if (RMUS.options.options.rightColumn_ticker_hideTicker == 'checked') RMUS.rightColumn.ticker.hideTicker();
 
     // Schlagzeilen ausblenden
-    if (RMUS.options.options.rightColumn_headlines_hideHeadlines == 'checked') RMUS.rightColumn.headlines.hideHeadlines();	// Alle
+    if (RMUS.options.options.rightColumn_headlines_hideHeadlines == 'checked') RMUS.rightColumn.headlines.hideHeadlines();  // Alle
     else{	// Individuell
         if(RMUS.options.options.rightColumn_headlines_hideCounterstrike == 'checked') RMUS.rightColumn.headlines.hideCounterstrike();
         if(RMUS.options.options.rightColumn_headlines_hideStarcraft == 'checked') RMUS.rightColumn.headlines.hideStarcraft();
         if(RMUS.options.options.rightColumn_headlines_hideDefenseOfTheAncients == 'checked') RMUS.rightColumn.headlines.hideDefenseOfTheAncients();
-        if(RMUS.options.options.rightColumn_headlines_hideLeagueOfLegends == 'checked')	RMUS.rightColumn.headlines.hideLeagueOfLegends();
+        if(RMUS.options.options.rightColumn_headlines_hideLeagueOfLegends == 'checked') RMUS.rightColumn.headlines.hideLeagueOfLegends();
         if(RMUS.options.options.rightColumn_headlines_hideWarcraft3 == 'checked') RMUS.rightColumn.headlines.hideWarcraft3();
         if(RMUS.options.options.rightColumn_headlines_hideSonstiges == 'checked') RMUS.rightColumn.headlines.hideSonstiges();
     }
@@ -1310,8 +1362,8 @@ if (content.forum_thread){
     }
 }
 
-// In der Threadansicht, beim erstellen von neuen Threads oder beim Editieren einblenden
-if (content.forum_thread || content.forum_newtopic || content.forum_edit){
+// Extrabuttons in den entsprechenden Seiten initialisieren
+if (content.forum_thread || content.forum_newtopic || content.forum_edit || content.matches || content.msg || content.profile){
     if (RMUS.options.options.miscellaneous_extraButtons == 'checked') {
         RMUS.miscellaneous.extrabuttons.init();
     }
