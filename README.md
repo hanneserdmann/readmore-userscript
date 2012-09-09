@@ -37,6 +37,12 @@ Features
  * Last-Page-Pfeil in der Navigation/Übersicht des Forums springt zum aktuellsten Post
  * RM Extrabuttons
 
+Contributors
+-----------------
+
+ * [@thextor](https://github.com/thextor)
+ * [@venyii](https://github.com/venyii)
+
 Credits
 -----------------
 
