@@ -134,14 +134,14 @@ var RMUS = {
 	miscellaneous: {
 		// Blendet einen Button zum Runterscrollen ein
 		buttonScrollDown : function () {
-			$('.floatr.m2:first').append('<img onclick="window.scrollTo(0, $(\'td.ten.vtop:last\').offset().top-50);" style="top: 0; height: 16px; padding-right: 2px;" alt="scroll down" src="http://thextor.de/readmore-userscript/img/arrow_down_alt1_16x16.png" />');
+			$('.floatr.m2:first').append('<img onclick="window.scrollTo(0, $(\'td.ten.vtop:last\').offset().top-50);" style="top: 0; height: 13px; padding-right: 2px; cursor: pointer;" alt="scroll down" src="http://thextor.de/readmore-userscript/img/arrow_down_alt1_16x16.png" />');
 			return false;
 		},
 
 		// Blendet einen Button zum Hochscrollen ein
 		buttonScrollUp : function () {
 			$('.floatl.m2.elf:last').css('width', '100%');
-			$('.floatl.m2.elf:last').append('<img onclick="window.scrollTo(0,0)" style="float: right; height: 16px; padding-right: 10px;" alt="scroll up" src="http://thextor.de/readmore-userscript/img/arrow_up_alt1_16x16.png" />');
+			$('.floatl.m2.elf:last').append('<img onclick="window.scrollTo(0,0)" style="float: right; height: 13px; padding-right: 10px; cursor: pointer;" alt="scroll up" src="http://thextor.de/readmore-userscript/img/arrow_up_alt1_16x16.png" />');
 			return false;
 		},
 
