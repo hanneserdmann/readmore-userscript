@@ -625,8 +625,9 @@ var RMUS = {
 						RMUS.middleColumn.forum.reloadPosts.oldTitle = $('title').text();
 					}
 
-					var title = RMUS.middleColumn.forum.reloadPosts.oldTitle;
-					title = '(' + RMUS.middleColumn.forum.reloadPosts.unseenPosts.length + ') ' + title;
+					var title = RMUS.middleColumn.forum.reloadPosts.oldTitle;					
+					if (RMUS.middleColumn.forum.reloadPosts.unseenPosts.length) title = '(' + RMUS.middleColumn.forum.reloadPosts.unseenPosts.length + ') ' + title;
+					
 					$('title').text(title);	
 				},
 
