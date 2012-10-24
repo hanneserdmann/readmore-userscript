@@ -899,11 +899,16 @@ var RMUS = {
 							$('#c_comment').val('');
 							RMUS.middleColumn.forum.reloadPosts.readNewPosts();
 						}
+						
+						// Submit-Knopf wieder einblenden
+						$('.center:last').css('display', 'block');
+					},
+					error: function (){
+						// Submit-Knopf wieder einblenden
+						$('.center:last').css('display', 'block');
 					}
 				});
-
-				// Submit-Knopf wieder einblenden
-				$('.center:last').css('display', 'block');
+				
 				return false;
 			}
 		}
