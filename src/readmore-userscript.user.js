@@ -576,6 +576,8 @@ var RMUS = {
 						}
 					});
 
+					// Rausfinden ob eine neue Seite existiert
+					if (RMUS.options.options.middleColumn_forum_reloadPosts_endlessPage != 'checked') RMUS.middleColumn.forum.reloadPosts.checkForNewPage();				
 					return false;
 				},
 
@@ -668,6 +670,28 @@ var RMUS = {
 						RMUS.middleColumn.forum.page++;
 					}
 
+					return false;
+				},
+				
+				// Prüft ob eine neue Seite im FOrum vorhanden ist vorhanden ist
+				checkForNewPage : function() {
+					if (RMUS.middleColumn.forum.reloadPosts.postcount == (25 + (25 * RMUS.middleColumn.forum.reloadPosts.finishedPages)) && $('#userscriptNewPage').length < 1) {
+						$.ajax({
+							type: 'POST',
+							async: true,
+							cache: false,
+							url: RMUS.middleColumn.forum.threadlink + '&pagenum=' + (RMUS.middleColumn.forum.page + 1),
+							contentType: 'text/html; charset=iso-8859-1;', 
+							dataType: 'html',
+							success: function (data) {
+								var posts = data.match(/\<tr class=\"post\_[^"]+\"\>[^]+?\<\/tr\>/g);
+								if (posts != null) {
+									$('table.elf.forum.p2:last').after('<br/><div id="userscriptNewPage" style="width:520px; height: 23px; background-color: #2B91FF; text-align: right; vertical-align:middle; display:table-cell"><a style="color: #fff; font-weight: bold; padding-right: 10px;" href="' + RMUS.middleColumn.forum.threadlink + '&pagenum=' + (RMUS.middleColumn.forum.page + 1) + '">Zur n&auml;chsten Seite</a></div>');
+								}
+							}
+						});
+					}
+					
 					return false;
 				}
 			},
@@ -909,6 +933,10 @@ var RMUS = {
 						$('.center:last').css('display', 'block');
 					}
 				});
+				
+				// Prüft auf Fehler beim Laden der Seite
+				var error = RMUS.miscellaneous.reloadMainpageData.mainpageData.search('<div class="error">');
+				if (error != -1) RMUS.miscellaneous.reloadMainpageData.readPage();
 				
 				return false;
 			}
