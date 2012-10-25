@@ -14,11 +14,16 @@
 var RMUS = {
 
 	info: function (message, module) {
+		if (!window.console) {
+			console = {info: function() {}}
+		};
+
 		if (module) {
 			module = '[' + module + ']';
 		} else {
 			module = '';
 		}
+
 		console.info('[RMUS]' + module + ' ' + message);
 	},
 
@@ -673,7 +678,7 @@ var RMUS = {
 					return false;
 				},
 				
-				// Prüft ob eine neue Seite im FOrum vorhanden ist vorhanden ist
+				// Prüft ob eine neue Seite im Forum vorhanden ist
 				checkForNewPage : function() {
 					if (RMUS.middleColumn.forum.reloadPosts.postcount == (25 + (25 * RMUS.middleColumn.forum.reloadPosts.finishedPages)) && $('#userscriptNewPage').length < 1) {
 						$.ajax({
@@ -691,7 +696,7 @@ var RMUS = {
 							}
 						});
 					}
-					
+
 					return false;
 				}
 			},
