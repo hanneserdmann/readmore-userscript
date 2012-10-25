@@ -19,7 +19,7 @@ Anschließend muss das Userscript in einem Ordner auf der Festplatte abgelegt we
 Eine Rückmeldung, ob die Userscripte Installiert sind, scheint es bei Opera leider nicht zu geben.
 
 Features
--------------
+------------
 
  * Post im Hintergrund nachladen (Autoupdate)
  * Ungelesene Posts markieren
@@ -35,22 +35,27 @@ Features
  * Bestimmte oder alle Schlagzeilen ausblenden
  * Buttons zum Hoch- und/oder Runterscrollen anzeigen
  * Last-Page-Pfeil in der Navigation/Übersicht des Forums springt zum aktuellsten Post
- * RM Extrabuttons
+ * Extrabuttons (Erweiterte Buttons um Kommentare zu formatieren)
+ * Fixierte Userbar (Die Userbar bleibt am oberen Browserrand fixiert)
+
+ToDo
+-------------
+ * tbc
 
 Contributors
------------------
+-------------
 
  * [@thextor](https://github.com/thextor)
  * [@venyii](https://github.com/venyii)
 
 Credits
------------------
+-------------
 
  * Biki (RM Plus Chrome Addon)
  * IllDependence (RM Extrabuttons)
 
 Links
------------------
+-------------
 
 [Readmore Userscript Thread][1]
 
