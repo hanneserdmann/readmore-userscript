@@ -60,6 +60,20 @@
 			<td align="left">
 			</td>
 			<td align="left">
+				Hinweis bei neuen Seiten einblenden
+			</td>
+			<td align="right">
+				<input type="checkbox" class="userscriptOptions" name="middleColumn_forum_reloadPosts_checkForNewPage"/>
+			</td>
+			<td align="right">
+				<img src="http://thextor.de/readmore-userscript/img/magnifying_glass_16x16.png" alt="info" title="Achtung: Funktioniert nur, wenn 'Seite endlos erweitern' deaktiv ist. Weist auf eine neue Seite hin." />
+			</td>
+		</tr>
+		<tr class="menufirstchild sub_middleColumn_forum_reloadPosts_readNewPosts">
+			<td align="left">
+				<img id="toggle_sub_middleColumn_forum_reloadPosts_endlessPage" src="http://thextor.de/readmore-userscript/img/plus_alt_16x16.png" alt="more" title="Weitere Optionen"/>
+			</td>
+			<td align="left">
 				Seite endlos erweitern
 			</td>
 			<td align="right">
@@ -69,6 +83,32 @@
 				<img src="http://thextor.de/readmore-userscript/img/magnifying_glass_16x16.png" alt="info" title="Neue Posts werden einfach eingeblendet. Es muss also nicht mehr auf eine neue Seite gewechselt werden."/>
 			</td>
 		</tr>
+		<tr class="menusecondchild sub_middleColumn_forum_reloadPosts_endlessPage">
+			<td align="left">
+			</td>
+			<td align="left">
+				Automatisch zu neuen Posts scrollen/springen
+			</td>
+			<td align="right">
+				<input type="checkbox" class="userscriptOptions" name="middleColumn_forum_reloadPosts_jumpToNewPosts"/>
+			</td>
+			<td align="right">
+				<img src="http://thextor.de/readmore-userscript/img/magnifying_glass_16x16.png" alt="info" title="Springt zu neuen posts."/>
+			</td>
+		</tr>
+		<tr class="menusecondchild sub_middleColumn_forum_reloadPosts_endlessPage">
+			<td align="left">
+			</td>
+			<td align="left">
+				Zeit zwischen zwei Sprüngen
+			</td>
+			<td align="right">
+				<input type="text" class="userscriptOptions" name="middleColumn_forum_reloadPosts_jumpToNewPosts_waitUntilNextJump"/>
+			</td>
+			<td align="right">
+				<img src="http://thextor.de/readmore-userscript/img/magnifying_glass_16x16.png" alt="info" title="Zeit in Sekunden, die zwischen 2 Spr&uuml;ngen mindestens vergehen muss."/>
+			</td>
+		</tr>		
 		<tr class="menufirstchild sub_middleColumn_forum_reloadPosts_readNewPosts">
 			<td align="left">
 				<img id="toggle_sub_middleColumn_forum_reloadPosts_markNewPosts" src="http://thextor.de/readmore-userscript/img/plus_alt_16x16.png" alt="more" title="Weitere Optionen"/>
@@ -172,6 +212,32 @@
 			</td>
 			<td align="right">
 				<img src="http://thextor.de/readmore-userscript/img/magnifying_glass_16x16.png" alt="info" title="Beitr&auml;ge werden im Hintergrund gepostet. Ein manueller Refresh der Seite entfällt."/>
+			</td>
+		</tr>
+		<tr class="menuparent">
+			<td align="left">
+			</td>
+			<td align="left">
+				Editieren ohne Reload
+			</td>
+			<td align="right">
+				<input type="checkbox" class="userscriptOptions" name="middleColumn_forum_editPost"/>
+			</td>
+			<td align="right">
+				<img src="http://thextor.de/readmore-userscript/img/magnifying_glass_16x16.png" alt="info" title="Beitr&auml;ge werden im Hintergrund Editiert. Ein manueller Refresh der Seite entfällt."/>
+			</td>
+		</tr>
+		<tr class="menuparent">
+			<td align="left">
+			</td>
+			<td align="left">
+				Scrollen bis zum Seitenende lädt die Nächste
+			</td>
+			<td align="right">
+				<input type="checkbox" class="userscriptOptions" name="middleColumn_forum_scrollForNewPage"/>
+			</td>
+			<td align="right">
+				<img src="http://thextor.de/readmore-userscript/img/magnifying_glass_16x16.png" alt="info" title="Beim ereichen des letzten Posts ggf. die n&auml;chste Seite nachladen."/>
 			</td>
 		</tr>
 		<tr>
@@ -800,6 +866,19 @@
 			</td>
 			<td align="right">
 				<img src="http://thextor.de/readmore-userscript/img/magnifying_glass_16x16.png" alt="info" title="Mehr Buttons um einen Post im Forum ansehnlicher zu gestalten."/>
+			</td>
+		</tr>
+		<tr class="menuparent">
+			<td align="left">
+			</td>
+			<td align="left">
+				Avataranimationen anhalten (IllDepence)
+			</td>
+			<td align="right">
+				<input type="checkbox" class="userscriptOptions" name="miscellaneous_stopAvatarAnimation"/>
+			</td>
+			<td align="right">
+				<img src="http://thextor.de/readmore-userscript/img/magnifying_glass_16x16.png" alt="info" title="Die Animation von Avataren stoppen."/>
 			</td>
 		</tr>
 		<tr>
