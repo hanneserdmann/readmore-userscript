@@ -227,6 +227,72 @@
 				<img src="http://thextor.de/readmore-userscript/img/magnifying_glass_16x16.png" alt="info" title="Beim ereichen des letzten Posts ggf. die n&auml;chste Seite nachladen."/>
 			</td>
 		</tr>
+		<tr class="menuparent">
+			<td align="left">
+				<img id="toggle_sub_miscellaneous_reloadMessages" src="http://thextor.de/readmore-userscript/img/plus_alt_16x16.png" alt="more" title="Weitere Optionen"/>
+			</td>
+			<td align="left">
+				Neue Nachrichten im Hintergrund nachladen
+			</td>
+			<td align="right">
+				<input type="checkbox" class="userscriptOptions" name="miscellaneous_reloadMessages"/>
+			</td>
+			<td align="right">
+				<img src="http://thextor.de/readmore-userscript/img/magnifying_glass_16x16.png" alt="info" title="Neue Beitr&auml;ge im Readmore.de-Froum werden automatisch nachgeladen. Ein Refresh des Threads entf&auml;llt somit."/>
+			</td>
+		</tr>
+		<tr class="menufirstchild sub_miscellaneous_reloadMessages">
+			<td align="left">
+			</td>
+			<td align="left">
+				Desktop-Notifications aktivieren <i>(nur Chrome)</i>
+			</td>
+			<td align="right">
+				<input type="checkbox" class="userscriptOptions" id="miscellaneous_reloadMessages_desktopNotifications" name="miscellaneous_reloadMessages_desktopNotifications" />
+			</td>
+			<td align="right">
+				<img src="http://thextor.de/readmore-userscript/img/magnifying_glass_16x16.png" alt="info" title="Deskop-Benachrichtigungen sobald es neue Nachrichten gibt."/>
+			</td>
+		</tr>
+		<tr class="menufirstchild sub_miscellaneous_reloadMessages">
+			<td align="left">
+			</td>
+			<td align="left">
+				Alert-Box bei neuen Nachrichten anzeigen
+			</td>
+			<td align="right">
+				<input type="checkbox" class="userscriptOptions" name="miscellaneous_reloadMessages_alertBox" />
+			</td>
+			<td align="right">
+				<img src="http://thextor.de/readmore-userscript/img/magnifying_glass_16x16.png" alt="info" title="Deskop-Benachrichtigungen sobald es neue Nachrichten gibt."/>
+			</td>
+		</tr>
+		<tr class="menufirstchild sub_miscellaneous_reloadMessages">
+			<td align="left">
+			</td>
+			<td align="left">
+				Sound bei neuen Nachrichten abspielen
+			</td>
+			<td align="right">
+				<input type="checkbox" class="userscriptOptions" id="notification_playsound_cb" name="miscellaneous_reloadMessages_playSound" />
+			</td>
+			<td align="right">
+				<img src="http://thextor.de/readmore-userscript/img/magnifying_glass_16x16.png" alt="info" title="Deskop-Benachrichtigungen sobald es neue Nachrichten gibt."/>
+			</td>
+		</tr>
+		<tr class="menufirstchild sub_miscellaneous_reloadMessages">
+			<td align="left">
+			</td>
+			<td align="left">
+				URL f&uuml;r die Audiodatei
+			</td>
+			<td align="right">
+				<input type="text" class="userscriptOptions" id="miscellaneous_reloadMessages_playSoundUrl" name="miscellaneous_reloadMessages_playSoundUrl" value="http://" />
+			</td>
+			<td align="right">
+				<img src="http://thextor.de/readmore-userscript/img/magnifying_glass_16x16.png" alt="info" title="Direkt-Url für den Notification Sound"/>
+			</td>
+		</tr>
 		<tr>
 			<td colspan="4">
 				&nbsp;
@@ -846,7 +912,7 @@
 			<td align="left">
 			</td>
 			<td align="left">
-				Readmore Extrabuttons (IllDepence)
+				Readmore Extrabuttons
 			</td>
 			<td align="right">
 				<input type="checkbox" class="userscriptOptions" name="miscellaneous_extraButtons"/>
