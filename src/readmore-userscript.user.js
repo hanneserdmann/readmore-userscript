@@ -1973,9 +1973,11 @@ if (content.forum_thread) {
 		// Ungelesene Posts markieren		
 		if (RMUS.options.options.middleColumn_forum_reloadPosts_markNewPosts == 'checked') {
 			// Farbe zum markieren setzen
-			if (RMUS.options.options.middleColumn_forum_reloadPosts_markPostColor.length){
+			if (RMUS.options.options.middleColumn_forum_reloadPosts_markPostColor &&
+				RMUS.options.options.middleColumn_forum_reloadPosts_markPostColor.length){
+
 				RMUS.middleColumn.forum.reloadPosts.setMarkPostColor();
-			} 
+			}
 		}
 
 		if (RMUS.options.options.middleColumn_forum_reloadPosts_jumpToNewPosts == 'checked' && RMUS.options.options.middleColumn_forum_reloadPosts_endlessPage == 'checked'){
