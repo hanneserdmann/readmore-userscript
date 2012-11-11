@@ -959,7 +959,7 @@ var RMUS = {
 					
 					setWaitUntilNextJump : function(){
 						var timeToWait = parseInt(RMUS.options.options.middleColumn_forum_reloadPosts_jumpToNewPosts_waitUntilNextJump, 10);
-						if (timeToWait > 5){
+						if (timeToWait > 0){
 							RMUS.middleColumn.forum.reloadPosts.jumpToNewPosts.waitUntilNextJump = timeToWait;
 						}
 						return false;
@@ -968,7 +968,7 @@ var RMUS = {
 					jump : function(){
 						if (RMUS.middleColumn.forum.reloadPosts.unseenPosts.length > 0){
 							if ($('#userscript_enable_jump').attr('checked') == 'checked'){
-								window.scrollTo(0, RMUS.middleColumn.forum.reloadPosts.unseenPosts[0] - (window.innerHeight * 0.55) + 10)
+								window.scrollTo(0, RMUS.middleColumn.forum.reloadPosts.unseenPosts[0] - (window.innerHeight * 0.55) + 15);
 							}
 						}
 						return false;
