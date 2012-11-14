@@ -230,6 +230,7 @@ var RMUS = {
 		},
 
 		messages: {
+			messageCount: 0,
 			getUserBarItem: function (ns) {
 				if (!ns) {
 					ns = $('body > div.user_band');
@@ -237,7 +238,6 @@ var RMUS = {
 
 				return $('div.floatl.vcenter > a[href="index.php?cont=msg"]', ns);
 			},
-			messageCount: 0,
 			checkForNewMessages: function () {
 				RMUS.info('Checking for new messages', 'Messages');
 
@@ -256,46 +256,58 @@ var RMUS = {
 						if (currentLinkNode.length === 1) {
 							currentMsgCount = parseInt(currentLinkNode.text().match(/\d+/g)[0]);
 
-							if (newMsgCount > currentMsgCount) {
-								var msgsReceived = newMsgCount - currentMsgCount;
-
-								RMUS.info('Received ' + msgsReceived + ' new message(s)', 'Messages');
+							if (newMsgCount !== currentMsgCount) {
 								RMUS.miscellaneous.messages.messageCount = newMsgCount;
-								RMUS.miscellaneous.messages.displayToUser(msgsReceived, currentLinkNode);
-								if (RMUS.options.options.miscellaneous_reloadMessages_playSound == 'checked') {
-									RMUS.miscellaneous.messages.playSound();
+
+								if (newMsgCount > currentMsgCount) {
+									var msgsReceived = newMsgCount - currentMsgCount;
+
+									RMUS.info('Received ' + msgsReceived + ' new message(s)', 'Messages');
+									RMUS.miscellaneous.messages.changeUserBar(newMsgCount, true);
+									RMUS.miscellaneous.messages.notifyUser(msgsReceived);
+								} else if (newMsgCount < currentMsgCount) {
+									RMUS.miscellaneous.messages.changeUserBar(newMsgCount, (newMsgCount > 0) ? true : false);
 								}
 							}
 						}
 					}
 				});
 			},
-			displayToUser: function (msgsReceived, currentLinkNode) {
+			changeUserBar: function (msgCount, showImg) {
 				// Standard Animation für die User-Navi
-				var currentLinkParent = currentLinkNode.parent('div');
+				var node = RMUS.miscellaneous.messages.getUserBarItem(),
+					nodeParent = node.parent('div');
 
-				currentLinkParent.animate({
+				nodeParent.animate({
 					'margin-top': '-12px'
 				}, 333, function () {
-					currentLinkParent.css('margin-top', '32px');
-					currentLinkNode.text('Nachrichten: ' + RMUS.miscellaneous.messages.messageCount);
+					nodeParent.css('margin-top', '32px');
+					node.text('Nachrichten: ' + msgCount);
+					var msgImg = $('img', nodeParent);
 
-					if ($('img', currentLinkNode).length === 0) {
-						currentLinkNode.html(currentLinkNode.text() + ' <img src="http://images.readmore.de/img/icons/newmsgs.gif" alt="Neue Nachrichten">');
+					if (true === showImg) {
+						if (msgImg.length === 0) {
+							node.html(node.text() + ' <img src="http://images.readmore.de/img/icons/newmsgs.gif" alt="Neue Nachrichten">');
+						}
+					} else {
+						if (msgImg.length > 0) {
+							msgImg.remove();
+						}
 					}
 
-					currentLinkParent.animate({
+					nodeParent.animate({
 						'margin-top': '10px'
 					}, 333);
 				});
-
+			},
+			notifyUser: function (msgsReceived) {
 				// Browserspezifisches Melden von neuen Nachrichten
 				switch (RMUS.browser.getBrowser()) {
 					case 'webkit':
 						if (window.webkitNotifications) {
 							if (window.webkitNotifications.checkPermission() == 0) {
 								window.webkitNotifications.createNotification(
-									'http://images.readmore.de/img/icons/else.png',
+									'http://f1.hostingsociety.com/rmus/readmore.png',
 									'Neue Nachricht!',
 									'Du hast eine neue Readmore Nachricht erhalten!'
 								).show();
@@ -318,6 +330,10 @@ var RMUS = {
 					case 'unknown':
 						// what is going on here!?
 				}
+
+				if (RMUS.options.options.miscellaneous_reloadMessages_playSound == 'checked') {
+					RMUS.miscellaneous.messages.playSound();
+				}
 			},
 			playSound: function () {
 				var audioUrl = RMUS.options.options.miscellaneous_reloadMessages_playSoundUrl;
@@ -331,8 +347,7 @@ var RMUS = {
 						audioElement.pause();
 						audioElement.play();
 					} catch (e) {
-						RMUS.info('Error occurred', 'Messages');
-						RMUS.info(e.message, 'Messages');
+						RMUS.info('Error occurred (File: ' + audioUrl + ') - ' + e.message, 'Messages');
 					}
 				}
 			}
@@ -2094,7 +2109,7 @@ if (RMUS.options.options.miscellaneous_checkVersion == 'checked') {
 	RMUS.miscellaneous.checkVersion();
 }
 
-// content in den Localestorage speichern
+// content in den LocalStorage speichern
 localStorage.setItem('userscriptContent', JSON.stringify(content));
 
 // Im Hintergrund ausgeführte Aktionen starten (alle 15 Sekunden, zeitunkritisch)
