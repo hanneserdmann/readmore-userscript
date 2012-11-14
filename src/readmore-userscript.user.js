@@ -575,15 +575,16 @@ var RMUS = {
 						var pageData = data;
 						
 						if(pageData != null){
-							RMUS.miscellaneous.reloadMainpageData.mainpageData = pageData.replace(/(\r\n|\n|\r)/gm,' ').replace(/\s+/g," ");
+							// Prüft auf Fehler beim Laden der Seite
+							if (pageData.search('<div class="error">') != -1) {
+								RMUS.miscellaneous.reloadMainpageData.readPage();
+							} else {
+								RMUS.miscellaneous.reloadMainpageData.mainpageData = pageData.replace(/(\r\n|\n|\r)/gm,' ').replace(/\s+/g," ");
+							}
 						}
 					}
 				});
 
-				// Prüft auf Fehler beim Laden der Seite
-				var error = RMUS.miscellaneous.reloadMainpageData.mainpageData.search('<div class="error">');
-				if (error != -1) RMUS.miscellaneous.reloadMainpageData.readPage();
-				
 				return false;
 			}
 		},
