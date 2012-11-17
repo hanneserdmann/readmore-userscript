@@ -224,7 +224,7 @@ var RMUS = {
 			var lastpage = document.location.href.match(/pagenum=lastpage/);
 			if (lastpage != null) {
 				if (lastpage[0] == 'pagenum=lastpage') {
-					window.scrollTo(0, $('td.ten.vtop:last').offset().top - 50);
+					window.scrollTo(0, $('td.ten.vtop:last').offset().top - 50);					
 				}
 			}
 			
@@ -1012,6 +1012,7 @@ var RMUS = {
 				// Zu neuen Posts scrollen
 				jumpToNewPosts :{
 					waitUntilNextJump : 5,
+					oldmimit : 0,
 					
 					setWaitUntilNextJump : function(){
 						var timeToWait = parseInt(RMUS.options.options.middleColumn_forum_reloadPosts_jumpToNewPosts_waitUntilNextJump, 10);
@@ -1024,7 +1025,10 @@ var RMUS = {
 					jump : function(){
 						if (RMUS.middleColumn.forum.reloadPosts.unseenPosts.length > 0){
 							if ($('#userscript_enable_jump').attr('checked') == 'checked'){
-								window.scrollTo(0, RMUS.middleColumn.forum.reloadPosts.unseenPosts[0] - (window.innerHeight * 0.55) + 15);
+								var jumpto = RMUS.middleColumn.forum.reloadPosts.unseenPosts[0] - (window.innerHeight * 0.55) + 25;								
+								if (jumpto <= RMUS.middleColumn.forum.reloadPosts.jumpToNewPosts.oldmimit) jumpto = RMUS.middleColumn.forum.reloadPosts.jumpToNewPosts.oldmimit + 25;
+								window.scrollTo(0, jumpto);
+								RMUS.middleColumn.forum.reloadPosts.jumpToNewPosts.oldmimit = jumpto;
 							}
 						}
 						return false;
