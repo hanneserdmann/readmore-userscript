@@ -324,7 +324,7 @@ var RMUS = {
 						if (window.webkitNotifications) {
 							if (window.webkitNotifications.checkPermission() == 0) {
 								window.webkitNotifications.createNotification(
-									'http://f1.hostingsociety.com/rmus/readmore.png',
+									'http://thextor.de/readmore-userscript/img/msg-notification-icon.png',
 									'Neue Nachricht!',
 									'Du hast eine neue Readmore Nachricht erhalten!'
 								).show();
