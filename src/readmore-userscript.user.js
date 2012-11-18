@@ -724,30 +724,33 @@ var RMUS = {
 					var br = '<br />';
 					var user = String($(this).find('a.bml').attr('title'));
 					var notenr = RMUS.miscellaneous.note.notenumber++;
-					
+
 					if ($($(this).html()).length > 0) br = '<br /><br />';						
 					$(this).append(br + '<center><a href="javascript:void(o);" name="note_' + user + '_' + notenr + '">Notiz</a><br /><br /><textarea style="display:none;height:100px;width:98%" name="note_' + user + '_' + notenr + '"></textarea></center>');
-					
-					$('a[name="note_' + user + '_' + notenr + '"]').click(function (){
-						var notes = JSON.parse(localStorage.getItem('userscriptNote'));
+
+					$('a[name="note_' + user + '_' + notenr + '"]').click(function () {
+						var notes = JSON.parse(localStorage.getItem('userscriptNote')),
+							note = $('textarea[name="note_' + user + '_' + notenr + '"]'),
+							closing = note.is(':visible');
+
 						if (notes == null) notes = {};
-							
-						if (String($('textarea[name="note_' + user + '_' + notenr + '"]').val()).length > 0){
-							notes[user] = String($('textarea[name="note_' + user + '_' + notenr + '"]').val()).trim();
-							$('textarea[name="note_' + user + '_' + notenr + '"]').val('');							
+
+						if (true === closing) {
+							notes[user] = String(note.val()).trim();
+						} else {
+							note.val(notes[user]);
 						}
-						else $('textarea[name="note_' + user + '_' + notenr + '"]').val(notes[user]);
-						
-						$('textarea[name="note_' + user + '_' + notenr + '"]').toggle();
+
+						note.toggle();
 						localStorage.setItem('userscriptNote', JSON.stringify(notes));
-					});				
-				});	
-				
+					});
+				});
+
 				return false;
 			}
 		}
 	},
-	
+
 	leftColumn: {
 
 		www : {
