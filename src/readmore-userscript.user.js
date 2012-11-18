@@ -683,12 +683,19 @@ var RMUS = {
 					RMUS.miscellaneous.ignoreUser.setUser();
 				}
 				
-				if (thread) {
+				if (thread) {					
 					$(RMUS.miscellaneous.ignoreUser.user).each(function(index, value) {
-						$('tr[class*=post_]:has(a[title="' + value + '"]) td:odd:not(:has(div[id*=ignored_]))').each(function() {
-							RMUS.info('Ignoring user: ' + value, 'User');
-							$(this).html('<a href="javascript:void(0)" onclick="$(\'#ignored_' + RMUS.miscellaneous.ignoreUser.ignoreCount + '\').toggle();">Beitrag einblenden</a><br/>' + '<br/><div style="display:none;" id="ignored_' + RMUS.miscellaneous.ignoreUser.ignoreCount + '">' + $(this).html() + '</div>');
-							RMUS.miscellaneous.ignoreUser.ignoreCount++;
+						$('tr[class*=post_]:has(a[title="' + value + '"]) td:not(:has(div[id*=ignored_]))').each(function() {							
+							if (RMUS.miscellaneous.ignoreUser.ignoreCount % 2){
+								RMUS.miscellaneous.ignoreUser.ignoreCount--;
+								RMUS.info('Ignoring user: ' + value, 'User');
+								$(this).html('<br/><div style="display:none;" class="ignored_' + RMUS.miscellaneous.ignoreUser.ignoreCount + '">' + $(this).html() + '</div>');
+								RMUS.miscellaneous.ignoreUser.ignoreCount = RMUS.miscellaneous.ignoreUser.ignoreCount + 2;
+							} 
+							else{
+								$(this).html('<a href="javascript:void(0)" onclick="$(\'.ignored_' + RMUS.miscellaneous.ignoreUser.ignoreCount + '\').toggle();">Beitrag einblenden</a><br/>' + '<br/><div style="display:none;" class="ignored_' + RMUS.miscellaneous.ignoreUser.ignoreCount + '">' + $(this).html() + '</div>');
+								RMUS.miscellaneous.ignoreUser.ignoreCount++;
+							}							
 						});
 					});					
 				}
@@ -697,7 +704,7 @@ var RMUS = {
 					$(RMUS.miscellaneous.ignoreUser.user).each(function(index, value) {
 						$('div .elf.cmt_kopf:has(a.cmt_head:contains(' + value + '))').next().each(function(){
 							RMUS.info('Ignoring user: ' + value, 'User');
-							$(this).html('<a href="javascript:void(0)" onclick="$(\'#ignored_' + RMUS.miscellaneous.ignoreUser.ignoreCount + '\').toggle();">Beitrag einblenden</a><br/>' + '<br/><div style="display:none;" id="ignored_' + RMUS.miscellaneous.ignoreUser.ignoreCount + '">' + $(this).html() + '</div>');
+							$(this).html('<a href="javascript:void(0)" onclick="$(\'.ignored_' + RMUS.miscellaneous.ignoreUser.ignoreCount + '\').toggle();">Beitrag einblenden</a><br/>' + '<br/><div style="display:none;" class="ignored_' + RMUS.miscellaneous.ignoreUser.ignoreCount + '">' + $(this).html() + '</div>');
 							RMUS.miscellaneous.ignoreUser.ignoreCount++;
 						});
 					});					
@@ -912,9 +919,6 @@ var RMUS = {
 										
 										RMUS.middleColumn.forum.reloadPosts.unseenPosts.push(parseInt($('[class^=post_]:last').offset().top, 10));  // Zum markieren der neuen Posts
 										RMUS.middleColumn.forum.reloadPosts.postcount++;
-										
-										var postuserid = posts[i-oldPosts].match(/href="index.php\?cont=profile&amp;id=(.+?)"/)[1];
-										if (postuserid == userid) RMUS.middleColumn.forum.reloadPosts.unseenPosts = [];
 									}
 
 									RMUS.info('Received ' + RMUS.middleColumn.forum.reloadPosts.unseenPosts.length + ' new posts', 'Forum');
