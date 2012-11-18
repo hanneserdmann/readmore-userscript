@@ -828,7 +828,7 @@ var RMUS = {
 
 						if (streams != null && icons != null){
 							for (var i = 0; i < icons.length; i++){
-								var username = usernames[i].replace(/title=/g, '').replace(/@/g, '').replace(/"/g, '').replace(/own3d.tv/g, '').replace(/justin.tv/g, '').trim();
+								var username = usernames[i].replace(/title=/g, '').replace(/@/g, '').replace(/"/g, '').replace(/own3d.tv/g, '').replace(/justin.tv/g, '').trim().replace(/[0-9] Zuschauer$/, '');
 								var anbieter = streamingsite[i].replace(/floatl">/, '');
 
 								if (icons[i] == 'src="http://images.readmore.de/img/icons/.png"') icons[i] = 'src="http://images.readmore.de/img/icons/else.png"';
@@ -2248,7 +2248,6 @@ if (RMUS.options.options.miscellaneous_checkVersion == 'checked') {
 
 // content in den LocalStorage speichern
 if (RMUS.browser.supportsLocalStorage()) {
-	//localStorage.setItem('userscriptContent', JSON.stringify(content));
 	var seen = [];
 	localStorage.setItem('userscriptContent', 
 		JSON.stringify(content, function(key, val) {
