@@ -53,7 +53,7 @@ Features
 
 ToDo
 -------------
- * tbc
+ * Edit ohne Reload für den Firstpost
 
 Contributors
 -------------
