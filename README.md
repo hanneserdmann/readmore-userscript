@@ -7,7 +7,7 @@ Installation
 ------------
 
 **Google Chrome**
-Das Script herunterladen danach in den Einstellungen "Erweiterungen" auswählen und das Script per Drag & Drop in den Browser ziehen.
+Das Script herunterladen danach in den Einstellungen "Erweiterungen" auswählen und das Script per Drag & Drop in den Browser ziehen. Eventuell muss die Checkbox "Entwicklermodus" aktiviert werden.
 
 **Mozilla Firefox**
 Im Firefox wird zum ausführen von Userscripten eine Erweiterung benötigt. Die bekanntesten Vertreter sind Greasemonkey und Scriptish - ich empfehle letzteres.
@@ -21,22 +21,35 @@ Eine Rückmeldung, ob die Userscripte Installiert sind, scheint es bei Opera lei
 Features
 ------------
 
- * Post im Hintergrund nachladen (Autoupdate)
- * Ungelesene Posts markieren
- * Anzahl der neuen Posts im Titel (Tab) anzeigen
- * Bei ungelesene Posts das Favicon ändern
- * Endlose Seite
+ * Neue Forenbeiträge im Hintergrund nachladen (Autoupdate)
+     * Seite endlos erweitern
+          * Automatisch zu neuen Posts scrollen/springen
+     * Neue Einträge markieren
+          * Ungelesene Posts im Titel / Tab anzeigen
+          * Favicon verändern
+     * Hinweis bei neuen Seiten einblenden
+ * Neue Nachrichten im Hintergrund nachladen (PM)
+ * Readmore User ignorieren
+ * Beiträge ohne Reload senden
+ * Editieren ohne Reload
+ * Streams aktualisieren
  * Vorschaufunktion
- * Post senden ohne die Seite neu laden zu müssen
- * Foren umsortieren und/oder ausblenden
- * Ticker komplett ausblenden
- * Wer Wohin Warum komplett ausblenden
- * Bestimmte oder alle Steams ausblenden
- * Bestimmte oder alle Schlagzeilen ausblenden
- * Buttons zum Hoch- und/oder Runterscrollen anzeigen
- * Last-Page-Pfeil in der Navigation/Übersicht des Forums springt zum aktuellsten Post
- * Extrabuttons (Erweiterte Buttons um Kommentare zu formatieren)
- * Fixierte Userbar (Die Userbar bleibt am oberen Browserrand fixiert)
+ * Forennavigation aktualisieren
+ * Scrollen bis zum Seitenende lädt die Nächste
+ * Forum ausblenden und umsortieren
+ * Schlagzeilen ausblenden
+ * Streams ausblenden
+ * Streams von Readmoreusern anzeigen
+ * Fixierte Toolbar
+ * Ticker ausblenden
+ * Wer? Wohin? Warum? ausblenden
+ * Notizen
+ * Titel / Tab umsortieren
+ * Readmore Extrabuttons
+ * Youtubeplayer ersetzen
+ * Avataranimationen anhalten
+ * Button zum Hoch- und Runterscrollen anzeigen
+ * Last-Page-Pfeil springt zum letzten Post
 
 ToDo
 -------------
