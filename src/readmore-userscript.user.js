@@ -2245,7 +2245,18 @@ if (RMUS.options.options.miscellaneous_checkVersion == 'checked') {
 
 // content in den LocalStorage speichern
 if (RMUS.browser.supportsLocalStorage()) {
-	localStorage.setItem('userscriptContent', JSON.stringify(content));
+	//localStorage.setItem('userscriptContent', JSON.stringify(content));
+	var seen = [];
+	localStorage.setItem('userscriptContent', 
+		JSON.stringify(content, function(key, val) {
+		   if (typeof val == "object") {
+			if (seen.indexOf(val) >= 0)
+			    return undefined
+			seen.push(val)
+		    }
+		    return val
+		})
+	);
 }
 
 // Im Hintergrund ausgeführte Aktionen starten (alle 15 Sekunden, zeitunkritisch)
