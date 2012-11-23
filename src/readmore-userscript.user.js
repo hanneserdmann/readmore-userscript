@@ -1338,11 +1338,15 @@ var RMUS = {
 			
 				initializeEvent : function(){
 					$('tr[class*=footer_]>td>a[href*=edit]').click(function () {
-						var postid = parseInt(String($(this).attr('href')).match(/postid=(.*)/)[1], 10);	
-						$(this).attr('href', 'javascript:void(0);');
-						
-						RMUS.middleColumn.forum.editPost.loadPost(postid);
-						RMUS.middleColumn.forum.editPost.showEditMenu(postid);
+						var hrefParts = String($(this).attr('href')).match(/postid=(.*)/);
+
+						if (null !== hrefParts) {
+							var postid = parseInt(hrefParts[1], 10);	
+							$(this).attr('href', 'javascript:void(0);');
+
+							RMUS.middleColumn.forum.editPost.loadPost(postid);
+							RMUS.middleColumn.forum.editPost.showEditMenu(postid);
+						}
 					});
 					
 					return false;
