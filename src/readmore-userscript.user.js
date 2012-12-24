@@ -324,13 +324,15 @@ var RMUS = {
 				// Browserspezifisches Melden von neuen Nachrichten
 				switch (RMUS.browser.getBrowser()) {
 					case 'webkit':
-						if (window.webkitNotifications) {
-							if (window.webkitNotifications.checkPermission() == 0) {
-								window.webkitNotifications.createNotification(
-									'http://thextor.de/readmore-userscript/img/msg-notification-icon.png',
-									'Neue Nachricht!',
-									'Du hast eine neue Readmore Nachricht erhalten!'
-								).show();
+						if (RMUS.options.options.miscellaneous_reloadMessages_desktopNotifications == 'checked'){
+							if (window.webkitNotifications) {
+								if (window.webkitNotifications.checkPermission() == 0) {
+									window.webkitNotifications.createNotification(
+										'http://thextor.de/readmore-userscript/img/msg-notification-icon.png',
+										'Neue Nachricht!',
+										'Du hast eine neue Readmore Nachricht erhalten!'
+									).show();
+								}
 							}
 						}
 						break;
@@ -2252,7 +2254,7 @@ if (RMUS.browser.supportsLocalStorage()) {
 	);
 }
 
-// Im Hintergrund ausgeführte Aktionen starten (alle 15 Sekunden, zeitunkritisch)
+// Im Hintergrund ausgeführte Aktionen starten (zeitunkritisch)
 window.setInterval(function(){
 
 	// content auslesen
