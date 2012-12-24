@@ -1800,9 +1800,9 @@ var RMUS = {
 			},
 			
 			// Forennavigation manuell neuladen
-			realoadForumPerClick : {
+			reloadForumPerClick : {
 				addimage : function (){
-					$('a.headline_link[href="index.php?cont=forum/forum"]').parent().append('<span style="float: right;"><img id="userscript_realoadForumButton" src="http://thextor.de/readmore-userscript/img/refresh.png" style="height: 13px; padding-top: 2px; cursor: pointer;">&nbsp;</span>');
+					$('a.headline_link[href="index.php?cont=forum/forum"]').parent().append('<span style="float: right;"><img id="userscript_reloadForumButton" src="http://thextor.de/readmore-userscript/img/refresh.png" style="height: 13px; padding-top: 2px; cursor: pointer;">&nbsp;</span>');
 					return false;
 				},
 				
@@ -2064,8 +2064,8 @@ if (!content.profile && !content.guides) {
 	}
 	
 	// Button um die Forennavigation zu aktualisieren
-	RMUS.rightColumn.forum.realoadForumPerClick.addimage();
-	$('#userscript_realoadForumButton').click(function () { RMUS.rightColumn.forum.realoadForumPerClick.reload(); });
+	RMUS.rightColumn.forum.reloadForumPerClick.addimage();
+	$('#userscript_reloadForumButton').click(function () { RMUS.rightColumn.forum.reloadForumPerClick.reload(); });
 }
 
 // Nur im Forum (Threadansicht) aktivieren
