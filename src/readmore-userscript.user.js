@@ -2222,6 +2222,13 @@ $('#toggle_sub_miscellaneous_ignoreUser').click(function () {
 	$('.sub_miscellaneous_ignoreUser').toggle();
 });
 
+// Icon fuer das Auf- und Zuklappen anpassen
+$('[id*=toggle_sub]').click(function(){
+	var img = $(this).attr('src').trim();
+	if (img == 'http://thextor.de/readmore-userscript/img/plus_alt_16x16.png') $(this).attr('src', 'http://thextor.de/readmore-userscript/img/minus_alt_16x16.png');
+	else $(this).attr('src', 'http://thextor.de/readmore-userscript/img/plus_alt_16x16.png');
+});
+
 // Prüfen ob eine neue Version erschienen ist
 if (RMUS.options.options.miscellaneous_checkVersion == 'checked') {
 	RMUS.miscellaneous.checkVersion();
