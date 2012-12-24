@@ -335,8 +335,6 @@ var RMUS = {
 								}
 							}
 						}
-						break;
-
 					case 'mozilla':
 					case 'opera':
 					case 'msie':
