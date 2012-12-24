@@ -1429,9 +1429,13 @@ var RMUS = {
 							var boardid = $(datafirst).find('input[name="thread[boardid]"]').val();
 							var threadid = $(datafirst).find('input[name="thread[threadid]"]').val();
 							var postidedit = $(datafirst).find('input[name="post[postid]"]').val();
+							var threadtopic = $(datafirst).find('input[name="thread[threadtopic]"]').val();
 														
 							newpost = $('tr[class=post_' + postid + ']>td:last textarea').val();
 							postdata = 'f_uid=' + f_uid + '&thread[boardid]=' + boardid + '&thread[threadid]=' + threadid + '&post[postid]=' + postidedit + '&postnew_newposttext=' + encodeURI(newpost).replace(/&amp;/g, '&').replace(/&/g, '%26');
+							if (threadtopic != null){
+								if (threadtopic.trim().length > 0) postdata += '&thread[threadtopic]=' + encodeURI(threadtopic).replace(/&amp;/g, '&').replace(/&/g, '%26');
+							} 
 							postdata = RMUS.middleColumn.forum.replaceSpecialChars(postdata);
 							
 							$.ajax({
