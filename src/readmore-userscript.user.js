@@ -1497,7 +1497,6 @@ var RMUS = {
 				if (reloadData != false){
 					if (reloadData.length > 0){
 						$('#nav_matchticker').html(reloadData);
-						if (RMUS.options.options.rightColumn_forum_sections == 'checked') RMUS.rightColumn.forum.initializeForum();
 					}
 				}
 				
@@ -2287,7 +2286,7 @@ window.setInterval(function(){
 			// Forennavigation
 			if (RMUS.options.options.rightColumn_forum_hideForum != 'checked'){
 				if(RMUS.options.options.rightColumn_forum_reloadForum == 'checked'){					
-					RMUS.rightColumn.forum.reloadForum();				
+					RMUS.rightColumn.forum.reloadForum();					
 				}
 			}
 
