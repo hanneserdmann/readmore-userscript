@@ -2283,20 +2283,22 @@ window.setInterval(function(){
 		if (RMUS.options.options.rightColumn_forum_reloadForum == 'checked' || RMUS.options.options.leftColumn_streams_reloadStreams == 'checked' || RMUS.options.options.rightColumn_ticker_reloadTicker == 'checked'){
 			RMUS.miscellaneous.reloadMainpageData.readPage();
 
-			// Forennavigation
-			if (RMUS.options.options.rightColumn_forum_hideForum != 'checked'){
-				if(RMUS.options.options.rightColumn_forum_reloadForum == 'checked'){					
-					RMUS.rightColumn.forum.reloadForum();					
-				}
+			// Forennavigation (Nur nachladen, wenn es auch eingeblendet ist)
+			if (RMUS.options.options.rightColumn_forum_hideForum != 'checked'
+				&& RMUS.options.options.rightColumn_forum_reloadForum == 'checked') {
+
+				RMUS.rightColumn.forum.reloadForum();					
 			}
 
 			// Streams
-			if(RMUS.options.options.leftColumn_streams_reloadStreams == 'checked'){
-				RMUS.leftColumn.streams.reloadStreams();			
+			if (RMUS.options.options.leftColumn_streams_reloadStreams == 'checked') {
+				RMUS.leftColumn.streams.reloadStreams();
 			}
 			
-			// Ticker
-			if(RMUS.options.options.rightColumn_ticker_reloadTicker == 'checked'){
+			// Ticker (Nur nachladen, wenn er auch eingeblendet ist)
+			if (RMUS.options.options.rightColumn_ticker_hideTicker != 'checked'
+				&& RMUS.options.options.rightColumn_ticker_reloadTicker == 'checked') {
+
 				RMUS.rightColumn.ticker.reloadTicker();
 			}
 		}
