@@ -69,7 +69,7 @@ var RMUS = {
 
 	options: {
 
-		version : '2.1.3',
+		version : '2.1.4-dev',
 		options : {},
 
 		// Fügt den Link zum öffnen der Optionen ein
