@@ -2277,26 +2277,34 @@ window.setInterval(function(){
 		}
 	}
 
-	// Außer auf dem Profil uder Guides
+	// Außer auf dem Profil und der Guides
 	if (!content.profile && !content.guides) {
-		// Streams und Forennavigation refreshen
-		if (RMUS.options.options.rightColumn_forum_reloadForum == 'checked' || RMUS.options.options.leftColumn_streams_reloadStreams == 'checked' || RMUS.options.options.rightColumn_ticker_reloadTicker == 'checked'){
+
+		// Streams und Forennavigation nachladen (Nur, wenn auch eingeblendet)
+		if (RMUS.options.options.rightColumn_forum_reloadForum == 'checked' && RMUS.options.options.rightColumn_forum_hideForum != 'checked'
+			|| RMUS.options.options.leftColumn_streams_reloadStreams == 'checked' && RMUS.options.options.leftColumn_streams_hideStreams != 'checked'
+			|| RMUS.options.options.rightColumn_ticker_reloadTicker == 'checked' && RMUS.options.options.rightColumn_ticker_hideTicker != 'checked') {
+
 			RMUS.miscellaneous.reloadMainpageData.readPage();
 
 			// Forennavigation
-			if (RMUS.options.options.rightColumn_forum_hideForum != 'checked'){
-				if(RMUS.options.options.rightColumn_forum_reloadForum == 'checked'){					
-					RMUS.rightColumn.forum.reloadForum();					
-				}
+			if (RMUS.options.options.rightColumn_forum_hideForum != 'checked'
+				&& RMUS.options.options.rightColumn_forum_reloadForum == 'checked') {
+
+				RMUS.rightColumn.forum.reloadForum();					
 			}
 
 			// Streams
-			if(RMUS.options.options.leftColumn_streams_reloadStreams == 'checked'){
+			if (RMUS.options.options.leftColumn_streams_hideStreams != 'checked'
+				&& RMUS.options.options.leftColumn_streams_reloadStreams == 'checked') {
+
 				RMUS.leftColumn.streams.reloadStreams();			
 			}
 			
 			// Ticker
-			if(RMUS.options.options.rightColumn_ticker_reloadTicker == 'checked'){
+			if (RMUS.options.options.rightColumn_ticker_hideTicker != 'checked'
+				&& RMUS.options.options.rightColumn_ticker_reloadTicker == 'checked') {
+
 				RMUS.rightColumn.ticker.reloadTicker();
 			}
 		}
@@ -2311,7 +2319,7 @@ window.setInterval(function(){
 // Im Hintergrund ausgeführte Aktionen starten (3x in der Sekunde, sehr zeitkritisch)
 window.setInterval(function(){
 
-	// content auslesen
+	// Content auslesen
 	if (!content){
 		content = JSON.parse(localStorage.getItem('userscriptContent'));
 	}
@@ -2349,4 +2357,4 @@ window.setInterval(function(){
 			RMUS.miscellaneous.convertYoutube();
 		}
 	}
-}, 333);
+}, 15000);
