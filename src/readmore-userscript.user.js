@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name            Readmore Userscript
-// @version         2.1.3
+// @version         2.1.4-dev
 // @description     Fügt der deutschen eSport-Webseite zusätzliche Funktionen hinzu
 // @author          thextor, vntw
 // @credits         IllDependence (Extrabuttons)
@@ -324,16 +324,14 @@ var RMUS = {
 				// Browserspezifisches Melden von neuen Nachrichten
 				switch (RMUS.browser.getBrowser()) {
 					case 'webkit':
-						if (RMUS.options.options.miscellaneous_reloadMessages_desktopNotifications == 'checked'){
-							if (window.webkitNotifications) {
-								if (window.webkitNotifications.checkPermission() == 0) {
-									window.webkitNotifications.createNotification(
-										'http://thextor.de/readmore-userscript/img/msg-notification-icon.png',
-										'Neue Nachricht!',
-										'Du hast eine neue Readmore Nachricht erhalten!'
-									).show();
-								}
-							}
+						if (RMUS.options.options.miscellaneous_reloadMessages_desktopNotifications == 'checked'
+							&& window.webkitNotifications && window.webkitNotifications.checkPermission() == 0) {
+
+							window.webkitNotifications.createNotification(
+								'http://thextor.de/readmore-userscript/img/msg-notification-icon.png',
+								'Neue Nachricht!',
+								'Du hast eine neue Readmore Nachricht erhalten!'
+							).show();
 						}
 					case 'mozilla':
 					case 'opera':
