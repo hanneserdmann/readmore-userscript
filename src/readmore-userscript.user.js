@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name            Readmore Userscript
-// @version         2.1.3
+// @version         2.2
 // @description     Fügt der deutschen eSport-Webseite zusätzliche Funktionen hinzu
 // @author          thextor, vntw
 // @credits         IllDependence (Extrabuttons)
@@ -69,7 +69,7 @@ var RMUS = {
 
 	options: {
 
-		version : '2.1.4-dev',
+		version : '2.2',
 		options : {},
 
 		// Fügt den Link zum öffnen der Optionen ein
@@ -324,16 +324,14 @@ var RMUS = {
 				// Browserspezifisches Melden von neuen Nachrichten
 				switch (RMUS.browser.getBrowser()) {
 					case 'webkit':
-						if (RMUS.options.options.miscellaneous_reloadMessages_desktopNotifications == 'checked'){
-							if (window.webkitNotifications) {
-								if (window.webkitNotifications.checkPermission() == 0) {
-									window.webkitNotifications.createNotification(
-										'http://thextor.de/readmore-userscript/img/msg-notification-icon.png',
-										'Neue Nachricht!',
-										'Du hast eine neue Readmore Nachricht erhalten!'
-									).show();
-								}
-							}
+						if (RMUS.options.options.miscellaneous_reloadMessages_desktopNotifications == 'checked'
+							&& window.webkitNotifications && window.webkitNotifications.checkPermission() == 0) {
+
+							window.webkitNotifications.createNotification(
+								'http://thextor.de/readmore-userscript/img/msg-notification-icon.png',
+								'Neue Nachricht!',
+								'Du hast eine neue Readmore Nachricht erhalten!'
+							).show();
 						}
 					case 'mozilla':
 					case 'opera':
@@ -404,6 +402,21 @@ var RMUS = {
 					}
 
 					return $('div.headline_bg', container);
+				} else if (content.groups_show_group) {
+					// First Post im Thread?
+					if ($('input[name="threadtitle"]').length === 1) {
+					    container = $('<div/>').insertBefore(RMUS.miscellaneous.extrabuttons.getCommentBox());
+					} else {
+					    container = RMUS.miscellaneous.extrabuttons.getCommentBox().parent();
+					}
+
+					if ($('div.headline_bg', container).length === 0) {
+						toolbar = $('<div class="headline_bg" />');
+						toolbar.css('padding', '3px 0px');
+						container.prepend(toolbar);
+					}
+
+					return $('div.headline_bg', container);
 				}
 
 				return null;
@@ -417,6 +430,12 @@ var RMUS = {
 					return $('form[name=submiteditthread]');
 				} else if (content.msg) {
 					return $('td.text_h1_j form');
+				} else if (content.groups_show_group) {
+					if (action === 'threadedit') {
+					    return $('form[name="submiteditthread"]');
+					}
+
+					return $('div.elf form[name="submitpost"]');
 				}
 
 				return null;
@@ -426,6 +445,12 @@ var RMUS = {
 					return $('textarea[name=comment]', RMUS.miscellaneous.extrabuttons.getForm());
 				} else if (content.msg) {
 					return $('textarea[name=msg]', RMUS.miscellaneous.extrabuttons.getForm());
+				} else if (content.groups_show_group) {
+				    if (action === 'threadedit') {
+					return $('textarea[name=new_comment].form', RMUS.miscellaneous.extrabuttons.getForm());
+				    }
+
+				    return $('textarea[name=comment].form', RMUS.miscellaneous.extrabuttons.getForm());
 				}
 
 				return $('textarea#c_comment', RMUS.miscellaneous.extrabuttons.getForm());
@@ -1836,8 +1861,16 @@ var RMUS = {
 *********************************/
 
 // Bereich auf der Readmore.de Seite rausfinden
-var cont = '';
-var getVars = document.location.search.replace(/[?]/g, '').replace(/[&]/g, '=').split('=');
+var cont = '',
+    action = document.location.search.match(/action=([a-zA-Z]+)/i),
+    getVars = document.location.search.replace(/[?]/g, '').replace(/[&]/g, '=').split('=');
+
+if (action && action[1]) {
+    action = action[1];
+} else {
+    action = null;
+}
+
 $.each(getVars, function (index, value) {
 	if (value == 'cont') {
 		cont = getVars[index+1];
@@ -2147,7 +2180,7 @@ if (RMUS.options.options.miscellaneous_ignoreUser == 'checked'){
 }
 
 // Extrabuttons in den entsprechenden Seiten initialisieren
-if (content.forum_thread || content.forum_newtopic || content.forum_edit || content.matches || content.msg || content.profile) {
+if (content.forum_thread || content.forum_newtopic || content.forum_edit || content.matches || content.msg || content.profile || content.groups_show_group) {
 	if (RMUS.options.options.miscellaneous_extraButtons == 'checked') {
 		RMUS.miscellaneous.extrabuttons.init();
 	}
@@ -2249,11 +2282,13 @@ if (RMUS.browser.supportsLocalStorage()) {
 	localStorage.setItem('userscriptContent', 
 		JSON.stringify(content, function(key, val) {
 		   if (typeof val == "object") {
-			if (seen.indexOf(val) >= 0)
+			if (seen.indexOf(val) >= 0) {
 			    return undefined
-			seen.push(val)
+			}
+			seen.push(val);
 		    }
-		    return val
+
+		    return val;
 		})
 	);
 }
