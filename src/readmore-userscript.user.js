@@ -54,16 +54,6 @@ var RMUS = {
 
 			RMUS.info('Detected browser: ' + browser, 'General');
 			RMUS.browser._browser = browser;
-		},
-		supportsLocalStorage : function () {
-			var mod = 'RMUS';
-			try {
-				localStorage.setItem(mod, mod);
-				localStorage.removeItem(mod);
-				return true;
-			} catch (e) {
-				return false;
-			}
 		}
 	},
 
@@ -103,14 +93,9 @@ var RMUS = {
 			});
 
 			// Json-Speichern
-			if (RMUS.browser.supportsLocalStorage()) {
-				localStorage.setItem('userscriptOptions', JSON.stringify(userscriptOptions));
-				response = 'Die Optionen wurden erfolgreich gespeichert!';
-				RMUS.info('Options successfully saved', 'Options');
-			} else {
-				response = 'Die Optionen konnten nicht gespeichert werden, da dein Browser keinen LocalStorage unterstützt.';
-				RMUS.info('Options haven´t been saved', 'Options');
-			}
+			localStorage.setItem('userscriptOptions', JSON.stringify(userscriptOptions));
+			response = 'Die Optionen wurden erfolgreich gespeichert!';
+			RMUS.info('Options successfully saved', 'Options');
 
 			// Rückmeldung
 			alert(response);
@@ -118,36 +103,34 @@ var RMUS = {
 
 		// Optionen laden
 		loadOptions : function () {
-			if (RMUS.browser.supportsLocalStorage()) {
-				RMUS.info('Loading options from storage', 'Options');
+			RMUS.info('Loading options from storage', 'Options');
 
-				var type = '',
-					userscriptOptions = JSON.parse(localStorage.getItem('userscriptOptions'));
+			var type = '',
+				userscriptOptions = JSON.parse(localStorage.getItem('userscriptOptions'));
 
-				if (userscriptOptions != null) {
-					$.each(userscriptOptions, function (index, value) {
-						type = $('[name=' + index + ']').attr('type');
-						if (type == 'checkbox') {
-							// Checkboxen setzen
-							if (value == 'checked') {
-								$('[name=' + index + ']').attr('checked', true);
-								return true;
-							}
-						}
-
-						if (type == 'text' || type == null) {
-							// Textfelder füllen
-							$('[name=' + index + ']').val(value);
+			if (userscriptOptions != null) {
+				$.each(userscriptOptions, function (index, value) {
+					type = $('[name=' + index + ']').attr('type');
+					if (type == 'checkbox') {
+						// Checkboxen setzen
+						if (value == 'checked') {
+							$('[name=' + index + ']').attr('checked', true);
 							return true;
 						}
+					}
 
-						// Selectboxen auswählen
-						if (index.match('rightColumn_forum_hideForum_') != null) {
-							$('[name=' + index + ']').val(value);
-							return true;
-						}
-					});
-				}
+					if (type == 'text' || type == null) {
+						// Textfelder füllen
+						$('[name=' + index + ']').val(value);
+						return true;
+					}
+
+					// Selectboxen auswählen
+					if (index.match('rightColumn_forum_hideForum_') != null) {
+						$('[name=' + index + ']').val(value);
+						return true;
+					}
+				});
 			}
 
 			return false;
@@ -155,15 +138,13 @@ var RMUS = {
 
 		// Optionen auslesen
 		readOptions : function () {
-			if (RMUS.browser.supportsLocalStorage()) {
-				RMUS.info('Reading Options', 'Options');
+			RMUS.info('Reading Options', 'Options');
 
-				// Json auslesen und in Objekt umwandeln
-				RMUS.options.options = JSON.parse(localStorage.getItem('userscriptOptions'));
+			// Json auslesen und in Objekt umwandeln
+			RMUS.options.options = JSON.parse(localStorage.getItem('userscriptOptions'));
 
-				if (RMUS.options.options == null) {
-					RMUS.options.options = [];
-				}
+			if (RMUS.options.options == null) {
+				RMUS.options.options = [];
 			}
 
 			return false;
@@ -702,10 +683,6 @@ var RMUS = {
 		note : {
 			notenumber : 0,
 			initialize : function() {
-				if (!RMUS.browser.supportsLocalStorage()) {
-					return false;
-				}
-
 				$('tr[class*=post_]>td:even:not(:has(textarea))').each(function(){
 					var br = '<br />';
 					var user = String($(this).find('a.bml').attr('title'));
@@ -2281,19 +2258,17 @@ $('[id*=toggle_sub]').click(function(){
 RMUS.miscellaneous.checkVersion();
 
 // content in den LocalStorage speichern
-if (RMUS.browser.supportsLocalStorage()) {
-	var seen = [];
-	localStorage.setItem('userscriptContent', 
-		JSON.stringify(content, function(key, val) {
-		   if (typeof val == "object") {
-			if (seen.indexOf(val) >= 0)
-			    return undefined
-			seen.push(val)
-		    }
-		    return val
-		})
-	);
-}
+var seen = [];
+localStorage.setItem('userscriptContent', 
+	JSON.stringify(content, function(key, val) {
+	   if (typeof val == "object") {
+		if (seen.indexOf(val) >= 0)
+		    return undefined
+		seen.push(val)
+	    }
+	    return val
+	})
+);
 
 // Im Hintergrund ausgeführte Aktionen starten (zeitunkritisch)
 window.setInterval(function(){
