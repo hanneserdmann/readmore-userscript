@@ -59,7 +59,7 @@ var RMUS = {
 
 	options: {
 
-		version : '2.1.4-dev',
+		version : '2.1',
 		options : {},
 
 		// Fügt den Link zum öffnen der Optionen ein
@@ -192,19 +192,25 @@ var RMUS = {
 				if (lastVersionCheck.checkDate) {
 				    var lastCheck = new Date(Date.parse(lastVersionCheck.checkDate));
 
+				    // Älter als 1 Tag?
 				    lastCheck.setDate(lastCheck.getDate() + 1);
 
 				    if (lastCheck > today) {
-					RMUS.info('Already checked version.', 'Updater');
+					var currentRawVersion = getRawVersion(RMUS.options.version);
+					RMUS.info('Already checked version. Got: ' + lastVersionCheck.prettyVersion, 'Updater');
 
-					if (lastVersionCheck.version > getRawVersion(RMUS.options.version)) {
+					// Ist die cached Version neuer als die aktuelle Version?
+					if (lastVersionCheck.version > currentRawVersion) {
 					    showUpdateMsg();
-					    RMUS.info('You are using a deprecated version of RMUS! Please upgrade immediately!', 'Updater');
+					    RMUS.info('You are using a deprecated version (' + RMUS.options.version + ') of the RM Userscript! Please upgrade immediately!', 'Updater');
 					}
 
 					return;
 				    }
 				}
+
+				// Cleanup
+				localStorage.removeItem('lastVersionCheck');
 			}
 
 			RMUS.info('Checking RM Userscript version', 'Updater');
@@ -225,12 +231,14 @@ var RMUS = {
 
 					    if (getRawVersion(RMUS.options.version) < rawVersion) {
 						    showUpdateMsg();
-						    RMUS.info('An update is available: ' + version, 'Updater');
+						    RMUS.info('An update is available, please update to latest version: ' + version, 'Updater');
 					    } else {
 						    RMUS.info('No need to update, got latest version: ' + version, 'Updater');
 					    }
 
 					    today.setHours(6);
+					    today.setMinutes(0);
+					    today.setSeconds(0);
 
 					    localStorage.setItem('lastVersionCheck', JSON.stringify({
 						version: rawVersion,
