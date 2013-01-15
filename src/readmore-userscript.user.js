@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name            Readmore Userscript
-// @version         2.1.3
+// @version         2.2
 // @description     Fügt der deutschen eSport-Webseite zusätzliche Funktionen hinzu
 // @author          thextor, vntw
 // @credits         IllDependence (Extrabuttons)
@@ -59,7 +59,7 @@ var RMUS = {
 
 	options: {
 
-		version : '2.1',
+		version : '2.2',
 		options : {},
 
 		// Fügt den Link zum öffnen der Optionen ein
