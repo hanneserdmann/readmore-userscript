@@ -1543,10 +1543,9 @@ var RMUS = {
 
 				var reloadData = '';
 				reloadData = $(RMUS.miscellaneous.reloadMainpageData.mainpageData).find('#nav_matchticker').html();
-				if (reloadData != false){
-					if (reloadData.length > 0){
-						$('#nav_matchticker').html(reloadData);
-					}
+
+				if (reloadData && reloadData.length > 0) {
+					$('#nav_matchticker').html(reloadData);
 				}
 				
 				return false;
@@ -1844,11 +1843,10 @@ var RMUS = {
 
 				var reloadData = '';
 				reloadData = $(RMUS.miscellaneous.reloadMainpageData.mainpageData).find('div.cont_box:last').html();
-				if (reloadData != false){
-					if (reloadData.length > 0){
-						$('.cont_box:last').html(reloadData);
-						if (RMUS.options.options.rightColumn_forum_sections == 'checked') RMUS.rightColumn.forum.initializeForum();
-					}
+
+				if (reloadData && reloadData.length > 0) {
+					$('.cont_box:last').html(reloadData);
+					if (RMUS.options.options.rightColumn_forum_sections == 'checked') RMUS.rightColumn.forum.initializeForum();
 				}
 				
 				return false;
