@@ -1435,60 +1435,54 @@ var RMUS = {
 		headlines : {
 			// Blendet die Schlagzeilen komplett aus
 			hideHeadlines : function () {
-				$('#headlines, div.line3:eq(2)').css('display','none');
+				document.getElementById('headlines').style.display = "none";
 				return false;
 			},
 
 			// Blendet Counterstrike aus
 			hideCounterstrike : function () {
-				var i = 0;
-				for (i; i < 8; i++) {
-					$('div #nav_schlagzeilen>:eq(' + i + ')').css('display','none');
+				for (var i = 0; i < 8; i++) {
+					document.getElementById('nav_schlagzeilen').children[i].style.display = "none";
 				}
 				return false;
 			},
 
 			// Blendet Starcraft aus
 			hideStarcraft : function () {
-				var i = 8;
-				for (i; i < 16; i++) {
-					$('div #nav_schlagzeilen>:eq(' + i + ')').css('display','none');
+				for (var i = 8; i < 16; i++) {
+					document.getElementById('nav_schlagzeilen').children[i].style.display = "none";
 				}
 				return false;
 			},
 
 			// Blendet Dota aus
 			hideDefenseOfTheAncients : function () {
-				var i = 16;
-				for (i; i < 23; i++) {
-					$('div #nav_schlagzeilen>:eq(' + i + ')').css('display','none');
+				for (var i = 16; i < 23; i++) {
+					document.getElementById('nav_schlagzeilen').children[i].style.display = "none";
 				}
 				return false;
 			},
 
 			// Blendet LoL aus
 			hideLeagueOfLegends : function () {
-				var i = 23;
-				for (i; i < 29; i++) {
-					$('div #nav_schlagzeilen>:eq(' + i + ')').css('display','none');
+				for (var i = 23; i < 29; i++) {
+					document.getElementById('nav_schlagzeilen').children[i].style.display = "none";
 				}
 				return false;
 			},
 
 			// Blendet Warcraft aus
 			hideWarcraft3 : function () {
-				var i = 29;
-				for (i; i < 34; i++) {
-					$('div #nav_schlagzeilen>:eq(' + i + ')').css('display','none');
+				for (var i = 29; i < 34; i++) {
+					document.getElementById('nav_schlagzeilen').children[i].style.display = "none";
 				}
 				return false;
 			},
 
 			// Blendet Sonstiges aus
 			hideSonstiges : function () {
-				var i = 34;
-				for (i; i < 43; i++) {
-					$('div #nav_schlagzeilen>:eq(' + i + ')').css('display','none');
+				for (var i = 34; i < 43; i++) {
+					document.getElementById('nav_schlagzeilen').children[i].style.display = "none";
 				}
 				return false;
 			}
@@ -1498,173 +1492,53 @@ var RMUS = {
 	*	FORUM		*
 	*************************/
 		forum : {
-
-			sections : [],
-			featuredthreads : '',
-			esportforen : '',
-			technik : '',
-			offtopicforen : '',
-			spiele : '',
-
-			// Teil die Foren in Sektionen ein
-			readSections : function () {
-				$('div.cont_box:last>a').each(function (index, element) {
-					$('div.cont_box:last>*').each(function (i, e) {
-						if (element == e) {
-							RMUS.rightColumn.forum.sections[index] = i;
-							return false;
-						}
-					});
-				});	
-
-				return false;
-			},
-
-			// Setzt den entsprechenden HTML-Code in die Feafured-Threads Variable
-			readFeaturedThreads : function () {
-				var featuredthreads = '',
-					i = RMUS.rightColumn.forum.sections[0];
-
-				for (i; i < RMUS.rightColumn.forum.sections[1]; i++) {
-					var html = $('div.cont_box:last>:eq(' + i + ')').html();
-
-					if (i == RMUS.rightColumn.forum.sections[0]) {
-						featuredthreads += '<a href="index.php?cont=forum/forum" class="bml" style="margin-top:10px;">' + html + '</a>';
-					} else if (html != '') {
-						featuredthreads += '<div class="listing">' + html + '</div>';
-					}
-				}
-
-				RMUS.rightColumn.forum.featuredthreads = featuredthreads;
-				return false;
-			},
-
-			// Setzt den entsprechenden HTML-Code in die EsportForen Variable
-			readEsportForen : function () {
-				var esportforen = '',
-					i = RMUS.rightColumn.forum.sections[1];
-
-				for (i; i < RMUS.rightColumn.forum.sections[2]; i++) {
-					var html = $('div.cont_box:last>:eq(' + i + ')').html();
-
-					if (i == RMUS.rightColumn.forum.sections[1]) {
-						esportforen += '<a href="index.php?cont=forum/forum#eSport" class="bml" style="margin-top:10px;">' + html + '</a>';
-					} else if (html != '') {
-						esportforen += '<div class="listing">' + html + '</div>';
-					}
-				}  
-
-				RMUS.rightColumn.forum.esportforen = esportforen;
-				return false;			
-			},
-
-			// Setzt den entsprechenden HTML-Code in die Technik Variable
-			readTechnik : function () {
-				var technik = '',
-					i = RMUS.rightColumn.forum.sections[2];
-
-				for (i; i < RMUS.rightColumn.forum.sections[3]; i++) {
-					var html = $('div.cont_box:last>:eq(' + i + ')').html();
-
-					if (i == RMUS.rightColumn.forum.sections[2]) {
-						technik += '<a href="index.php?cont=forum/forum#Technik" class="bml" style="margin-top:10px;">' + html + '</a>';
-					} else if (html != '') {
-						technik += '<div class="listing">' + html + '</div>';
-					}
-				}  
-
-				RMUS.rightColumn.forum.technik = technik;
-				return false;
-			},
-
-			// Setzt den entsprechenden HTML-Code in die Offtopic Variable
-			readOfftopicForen : function () {
-				var offtopicforen = '',
-					i = RMUS.rightColumn.forum.sections[3];
-
-				for (i; i < RMUS.rightColumn.forum.sections[4]; i++) {
-					var html = $('div.cont_box:last>:eq(' + i + ')').html();
-
-					if (i == RMUS.rightColumn.forum.sections[3]) {
-						offtopicforen += '<a href="index.php?cont=forum/forum#Technik" class="bml" style="margin-top:10px;">' + html + '</a>';
-					} else if (html != '') {
-						offtopicforen += '<div class="listing">' + html + '</div>';
-					}
-				}  
-
-				RMUS.rightColumn.forum.offtopicforen = offtopicforen;
-				return false;
-			},
-
-			// Setzt den entsprechenden HTML-Code in die Spiele Variable
-			readSpiele : function () {
-				var spiele = '';					
-				var j = $('div.cont_box:last>*').length;
-				var i = RMUS.rightColumn.forum.sections[4];
-					
-				for (i; i < j; i++) {
-					var html = $('div.cont_box:last>:eq(' + i + ')').html();
-
-					if (i == RMUS.rightColumn.forum.sections[4]) {
-						spiele += '<a href="index.php?cont=forum/forum#Technik" class="bml" style="margin-top:10px;">' + html + '</a>';
-					} else if (html != '') {
-						spiele += '<div class="listing">' + html + '</div>';
-					}
-				}
-
-				RMUS.rightColumn.forum.spiele = spiele;
-				return false;
-			},
-
 			// Startet das umsortieren des Forums
 			initializeForum : function () {
-				var i = 0,
-					html = '';
-
-				sortForum = [];
-				sortForum.push(RMUS.options.options.rightColumn_forum_hideForum_0);
-				sortForum.push(RMUS.options.options.rightColumn_forum_hideForum_1);
-				sortForum.push(RMUS.options.options.rightColumn_forum_hideForum_2);
-				sortForum.push(RMUS.options.options.rightColumn_forum_hideForum_3);
-				sortForum.push(RMUS.options.options.rightColumn_forum_hideForum_4);
-
-				RMUS.rightColumn.forum.readSections();				
-				RMUS.rightColumn.forum.readFeaturedThreads();
-				RMUS.rightColumn.forum.readEsportForen();
-				RMUS.rightColumn.forum.readTechnik();
-				RMUS.rightColumn.forum.readOfftopicForen();
-				RMUS.rightColumn.forum.readSpiele();
-
-				for (i; i < 6; i++) {
-					if (sortForum[i] == 'featuredthreads') {
-						html += RMUS.rightColumn.forum.featuredthreads + '<br>';
-						continue;
-					}
-					if (sortForum[i] == 'esportforen') {
-						html += RMUS.rightColumn.forum.esportforen + '<br>';
-						continue;
-					}
-					if (sortForum[i] == 'technik') {
-						html += RMUS.rightColumn.forum.technik + '<br>';
-						continue;
-					}
-					if (sortForum[i] == 'offtopicforen') {
-						html += RMUS.rightColumn.forum.offtopicforen + '<br>';
-						continue;
-					}
-					if (sortForum[i] == 'spiele') {
-						html += RMUS.rightColumn.forum.spiele + '<br>';
-						continue;
-					}
-					if (sortForum[i] == '') {
-						if (html.substring(html.length-8) == '<br><br>') {
-							html = html.substring(0, html.length-4);
-						}
-						continue;
+				var html = '';
+				var sortForum = [RMUS.options.options.rightColumn_forum_hideForum_0, RMUS.options.options.rightColumn_forum_hideForum_1, RMUS.options.options.rightColumn_forum_hideForum_2, RMUS.options.options.rightColumn_forum_hideForum_3, RMUS.options.options.rightColumn_forum_hideForum_4];	       
+				var menuItems	= document.getElementsByClassName('cont_box')[1].children;
+				var sections	= ['','','','',''];
+				
+				// Alle Menueinträge durchgehen
+				for (var j = 0, k = menuItems.length, l = -1, item = ''; j < k; j++){
+					// HTML-Auslesen
+					item = menuItems[j].outerHTML;						
+					// Sektionen hochzählen
+					if (item.indexOf('class="bml"') !== -1)	l++;  
+					// Bilder in der "Featured Thread" Sektion anpassen
+					if (l === 0) item = item.replace('" height="11px"', '" height="11px" class="userscript11px" ');				
+					// Eintrag zur Sektion hinzufügen
+					sections[l] += item;
+				}
+				
+				// Leerzeilen entfernen
+				for (var n = 0, o = sections.length; n < o; n++){
+					sections[n] = sections[n].replace(/(<div class="spacer_s"><\/div>)|(<br>)|(<br \/>)/g, '');
+				}
+       
+				// Reihenfolge der Sektionen entsprechen den Optionen anpassen
+				for (var i = 0, m = sections.length; i < m; i++) {
+					switch (sortForum[i]){
+						case 'featuredthreads':	html += sections[0] + '<br>';
+									break;
+						case 'esportforen':	html += sections[1] + '<br>';
+									break;
+						case 'technik':		html += sections[2] + '<br>';
+									break;
+						case 'offtopicforen':	html += sections[3] + '<br>';
+									break;
+						case 'spiele':		html += sections[4] + '<br>';
+									break;									
 					}
 				}
-
-				$('div.cont_box:last').html(html);
+				
+				// Einfügen
+				document.getElementsByClassName('cont_box')[1].innerHTML = html
+				
+				// Größte der Bilder anpassen
+				$('.userscript11px').css('height', '11px');
+				$('.userscript11px').css('width', '11px');
+				
 				return false;
 			},
 			
@@ -1890,37 +1764,41 @@ if (RMUS.options.options.miscellaneous_fixedToolbar) {
 // WWW, Streams, Galerie, Ergebnisticker, Schlagzeilen und Forum angezeigt
 if (!content.profile && !content.guides) {
 	// WWW ausblenden
-	if (RMUS.options.options.leftColumn_www_hideWww == 'checked') RMUS.leftColumn.www.hideWww();
+	if (RMUS.options.options.leftColumn_www_hideWww === 'checked') RMUS.leftColumn.www.hideWww();
 
 	// Streams ausblenden
-	if (RMUS.options.options.leftColumn_streams_hideStreams == 'checked') {
+	if (RMUS.options.options.leftColumn_streams_hideStreams === 'checked') {
 		RMUS.leftColumn.streams.hideStreams();
 	} 
 
 	// Ticker ausblenden
-	if (RMUS.options.options.rightColumn_ticker_hideTicker == 'checked') RMUS.rightColumn.ticker.hideTicker();
+	if (RMUS.options.options.rightColumn_ticker_hideTicker === 'checked') RMUS.rightColumn.ticker.hideTicker();
 
 	// Schlagzeilen ausblenden
-	if (RMUS.options.options.rightColumn_headlines_hideHeadlines == 'checked') RMUS.rightColumn.headlines.hideHeadlines();  // Alle
+	if (RMUS.options.options.rightColumn_headlines_hideHeadlines === 'checked') RMUS.rightColumn.headlines.hideHeadlines();  // Alle
 	else{	// Individuell
-		if (RMUS.options.options.rightColumn_headlines_hideCounterstrike == 'checked') RMUS.rightColumn.headlines.hideCounterstrike();
-		if (RMUS.options.options.rightColumn_headlines_hideStarcraft == 'checked') RMUS.rightColumn.headlines.hideStarcraft();
-		if (RMUS.options.options.rightColumn_headlines_hideDefenseOfTheAncients == 'checked') RMUS.rightColumn.headlines.hideDefenseOfTheAncients();
-		if (RMUS.options.options.rightColumn_headlines_hideLeagueOfLegends == 'checked') RMUS.rightColumn.headlines.hideLeagueOfLegends();
-		if (RMUS.options.options.rightColumn_headlines_hideWarcraft3 == 'checked') RMUS.rightColumn.headlines.hideWarcraft3();
-		if (RMUS.options.options.rightColumn_headlines_hideSonstiges == 'checked') RMUS.rightColumn.headlines.hideSonstiges();
+		if (RMUS.options.options.rightColumn_headlines_hideCounterstrike === 'checked') RMUS.rightColumn.headlines.hideCounterstrike();
+		if (RMUS.options.options.rightColumn_headlines_hideStarcraft === 'checked') RMUS.rightColumn.headlines.hideStarcraft();
+		if (RMUS.options.options.rightColumn_headlines_hideDefenseOfTheAncients === 'checked') RMUS.rightColumn.headlines.hideDefenseOfTheAncients();
+		if (RMUS.options.options.rightColumn_headlines_hideLeagueOfLegends === 'checked') RMUS.rightColumn.headlines.hideLeagueOfLegends();
+		if (RMUS.options.options.rightColumn_headlines_hideWarcraft3 === 'checked') RMUS.rightColumn.headlines.hideWarcraft3();
+		if (RMUS.options.options.rightColumn_headlines_hideSonstiges === 'checked') RMUS.rightColumn.headlines.hideSonstiges();
+		
+		// Fixt die Größe des Bildes
+		$('#nav_schlagzeilen img[alt=activity]').css('height', '11px');
+		$('#nav_schlagzeilen img[alt=activity]').css('width', '11px');
 	}
 
 	// Forum ausblenden
-	if (RMUS.options.options.rightColumn_forum_hideForum == 'checked')	RMUS.rightColumn.forum.hideForum();	// Komplett ausblenden
+	if (RMUS.options.options.rightColumn_forum_hideForum === 'checked')	RMUS.rightColumn.forum.hideForum();	// Komplett ausblenden
 	else{	// Individuell
-		if (RMUS.options.options.rightColumn_forum_sections == 'checked') {
+		if (RMUS.options.options.rightColumn_forum_sections === 'checked') {
 			RMUS.rightColumn.forum.initializeForum();
 		}
 	}
 	
 	// Neuladen der Forannavigation beziehungsweise der Streams oder Ticker	
-	if (RMUS.options.options.rightColumn_forum_reloadForum == 'checked' || RMUS.options.options.leftColumn_streams_reloadStreams == 'checked' || RMUS.options.options.rightColumn_ticker_reloadTicker == 'checked'){
+	if (RMUS.options.options.rightColumn_forum_reloadForum === 'checked' || RMUS.options.options.leftColumn_streams_reloadStreams === 'checked' || RMUS.options.options.rightColumn_ticker_reloadTicker === 'checked'){
 		RMUS.miscellaneous.reloadMainpageData.readPage();
 	}
 		
@@ -1937,25 +1815,25 @@ if (content.forum_thread) {
 	RMUS.middleColumn.forum.readPage();
 	
 	// Wenn Lastpage gesetzt ist, zum letzten Post springen
-	if (RMUS.options.options.miscellaneous_lastPageJumpToLastPost == 'checked') RMUS.miscellaneous.lastPageJumpToLastPost();
+	if (RMUS.options.options.miscellaneous_lastPageJumpToLastPost === 'checked') RMUS.miscellaneous.lastPageJumpToLastPost();
 	
 	// Knopf zum hochscrollen
-	if (RMUS.options.options.miscellaneous_buttonScrollUp == 'checked') RMUS.miscellaneous.buttonScrollUp();
+	if (RMUS.options.options.miscellaneous_buttonScrollUp === 'checked') RMUS.miscellaneous.buttonScrollUp();
 	
 	// Knopf zum runterscrollen
-	if (RMUS.options.options.miscellaneous_buttonScrollDown == 'checked') RMUS.miscellaneous.buttonScrollDown();
+	if (RMUS.options.options.miscellaneous_buttonScrollDown === 'checked') RMUS.miscellaneous.buttonScrollDown();
 	
 	// Titel umsortieren
-	if (RMUS.options.options.miscellaneous_reSortTitle == 'checked') RMUS.miscellaneous.reSortTitle();
+	if (RMUS.options.options.miscellaneous_reSortTitle === 'checked') RMUS.miscellaneous.reSortTitle();
 	  
 	// Vorschau
-	if (RMUS.options.options.middleColumn_forum_preview == 'checked') {
+	if (RMUS.options.options.middleColumn_forum_preview === 'checked') {
 		RMUS.middleColumn.forum.preview.insertPreviewHtml();
 		$('#triggerPreview').click(RMUS.middleColumn.forum.preview.triggerPreview);
 	}
 	
 	// Posten im Hintergrund
-	if (RMUS.options.options.middleColumn_forum_postPerAjax == 'checked') {
+	if (RMUS.options.options.middleColumn_forum_postPerAjax === 'checked') {
 		$('input[name=submit_thread]').click(function (event) {
 			event.preventDefault();
 			RMUS.middleColumn.forum.postPerAjax();
@@ -1963,11 +1841,11 @@ if (content.forum_thread) {
 	}
 
 	// Posts nachladen
-	if (RMUS.options.options.middleColumn_forum_reloadPosts_readNewPosts == 'checked') {
+	if (RMUS.options.options.middleColumn_forum_reloadPosts_readNewPosts === 'checked') {
 		RMUS.middleColumn.forum.reloadPosts.readPostcount();
 
 		// Ungelesene Posts markieren		
-		if (RMUS.options.options.middleColumn_forum_reloadPosts_markNewPosts == 'checked') {
+		if (RMUS.options.options.middleColumn_forum_reloadPosts_markNewPosts === 'checked') {
 			// Farbe zum markieren setzen
 			if (RMUS.options.options.middleColumn_forum_reloadPosts_markPostColor &&
 				RMUS.options.options.middleColumn_forum_reloadPosts_markPostColor.length){
@@ -1976,7 +1854,7 @@ if (content.forum_thread) {
 			}
 		}
 
-		if (RMUS.options.options.middleColumn_forum_reloadPosts_jumpToNewPosts == 'checked' && RMUS.options.options.middleColumn_forum_reloadPosts_endlessPage == 'checked'){
+		if (RMUS.options.options.middleColumn_forum_reloadPosts_jumpToNewPosts === 'checked' && RMUS.options.options.middleColumn_forum_reloadPosts_endlessPage === 'checked'){
 			$('a.bookmark').after('<input style="margin-left: 2px;" type="checkbox" id="userscript_enable_jump" name="userscript_enable_jump">');
 			RMUS.middleColumn.forum.reloadPosts.jumpToNewPosts.setWaitUntilNextJump();
 			window.setInterval(function () {
@@ -1986,34 +1864,34 @@ if (content.forum_thread) {
 	}	
 
 	// Avataranimationen stoppen
-	if (RMUS.options.options.miscellaneous_stopAvatarAnimation == 'checked') {
+	if (RMUS.options.options.miscellaneous_stopAvatarAnimation === 'checked') {
 		RMUS.miscellaneous.stopAvatarAnimation.stopAnimation();
 	}
 	
 	// Notzizen einblenden
-	if(RMUS.options.options.miscellaneous_note == 'checked') {
+	if(RMUS.options.options.miscellaneous_note === 'checked') {
 		RMUS.miscellaneous.note.initialize();
 	}
 	
 	// Edit vorbereiten	
-	if (RMUS.options.options.middleColumn_forum_editPost == 'checked'){
+	if (RMUS.options.options.middleColumn_forum_editPost === 'checked'){
 		RMUS.middleColumn.forum.editPost.initializeEvent();
 	}
 
 	// Youtubeplayer ersetzen
-	if(RMUS.options.options.miscellaneous_convertYoutube == 'checked') {
+	if(RMUS.options.options.miscellaneous_convertYoutube === 'checked') {
 		RMUS.miscellaneous.convertYoutube();
 	}
 }
 
 // User ignorieren
-if (RMUS.options.options.miscellaneous_ignoreUser == 'checked'){
+if (RMUS.options.options.miscellaneous_ignoreUser === 'checked'){
 	RMUS.miscellaneous.ignoreUser.doIgnore(content.forum_thread, content.matches, content.profile);
 }
 
 // Extrabuttons in den entsprechenden Seiten initialisieren
 if (content.forum_thread || content.forum_newtopic || content.forum_edit || content.matches || content.msg || content.profile || content.groups_show_group) {
-	if (RMUS.options.options.miscellaneous_extraButtons == 'checked') {
+	if (RMUS.options.options.miscellaneous_extraButtons === 'checked') {
 		RMUS.miscellaneous.extrabuttons.init();
 	}
 }
@@ -2038,7 +1916,7 @@ $('#closeUserscriptOptions').click(function () {
 });
 
 // Click Handler für Desktop-Notifications um die Berechtigung einzuholen
-if(RMUS.options.options.miscellaneous_reloadMessages == 'checked') {
+if(RMUS.options.options.miscellaneous_reloadMessages === 'checked') {
 	$('input#miscellaneous_reloadMessages_desktopNotifications').click(function () {
 		if ($(this).is(':checked')) {
 			if (window.webkitNotifications) {
@@ -2130,12 +2008,12 @@ window.setInterval(function(){
 	if (content.forum_thread) {
 
 		// Posts nachladen
-		if (RMUS.options.options.middleColumn_forum_reloadPosts_readNewPosts == 'checked') {
+		if (RMUS.options.options.middleColumn_forum_reloadPosts_readNewPosts === 'checked') {
 			RMUS.middleColumn.forum.reloadPosts.readNewPosts();
 		}		
 
 		// Avataranimationen stoppen
-		if (RMUS.options.options.miscellaneous_stopAvatarAnimation == 'checked') {
+		if (RMUS.options.options.miscellaneous_stopAvatarAnimation === 'checked') {
 			RMUS.miscellaneous.stopAvatarAnimation.stopAnimation();
 		}
 	}	
@@ -2150,25 +2028,25 @@ window.setInterval(function(){
 	}
 
 	if (content.forum_thread) {
-		if (RMUS.options.options.middleColumn_forum_reloadPosts_readNewPosts == 'checked') {
-			if (RMUS.options.options.middleColumn_forum_reloadPosts_markNewPosts == 'checked') {
+		if (RMUS.options.options.middleColumn_forum_reloadPosts_readNewPosts === 'checked') {
+			if (RMUS.options.options.middleColumn_forum_reloadPosts_markNewPosts === 'checked') {
 				// (de)-Markieren
 				RMUS.middleColumn.forum.reloadPosts.markNewPosts();			
 
 				// Favicon verändern
-				if (RMUS.options.options.middleColumn_forum_reloadPosts_changeFavicon == 'checked'){
+				if (RMUS.options.options.middleColumn_forum_reloadPosts_changeFavicon === 'checked'){
 					RMUS.middleColumn.forum.reloadPosts.changeFavicon();
 				}
 
 				// Postanzahl im Tab anzeigen
-				if (RMUS.options.options.middleColumn_forum_reloadPosts_showNewPostsTitle == 'checked') {
+				if (RMUS.options.options.middleColumn_forum_reloadPosts_showNewPostsTitle === 'checked') {
 					RMUS.middleColumn.forum.reloadPosts.showNewPostsTitle();
 				}
 			}
 		}
 	
 		// Beim ereichen des letzten Posts ggf. die nächste Seite nachladen. Nur wenn wir uns nicht auf der letzten Seite befinden!
-		if (RMUS.options.options.middleColumn_forum_scrollForNewPage == 'checked' && $.trim($('div.floatl.m2.elf').html()).substr($.trim($('div.floatl.m2.elf').html()).length-4) != '</b>') {
+		if (RMUS.options.options.middleColumn_forum_scrollForNewPage === 'checked' && $.trim($('div.floatl.m2.elf').html()).substr($.trim($('div.floatl.m2.elf').html()).length-4) != '</b>') {
 			RMUS.middleColumn.forum.scrollForNewPage.insertPosts();
 		}		
 	}
@@ -2181,15 +2059,15 @@ window.setInterval(function(){
 	if (!content.profile && !content.guides) {
 
 		// Streams und Forennavigation nachladen (Nur, wenn auch eingeblendet)
-		if (RMUS.options.options.rightColumn_forum_reloadForum == 'checked' && RMUS.options.options.rightColumn_forum_hideForum != 'checked'
-			|| RMUS.options.options.leftColumn_streams_reloadStreams == 'checked' && RMUS.options.options.leftColumn_streams_hideStreams != 'checked'
-			|| RMUS.options.options.rightColumn_ticker_reloadTicker == 'checked' && RMUS.options.options.rightColumn_ticker_hideTicker != 'checked') {
+		if (RMUS.options.options.rightColumn_forum_reloadForum === 'checked' && RMUS.options.options.rightColumn_forum_hideForum != 'checked'
+			|| RMUS.options.options.leftColumn_streams_reloadStreams === 'checked' && RMUS.options.options.leftColumn_streams_hideStreams != 'checked'
+			|| RMUS.options.options.rightColumn_ticker_reloadTicker === 'checked' && RMUS.options.options.rightColumn_ticker_hideTicker != 'checked') {
 
 			RMUS.miscellaneous.reloadMainpageData.readPage();
 
 			// Forennavigation
-			if (RMUS.options.options.rightColumn_forum_hideForum != 'checked'
-				&& RMUS.options.options.rightColumn_forum_reloadForum == 'checked') {
+			if (RMUS.options.options.rightColumn_forum_hideForum !== 'checked'
+				&& RMUS.options.options.rightColumn_forum_reloadForum === 'checked') {
 
 				// Lag im FF vermindern
 				window.setTimeout(RMUS.rightColumn.forum.reloadForum(), 2000);					
@@ -2197,7 +2075,7 @@ window.setInterval(function(){
 
 			// Streams
 			if (RMUS.options.options.leftColumn_streams_hideStreams != 'checked'
-				&& RMUS.options.options.leftColumn_streams_reloadStreams == 'checked') {
+				&& RMUS.options.options.leftColumn_streams_reloadStreams === 'checked') {
 
 				// Lag im FF vermindern
 				window.setTimeout(RMUS.leftColumn.streams.reloadStreams(), 4000);			
@@ -2205,7 +2083,7 @@ window.setInterval(function(){
 			
 			// Ticker
 			if (RMUS.options.options.rightColumn_ticker_hideTicker != 'checked'
-				&& RMUS.options.options.rightColumn_ticker_reloadTicker == 'checked') {
+				&& RMUS.options.options.rightColumn_ticker_reloadTicker === 'checked') {
 
 				// Lag im FF vermindern
 				window.setTimeout(RMUS.rightColumn.ticker.reloadTicker(), 6000);
@@ -2214,7 +2092,7 @@ window.setInterval(function(){
 	}
 
 	// PMs auf jeder Seite überprüfen (Usernavi buggy, daher nicht Teil der mainPageData)
-	if(RMUS.options.options.miscellaneous_reloadMessages == 'checked') {
+	if(RMUS.options.options.miscellaneous_reloadMessages === 'checked') {
 		RMUS.miscellaneous.messages.checkForNewMessages();
 	}
 	
