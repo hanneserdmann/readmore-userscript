@@ -634,16 +634,19 @@ var RMUS = {
 				
 				if (thread) {					
 					$(RMUS.miscellaneous.ignoreUser.user).each(function(index, value) {
-						$('tr[class*=post_]:has(a[title="' + value + '"]) td:not(:has(div[id*=ignored_]))').each(function() {							
-							if (RMUS.miscellaneous.ignoreUser.ignoreCount % 2){
-								RMUS.miscellaneous.ignoreUser.ignoreCount--;
-								$(this).html('<br/><div style="display:none;" class="ignored_' + RMUS.miscellaneous.ignoreUser.ignoreCount + '">' + $(this).html() + '</div>');
-								RMUS.miscellaneous.ignoreUser.ignoreCount = RMUS.miscellaneous.ignoreUser.ignoreCount + 2;
-							} 
-							else{
-								$(this).html('<a href="javascript:void(0)" onclick="$(\'.ignored_' + RMUS.miscellaneous.ignoreUser.ignoreCount + '\').toggle();">Beitrag einblenden</a><br/>' + '<br/><div style="display:none;" class="ignored_' + RMUS.miscellaneous.ignoreUser.ignoreCount + '">' + $(this).html() + '</div>');
-								RMUS.miscellaneous.ignoreUser.ignoreCount++;
-							}							
+						$('tr[class*=post_]:has(a[title="' + value + '"]) td').each(function() {
+
+							if (this.innerHTML.match(/ignored_/) == null){
+								if (RMUS.miscellaneous.ignoreUser.ignoreCount % 2){
+									RMUS.miscellaneous.ignoreUser.ignoreCount--;
+									$(this).html('<div style="display:none;" class="ignored_' + RMUS.miscellaneous.ignoreUser.ignoreCount + '">' + $(this).html() + '</div>');
+									RMUS.miscellaneous.ignoreUser.ignoreCount = RMUS.miscellaneous.ignoreUser.ignoreCount + 2;
+								} 
+								else{
+									$(this).html('<a style="font-size: 9px;" href="javascript:void(0)" onclick="$(\'.ignored_' + RMUS.miscellaneous.ignoreUser.ignoreCount + '\').toggle(); if(this.innerHTML == \'Beitrag einblenden\'){this.innerHTML = \'Beitrag ausblenden\';}else{this.innerHTML = \'Beitrag einblenden\';}">Beitrag einblenden</a><br/>' + '<br/><div style="display:none;" class="ignored_' + RMUS.miscellaneous.ignoreUser.ignoreCount + '">' + $(this).html() + '</div>');
+									RMUS.miscellaneous.ignoreUser.ignoreCount++;
+								}	
+							}
 						});
 					});					
 				}
