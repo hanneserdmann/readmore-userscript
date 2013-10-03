@@ -7,7 +7,9 @@ module.exports = function (grunt) {
     grunt.initConfig({
 
         concat: {
-            dist: {
+            // Scripte / Module zusammenführen
+            // Auch jQuery integrieren
+            script: {
                 src: [
                     'src/prepend.js',
                     'src/jquery/jquery-*.min.js',
@@ -16,14 +18,18 @@ module.exports = function (grunt) {
                 ],
                 dest: 'dist/readmore-userscript.user.js'
             },
-            addheader: {
+
+            // Userscripthead hinzufügen
+            header: {
                 src: [
                     'src/userscripthead.js',
                     'dist/readmore-userscript.user.js'
                 ],
                 dest: 'dist/readmore-userscript.user.js'
             },
-            addheadermin: {
+
+            // Userscripthead zur minimierten Version hinzufügen
+            headermin: {
                 src: [
                     'src/userscripthead.js',
                     'dist/readmore-userscript.min.user.js'
@@ -33,7 +39,8 @@ module.exports = function (grunt) {
         },
 
         htmlmin: {
-            dist: {
+            // HTML der Optionen minimieren
+            scriptoptions: {
                 options: {
                     removeComments: true,
                     collapseWhitespace: true
@@ -45,7 +52,8 @@ module.exports = function (grunt) {
         },
 
         uglify: {
-            'dist': {
+            // Minimierte Version vom Userscript erstellen
+            script: {
                 files: {
                     'dist/readmore-userscript.min.user.js': ['dist/readmore-userscript.user.js']
                 }
@@ -53,6 +61,7 @@ module.exports = function (grunt) {
         },
 
         'string-replace': {
+            // Menu in das Script einfügen
             includemenu: {
                 options: {
                     replacements: [{
@@ -68,6 +77,7 @@ module.exports = function (grunt) {
                 }
             },
 
+            // Linebreaks entfernen
             removelinebreak: {
                 options: {
                     replacements: [{
@@ -81,6 +91,7 @@ module.exports = function (grunt) {
                 }
             },
 
+            // Leerzeichen entfernen
             removewhitespace: {
                 options: {
                     replacements: [{
@@ -98,6 +109,7 @@ module.exports = function (grunt) {
             }
         },
 
+        // Aufräumen / Tempfiles entfernen
         clean: {
             src: 'dist/options.html'
         }
@@ -112,14 +124,14 @@ module.exports = function (grunt) {
 
     // Default task.
     var tasks = [
-        'htmlmin',
-        'concat:dist',
+        'htmlmin:scriptoptions',
+        'concat:script',
         'string-replace:removelinebreak',
         'string-replace:removewhitespace',
         'string-replace:includemenu',
-        'uglify',
-        'concat:addheader',
-        'concat:addheadermin',
+        'uglify:script',
+        'concat:header',
+        'concat:headermin',
         'clean'
     ];
 
