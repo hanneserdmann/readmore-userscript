@@ -2,3 +2,7 @@
 try {
     GM_log("[Readmore Userscript]");
 } catch (e) {}
+
+function RMUS() {
+    "use strict";
+}
