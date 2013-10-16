@@ -372,6 +372,8 @@ RMUS.miscellaneous = {
                             ["http://images.readmore.de/img/icons/ubb/youtube.png", "youtube", "youtube", 0, true],
                             ["http://readmore.thextor.de/userscript/img/extrabuttons/ZQ5jN.png", "img", "img", 0, true]],
 
+        ubbHelp: '<a onclick="window.open(\'http://www.readmore.de/mod/ubb.mod.php\', \'UBB Hilfe\', \'scrollbars=1,width=600,height=490,left=100,top=200\');return false;" href="/index.php?cont=ubb" style="font-weight:bold; color:#fff; margin-left: 8px; font-size: 11px;" class="ten hgray">?</a>',
+
         getToolbarHtml: function () {
             var colorButtons = '',
                 btnTags = '';
@@ -390,6 +392,7 @@ RMUS.miscellaneous = {
 
             btnTags + '&emsp;' +
             colorButtons +
+            this.ubbHelp +
 
             '</div></div></div>' +
             '<div style="clear: right;"></div></div>';
