@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name            Readmore Userscript
-// @version         2.1.5
+// @version         {{version}}
 // @description     Fügt der deutschen eSport-Webseite zusätzliche Funktionen hinzu
 // @author          thextor, vntw
 // @credits         IllDependence (Extrabuttons)

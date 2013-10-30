@@ -1,6 +1,6 @@
 RMUS.options = {
 
-    version : '2.1.5',
+    version : '{{version}}',
     options : {},
 
     // Fügt den Link zum öffnen der Optionen ein

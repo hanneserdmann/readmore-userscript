@@ -69,8 +69,7 @@ module.exports = function (grunt) {
                         replacement: function () {
                             return grunt.file.read('dist/options.html');
                         }
-                    },
-                        { pattern: ",", replacement: ";" }]
+                    }]
                 },
                 files: {
                     'dist/readmore-userscript.user.js': 'dist/readmore-userscript.user.js'
@@ -83,8 +82,7 @@ module.exports = function (grunt) {
                     replacements: [{
                         pattern: /\r?\n|\r/g,
                         replacement: ''
-                    },
-                        { pattern: ",", replacement: ";" }]
+                    }]
                 },
                 files: {
                     'dist/options.html': 'dist/options.html'
@@ -97,14 +95,23 @@ module.exports = function (grunt) {
                     replacements: [{
                         pattern: /\s+/g,
                         replacement: ' '
-                    },
-                        {
-                            pattern: ",",
-                            replacement: ";"
-                        }]
+                    }]
                 },
                 files: {
                     'dist/options.html': 'dist/options.html'
+                }
+            },
+            
+            version: {
+                 options: {
+                    replacements: [{
+                        pattern: /\{\{version\}\}/ig,
+                        replacement: '2.1.6'
+                    }]
+                },
+                files: {
+                    'dist/readmore-userscript.user.js': 'dist/readmore-userscript.user.js',
+                    'dist/readmore-userscript.min.user.js': 'dist/readmore-userscript.min.user.js'
                 }
             }
         },
@@ -132,6 +139,7 @@ module.exports = function (grunt) {
         'uglify:script',
         'concat:header',
         'concat:headermin',
+        'string-replace:version',
         'clean'
     ];
 

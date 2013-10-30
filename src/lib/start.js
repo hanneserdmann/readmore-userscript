@@ -327,7 +327,7 @@ RMUS.start = function () {
     }
 
     // HTML für die Optionen injekten und Eventhandler für das Menu setzen
-    $('body').append(('{{optionshtml}}').replace('{{version}}', RMUS.options.version, 'g'));
+    $('body').append('{{optionshtml}}');
 
     // Fix image jumping in forum box between requests
     $('head').append('<style type="text/css">div#nav_schlagzeilen div.listing > a > img {width: 11px; height: 11px;} div.cont_box div.listing > img {width: 5px; height: 7px;}</style>');
