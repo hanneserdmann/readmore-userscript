@@ -108,6 +108,17 @@ RMUS.rightColumn = {
             for (var n = 0, o = sections.length; n < o; n++){
                 sections[n] = sections[n].replace(/(<div class="spacer_s"><\/div>)|(<br>)|(<br \/>)/g, '');
             }
+            
+            // Keine Featured Threads vorhanden -> rauswerfen
+            if (sections[4] === ''){
+                var sectionsNew = [''];
+                for (var i = 0, m = sections.length; i < m; i++) {
+                    if (sections[i] !== ''){
+                        sectionsNew.push(sections[i]);
+                    }
+                }
+                sections = sectionsNew;                
+            }
 
             // Reihenfolge der Sektionen entsprechen den Optionen anpassen
             for (var i = 0, m = sections.length; i < m; i++) {
@@ -124,13 +135,15 @@ RMUS.rightColumn = {
                                 break;									
                 }
             }
+            
+            // Noch einmal prüfen ob Leerzeilen vorhanden sind, nötig wegen dem Featured Thread fix
+            html = html.replace(/(<br>|<br \/>)+/gi, '<br>');
 
             // Einfügen
-            document.getElementsByClassName('cont_box')[1].innerHTML = html
+            document.getElementsByClassName('cont_box')[1].innerHTML = html;
 
             // Größte der Bilder anpassen
-            $('.userscript11px').css('height', '11px');
-            $('.userscript11px').css('width', '11px');
+            $('.userscript11px').css('height', '11px').css('width', '11px');
 
             return false;
         },
