@@ -307,6 +307,11 @@ RMUS.start = function () {
         if(RMUS.options.options.miscellaneous_convertYoutube === 'checked') {
             RMUS.miscellaneous.convertYoutube();
         }
+        
+        // Editbox verschieben
+        if (RMUS.options.options.middleColumn_forum_hideForum_editboxTop){
+            RMUS.middleColumn.forum.scrollForNewPage.editboxTop();
+        }
     }
 
     // User ignorieren
@@ -395,6 +400,9 @@ RMUS.start = function () {
     $('#toggle_sub_miscellaneous_ignoreUser').click(function () {
         $('.sub_miscellaneous_ignoreUser').toggle();
     });
+    $('#toggle_sub_middleColumn_forum_scrollForNewPage').click(function () {
+        $('.sub_middleColumn_forum_scrollForNewPage').toggle();
+    });
 
     // Icon fuer das Auf- und Zuklappen anpassen
     $('[id*=toggle_sub]').click(function(){
@@ -473,7 +481,7 @@ RMUS.start = function () {
             // Beim ereichen des letzten Posts ggf. die nächste Seite nachladen. Nur wenn wir uns nicht auf der letzten Seite befinden!
             if (RMUS.options.options.middleColumn_forum_scrollForNewPage === 'checked' && $.trim($('div.floatl.m2.elf').html()).substr($.trim($('div.floatl.m2.elf').html()).length-4) != '</b>') {
                 RMUS.middleColumn.forum.scrollForNewPage.insertPosts();
-            }		
+            }           
         }
     }, 500);
 
