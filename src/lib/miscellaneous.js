@@ -427,7 +427,7 @@ RMUS.miscellaneous = {
                 async: true,
                 cache: false,
                 url: 'http://www.readmore.de/index.php?cont=userstream_overview',
-                contentType: 'text/html; charset=iso-8859-1;', 
+                contentType: 'text/html; charset=iso-8859-1;',
                 dataType: 'html',
                 success: function (data) {
                     var pageData = data;
@@ -440,6 +440,9 @@ RMUS.miscellaneous = {
                             RMUS.miscellaneous.reloadMainpageData.mainpageData = pageData.replace(/(\r\n|\n|\r)/gm,' ').replace(/\s+/g," ");
                         }
                     }
+                },
+                beforeSend: function(jqXHR) {
+                    jqXHR.overrideMimeType('text/html;charset=iso-8859-1');
                 }
             });
 

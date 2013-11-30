@@ -87,6 +87,9 @@ RMUS.middleColumn = {
                                 // Youtubeplayer ersetzen
                                 if(RMUS.options.options.miscellaneous_convertYoutube == 'checked') RMUS.miscellaneous.convertYoutube();									
                             }
+                        },
+                        beforeSend: function(jqXHR) {
+                            jqXHR.overrideMimeType('text/html;charset=iso-8859-1');
                         }
                     });
 
@@ -200,6 +203,9 @@ RMUS.middleColumn = {
                                 if (posts != null) {
                                     $('table.elf.forum.p2:last').after('<br/><div id="userscriptNewPage" style="width:520px; height: 23px; background-color: #2B91FF; text-align: right; vertical-align:middle; display:table-cell"><a style="color: #fff; font-weight: bold; padding-right: 10px;" href="' + RMUS.middleColumn.forum.threadlink + '&pagenum=' + (RMUS.middleColumn.forum.page + 1) + '">Zur n&auml;chsten Seite</a></div>');
                                 }
+                            },
+                            beforeSend: function(jqXHR) {
+                                jqXHR.overrideMimeType('text/html;charset=iso-8859-1');
                             }
                         });
                     }
@@ -527,6 +533,9 @@ RMUS.middleColumn = {
                                     if(RMUS.options.options.miscellaneous_note == 'checked') RMUS.miscellaneous.note.initialize();
                                 }										
                             }
+                        },
+                        beforeSend: function(jqXHR) {
+                            jqXHR.overrideMimeType('text/html;charset=iso-8859-1');
                         }
                     });
                 }
@@ -576,6 +585,9 @@ RMUS.middleColumn = {
                     dataType: 'html',
                     success: function (data) {
                         $('tr[class=post_' + postid + ']>td:last textarea').val(data.replace(/(\r\n|\n|\r)/gm,'[newline]').match(/<textarea(.*?)>(.*?)<\/textarea>/)[2].replace(/\[newline\]/g, '\r\n'));
+                    },
+                    beforeSend: function(jqXHR) {
+                        jqXHR.overrideMimeType('text/html;charset=iso-8859-1');
                     }
                 });
 
@@ -656,6 +668,9 @@ RMUS.middleColumn = {
                                 alert('Es ist leider ein Fehler aufgetreten. Bitte lade die Seite neu!');
                             }
                         });								
+                    },
+                    beforeSend: function(jqXHR) {
+                        jqXHR.overrideMimeType('text/html;charset=iso-8859-1');
                     }
                 });
 
