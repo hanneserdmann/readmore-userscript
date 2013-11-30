@@ -34,7 +34,7 @@ RMUS.rightColumn = {
 
         // Blendet Counterstrike aus
         hideCounterstrike : function () {
-            for (var i = 0; i < 8; i++) {
+            for (var i = 0; i < 6; i++) {
                 document.getElementById('nav_schlagzeilen').children[i].style.display = "none";
             }
             return false;
@@ -42,7 +42,7 @@ RMUS.rightColumn = {
 
         // Blendet Starcraft aus
         hideStarcraft : function () {
-            for (var i = 8; i < 16; i++) {
+            for (var i = 6; i < 12; i++) {
                 document.getElementById('nav_schlagzeilen').children[i].style.display = "none";
             }
             return false;
@@ -50,7 +50,7 @@ RMUS.rightColumn = {
 
         // Blendet Dota aus
         hideDefenseOfTheAncients : function () {
-            for (var i = 16; i < 23; i++) {
+            for (var i = 12; i < 19; i++) {
                 document.getElementById('nav_schlagzeilen').children[i].style.display = "none";
             }
             return false;
@@ -58,7 +58,7 @@ RMUS.rightColumn = {
 
         // Blendet LoL aus
         hideLeagueOfLegends : function () {
-            for (var i = 23; i < 29; i++) {
+            for (var i = 19; i < 25; i++) {
                 document.getElementById('nav_schlagzeilen').children[i].style.display = "none";
             }
             return false;
@@ -66,7 +66,7 @@ RMUS.rightColumn = {
 
         // Blendet Warcraft aus
         hideWarcraft3 : function () {
-            for (var i = 29; i < 34; i++) {
+            for (var i = 25; i < 31; i++) {
                 document.getElementById('nav_schlagzeilen').children[i].style.display = "none";
             }
             return false;
@@ -74,7 +74,7 @@ RMUS.rightColumn = {
 
         // Blendet Sonstiges aus
         hideSonstiges : function () {
-            for (var i = 34; i < 43; i++) {
+            for (var i = 31; i < 38; i++) {
                 document.getElementById('nav_schlagzeilen').children[i].style.display = "none";
             }
             return false;
