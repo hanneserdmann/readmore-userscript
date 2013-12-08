@@ -484,6 +484,8 @@ RMUS.middleColumn = {
                     } else {
                         // Nachricht aus dem Feld löschen und Posts neuladen
                         $('#c_comment').val('');
+                        $('#previewtable').css('display', 'none');
+                        $('#previewtable #preview').text('');
                         RMUS.middleColumn.forum.reloadPosts.readNewPosts();
                     }
 
