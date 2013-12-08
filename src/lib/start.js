@@ -412,7 +412,7 @@ RMUS.start = function () {
     });
 
     // Prüfen ob eine neue Version erschienen ist
-    RMUS.miscellaneous.checkVersion();
+    RMUS.update.checkVersion();
 
     // content in den LocalStorage speichern
     var seen = [];
