@@ -377,22 +377,30 @@ RMUS.middleColumn = {
 
             // Preview starten / Ein- und ausblenden
             triggerPreview : function () {
-                if(RMUS.middleColumn.forum.preview.previewIsEnabled == true) {
-                    // Ausblenden
-                    $('#previewtable').css('display', 'none');
-                    $('#c_comment').unbind("keyup", RMUS.middleColumn.forum.preview.showPreview);
-                    $('#c_comment').unbind("focus", RMUS.middleColumn.forum.preview.showPreview);
-                    RMUS.middleColumn.forum.preview.previewIsEnabled = false;
+                if (RMUS.middleColumn.forum.preview.previewIsEnabled == true) {
+                    RMUS.middleColumn.forum.preview.deactivatePreview();
                 } else {
-                    // Einblenden
-                    RMUS.middleColumn.forum.preview.initializePreview();
-                    RMUS.middleColumn.forum.preview.showPreview();
-
-                    $('#previewtable').css('display', 'block');
-                    $('#c_comment').keyup(RMUS.middleColumn.forum.preview.showPreview);
-                    $('#c_comment').focus(RMUS.middleColumn.forum.preview.showPreview);
-                    RMUS.middleColumn.forum.preview.previewIsEnabled = true;
+                    RMUS.middleColumn.forum.preview.activatePreview();
                 }
+            },
+
+            // Preview einblenden
+            activatePreview: function () {
+                RMUS.middleColumn.forum.preview.initializePreview();
+                RMUS.middleColumn.forum.preview.showPreview();
+
+                $('#previewtable').css('display', 'block');
+                $('#c_comment').keyup(RMUS.middleColumn.forum.preview.showPreview);
+                $('#c_comment').focus(RMUS.middleColumn.forum.preview.showPreview);
+                RMUS.middleColumn.forum.preview.previewIsEnabled = true;
+            },
+
+            // Preview ausblenden
+            deactivatePreview: function () {
+                $('#previewtable').css('display', 'none');
+                $('#c_comment').unbind("keyup", RMUS.middleColumn.forum.preview.showPreview);
+                $('#c_comment').unbind("focus", RMUS.middleColumn.forum.preview.showPreview);
+                RMUS.middleColumn.forum.preview.previewIsEnabled = false;
             }
         },
 
@@ -484,6 +492,7 @@ RMUS.middleColumn = {
                     } else {
                         // Nachricht aus dem Feld löschen und Posts neuladen
                         $('#c_comment').val('');
+                        RMUS.middleColumn.forum.preview.deactivatePreview();
                         RMUS.middleColumn.forum.reloadPosts.readNewPosts();
                     }
 
