@@ -76,10 +76,10 @@ RMUS.options = {
     // Optionen auslesen
     readOptions : function () {
         // Json auslesen und in Objekt umwandeln
-        RMUS.options.options = JSON.parse(localStorage.getItem('userscriptOptions'));
+        this.options = JSON.parse(localStorage.getItem('userscriptOptions'));
 
-        if (RMUS.options.options == null) {
-            RMUS.options.options = [];
+        if (this.options == null) {
+            this.options = [];
         }
 
         return false;
