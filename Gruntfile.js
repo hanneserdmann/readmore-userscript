@@ -11,8 +11,8 @@ module.exports = function (grunt) {
             // Auch jQuery integrieren
             script: {
                 src: [
+                    'vendor/*.js',
                     'src/prepend.js',
-                    'src/jquery/jquery-*.min.js',
                     'src/lib/*.js',
                     'src/append.js'
                 ],
