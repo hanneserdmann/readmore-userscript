@@ -335,13 +335,11 @@ RMUS.start = function () {
     $('#saveUserscriptOptions').click(function () {
         RMUS.options.saveOptions();
     });
-    $('#openUserscriptOptions').click(function (e) {
-        e.preventDefault();
+    $('#openUserscriptOptions').click(function () {
         RMUS.options.loadOptions();
         $('#userscriptOptions').toggle();
     });
-    $('#closeUserscriptOptions').click(function (e) {
-        e.preventDefault();
+    $('#closeUserscriptOptions').click(function () {
         $('#userscriptOptions').toggle();
     });
 
