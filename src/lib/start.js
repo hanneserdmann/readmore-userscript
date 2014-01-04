@@ -337,8 +337,6 @@ RMUS.start = function () {
     });
     $('#openUserscriptOptions').click(function () {
         RMUS.options.loadOptions();
-    });
-    $('#openUserscriptOptions').click(function () {
         $('#userscriptOptions').toggle();
     });
     $('#closeUserscriptOptions').click(function () {
@@ -346,31 +344,40 @@ RMUS.start = function () {
     });
 
     // Click Handler für Desktop-Notifications um die Berechtigung einzuholen
-    if(RMUS.options.options.miscellaneous_reloadMessages === 'checked') {
-        $('input#miscellaneous_reloadMessages_desktopNotifications').click(function () {
-            if ($(this).is(':checked')) {
-                if (window.webkitNotifications) {
-                    // const unsigned int PERMISSION_ALLOWED = 0;
-                    // const unsigned int PERMISSION_NOT_ALLOWED = 1;
-                    // const unsigned int PERMISSION_DENIED = 2;
+    $('input#miscellaneous_reloadMessages_desktopNotifications').click(function () {
+        var checkbox = $(this),
+            uncheckBox = function () {
+                checkbox.attr('checked', false);
+            };
 
-                    switch (window.webkitNotifications.checkPermission()) {
-                        case 1:
-                            window.webkitNotifications.requestPermission();
-                            break;
-                        case 2:
-                            alert('Es scheint als hättest Du Desktop-Notifications für readmore.de geblockt. Du kannst diese jedoch einfach in den Einstellungen deines Browsers widerrufen.');
-                            break;
-                        default:
-                            // Permission liegt bereits vor (0). <Nothing to do here...>
-                    }
-                } else {
-                    alert('Diese Funktion funktioniert derzeit nur in Verbindung mit dem Google Chrome Browser');
-                    $(this).attr('checked', false);
+        if (checkbox.is(':checked')) {
+            var notification = new Notify('Notifications aktiviert!', {
+                //tag: 'activated-notifications',
+                icon: RMUS.messages.iconUrl,
+                body: 'Notifications sind nun für alle Nachrichten aktiviert.',
+                permissionGranted: function () {
+                    notification.show();
+                },
+                permissionDenied: function () {
+                    alert('Du hast die nötige Berechtigung für Notifications nicht erteilt. Bitte überprüfe, ob Notifications in deinen Browser-Einstellungen für readmore.de blockiert sind.');
+                    uncheckBox();
                 }
+            });
+
+            if (!notification.isSupported()) {
+                alert('Diese Funktion wird von deinem Browser derzeit leider nicht unterstützt.');
+                uncheckBox();
+                return;
             }
-        });
-    }
+
+            if (notification.needsPermission()) {
+                notification.requestPermission();
+                return;
+            }
+
+            notification.show();
+        }
+    });
 
     // Auf- und Einklappen von Unterkategorien
     $('#toggle_sub_middleColumn_forum_reloadPosts_readNewPosts').click(function () {
@@ -526,7 +533,7 @@ RMUS.start = function () {
 
         // PMs auf jeder Seite überprüfen (Usernavi buggy, daher nicht Teil der mainPageData)
         if(RMUS.options.options.miscellaneous_reloadMessages === 'checked') {
-            RMUS.miscellaneous.messages.checkForNewMessages();
+            RMUS.messages.checkForNewMessages();
         }
 
     }, 15000);  
