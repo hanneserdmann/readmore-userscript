@@ -333,14 +333,48 @@ RMUS.start = function () {
     $('head').append('<style type="text/css">div#nav_schlagzeilen div.listing > a > img {width: 11px; height: 11px;} div.cont_box div.listing > img {width: 5px; height: 7px;}</style>');
 
     $('#saveUserscriptOptions').click(function () {
-        RMUS.options.saveOptions();
+        if (RMUS.options.saveOptions()) {
+            RMUS.options.hideOptions();
+        }
     });
     $('#openUserscriptOptions').click(function () {
-        RMUS.options.loadOptions();
-        $('#userscriptOptions').toggle();
+        RMUS.options.showOptions();
     });
-    $('#closeUserscriptOptions').click(function () {
-        $('#userscriptOptions').toggle();
+    $('#closeUserscriptOptions,#userscriptOptionsOverlay').click(function () {
+        RMUS.options.hideOptions();
+    });
+
+    $('#importUserscriptOptions').click(function () {
+        var opts = prompt('Bitte den exportierten JSON-String in das Textfeld eingeben:'),
+            validJson = true;
+
+        if (null === opts) {
+            return; // Cancelled
+        }
+
+        try {
+            JSON.parse(opts);
+        } catch (e) {
+            validJson = false;
+        }
+
+        if (validJson) {
+            RMUS.options.backupOptions();
+            RMUS.options.setOptionsRaw(opts);
+            alert('Die Optionen wurden erfolgreich importiert! Du musst die Seite neu laden, damit die Optionen vollständig übernommen werden.');
+        } else {
+            alert('Die Optionen konnten nicht importiert werden! Der eingegebene Text ist kein valider JSON-String.');
+        }
+    });
+    $('#exportUserscriptOptions').click(function () {
+        var opts = RMUS.options.getOptionsRaw();
+
+        if (opts === 'null') {
+            alert('Es sind keine gespeicherten Optionen zum Exportieren vorhanden. Bitte speichere deine Optionen zuerst ab.');
+            return;
+        }
+
+        prompt('Kopiere diesen JSON-String für den späteren Import:', opts);
     });
 
     // Click Handler für Desktop-Notifications um die Berechtigung einzuholen
