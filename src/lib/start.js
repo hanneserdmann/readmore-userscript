@@ -174,8 +174,16 @@ RMUS.start = function () {
     }
 
     // Optionen laden und Link in der Usereiste einfügen
+    $('body').append('{{optionshtml}}');
     RMUS.options.readOptions();
+    RMUS.options.loadOptions();
     RMUS.options.insertOptionsLink();
+
+    // BC: Einmal speichern, damit auch die nicht-selektierten Checkboxen gespeichert werden.
+    if (!localStorage.getItem('bcOptionsSaved')) {
+        RMUS.options.saveOptions();
+        localStorage.setItem('bcOptionsSaved', true);
+    }
 
     if (RMUS.options.options.miscellaneous_fixedToolbar) {
         RMUS.miscellaneous.createFixedToolbar();	
@@ -326,12 +334,10 @@ RMUS.start = function () {
         }
     }
 
-    // HTML für die Optionen injekten und Eventhandler für das Menu setzen
-    $('body').append('{{optionshtml}}');
-
     // Fix image jumping in forum box between requests
     $('head').append('<style type="text/css">div#nav_schlagzeilen div.listing > a > img {width: 11px; height: 11px;} div.cont_box div.listing > img {width: 5px; height: 7px;}</style>');
 
+    // Eventhandler für die Optionen setzen
     $('#saveUserscriptOptions').click(function () {
         if (RMUS.options.saveOptions()) {
             RMUS.options.hideOptions();
@@ -344,13 +350,41 @@ RMUS.start = function () {
         RMUS.options.hideOptions();
     });
 
-    $('#importUserscriptOptions').click(function () {
-        var opts = prompt('Bitte den exportierten JSON-String in das Textfeld eingeben:'),
-            validJson = true;
+    $('div#userscriptOptions input.imexp').click(function () {
+        var $this = $(this),
+            imexportContainer = $('div#rmus-options-imexport'),
+            importBtn = $('div#rmus-options-imexport input#importUserscriptOptionsBtn'),
+            helpContainer = $('div.rmus-options-imexport-help', imexportContainer),
+            textarea = $('textarea', imexportContainer);
 
-        if (null === opts) {
-            return; // Cancelled
+        imexportContainer.hide();
+
+        if ($this.prop('id') === 'importUserscriptOptions') {
+            importBtn.show();
+            helpContainer.text('Füge den exportierten JSON-String in das Textfeld ein:');
+            textarea.val('');
+            textarea.focus();
+        } else {
+            var opts = RMUS.options.getOptionsRaw();
+
+            if (opts === 'null') {
+                alert('Es sind keine gespeicherten Optionen zum Exportieren vorhanden. Bitte speichere deine Optionen zuerst ab.');
+                return;
+            }
+
+            importBtn.hide();
+            helpContainer.text('Kopiere diesen JSON-String für den späteren Import:');
+            textarea.val(opts);
         }
+
+        imexportContainer.slideToggle(250, function () { textarea.select(); });
+    });
+    $('#imexportUserscriptOptionsCloseBtn').click(function () {
+        $('div#rmus-options-imexport').hide();
+    });
+    $('#importUserscriptOptionsBtn').click(function () {
+        var opts = $('div#rmus-options-imexport textarea').val(),
+            validJson = true;
 
         try {
             JSON.parse(opts);
@@ -361,20 +395,16 @@ RMUS.start = function () {
         if (validJson) {
             RMUS.options.backupOptions();
             RMUS.options.setOptionsRaw(opts);
+
+            // Optionen schließen, damit sie neu geladen werden beim nächsten öffnen.
+            RMUS.options.hideOptions();
+            RMUS.options.loadOptions();
+            RMUS.options.readOptions();
+
             alert('Die Optionen wurden erfolgreich importiert! Du musst die Seite neu laden, damit die Optionen vollständig übernommen werden.');
         } else {
             alert('Die Optionen konnten nicht importiert werden! Der eingegebene Text ist kein valider JSON-String.');
         }
-    });
-    $('#exportUserscriptOptions').click(function () {
-        var opts = RMUS.options.getOptionsRaw();
-
-        if (opts === 'null') {
-            alert('Es sind keine gespeicherten Optionen zum Exportieren vorhanden. Bitte speichere deine Optionen zuerst ab.');
-            return;
-        }
-
-        prompt('Kopiere diesen JSON-String für den späteren Import:', opts);
     });
 
     // Click Handler für Desktop-Notifications um die Berechtigung einzuholen

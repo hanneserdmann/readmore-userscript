@@ -117,6 +117,23 @@
 	background: -ms-linear-gradient(top, #ffffff 0%,#ededed 100%);
 	background: linear-gradient(to bottom, #ffffff 0%,#ededed 100%);
     }
+    #userscriptOptions .rmus-options-footer #rmus-options-imexport {
+	clear: both;
+	text-align: left;
+	margin-top: 10px;
+	display: none;
+    }
+    #userscriptOptions .rmus-options-footer #rmus-options-imexport .rmus-options-imexport-help {
+	font-size: 10px;
+    }
+    #userscriptOptions .rmus-options-footer #rmus-options-imexport textarea {
+	width: 568px;
+	font-family: Verdana;
+	font-size: 10px;
+	padding: 5px;
+	margin: 5px 0 3px;
+	height: 21px;
+    }
 
     #userscriptOptions input[type=checkbox],
     #userscriptOptions input[type=select],
@@ -127,9 +144,7 @@
 
     .btn-rm {
 	background-color: #fff;
-	border-color: #ccccce;
-	border-style: solid;
-	border-width: 1px;
+	border: 1px solid #ccccce;
 	color: #222222;
 	font-family: Verdana;
 	font-size: 10px;
@@ -945,14 +960,21 @@
 	</div>
 	<div class="rmus-options-footer">
 	    <div style="float: left;">
-		<input class="btn-rm" type="button" id="importUserscriptOptions" value="Import"/>
+		<input class="btn-rm imexp" type="button" id="importUserscriptOptions" value="Import"/>
 		&nbsp;
-		<input class="btn-rm" type="button" id="exportUserscriptOptions" value="Export"/>
+		<input class="btn-rm imexp" type="button" id="exportUserscriptOptions" value="Export"/>
 	    </div>
 
 	    <input class="btn-rm" type="button" id="closeUserscriptOptions" value="Abbrechen"/>
 	    &nbsp;
 	    <input class="btn-rm primary" type="button" value="Speichern" id="saveUserscriptOptions"/>
+
+	    <div id="rmus-options-imexport">
+		<div class="rmus-options-imexport-help"></div>
+		<textarea class="btn-rm"></textarea>
+		<input class="btn-rm primary" style="margin-right: 4px;" type="button" value="Importieren" id="importUserscriptOptionsBtn"/>
+		<input class="btn-rm" type="button" value="Schlie&szlig;en" id="imexportUserscriptOptionsCloseBtn"/>
+	    </div>
 	</div>
     </div>
 </div>

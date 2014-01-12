@@ -18,6 +18,8 @@ RMUS.options = {
             var attr = $(this).attr('checked');
             if (attr == true || attr == 'checked') {
                 userscriptOptions[$(this).attr('name')] = 'checked';
+            } else {
+                userscriptOptions[$(this).attr('name')] = false;
             }
         });
 
@@ -54,8 +56,10 @@ RMUS.options = {
                     // Checkboxen setzen
                     if (value == 'checked') {
                         $('[name=' + index + ']').attr('checked', true);
-                        return true;
+                    } else {
+                        $('[name=' + index + ']').attr('checked', false);
                     }
+                    return true;
                 }
 
                 if (type == 'text' || type == null) {
@@ -105,6 +109,9 @@ RMUS.options = {
         $('div#userscriptOptionsOverlay').css('height', $(document).height()).fadeIn(200, function () {
             // Reset scroll
             $('div#userscriptOptions div.rmus-options-content').animate({scrollTop: 0}, 50);
+            // Im-/Export ausblenden
+            $('div#rmus-options-imexport').hide();
+
             $('div#userscriptOptions').fadeIn(250);
         });
     },
