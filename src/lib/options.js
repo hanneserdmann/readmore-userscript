@@ -11,14 +11,15 @@ RMUS.options = {
 
     // Speichert die Optionen im LocalStorage
     saveOptions : function () {
-        var userscriptOptions = {},
-            response;
+        var userscriptOptions = {};
 
         // Alle Checkboxen
         $('input[type=checkbox].userscriptOptions').each(function () {
             var attr = $(this).attr('checked');
             if (attr == true || attr == 'checked') {
                 userscriptOptions[$(this).attr('name')] = 'checked';
+            } else {
+                userscriptOptions[$(this).attr('name')] = false;
             }
         });
 
@@ -32,12 +33,15 @@ RMUS.options = {
             userscriptOptions[$(this).attr('name')] = $(this).val();
         });
 
-        // Json-Speichern
-        localStorage.setItem('userscriptOptions', JSON.stringify(userscriptOptions));
-        response = 'Die Optionen wurden erfolgreich gespeichert!';
+        try {
+            // Json-Speichern
+            localStorage.setItem('userscriptOptions', JSON.stringify(userscriptOptions));
+        } catch (e) {
+            alert('Es ist ein Fehler beim Speichern aufgetreten: ' + e);
+            return false;
+        }
 
-        // Rückmeldung
-        alert(response);
+        return true;
     },
 
     // Optionen laden
@@ -52,8 +56,10 @@ RMUS.options = {
                     // Checkboxen setzen
                     if (value == 'checked') {
                         $('[name=' + index + ']').attr('checked', true);
-                        return true;
+                    } else {
+                        $('[name=' + index + ']').attr('checked', false);
                     }
+                    return true;
                 }
 
                 if (type == 'text' || type == null) {
@@ -83,5 +89,37 @@ RMUS.options = {
         }
 
         return false;
+    },
+
+    getOptionsRaw: function () {
+        return localStorage.getItem('userscriptOptions');
+    },
+
+    setOptionsRaw: function (options) {
+        localStorage.setItem('userscriptOptions', options + "");
+    },
+
+    backupOptions: function () {
+        localStorage.setItem('userscriptOptionsBackup', localStorage.getItem('userscriptOptions'));
+    },
+
+    showOptions: function () {
+        RMUS.options.loadOptions();
+
+        $('div#userscriptOptionsOverlay').css('height', $(document).height()).fadeIn(200, function () {
+            // Reset scroll
+            $('div#userscriptOptions div.rmus-options-content').animate({scrollTop: 0}, 50);
+            // Im-/Export ausblenden
+            $('div#rmus-options-imexport').hide();
+
+            $('div#userscriptOptions').fadeIn(250);
+        });
+    },
+
+    hideOptions: function () {
+        $('div#userscriptOptions').fadeOut(250, function () {
+            $('div#userscriptOptionsOverlay').fadeOut(200);
+        });
     }
+
 };
