@@ -149,7 +149,6 @@ module.exports = function (grunt) {
         clean: {
             src: 'dist/tmp'
         }
-
     });
 
     grunt.loadNpmTasks('grunt-contrib-concat');
