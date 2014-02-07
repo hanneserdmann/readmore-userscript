@@ -147,7 +147,7 @@ module.exports = function (grunt) {
 
         // Aufräumen / Tempfiles entfernen
         clean: {
-            src: 'dist/tmp/'
+            src: 'dist/tmp'
         }
 
     });
