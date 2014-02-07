@@ -17,9 +17,14 @@ module.exports = function (grunt) {
         },
 
         copy:{
-            main: {
-                src: 'dist/readmore-userscript.min.user.js',
-                dest: 'dist/tmp/chrome/readmore-userscript.min.user.js'
+            userscriptsrc: {
+                src:    'dist/readmore-userscript.min.user.js',
+                dest:   'dist/tmp/chrome/readmore-userscript.min.user.js'
+            },
+
+            chromeicon: {
+                src:    'img/128.png',
+                dest:   'dist/tmp/chrome/128.png'
             }
         },
 

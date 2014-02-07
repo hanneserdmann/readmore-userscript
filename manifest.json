@@ -15,5 +15,7 @@
         "matches": ["http://readmore.de/*", "http://www.readmore.de/*"],
         "js": ["readmore-userscript.min.user.js"],
         "run_at": "document_end"
-    }]
+    }],
+
+    "author": "thextor, venyii"
 }
