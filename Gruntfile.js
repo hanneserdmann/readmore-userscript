@@ -6,6 +6,34 @@ module.exports = function (grunt) {
     // Project configuration.
     grunt.initConfig({
 
+        // Temp-Dir erstellen
+        mkdir:{
+            all: {
+                options: {
+                    archive: 'zip',
+                    create: ['dist/tmp', 'dist/tmp/chrome']
+                }
+            }
+        },
+
+        copy:{
+            main: {
+                src: 'dist/readmore-userscript.min.user.js',
+                dest: 'dist/tmp/chrome/readmore-userscript.min.user.js'
+            }
+        },
+
+        compress:{
+            main: {
+                options: {
+                    archive: 'dist/chromeExtension.zip'
+                },
+                files: [
+                    {flatten: true, expand: true, src: ['dist/tmp/chrome/*'], dest: ''} // includes files in path
+                ]
+            }
+        },
+
         concat: {
             // Scripte / Module zusammenführen
             // Auch jQuery integrieren
@@ -16,25 +44,25 @@ module.exports = function (grunt) {
                     'src/lib/*.js',
                     'src/append.js'
                 ],
-                dest: 'dist/readmore-userscript.user.js'
+                dest: 'dist/tmp/readmore-userscript.user.js'
             },
 
             // Userscripthead hinzufügen
             header: {
                 src: [
                     'src/userscripthead.js',
-                    'dist/readmore-userscript.user.js'
+                    'dist/tmp/readmore-userscript.user.js'
                 ],
-                dest: 'dist/readmore-userscript.user.js'
+                dest: 'dist/tmp/readmore-userscript.user.js'
             },
 
             // Userscripthead zur minimierten Version hinzufügen
             headermin: {
                 src: [
                     'src/userscripthead.js',
-                    'dist/readmore-userscript.min.user.js'
+                    'dist/tmp/readmore-userscript.min.user.js'
                 ],
-                dest: 'dist/readmore-userscript.min.user.js'
+                dest: 'dist/tmp/readmore-userscript.min.user.js'
             }
         },
 
@@ -46,7 +74,7 @@ module.exports = function (grunt) {
                     collapseWhitespace: true
                 },
                 files: {
-                    'dist/options.html': 'src/options.html'
+                    'dist/tmp/options.html': 'src/options.html'
                 }
             }
         },
@@ -55,7 +83,7 @@ module.exports = function (grunt) {
             // Minimierte Version vom Userscript erstellen
             script: {
                 files: {
-                    'dist/readmore-userscript.min.user.js': ['dist/readmore-userscript.user.js']
+                    'dist/tmp/readmore-userscript.min.user.js': ['dist/tmp/readmore-userscript.user.js']
                 }
             }
         },
@@ -67,12 +95,12 @@ module.exports = function (grunt) {
                     replacements: [{
                         pattern: /\{\{optionshtml\}\}/ig,
                         replacement: function () {
-                            return grunt.file.read('dist/options.html');
+                            return grunt.file.read('dist/tmp/options.html');
                         }
                     }]
                 },
                 files: {
-                    'dist/readmore-userscript.user.js': 'dist/readmore-userscript.user.js'
+                    'dist/tmp/readmore-userscript.user.js': 'dist/tmp/readmore-userscript.user.js'
                 }
             },
 
@@ -85,7 +113,7 @@ module.exports = function (grunt) {
                     }]
                 },
                 files: {
-                    'dist/options.html': 'dist/options.html'
+                    'dist/tmp/options.html': 'dist/tmp/options.html'
                 }
             },
 
@@ -98,10 +126,10 @@ module.exports = function (grunt) {
                     }]
                 },
                 files: {
-                    'dist/options.html': 'dist/options.html'
+                    'dist/tmp/options.html': 'dist/tmp/options.html'
                 }
             },
-            
+
             version: {
                  options: {
                     replacements: [{
@@ -110,15 +138,16 @@ module.exports = function (grunt) {
                     }]
                 },
                 files: {
-                    'dist/readmore-userscript.user.js': 'dist/readmore-userscript.user.js',
-                    'dist/readmore-userscript.min.user.js': 'dist/readmore-userscript.min.user.js'
+                    'dist/readmore-userscript.user.js': 'dist/tmp/readmore-userscript.user.js',
+                    'dist/readmore-userscript.min.user.js': 'dist/tmp/readmore-userscript.min.user.js',
+                    'dist/tmp/chrome/manifest.json': 'manifest.json'
                 }
             }
         },
 
         // Aufräumen / Tempfiles entfernen
         clean: {
-            src: 'dist/options.html'
+            src: 'dist/tmp/'
         }
 
     });
@@ -128,9 +157,13 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-htmlmin');
     grunt.loadNpmTasks('grunt-string-replace');
     grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-contrib-compress');
+    grunt.loadNpmTasks('grunt-mkdir');
+    grunt.loadNpmTasks('grunt-contrib-copy');
 
     // Default task.
     var tasks = [
+        'mkdir',
         'htmlmin:scriptoptions',
         'concat:script',
         'string-replace:removelinebreak',
@@ -140,6 +173,8 @@ module.exports = function (grunt) {
         'concat:header',
         'concat:headermin',
         'string-replace:version',
+        'copy',
+        'compress',
         'clean'
     ];
 
