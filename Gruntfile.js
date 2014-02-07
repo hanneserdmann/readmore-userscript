@@ -139,7 +139,7 @@ module.exports = function (grunt) {
                  options: {
                     replacements: [{
                         pattern: /\{\{version\}\}/ig,
-                        replacement: '2.1.7'
+                        replacement: '2.1.8'
                     }]
                 },
                 files: {
