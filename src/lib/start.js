@@ -258,7 +258,10 @@ RMUS.start = function () {
 
         // Titel umsortieren
         if (RMUS.options.options.miscellaneous_reSortTitle === 'checked') RMUS.miscellaneous.reSortTitle();
-
+        
+        // Bilderlinks umwandeln
+        if (RMUS.options.options.miscellaneous_convertImageLinks === 'checked') RMUS.miscellaneous.convertImageLinks();
+        
         // Vorschau
         if (RMUS.options.options.middleColumn_forum_preview === 'checked') {
             RMUS.middleColumn.forum.preview.insertPreviewHtml();
