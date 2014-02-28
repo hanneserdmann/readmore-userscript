@@ -21,6 +21,13 @@ RMUS.miscellaneous = {
         $('title').text(title);
         return false;
     },
+    
+    // Wandelt Bilder-URLs in eigentliche Bilder um
+    convertImageLinks: function() {
+    	$('a[href$=".png"], a[href$=".jpg"], a[href$=".gif"], a[href$=".bmp"]').each(function() {
+    	    $(this).html('<img src="' + $(this).attr('href') + '" class="center" style="max-width: 98%; border: 1px solid #CDCDCD" />');
+    	});
+    },
 
     // Zum letzten Post springen
     lastPageJumpToLastPost : function () {
