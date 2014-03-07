@@ -173,11 +173,8 @@ RMUS.start = function () {
             break;
     }
 
-    // Optionen laden und Link in der Usereiste einfügen
-    $('body').append('{{optionshtml}}');
+    // Optionen laden
     RMUS.options.readOptions();
-    RMUS.options.loadOptions();
-    RMUS.options.insertOptionsLink();
 
     // BC: Einmal speichern, damit auch die nicht-selektierten Checkboxen gespeichert werden.
     if (!localStorage.getItem('bcOptionsSaved')) {
@@ -186,7 +183,7 @@ RMUS.start = function () {
     }
 
     if (RMUS.options.options.miscellaneous_fixedToolbar) {
-        RMUS.miscellaneous.createFixedToolbar();	
+        RMUS.miscellaneous.createFixedToolbar();
     }
 
     // WWW, Streams, Galerie, Ergebnisticker, Schlagzeilen und Forum angezeigt
@@ -197,7 +194,7 @@ RMUS.start = function () {
         // Streams ausblenden
         if (RMUS.options.options.leftColumn_streams_hideStreams === 'checked') {
             RMUS.leftColumn.streams.hideStreams();
-        } 
+        }
 
         // Ticker ausblenden
         if (RMUS.options.options.rightColumn_ticker_hideTicker === 'checked') RMUS.rightColumn.ticker.hideTicker();
@@ -225,7 +222,7 @@ RMUS.start = function () {
             }
         }
 
-        // Neuladen der Forannavigation beziehungsweise der Streams oder Ticker	
+        // Neuladen der Forannavigation beziehungsweise der Streams oder Ticker
         if (RMUS.options.options.rightColumn_forum_reloadForum === 'checked' || RMUS.options.options.leftColumn_streams_reloadStreams === 'checked' || RMUS.options.options.rightColumn_ticker_reloadTicker === 'checked'){
             RMUS.miscellaneous.reloadMainpageData.readPage();
         }
@@ -258,10 +255,10 @@ RMUS.start = function () {
 
         // Titel umsortieren
         if (RMUS.options.options.miscellaneous_reSortTitle === 'checked') RMUS.miscellaneous.reSortTitle();
-        
+
         // Bilderlinks umwandeln
         if (RMUS.options.options.miscellaneous_convertImageLinks === 'checked') RMUS.miscellaneous.convertImageLinks();
-        
+
         // Vorschau
         if (RMUS.options.options.middleColumn_forum_preview === 'checked') {
             RMUS.middleColumn.forum.preview.insertPreviewHtml();
@@ -280,7 +277,7 @@ RMUS.start = function () {
         if (RMUS.options.options.middleColumn_forum_reloadPosts_readNewPosts === 'checked') {
             RMUS.middleColumn.forum.reloadPosts.readPostcount();
 
-            // Ungelesene Posts markieren		
+            // Ungelesene Posts markieren
             if (RMUS.options.options.middleColumn_forum_reloadPosts_markNewPosts === 'checked') {
                 // Farbe zum markieren setzen
                 if (RMUS.options.options.middleColumn_forum_reloadPosts_markPostColor &&
@@ -295,9 +292,9 @@ RMUS.start = function () {
                 RMUS.middleColumn.forum.reloadPosts.jumpToNewPosts.setWaitUntilNextJump();
                 window.setInterval(function () {
                     RMUS.middleColumn.forum.reloadPosts.jumpToNewPosts.jump();
-                }, parseInt(RMUS.middleColumn.forum.reloadPosts.jumpToNewPosts.waitUntilNextJump, 10) * 1000);	
+                }, parseInt(RMUS.middleColumn.forum.reloadPosts.jumpToNewPosts.waitUntilNextJump, 10) * 1000);
             }
-        }	
+        }
 
         // Avataranimationen stoppen
         if (RMUS.options.options.miscellaneous_stopAvatarAnimation === 'checked') {
@@ -309,7 +306,7 @@ RMUS.start = function () {
             RMUS.miscellaneous.note.initialize();
         }
 
-        // Edit vorbereiten	
+        // Edit vorbereiten
         if (RMUS.options.options.middleColumn_forum_editPost === 'checked'){
             RMUS.middleColumn.forum.editPost.initializeEvent();
         }
@@ -318,7 +315,7 @@ RMUS.start = function () {
         if(RMUS.options.options.miscellaneous_convertYoutube === 'checked') {
             RMUS.miscellaneous.convertYoutube();
         }
-        
+
         // Editbox verschieben
         if (RMUS.options.options.middleColumn_forum_hideForum_editboxTop){
             RMUS.middleColumn.forum.scrollForNewPage.editboxTop();
@@ -340,15 +337,22 @@ RMUS.start = function () {
     // Fix image jumping in forum box between requests
     $('head').append('<style type="text/css">div#nav_schlagzeilen div.listing > a > img {width: 11px; height: 11px;} div.cont_box div.listing > img {width: 5px; height: 7px;}</style>');
 
+    // Optionen einfügen
+    $('body').append('{{optionshtml}}');
+    RMUS.options.loadOptions();
+    RMUS.options.insertOptionsLink();
+
     // Eventhandler für die Optionen setzen
     $('#saveUserscriptOptions').click(function () {
         if (RMUS.options.saveOptions()) {
             RMUS.options.hideOptions();
         }
     });
+
     $('#openUserscriptOptions').click(function () {
         RMUS.options.showOptions();
     });
+
     $('#closeUserscriptOptions,#userscriptOptionsOverlay').click(function () {
         RMUS.options.hideOptions();
     });
@@ -490,7 +494,7 @@ RMUS.start = function () {
 
     // content in den LocalStorage speichern
     var seen = [];
-    localStorage.setItem('userscriptContent', 
+    localStorage.setItem('userscriptContent',
         JSON.stringify(content, function(key, val) {
             if (typeof val == "object") {
                 if (seen.indexOf(val) >= 0) {
@@ -517,13 +521,13 @@ RMUS.start = function () {
             // Posts nachladen
             if (RMUS.options.options.middleColumn_forum_reloadPosts_readNewPosts === 'checked') {
                 RMUS.middleColumn.forum.reloadPosts.readNewPosts();
-            }		
+            }
 
             // Avataranimationen stoppen
             if (RMUS.options.options.miscellaneous_stopAvatarAnimation === 'checked') {
                 RMUS.miscellaneous.stopAvatarAnimation.stopAnimation();
             }
-        }	
+        }
     }, (parseInt(RMUS.options.options.sub_middleColumn_forum_reloadPosts_timeToWait, 10) > 2) ? parseInt(RMUS.options.options.sub_middleColumn_forum_reloadPosts_timeToWait, 10) * 1000 : 3000);
 
     // Im Hintergrund ausgeführte Aktionen starten (3x in der Sekunde, sehr zeitkritisch)
@@ -538,7 +542,7 @@ RMUS.start = function () {
             if (RMUS.options.options.middleColumn_forum_reloadPosts_readNewPosts === 'checked') {
                 if (RMUS.options.options.middleColumn_forum_reloadPosts_markNewPosts === 'checked') {
                     // (de)-Markieren
-                    RMUS.middleColumn.forum.reloadPosts.markNewPosts();			
+                    RMUS.middleColumn.forum.reloadPosts.markNewPosts();
 
                     // Favicon verändern
                     if (RMUS.options.options.middleColumn_forum_reloadPosts_changeFavicon === 'checked'){
@@ -555,7 +559,7 @@ RMUS.start = function () {
             // Beim ereichen des letzten Posts ggf. die nächste Seite nachladen. Nur wenn wir uns nicht auf der letzten Seite befinden!
             if (RMUS.options.options.middleColumn_forum_scrollForNewPage === 'checked' && $.trim($('div.floatl.m2.elf').html()).substr($.trim($('div.floatl.m2.elf').html()).length-4) != '</b>') {
                 RMUS.middleColumn.forum.scrollForNewPage.insertPosts();
-            }           
+            }
         }
     }, 500);
 
@@ -577,7 +581,7 @@ RMUS.start = function () {
                     && RMUS.options.options.rightColumn_forum_reloadForum === 'checked') {
 
                     // Lag im FF vermindern
-                    window.setTimeout(RMUS.rightColumn.forum.reloadForum(), 2000);					
+                    window.setTimeout(RMUS.rightColumn.forum.reloadForum(), 2000);
                 }
 
                 // Streams
@@ -585,7 +589,7 @@ RMUS.start = function () {
                     && RMUS.options.options.leftColumn_streams_reloadStreams === 'checked') {
 
                     // Lag im FF vermindern
-                    window.setTimeout(RMUS.leftColumn.streams.reloadStreams(), 4000);			
+                    window.setTimeout(RMUS.leftColumn.streams.reloadStreams(), 4000);
                 }
 
                 // Ticker
@@ -603,5 +607,5 @@ RMUS.start = function () {
             RMUS.messages.checkForNewMessages();
         }
 
-    }, 15000);  
+    }, 15000);
 };
