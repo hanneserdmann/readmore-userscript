@@ -26,6 +26,9 @@ RMUS.rightColumn = {
 *	HEADLINES	*
 *************************/
     headlines : {
+
+        headlineElements: [],
+
         // Blendet die Schlagzeilen komplett aus
         hideHeadlines : function () {
             document.getElementById('headlines').style.display = "none";
@@ -34,50 +37,59 @@ RMUS.rightColumn = {
 
         // Blendet Counterstrike aus
         hideCounterstrike : function () {
-            for (var i = 0; i < 6; i++) {
-                document.getElementById('nav_schlagzeilen').children[i].style.display = "none";
-            }
+            if (this.headlineElements.length === 0) this.readHeadlineElements();
+            $(this.headlineElements[0]).css('display', 'none');
             return false;
         },
 
         // Blendet Starcraft aus
         hideStarcraft : function () {
-            for (var i = 6; i < 12; i++) {
-                document.getElementById('nav_schlagzeilen').children[i].style.display = "none";
-            }
+            if (this.headlineElements.length === 0) this.readHeadlineElements();
+            $(this.headlineElements[1]).css('display', 'none');
             return false;
         },
 
         // Blendet Dota aus
         hideDefenseOfTheAncients : function () {
-            for (var i = 12; i < 19; i++) {
-                document.getElementById('nav_schlagzeilen').children[i].style.display = "none";
-            }
+            if (this.headlineElements.length === 0) this.readHeadlineElements();
+            $(this.headlineElements[2]).css('display', 'none');
             return false;
         },
 
         // Blendet LoL aus
         hideLeagueOfLegends : function () {
-            for (var i = 19; i < 25; i++) {
-                document.getElementById('nav_schlagzeilen').children[i].style.display = "none";
-            }
+            if (this.headlineElements.length === 0) this.readHeadlineElements();
+            $(this.headlineElements[3]).css('display', 'none');
             return false;
         },
 
         // Blendet Warcraft aus
         hideWarcraft3 : function () {
-            for (var i = 25; i < 31; i++) {
-                document.getElementById('nav_schlagzeilen').children[i].style.display = "none";
-            }
+            if (this.headlineElements.length === 0) this.readHeadlineElements();
+            $(this.headlineElements[4]).css('display', 'none');
             return false;
         },
 
         // Blendet Sonstiges aus
         hideSonstiges : function () {
-            for (var i = 31; i < 38; i++) {
-                document.getElementById('nav_schlagzeilen').children[i].style.display = "none";
-            }
+            if (this.headlineElements.length === 0) this.readHeadlineElements();
+            $(this.headlineElements[5]).css('display', 'none');
             return false;
+        },
+
+        readHeadlineElements: function(){
+            var elements    = document.getElementById('nav_schlagzeilen').children;
+            var count       = elements.length - 4; // Einsenden, Archiv, Übersicht
+
+            this.headlineElements = [];
+
+            for(var i = 0, k = -1; i < count; i++){
+                if (elements[i].className === 'bml'){
+                    this.headlineElements[++k] = [];
+                }
+
+                this.headlineElements[k].push(elements[i]);
+            }
         }
     },
 
@@ -88,18 +100,18 @@ RMUS.rightColumn = {
         // Startet das umsortieren des Forums
         initializeForum : function () {
             var html = '';
-            var sortForum = [RMUS.options.options.rightColumn_forum_hideForum_0, RMUS.options.options.rightColumn_forum_hideForum_1, RMUS.options.options.rightColumn_forum_hideForum_2, RMUS.options.options.rightColumn_forum_hideForum_3, RMUS.options.options.rightColumn_forum_hideForum_4];	       
+            var sortForum = [RMUS.options.options.rightColumn_forum_hideForum_0, RMUS.options.options.rightColumn_forum_hideForum_1, RMUS.options.options.rightColumn_forum_hideForum_2, RMUS.options.options.rightColumn_forum_hideForum_3, RMUS.options.options.rightColumn_forum_hideForum_4];
             var menuItems	= document.getElementsByClassName('cont_box')[1].children;
             var sections	= ['','','','',''];
 
             // Alle Menueinträge durchgehen
             for (var j = 0, k = menuItems.length, l = -1, item = ''; j < k; j++){
                 // HTML-Auslesen
-                item = menuItems[j].outerHTML;						
+                item = menuItems[j].outerHTML;
                 // Sektionen hochzählen
-                if (item.indexOf('class="bml"') !== -1)	l++;  
+                if (item.indexOf('class="bml"') !== -1)	l++;
                 // Bilder in der "Featured Thread" Sektion anpassen
-                if (l === 0) item = item.replace('" height="11px"', '" height="11px" class="userscript11px" ');				
+                if (l === 0) item = item.replace('" height="11px"', '" height="11px" class="userscript11px" ');
                 // Eintrag zur Sektion hinzufügen
                 sections[l] += item;
             }
@@ -108,7 +120,7 @@ RMUS.rightColumn = {
             for (var n = 0, o = sections.length; n < o; n++){
                 sections[n] = sections[n].replace(/(<div class="spacer_s"><\/div>)|(<br>)|(<br \/>)/g, '');
             }
-            
+
             // Keine Featured Threads vorhanden -> rauswerfen
             if (sections[4] === ''){
                 var sectionsNew = [''];
@@ -117,7 +129,7 @@ RMUS.rightColumn = {
                         sectionsNew.push(sections[i]);
                     }
                 }
-                sections = sectionsNew;                
+                sections = sectionsNew;
             }
 
             // Reihenfolge der Sektionen entsprechen den Optionen anpassen
@@ -132,10 +144,10 @@ RMUS.rightColumn = {
                     case 'offtopicforen':	html += sections[3] + '<br>';
                                 break;
                     case 'spiele':		html += sections[4] + '<br>';
-                                break;									
+                                break;
                 }
             }
-            
+
             // Noch einmal prüfen ob Leerzeilen vorhanden sind, nötig wegen dem Featured Thread fix
             html = html.replace(/(<br>|<br \/>)+/gi, '<br>');
 
@@ -176,7 +188,7 @@ RMUS.rightColumn = {
 
         // Blendet das Forum komplett aus
         hideForum : function () {
-            $('div.headline_bg:last, div.cont_box:last').css('display','none');			
+            $('div.headline_bg:last, div.cont_box:last').css('display','none');
             return false;
         }
     }
