@@ -21,7 +21,7 @@ RMUS.miscellaneous = {
         $('title').text(title);
         return false;
     },
-    
+
     // Wandelt Bilder-URLs in eigentliche Bilder um
     convertImageLinks: function() {
     	$('a[href$=".png"], a[href$=".jpg"], a[href$=".gif"], a[href$=".bmp"]').each(function() {
@@ -34,7 +34,7 @@ RMUS.miscellaneous = {
         var lastpage = document.location.href.match(/pagenum=lastpage/);
         if (lastpage != null) {
             if (lastpage[0] == 'pagenum=lastpage') {
-                window.scrollTo(0, $('td.ten.vtop:last').offset().top - 50);					
+                window.scrollTo(0, $('td.ten.vtop:last').offset().top - 50);
             }
         }
 
@@ -304,7 +304,7 @@ RMUS.miscellaneous = {
             var link = 'http://www.youtube.com/watch?v=' + String($(this).attr('src')).trim().replace('http://www.youtube.com/embed/', '');
             $(this).after('<a href="' + link + '">' + link + '</a>');
             $(this).remove();
-        });		
+        });
 
         return false;
     },
@@ -315,7 +315,7 @@ RMUS.miscellaneous = {
 
         setUser : function(){
             var user = [];
-            $(String(RMUS.options.options.miscellaneous_ignoreUser_usernames).split(',')).each(function(index, value){					
+            $(String(Options.getOption('miscellaneous_ignoreUser_usernames')).split(',')).each(function(index, value){
                 user.push(value.trim());
             });
 
@@ -328,7 +328,7 @@ RMUS.miscellaneous = {
                 RMUS.miscellaneous.ignoreUser.setUser();
             }
 
-            if (thread) {					
+            if (thread) {
                 $(RMUS.miscellaneous.ignoreUser.user).each(function(index, value) {
                     $('tr[class*=post_]:has(a[title="' + value + '"]) td').each(function() {
 
@@ -337,14 +337,14 @@ RMUS.miscellaneous = {
                                 RMUS.miscellaneous.ignoreUser.ignoreCount--;
                                 $(this).html('<div style="display:none;" class="ignored_' + RMUS.miscellaneous.ignoreUser.ignoreCount + '">' + $(this).html() + '</div>');
                                 RMUS.miscellaneous.ignoreUser.ignoreCount = RMUS.miscellaneous.ignoreUser.ignoreCount + 2;
-                            } 
+                            }
                             else{
                                 $(this).html('<a style="font-size: 9px;" href="javascript:void(0)" onclick="$(\'.ignored_' + RMUS.miscellaneous.ignoreUser.ignoreCount + '\').toggle(); if(this.innerHTML == \'Beitrag einblenden\'){this.innerHTML = \'Beitrag ausblenden\';}else{this.innerHTML = \'Beitrag einblenden\';}">Beitrag einblenden</a><br/>' + '<br/><div style="display:none;" class="ignored_' + RMUS.miscellaneous.ignoreUser.ignoreCount + '">' + $(this).html() + '</div>');
                                 RMUS.miscellaneous.ignoreUser.ignoreCount++;
-                            }	
+                            }
                         }
                     });
-                });					
+                });
             }
 
             if (ticker || profile) {
@@ -353,7 +353,7 @@ RMUS.miscellaneous = {
                         $(this).html('<a href="javascript:void(0)" onclick="$(\'.ignored_' + RMUS.miscellaneous.ignoreUser.ignoreCount + '\').toggle();">Beitrag einblenden</a><br/>' + '<br/><div style="display:none;" class="ignored_' + RMUS.miscellaneous.ignoreUser.ignoreCount + '">' + $(this).html() + '</div>');
                         RMUS.miscellaneous.ignoreUser.ignoreCount++;
                     });
-                });					
+                });
             }
 
             return false;
@@ -367,7 +367,7 @@ RMUS.miscellaneous = {
                 var user = String($(this).find('a.bml').attr('title'));
                 var notenr = RMUS.miscellaneous.note.notenumber++;
 
-                if ($($(this).html()).length > 0) br = '<br /><br />';						
+                if ($($(this).html()).length > 0) br = '<br /><br />';
                 $(this).append(br + '<center><a href="javascript:void(o);" name="note_' + user + '_' + notenr + '">Notiz</a><br /><br /><textarea style="display:none;height:100px;width:98%" name="note_' + user + '_' + notenr + '"></textarea></center>');
 
                 $('a[name="note_' + user + '_' + notenr + '"]').click(function () {

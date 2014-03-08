@@ -6,7 +6,7 @@ RMUS.middleColumn = {
     forum : {
 
         threadlink : '',
-        page : '',	
+        page : '',
 
         // Link zum Thread ohne Seitenzahl ermitteln
         readThreadlink : function () {
@@ -46,9 +46,9 @@ RMUS.middleColumn = {
 
                 if (lastpage.substr(lastpage.length-4) == '</b>'){
                     // Seiten endlos erweitern
-                    if (RMUS.options.options.middleColumn_forum_reloadPosts_endlessPage == 'checked') {
+                    if (Options.getOption('middleColumn_forum_reloadPosts_endlessPage') == 'checked') {
                         RMUS.middleColumn.forum.reloadPosts.endlessPage();
-                    } 
+                    }
 
                     // Der eigentliche Reload
                     $.ajax({
@@ -56,7 +56,7 @@ RMUS.middleColumn = {
                         async: true,
                         cache: false,
                         url: RMUS.middleColumn.forum.threadlink + '&pagenum=' + RMUS.middleColumn.forum.page,
-                        contentType: 'text/html; charset=iso-8859-1;', 
+                        contentType: 'text/html; charset=iso-8859-1;',
                         dataType: 'html',
                         success: function (data) {
                             var posts = data.match(/\<tr class=\"post\_[^"]+\"\>[^]+?\<\/tr\>/g);
@@ -77,15 +77,15 @@ RMUS.middleColumn = {
 
                                 RMUS.middleColumn.forum.reloadPosts.oldLimit = window.pageYOffset + (window.innerHeight * 0.55);
                                 // Beiträge aus den neuen Posts ignorieren
-                                if (RMUS.options.options.miscellaneous_ignoreUser == 'checked') RMUS.miscellaneous.ignoreUser.doIgnore(true, false, false);									
+                                if (Options.getOption('miscellaneous_ignoreUser') == 'checked') RMUS.miscellaneous.ignoreUser.doIgnore(true, false, false);
                                 // Edit vorbereiten
-                                if (RMUS.options.options.middleColumn_forum_editPost == 'checked') RMUS.middleColumn.forum.editPost.initializeEvent();	
+                                if (Options.getOption('middleColumn_forum_editPost') == 'checked') RMUS.middleColumn.forum.editPost.initializeEvent();
                                 // Notzizen einblenden
-                                if(RMUS.options.options.miscellaneous_note == 'checked') RMUS.miscellaneous.note.initialize();
-                                // Edit vorbereiten	
-                                if (RMUS.options.options.middleColumn_forum_editPost == 'checked') RMUS.middleColumn.forum.editPost.initializeEvent();	
+                                if(Options.getOption('miscellaneous_note') == 'checked') RMUS.miscellaneous.note.initialize();
+                                // Edit vorbereiten
+                                if (Options.getOption('middleColumn_forum_editPost') == 'checked') RMUS.middleColumn.forum.editPost.initializeEvent();
                                 // Youtubeplayer ersetzen
-                                if(RMUS.options.options.miscellaneous_convertYoutube == 'checked') RMUS.miscellaneous.convertYoutube();									
+                                if(Options.getOption('miscellaneous_convertYoutube') == 'checked') RMUS.miscellaneous.convertYoutube();
                             }
                         },
                         beforeSend: function(jqXHR) {
@@ -94,9 +94,9 @@ RMUS.middleColumn = {
                     });
 
                     // Rausfinden ob eine neue Seite existiert
-                    if (RMUS.options.options.middleColumn_forum_reloadPosts_endlessPage != 'checked') RMUS.middleColumn.forum.reloadPosts.checkForNewPage();
+                    if (Options.getOption('middleColumn_forum_reloadPosts_endlessPage') != 'checked') RMUS.middleColumn.forum.reloadPosts.checkForNewPage();
                     return false;
-                }					
+                }
             },
 
             // Neue Posts markieren
@@ -128,7 +128,7 @@ RMUS.middleColumn = {
                     if(value < limit && limit != RMUS.middleColumn.forum.reloadPosts.oldLimit) {
                         $('[class^=post_]:eq(' + (RMUS.middleColumn.forum.reloadPosts.postcount - (RMUS.middleColumn.forum.reloadPosts.unseenPosts.length) + i) + ')').css('background-color', '#FFF');
                         i++;
-                        deleteArray.push(index);						
+                        deleteArray.push(index);
                     }
                 });
 
@@ -145,10 +145,10 @@ RMUS.middleColumn = {
                     RMUS.middleColumn.forum.reloadPosts.oldTitle = $('title').text();
                 }
 
-                var title = RMUS.middleColumn.forum.reloadPosts.oldTitle;					
+                var title = RMUS.middleColumn.forum.reloadPosts.oldTitle;
                 if (RMUS.middleColumn.forum.reloadPosts.unseenPosts.length) title = '(' + RMUS.middleColumn.forum.reloadPosts.unseenPosts.length + ') ' + title;
 
-                $('title').text(title);	
+                $('title').text(title);
                 return false;
             },
 
@@ -158,19 +158,19 @@ RMUS.middleColumn = {
                 if (RMUS.middleColumn.forum.reloadPosts.unseenPosts.length > 0 && currentIcon == '/favicon.ico') {
                     $('head>link[rel="shortcut icon"]').remove();
                     $('head').append('<link rel="shortcut icon" type="image/png" href="http://readmore.thextor.de/userscript/img/favicon.png">');
-                } 
+                }
                 if (RMUS.middleColumn.forum.reloadPosts.unseenPosts.length == 0 && currentIcon == 'http://readmore.thextor.de/userscript/img/favicon.png') {
                     $('head>link[rel="shortcut icon"]').remove();
                     $('head').append('<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">');
-                } 
+                }
                 return false;
             },
 
             // Setzt die Farbe (HEX + GRB) in der die neuen Posts markiert werden
             setMarkPostColor : function () {
                 // Nur wenn eine HEX-Zahl eingegeben wurde
-                if (RMUS.options.options.middleColumn_forum_reloadPosts_markPostColor[0] == '#' && RMUS.options.options.middleColumn_forum_reloadPosts_markPostColor.length == 7) {
-                    RMUS.middleColumn.forum.reloadPosts.markPostColor = RMUS.options.options.middleColumn_forum_reloadPosts_markPostColor;
+                if (Options.getOption('middleColumn_forum_reloadPosts_markPostColor')[0] == '#' && Options.getOption('middleColumn_forum_reloadPosts_markPostColor').length == 7) {
+                    RMUS.middleColumn.forum.reloadPosts.markPostColor = Options.getOption('middleColumn_forum_reloadPosts_markPostColor');
                     RMUS.middleColumn.forum.reloadPosts.markPostColorRgb = "rgb(" + parseInt(RMUS.middleColumn.forum.reloadPosts.markPostColor.substr(1, 2), 16).toString() + ", " + parseInt(RMUS.middleColumn.forum.reloadPosts.markPostColor.substr(3, 2), 16).toString() + ", " + parseInt(RMUS.middleColumn.forum.reloadPosts.markPostColor.substr(5, 2), 16).toString() + ")";
                 }
                 return false;
@@ -188,7 +188,7 @@ RMUS.middleColumn = {
 
             // Prüft ob eine neue Seite im Forum vorhanden ist
             checkForNewPage : function () {
-                if (RMUS.options.options.middleColumn_forum_reloadPosts_checkForNewPage == 'checked'){
+                if (Options.getOption('middleColumn_forum_reloadPosts_checkForNewPage') == 'checked'){
                     if (RMUS.middleColumn.forum.reloadPosts.postcount == (25 + (25 * RMUS.middleColumn.forum.reloadPosts.finishedPages)) && $('#userscriptNewPage').length < 1) {
 
                         $.ajax({
@@ -196,7 +196,7 @@ RMUS.middleColumn = {
                             async: true,
                             cache: false,
                             url: RMUS.middleColumn.forum.threadlink + '&pagenum=' + (RMUS.middleColumn.forum.page + 1),
-                            contentType: 'text/html; charset=iso-8859-1;', 
+                            contentType: 'text/html; charset=iso-8859-1;',
                             dataType: 'html',
                             success: function (data) {
                                 var posts = data.match(/\<tr class=\"post\_[^"]+\"\>[^]+?\<\/tr\>/g);
@@ -220,17 +220,17 @@ RMUS.middleColumn = {
                 oldmimit : 0,
 
                 setWaitUntilNextJump : function(){
-                    var timeToWait = parseInt(RMUS.options.options.middleColumn_forum_reloadPosts_jumpToNewPosts_waitUntilNextJump, 10);
+                    var timeToWait = parseInt(Options.getOption('middleColumn_forum_reloadPosts_jumpToNewPosts_waitUntilNextJump'), 10);
                     if (timeToWait > 0){
                         RMUS.middleColumn.forum.reloadPosts.jumpToNewPosts.waitUntilNextJump = timeToWait;
                     }
                     return false;
                 },
 
-                jump : function(){						
+                jump : function(){
                     if (RMUS.middleColumn.forum.reloadPosts.unseenPosts.length > 0){
                         if ($('#userscript_enable_jump').attr('checked') == 'checked'){
-                            var jumpto = RMUS.middleColumn.forum.reloadPosts.unseenPosts[0] - (window.innerHeight * 0.55) + 25;								
+                            var jumpto = RMUS.middleColumn.forum.reloadPosts.unseenPosts[0] - (window.innerHeight * 0.55) + 25;
                             if (jumpto <= RMUS.middleColumn.forum.reloadPosts.jumpToNewPosts.oldmimit) jumpto = RMUS.middleColumn.forum.reloadPosts.jumpToNewPosts.oldmimit + 25;
                             window.scrollTo(0, jumpto);
                             RMUS.middleColumn.forum.reloadPosts.jumpToNewPosts.oldmimit = jumpto;
@@ -279,7 +279,7 @@ RMUS.middleColumn = {
                     fourthRow = '<span style="font-size: 10px;">Beitr&auml;ge: 1337</span><br><br>',
                     fifthRow = '<a href="index.php?cont=profile&amp;id=' + RMUS.middleColumn.forum.preview.userid + '" title="' + RMUS.middleColumn.forum.preview.username + '"><img src="' + $('.floatl.vcenter.elf.dgray.vcenter:first').html().match(/src="(.+?)" alt/)[1] + '"></a>';
 
-                $('#previewleft').html(firstRow + secontRow + thirdRow + fourthRow + fifthRow);	
+                $('#previewleft').html(firstRow + secontRow + thirdRow + fourthRow + fifthRow);
                 return false;
             },
 
@@ -335,7 +335,7 @@ RMUS.middleColumn = {
                 if (urlPreview) {
                     $.each(urlPreview, function (key) {
                         var link = urlPreview[key].replace(/\[url=/, '').replace(/http:\/\//, '').replace(/https:\/\//, ''),
-                            regEx = new RegExp('\\' + urlPreview[key].replace(/\(/g, '\\(').replace(/\)/g, '\\)').replace(/\?/g, '\\?') + '\\]'); 
+                            regEx = new RegExp('\\' + urlPreview[key].replace(/\(/g, '\\(').replace(/\)/g, '\\)').replace(/\?/g, '\\?') + '\\]');
                         text = text.replace(regEx, '<a href="http://' + link + '">');
                     });
                 }
@@ -345,7 +345,7 @@ RMUS.middleColumn = {
                 if (colorPreview) {
                     $.each(colorPreview, function (key) {
                         var color = text.match(/\[color=(.+?)\]/)[1],
-                            regEx = new RegExp('\\' + colorPreview[key] + '\\]'); 
+                            regEx = new RegExp('\\' + colorPreview[key] + '\\]');
                         text = text.replace(regEx, '<span style="color: ' + color + ';">');
                     });
                 }
@@ -366,7 +366,7 @@ RMUS.middleColumn = {
                     });
                 }
 
-                text = text.replace(/\[\/quote\]/g, '</div>');				
+                text = text.replace(/\[\/quote\]/g, '</div>');
                 return text;
             },
 
@@ -437,10 +437,10 @@ RMUS.middleColumn = {
             replacePost['%C3%BA'] = '%FA';		// ú
             replacePost['%C3%9A'] = '%DA';		// Ú
             replacePost['%C3%BB'] = '%FB';		// û
-            replacePost['%C3%9B'] = '%DB';		// Û				
+            replacePost['%C3%9B'] = '%DB';		// Û
             replacePost['%C2%A7'] = '%A7';		// §
 
-            replacePost['%E2%82%AC'] = '%80';		// €				
+            replacePost['%E2%82%AC'] = '%80';		// €
             replacePost['%E2%95%AF'] = '%26#9583;';		// ╯
             replacePost['%E2%96%A1'] = '%26#9633;';		// □
             replacePost['%EF%BC%89'] = '%26#65289;';	// ）
@@ -474,12 +474,12 @@ RMUS.middleColumn = {
 
             // Der eigentliche Post
             $.ajax({
-                type:'POST', 
-                url: '?cont=forum/do_reply', 
-                data: post, 
+                type:'POST',
+                url: '?cont=forum/do_reply',
+                data: post,
                 async: true,
                 cache: false,
-                contentType: 'application/x-www-form-urlencoded; charset=iso-8859-1;', 
+                contentType: 'application/x-www-form-urlencoded; charset=iso-8859-1;',
                 dataType: 'html',
 
                 success: function (response) {
@@ -520,7 +520,7 @@ RMUS.middleColumn = {
                         async: false,
                         cache: false,
                         url: String(RMUS.middleColumn.forum.threadlink + '&pagenum=' + (RMUS.middleColumn.forum.page + 1)),
-                        contentType: 'text/html; charset=iso-8859-1;', 
+                        contentType: 'text/html; charset=iso-8859-1;',
                         dataType: 'html',
                         success: function (data) {
                             var posts = data.match(/\<tr class=\"post\_[^"]+\"\>[^]+?\<\/tr\>/g);
@@ -537,10 +537,10 @@ RMUS.middleColumn = {
 
                                     RMUS.middleColumn.forum.page++;
                                     // Beiträge aus den neuen Posts ignorieren
-                                    if (RMUS.options.options.miscellaneous_ignoreUser == 'checked') RMUS.miscellaneous.ignoreUser.doIgnore(true, false, false);
+                                    if (Options.getOption('miscellaneous_ignoreUser') == 'checked') RMUS.miscellaneous.ignoreUser.doIgnore(true, false, false);
                                     // Notzizen einblenden
-                                    if(RMUS.options.options.miscellaneous_note == 'checked') RMUS.miscellaneous.note.initialize();
-                                }										
+                                    if(Options.getOption('miscellaneous_note') == 'checked') RMUS.miscellaneous.note.initialize();
+                                }
                             }
                         },
                         beforeSend: function(jqXHR) {
@@ -551,7 +551,7 @@ RMUS.middleColumn = {
 
                 return false;
             },
-            editboxTop : function (){               
+            editboxTop : function (){
                 $('#content h1:first').after('<a id="RMUSeditboxTop" href="javascript:void(0);" style="float: right;" onclick="$(\'#content h1:first\').after($(\'form[name=submitpost]\')); $(this).css(\'display\',\'none\'); $(\'#RMUSeditboxBottom\').css(\'display\',\'\');">Editbox anzeigen<br /><br /></a>');
                 $('#content br.clear:last').after('<a id="RMUSeditboxBottom" href="javascript:void(0);" style="float: right; display: none;" onclick="$(\'#content br.clear:last\').after($(\'form[name=submitpost]\')); $(this).css(\'display\',\'none\'); $(\'#RMUSeditboxTop\').css(\'display\',\'\');">Editbox anzeigen<br /><br /></a>');
             }
@@ -567,7 +567,7 @@ RMUS.middleColumn = {
                     var hrefParts = String($(this).attr('href')).match(/postid=(.*)/);
 
                     if (null !== hrefParts) {
-                        var postid = parseInt(hrefParts[1], 10);	
+                        var postid = parseInt(hrefParts[1], 10);
                         $(this).attr('href', 'javascript:void(0);');
 
                         RMUS.middleColumn.forum.editPost.loadPost(postid);
@@ -603,7 +603,7 @@ RMUS.middleColumn = {
                 return false;
             },
 
-            showEditMenu : function(postid){					
+            showEditMenu : function(postid){
                 var submit = '<a class="edit_submit_' + postid + '" href="javascript:void(0);" style="margin-right: 4px;">Edit absenden</a>';
                 var cancel = '<a class="edit_cancel_' + postid + '"href="javascript:void(0);" style="color: gray;">Edit abrechen</a>&nbsp;|&nbsp;';
                 $('tr[class*=footer_' + postid + ']>td').append('<div>' + cancel + submit + '</div>');
@@ -625,7 +625,7 @@ RMUS.middleColumn = {
                 $('tr[class*=footer_' + postid + ']>td>a:eq(1)').attr('href', 'http://www.readmore.de/index.php?cont=forum/edit&postid=' + postid);
 
                 $('tr[class=post_' + postid + ']>td:last').html(RMUS.middleColumn.forum.editPost.originalPosts[postid]);
-                RMUS.middleColumn.forum.editPost.originalPosts[postid] = null;				
+                RMUS.middleColumn.forum.editPost.originalPosts[postid] = null;
 
                 $('tr[class*=footer_' + postid + ']>td>div>a:first').off('click');
                 $('tr[class*=footer_' + postid + ']>td>div>a:last').off('click');
@@ -634,7 +634,7 @@ RMUS.middleColumn = {
                 return false;
             },
 
-            submitEdit : function(postid){	
+            submitEdit : function(postid){
                 var newpost = '';
                 var postdata = '';
 
@@ -643,7 +643,7 @@ RMUS.middleColumn = {
                     async: false,
                     cache: false,
                     url: 'http://www.readmore.de/index.php?cont=forum/edit&postid=' + postid,
-                    contentType: 'text/html; charset=iso-8859-1;', 
+                    contentType: 'text/html; charset=iso-8859-1;',
                     dataType: 'html',
                     success: function (datafirst) {
                         var f_uid = $(datafirst).find('input[name="f_uid"]').val();
@@ -656,16 +656,16 @@ RMUS.middleColumn = {
                         postdata = 'f_uid=' + f_uid + '&thread[boardid]=' + boardid + '&thread[threadid]=' + threadid + '&post[postid]=' + postidedit + '&postnew_newposttext=' + encodeURI(newpost).replace(/&amp;/g, '&').replace(/&/g, '%26');
                         if (threadtopic != null){
                             if (threadtopic.trim().length > 0) postdata += '&thread[threadtopic]=' + encodeURI(threadtopic).replace(/&amp;/g, '&').replace(/&/g, '%26');
-                        } 
+                        }
                         postdata = RMUS.middleColumn.forum.replaceSpecialChars(postdata);
 
                         $.ajax({
                             type: 'POST',
                             async: false,
                             cache: false,
-                            url: 'http://www.readmore.de/index.php?cont=forum/do_edit',	
+                            url: 'http://www.readmore.de/index.php?cont=forum/do_edit',
                             data: postdata,
-                            contentType: 'application/x-www-form-urlencoded; charset=iso-8859-1;', 
+                            contentType: 'application/x-www-form-urlencoded; charset=iso-8859-1;',
                             dataType: 'html',
                             success: function (response) {
                                 var content = $(response).find('#content').html();
@@ -676,7 +676,7 @@ RMUS.middleColumn = {
                             error: function (){
                                 alert('Es ist leider ein Fehler aufgetreten. Bitte lade die Seite neu!');
                             }
-                        });								
+                        });
                     },
                     beforeSend: function(jqXHR) {
                         jqXHR.overrideMimeType('text/html;charset=iso-8859-1');
@@ -689,7 +689,7 @@ RMUS.middleColumn = {
 
                 $('tr[class*=footer_' + postid + ']>td>div').remove();
                 $('tr[class=post_' + postid + ']>td:last').html(RMUS.middleColumn.forum.preview.convertToPreview(newpost.replace(/(\r\n|\n|\r)/gm, '<br />')));
-                $('tr[class*=footer_' + postid + ']>td>a:eq(1)').attr('href', 'http://www.readmore.de/index.php?cont=forum/edit&postid=' + postid);					
+                $('tr[class*=footer_' + postid + ']>td>a:eq(1)').attr('href', 'http://www.readmore.de/index.php?cont=forum/edit&postid=' + postid);
                 RMUS.middleColumn.forum.editPost.initializeEvent();
 
                 return false;

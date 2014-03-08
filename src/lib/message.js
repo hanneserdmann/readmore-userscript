@@ -15,7 +15,7 @@ RMUS.messages = {
             async: true,
             cache: false,
             url: 'http://www.readmore.de/index.php?cont=msg',
-            contentType: 'text/html; charset=iso-8859-1;', 
+            contentType: 'text/html; charset=iso-8859-1;',
             dataType: 'html',
             success: function (data) {
                 var newMsgCount = $('div#content table.p0:first td.ofhidden.bold', data).length,
@@ -79,20 +79,20 @@ RMUS.messages = {
             msg = 'Du hast eine neue Nachricht erhalten!';
         }
 
-        if (RMUS.options.options.miscellaneous_reloadMessages_desktopNotifications == 'checked') {
+        if (Options.getOption('miscellaneous_reloadMessages_desktopNotifications') == 'checked') {
             RMUS.messages.notifications.create(title, msg);
         }
 
-        if (RMUS.options.options.miscellaneous_reloadMessages_alertBox == 'checked') {
+        if (Options.getOption('miscellaneous_reloadMessages_alertBox') == 'checked') {
             alert(msg);
         }
 
-        if (RMUS.options.options.miscellaneous_reloadMessages_playSound == 'checked') {
+        if (Options.getOption('miscellaneous_reloadMessages_playSound') == 'checked') {
             RMUS.messages.playSound();
         }
     },
     playSound: function () {
-        var audioUrl = RMUS.options.options.miscellaneous_reloadMessages_playSoundUrl;
+        var audioUrl = Options.getOption('miscellaneous_reloadMessages_playSoundUrl');
 
         if (audioUrl) {
             try {

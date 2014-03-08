@@ -100,7 +100,7 @@ RMUS.rightColumn = {
         // Startet das umsortieren des Forums
         initializeForum : function () {
             var html = '';
-            var sortForum = [RMUS.options.options.rightColumn_forum_hideForum_0, RMUS.options.options.rightColumn_forum_hideForum_1, RMUS.options.options.rightColumn_forum_hideForum_2, RMUS.options.options.rightColumn_forum_hideForum_3, RMUS.options.options.rightColumn_forum_hideForum_4];
+            var sortForum = [Options.getOption('rightColumn_forum_hideForum_0'), Options.getOption('rightColumn_forum_hideForum_1'), Options.getOption('rightColumn_forum_hideForum_2'), Options.getOption('rightColumn_forum_hideForum_3'), Options.getOption('rightColumn_forum_hideForum_4')];
             var menuItems	= document.getElementsByClassName('cont_box')[1].children;
             var sections	= ['','','','',''];
 
@@ -167,7 +167,7 @@ RMUS.rightColumn = {
 
             if (reloadData && reloadData.length > 0) {
                 $('.cont_box:last').html(reloadData);
-                if (RMUS.options.options.rightColumn_forum_sections == 'checked') RMUS.rightColumn.forum.initializeForum();
+                if (Options.getOption('rightColumn_forum_sections') == 'checked') RMUS.rightColumn.forum.initializeForum();
             }
 
             return false;

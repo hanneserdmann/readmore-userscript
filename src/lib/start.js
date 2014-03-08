@@ -1,12 +1,14 @@
 RMUS.start = function () {
+
+    var Options = new RMUSOptions();
+    var Content = new RMUSContent();
+
     /********************************
     *	Funktionen aktivieren	*
     *********************************/
 
     // Bereich auf der Readmore.de Seite rausfinden
-    var cont = '',
-        action = document.location.search.match(/action=([a-zA-Z]+)/i),
-        getVars = document.location.search.replace(/[?]/g, '').replace(/[&]/g, '=').split('=');
+    var action = document.location.search.match(/action=([a-zA-Z]+)/i);
 
     if (action && action[1]) {
         action = action[1];
@@ -14,200 +16,38 @@ RMUS.start = function () {
         action = null;
     }
 
-    $.each(getVars, function (index, value) {
-        if (value == 'cont') {
-            cont = getVars[index+1];
-        }
-    });
-
-    content = {
-        mainpage                : false,
-        profile                 : false,
-        groups_new              : false,
-        groups_group_list       : false,
-        groups_show_group       : false,
-        msg                     : false,
-        news_archive            : false,
-        headlines_overview      : false,
-        www                     : false,
-        widget_create_ticker    : false,
-        guides                  : false,
-        articles                : false,
-        news                    : false,
-        search                  : false,
-        match_overview          : false,
-        db                      : false,
-        coverages               : false,
-        demo_overview_pov       : false,
-        demo_overview_hltv      : false,
-        demo_overview           : false,
-        video_overview          : false,
-        gallery_sets            : false,
-        forum_forum             : false,
-        forum_board             : false,
-        forum_thread            : false,
-        forum_edit              : false,
-        forum_newtopic          : false,
-        community               : false,
-        blog                    : false,
-        poll_archive            : false,
-        rules                   : false,
-        team                    : false,
-        imprint                 : false,
-        userstream              : false,
-        gallery_images          : false,
-        matches                 : false
-    };
-
-    switch (cont) {
-        case '':
-            content.mainpage = true;
-            break;
-        case 'profile':
-            content.profile = true;
-            break;
-        case 'forum/thread':
-            content.forum_thread = true;
-            break;
-        case 'forum/forum':
-            content.forum_forum = true;
-            break;
-        case 'forum/board':
-            content.forum_board = true;
-            break;
-        case 'forum/edit':
-            content.forum_edit = true;
-            break;
-        case 'matches':
-            content.matches = true;
-            break;
-        case 'www':
-            content.www = true;
-            break;
-        case 'userstream':
-            content.userstream = true;
-            break;
-        case 'groups/new':
-            content.groups_new = true;
-            break;
-        case 'groups/group_list':
-            content.groups_group_list = true;
-            break;
-        case 'groups/show_group':
-            content.groups_show_group = true;
-            break;
-        case 'msg':
-            content.msg = true;
-            break;
-        case 'news_archive':
-            content.news_archive = true;
-            break;
-        case 'headlines_overview':
-            content.headlines_overview = true;
-            break;
-        case 'widget/create_ticker':
-            content.widget_create_ticker = true;
-            break;
-        case 'guides':
-            content.guides = true;
-            break;
-        case 'articles':
-            content.articles = true;
-            break;
-        case 'news':
-            content.news = true;
-            break;
-        case 'search':
-            content.search = true;
-            break;
-        case 'match_overview':
-            content.match_overview = true;
-            break;
-        case 'db':
-            content.db = true;
-            break;
-        case 'coverages':
-            content.coverages = true;
-            break;
-        case 'demo_overview_pov':
-            content.demo_overview_pov = true;
-            break;
-        case 'demo_overview_hltv':
-            content.demo_overview_hltv = true;
-            break;
-        case 'demo_overview':
-            content.demo_overview = true;
-            break;
-        case 'video_overview':
-            content.video_overview = true;
-            break;
-        case 'gallery_sets':
-            content.gallery_sets = true;
-            break;
-        case 'forum/newtopic':
-            content.forum_newtopic = true;
-            break;
-        case 'community':
-            content.community = true;
-            break;
-        case 'blog':
-            content.blog = true;
-            break;
-        case 'poll_archive':
-            content.poll_archive = true;
-            break;
-        case 'rules':
-            content.rules = true;
-            break;
-        case 'team':
-            content.team = true;
-            break;
-        case 'imprint':
-            content.imprint = true;
-            break;
-        case 'gallery_images':
-            content.gallery_images = true;
-            break;
-        default:
-            content.mainpage = true;
-            break;
-    }
-
-    // Optionen laden
-    RMUS.options.readOptions();
-
     // BC: Einmal speichern, damit auch die nicht-selektierten Checkboxen gespeichert werden.
     if (!localStorage.getItem('bcOptionsSaved')) {
-        RMUS.options.saveOptions();
+        Options.saveOptions();
         localStorage.setItem('bcOptionsSaved', true);
     }
 
-    if (RMUS.options.options.miscellaneous_fixedToolbar) {
+    if (Options.getOption('miscellaneous_fixedToolbar')) {
         RMUS.miscellaneous.createFixedToolbar();
     }
 
     // WWW, Streams, Galerie, Ergebnisticker, Schlagzeilen und Forum angezeigt
-    if (!content.profile && !content.guides) {
+    if (!Content.getMultipleContent(['profile', 'guides'], 'OR')) {
         // WWW ausblenden
-        if (RMUS.options.options.leftColumn_www_hideWww === 'checked') RMUS.leftColumn.www.hideWww();
+        if (Options.getOption('leftColumn_www_hideWww') === 'checked') RMUS.leftColumn.www.hideWww();
 
         // Streams ausblenden
-        if (RMUS.options.options.leftColumn_streams_hideStreams === 'checked') {
+        if (Options.getOption('leftColumn_streams_hideStreams') === 'checked') {
             RMUS.leftColumn.streams.hideStreams();
         }
 
         // Ticker ausblenden
-        if (RMUS.options.options.rightColumn_ticker_hideTicker === 'checked') RMUS.rightColumn.ticker.hideTicker();
+        if (Options.getOption('rightColumn_ticker_hideTicker') === 'checked') RMUS.rightColumn.ticker.hideTicker();
 
         // Schlagzeilen ausblenden
-        if (RMUS.options.options.rightColumn_headlines_hideHeadlines === 'checked') RMUS.rightColumn.headlines.hideHeadlines();  // Alle
+        if (Options.getOption('rightColumn_headlines_hideHeadlines') === 'checked') RMUS.rightColumn.headlines.hideHeadlines();  // Alle
         else{	// Individuell
-            if (RMUS.options.options.rightColumn_headlines_hideCounterstrike === 'checked') RMUS.rightColumn.headlines.hideCounterstrike();
-            if (RMUS.options.options.rightColumn_headlines_hideStarcraft === 'checked') RMUS.rightColumn.headlines.hideStarcraft();
-            if (RMUS.options.options.rightColumn_headlines_hideDefenseOfTheAncients === 'checked') RMUS.rightColumn.headlines.hideDefenseOfTheAncients();
-            if (RMUS.options.options.rightColumn_headlines_hideLeagueOfLegends === 'checked') RMUS.rightColumn.headlines.hideLeagueOfLegends();
-            if (RMUS.options.options.rightColumn_headlines_hideWarcraft3 === 'checked') RMUS.rightColumn.headlines.hideWarcraft3();
-            if (RMUS.options.options.rightColumn_headlines_hideSonstiges === 'checked') RMUS.rightColumn.headlines.hideSonstiges();
+            if (Options.getOption('rightColumn_headlines_hideCounterstrike') === 'checked') RMUS.rightColumn.headlines.hideCounterstrike();
+            if (Options.getOption('rightColumn_headlines_hideStarcraft') === 'checked') RMUS.rightColumn.headlines.hideStarcraft();
+            if (Options.getOption('rightColumn_headlines_hideDefenseOfTheAncients') === 'checked') RMUS.rightColumn.headlines.hideDefenseOfTheAncients();
+            if (Options.getOption('rightColumn_headlines_hideLeagueOfLegends') === 'checked') RMUS.rightColumn.headlines.hideLeagueOfLegends();
+            if (Options.getOption('rightColumn_headlines_hideWarcraft3') === 'checked') RMUS.rightColumn.headlines.hideWarcraft3();
+            if (Options.getOption('rightColumn_headlines_hideSonstiges') === 'checked') RMUS.rightColumn.headlines.hideSonstiges();
 
             // Fixt die Größe des Bildes
             $('#nav_schlagzeilen img[alt=activity]').css('height', '11px');
@@ -215,15 +55,15 @@ RMUS.start = function () {
         }
 
         // Forum ausblenden
-        if (RMUS.options.options.rightColumn_forum_hideForum === 'checked')	RMUS.rightColumn.forum.hideForum();	// Komplett ausblenden
+        if (Options.getOption('rightColumn_forum_hideForum') === 'checked')	RMUS.rightColumn.forum.hideForum();	// Komplett ausblenden
         else{	// Individuell
-            if (RMUS.options.options.rightColumn_forum_sections === 'checked') {
+            if (Options.getOption('rightColumn_forum_sections') === 'checked') {
                 RMUS.rightColumn.forum.initializeForum();
             }
         }
 
         // Neuladen der Forannavigation beziehungsweise der Streams oder Ticker
-        if (RMUS.options.options.rightColumn_forum_reloadForum === 'checked' || RMUS.options.options.leftColumn_streams_reloadStreams === 'checked' || RMUS.options.options.rightColumn_ticker_reloadTicker === 'checked'){
+        if (Options.getOption('rightColumn_forum_reloadForum') === 'checked' || Options.getOption('leftColumn_streams_reloadStreams') === 'checked' || Options.getOption('rightColumn_ticker_reloadTicker') === 'checked'){
             RMUS.miscellaneous.reloadMainpageData.readPage();
         }
 
@@ -233,40 +73,40 @@ RMUS.start = function () {
     }
 
         // Sprung zur letzten Seite in den Suchergebnissen
-        if (content.search){
-            if (RMUS.options.options.middleColumn_search_jump_to_last_page === 'checked') RMUS.middleColumn.searchJumpToLastpage.displayLink();
+        if (Content.getContent('search')){
+            if (Options.getOption('middleColumn_search_jump_to_last_page') === 'checked') RMUS.middleColumn.searchJumpToLastpage.displayLink();
         }
 
     // Nur im Forum (Threadansicht) aktivieren
-    if (content.forum_thread) {
+    if (Content.getContent('forum_thread')) {
 
         // Link zum Thread und Seite herausfinden
         RMUS.middleColumn.forum.readThreadlink();
         RMUS.middleColumn.forum.readPage();
 
         // Wenn Lastpage gesetzt ist, zum letzten Post springen
-        if (RMUS.options.options.miscellaneous_lastPageJumpToLastPost === 'checked') RMUS.miscellaneous.lastPageJumpToLastPost();
+        if (Options.getOption('miscellaneous_lastPageJumpToLastPost') === 'checked') RMUS.miscellaneous.lastPageJumpToLastPost();
 
         // Knopf zum hochscrollen
-        if (RMUS.options.options.miscellaneous_buttonScrollUp === 'checked') RMUS.miscellaneous.buttonScrollUp();
+        if (Options.getOption('miscellaneous_buttonScrollUp') === 'checked') RMUS.miscellaneous.buttonScrollUp();
 
         // Knopf zum runterscrollen
-        if (RMUS.options.options.miscellaneous_buttonScrollDown === 'checked') RMUS.miscellaneous.buttonScrollDown();
+        if (Options.getOption('miscellaneous_buttonScrollDown') === 'checked') RMUS.miscellaneous.buttonScrollDown();
 
         // Titel umsortieren
-        if (RMUS.options.options.miscellaneous_reSortTitle === 'checked') RMUS.miscellaneous.reSortTitle();
+        if (Options.getOption('miscellaneous_reSortTitle') === 'checked') RMUS.miscellaneous.reSortTitle();
 
         // Bilderlinks umwandeln
-        if (RMUS.options.options.miscellaneous_convertImageLinks === 'checked') RMUS.miscellaneous.convertImageLinks();
+        if (Options.getOption('miscellaneous_convertImageLinks') === 'checked') RMUS.miscellaneous.convertImageLinks();
 
         // Vorschau
-        if (RMUS.options.options.middleColumn_forum_preview === 'checked') {
+        if (Options.getOption('middleColumn_forum_preview') === 'checked') {
             RMUS.middleColumn.forum.preview.insertPreviewHtml();
             $('#triggerPreview').click(RMUS.middleColumn.forum.preview.triggerPreview);
         }
 
         // Posten im Hintergrund
-        if (RMUS.options.options.middleColumn_forum_postPerAjax === 'checked') {
+        if (Options.getOption('middleColumn_forum_postPerAjax') === 'checked') {
             $('input[name=submit_thread]').click(function (event) {
                 event.preventDefault();
                 RMUS.middleColumn.forum.postPerAjax();
@@ -274,20 +114,20 @@ RMUS.start = function () {
         }
 
         // Posts nachladen
-        if (RMUS.options.options.middleColumn_forum_reloadPosts_readNewPosts === 'checked') {
+        if (Options.getOption('middleColumn_forum_reloadPosts_readNewPosts') === 'checked') {
             RMUS.middleColumn.forum.reloadPosts.readPostcount();
 
             // Ungelesene Posts markieren
-            if (RMUS.options.options.middleColumn_forum_reloadPosts_markNewPosts === 'checked') {
+            if (Options.getOption('middleColumn_forum_reloadPosts_markNewPosts') === 'checked') {
                 // Farbe zum markieren setzen
-                if (RMUS.options.options.middleColumn_forum_reloadPosts_markPostColor &&
-                    RMUS.options.options.middleColumn_forum_reloadPosts_markPostColor.length){
+                if (Options.getOption('middleColumn_forum_reloadPosts_markPostColor') &&
+                    Options.getOption('middleColumn_forum_reloadPosts_markPostColor').length){
 
                     RMUS.middleColumn.forum.reloadPosts.setMarkPostColor();
                 }
             }
 
-            if (RMUS.options.options.middleColumn_forum_reloadPosts_jumpToNewPosts === 'checked' && RMUS.options.options.middleColumn_forum_reloadPosts_endlessPage === 'checked'){
+            if (Options.getOption('options.middleColumn_forum_reloadPosts_jumpToNewPosts') === 'checked' && Options.getOption('middleColumn_forum_reloadPosts_endlessPage') === 'checked'){
                 $('a.bookmark').after('<input style="margin-left: 2px;" type="checkbox" id="userscript_enable_jump" name="userscript_enable_jump">');
                 RMUS.middleColumn.forum.reloadPosts.jumpToNewPosts.setWaitUntilNextJump();
                 window.setInterval(function () {
@@ -297,39 +137,39 @@ RMUS.start = function () {
         }
 
         // Avataranimationen stoppen
-        if (RMUS.options.options.miscellaneous_stopAvatarAnimation === 'checked') {
+        if (Options.getOption('miscellaneous_stopAvatarAnimation') === 'checked') {
             RMUS.miscellaneous.stopAvatarAnimation.stopAnimation();
         }
 
         // Notzizen einblenden
-        if(RMUS.options.options.miscellaneous_note === 'checked') {
+        if(Options.getOption('miscellaneous_note') === 'checked') {
             RMUS.miscellaneous.note.initialize();
         }
 
         // Edit vorbereiten
-        if (RMUS.options.options.middleColumn_forum_editPost === 'checked'){
+        if (Options.getOption('middleColumn_forum_editPost') === 'checked'){
             RMUS.middleColumn.forum.editPost.initializeEvent();
         }
 
         // Youtubeplayer ersetzen
-        if(RMUS.options.options.miscellaneous_convertYoutube === 'checked') {
+        if(Options.getOption('miscellaneous_convertYoutube') === 'checked') {
             RMUS.miscellaneous.convertYoutube();
         }
 
         // Editbox verschieben
-        if (RMUS.options.options.middleColumn_forum_hideForum_editboxTop){
+        if (Options.getOption('middleColumn_forum_hideForum_editboxTop')){
             RMUS.middleColumn.forum.scrollForNewPage.editboxTop();
         }
     }
 
     // User ignorieren
-    if (RMUS.options.options.miscellaneous_ignoreUser === 'checked'){
-        RMUS.miscellaneous.ignoreUser.doIgnore(content.forum_thread, content.matches, content.profile);
+    if (Options.getOption('miscellaneous_ignoreUser') === 'checked'){
+        RMUS.miscellaneous.ignoreUser.doIgnore(Content.getContent('forum_thread'), Content.getContent('matches'), Content.getContent('profile'));
     }
 
     // Extrabuttons in den entsprechenden Seiten initialisieren
-    if (content.forum_thread || content.forum_newtopic || content.forum_edit || content.matches || content.msg || content.profile || content.groups_show_group) {
-        if (RMUS.options.options.miscellaneous_extraButtons === 'checked') {
+    if (Content.getMultipleContent(['forum_thread', 'forum_newtopic', 'forum_edit', 'matches', 'msg', 'profile', 'groups_show_group'], 'OR')) {
+        if (Options.getOption('miscellaneous_extraButtons') === 'checked') {
             RMUS.miscellaneous.extrabuttons.init();
         }
     }
@@ -339,22 +179,21 @@ RMUS.start = function () {
 
     // Optionen einfügen
     $('body').append('{{optionshtml}}');
-    RMUS.options.loadOptions();
-    RMUS.options.insertOptionsLink();
+    Options.insertOptionsLink();
 
     // Eventhandler für die Optionen setzen
     $('#saveUserscriptOptions').click(function () {
-        if (RMUS.options.saveOptions()) {
-            RMUS.options.hideOptions();
+        if (Options.saveOptions()){
+            Options.hideOptions();
         }
     });
 
     $('#openUserscriptOptions').click(function () {
-        RMUS.options.showOptions();
+        Options.showOptions();
     });
 
     $('#closeUserscriptOptions,#userscriptOptionsOverlay').click(function () {
-        RMUS.options.hideOptions();
+        Options.hideOptions();
     });
 
     $('div#userscriptOptions input.imexp').click(function () {
@@ -372,7 +211,7 @@ RMUS.start = function () {
             textarea.val('');
             textarea.focus();
         } else {
-            var opts = RMUS.options.getOptionsRaw();
+            var opts = Options.getOptionsRaw();
 
             if (opts === 'null') {
                 alert('Es sind keine gespeicherten Optionen zum Exportieren vorhanden. Bitte speichere deine Optionen zuerst ab.');
@@ -400,13 +239,11 @@ RMUS.start = function () {
         }
 
         if (validJson) {
-            RMUS.options.backupOptions();
-            RMUS.options.setOptionsRaw(opts);
+            Options.backupOptions();
+            Options.setOptionsRaw(opts);
 
             // Optionen schließen, damit sie neu geladen werden beim nächsten öffnen.
-            RMUS.options.hideOptions();
-            RMUS.options.loadOptions();
-            RMUS.options.readOptions();
+            Options.hideOptions();
 
             alert('Die Optionen wurden erfolgreich importiert! Du musst die Seite neu laden, damit die Optionen vollständig übernommen werden.');
         } else {
@@ -492,7 +329,7 @@ RMUS.start = function () {
     // Prüfen ob eine neue Version erschienen ist
     RMUS.update.checkVersion();
 
-    // content in den LocalStorage speichern
+/*    // content in den LocalStorage speichern
     var seen = [];
     localStorage.setItem('userscriptContent',
         JSON.stringify(content, function(key, val) {
@@ -506,58 +343,58 @@ RMUS.start = function () {
             return val;
         })
     );
-
+*/
     // Im Hintergrund ausgeführte Aktionen starten (zeitunkritisch)
     window.setInterval(function(){
 
-        // content auslesen
+/*        // content auslesen
         if (!content){
             content = JSON.parse(localStorage.getItem('userscriptContent'));
         }
-
+*/
         // Wenn wir uns in einem Thread befinden
-        if (content.forum_thread) {
+        if (Content.getContent('forum_thread')) {
 
             // Posts nachladen
-            if (RMUS.options.options.middleColumn_forum_reloadPosts_readNewPosts === 'checked') {
+            if (Options.getOption('middleColumn_forum_reloadPosts_readNewPosts') === 'checked') {
                 RMUS.middleColumn.forum.reloadPosts.readNewPosts();
             }
 
             // Avataranimationen stoppen
-            if (RMUS.options.options.miscellaneous_stopAvatarAnimation === 'checked') {
+            if (Options.getOption('miscellaneous_stopAvatarAnimation') === 'checked') {
                 RMUS.miscellaneous.stopAvatarAnimation.stopAnimation();
             }
         }
-    }, (parseInt(RMUS.options.options.sub_middleColumn_forum_reloadPosts_timeToWait, 10) > 2) ? parseInt(RMUS.options.options.sub_middleColumn_forum_reloadPosts_timeToWait, 10) * 1000 : 3000);
+    }, (parseInt(Options.getOption('sub_middleColumn_forum_reloadPosts_timeToWait'), 10) > 2) ? parseInt(Options.getOption('sub_middleColumn_forum_reloadPosts_timeToWait'), 10) * 1000 : 3000);
 
     // Im Hintergrund ausgeführte Aktionen starten (3x in der Sekunde, sehr zeitkritisch)
     window.setInterval(function(){
 
-        // Content auslesen
+/*        // Content auslesen
         if (!content){
             content = JSON.parse(localStorage.getItem('userscriptContent'));
         }
-
-        if (content.forum_thread) {
-            if (RMUS.options.options.middleColumn_forum_reloadPosts_readNewPosts === 'checked') {
-                if (RMUS.options.options.middleColumn_forum_reloadPosts_markNewPosts === 'checked') {
+*/
+        if (Content.getContent('forum_thread')) {
+            if (Options.getOption('middleColumn_forum_reloadPosts_readNewPosts') === 'checked') {
+                if (Options.getOption('middleColumn_forum_reloadPosts_markNewPosts') === 'checked') {
                     // (de)-Markieren
                     RMUS.middleColumn.forum.reloadPosts.markNewPosts();
 
                     // Favicon verändern
-                    if (RMUS.options.options.middleColumn_forum_reloadPosts_changeFavicon === 'checked'){
+                    if (Options.getOption('middleColumn_forum_reloadPosts_changeFavicon') === 'checked'){
                         RMUS.middleColumn.forum.reloadPosts.changeFavicon();
                     }
 
                     // Postanzahl im Tab anzeigen
-                    if (RMUS.options.options.middleColumn_forum_reloadPosts_showNewPostsTitle === 'checked') {
+                    if (Options.getOption('middleColumn_forum_reloadPosts_showNewPostsTitle') === 'checked') {
                         RMUS.middleColumn.forum.reloadPosts.showNewPostsTitle();
                     }
                 }
             }
 
             // Beim ereichen des letzten Posts ggf. die nächste Seite nachladen. Nur wenn wir uns nicht auf der letzten Seite befinden!
-            if (RMUS.options.options.middleColumn_forum_scrollForNewPage === 'checked' && $.trim($('div.floatl.m2.elf').html()).substr($.trim($('div.floatl.m2.elf').html()).length-4) != '</b>') {
+            if (Options.getOption('middleColumn_forum_scrollForNewPage') === 'checked' && $.trim($('div.floatl.m2.elf').html()).substr($.trim($('div.floatl.m2.elf').html()).length-4) != '</b>') {
                 RMUS.middleColumn.forum.scrollForNewPage.insertPosts();
             }
         }
@@ -567,34 +404,34 @@ RMUS.start = function () {
     window.setInterval(function(){
 
         // Außer auf dem Profil und der Guides
-        if (!content.profile && !content.guides) {
+        if (!Content.getMultipleContent(['profile', 'guides'], 'OR')) {
 
             // Streams und Forennavigation nachladen (Nur, wenn auch eingeblendet)
-            if (RMUS.options.options.rightColumn_forum_reloadForum === 'checked' && RMUS.options.options.rightColumn_forum_hideForum != 'checked'
-                || RMUS.options.options.leftColumn_streams_reloadStreams === 'checked' && RMUS.options.options.leftColumn_streams_hideStreams != 'checked'
-                || RMUS.options.options.rightColumn_ticker_reloadTicker === 'checked' && RMUS.options.options.rightColumn_ticker_hideTicker != 'checked') {
+            if (Options.getOption('rightColumn_forum_reloadForum') === 'checked' && Options.getOption('rightColumn_forum_hideForum') != 'checked'
+                || Options.getOption('leftColumn_streams_reloadStreams') === 'checked' && Options.getOption('options.leftColumn_streams_hideStreams') != 'checked'
+                || Options.getOption('rightColumn_ticker_reloadTicker') === 'checked' && Options.getOption('rightColumn_ticker_hideTicker') != 'checked') {
 
                 RMUS.miscellaneous.reloadMainpageData.readPage();
 
                 // Forennavigation
-                if (RMUS.options.options.rightColumn_forum_hideForum !== 'checked'
-                    && RMUS.options.options.rightColumn_forum_reloadForum === 'checked') {
+                if (Options.getOption('rightColumn_forum_hideForum') !== 'checked'
+                    && Options.getOption('rightColumn_forum_reloadForum') === 'checked') {
 
                     // Lag im FF vermindern
                     window.setTimeout(RMUS.rightColumn.forum.reloadForum(), 2000);
                 }
 
                 // Streams
-                if (RMUS.options.options.leftColumn_streams_hideStreams != 'checked'
-                    && RMUS.options.options.leftColumn_streams_reloadStreams === 'checked') {
+                if (Options.getOption('leftColumn_streams_hideStream') != 'checked'
+                    && Options.getOption('leftColumn_streams_reloadStreams') === 'checked') {
 
                     // Lag im FF vermindern
                     window.setTimeout(RMUS.leftColumn.streams.reloadStreams(), 4000);
                 }
 
                 // Ticker
-                if (RMUS.options.options.rightColumn_ticker_hideTicker != 'checked'
-                    && RMUS.options.options.rightColumn_ticker_reloadTicker === 'checked') {
+                if (Options.getOption('rightColumn_ticker_hideTicker') != 'checked'
+                    && Options.getOption('rightColumn_ticker_reloadTicker') === 'checked') {
 
                     // Lag im FF vermindern
                     window.setTimeout(RMUS.rightColumn.ticker.reloadTicker(), 6000);
@@ -603,7 +440,7 @@ RMUS.start = function () {
         }
 
         // PMs auf jeder Seite überprüfen (Usernavi buggy, daher nicht Teil der mainPageData)
-        if(RMUS.options.options.miscellaneous_reloadMessages === 'checked') {
+        if(Options.getOption('miscellaneous_reloadMessages') === 'checked') {
             RMUS.messages.checkForNewMessages();
         }
 

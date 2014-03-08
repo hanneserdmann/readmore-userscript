@@ -215,6 +215,488 @@ try {
 function RMUS() {
     "use strict";
 }
+/**
+ * RMUSContent
+ * ===========
+ *
+ * Simple Klasse um auszulesen wo wir uns auf der Readmore.de Seite befinden.
+ * Dadurch werden Funktionen des Userscriptes gesteuert.
+ */
+function RMUSContent(){
+
+    /**
+     * Property in dem alle content Möglichkeiten aufgelistet sind. Default sind alle falsch, die _init Methode
+     * liest die aktuelle Seite aus.
+     * @type {{mainpage: boolean, profile: boolean, groups_new: boolean, groups_group_list: boolean, groups_show_group: boolean, msg: boolean, news_archive: boolean, headlines_overview: boolean, www: boolean, widget_create_ticker: boolean, guides: boolean, articles: boolean, news: boolean, search: boolean, match_overview: boolean, db: boolean, coverages: boolean, demo_overview_pov: boolean, demo_overview_hltv: boolean, demo_overview: boolean, video_overview: boolean, gallery_sets: boolean, forum_forum: boolean, forum_board: boolean, forum_thread: boolean, forum_edit: boolean, forum_newtopic: boolean, community: boolean, blog: boolean, poll_archive: boolean, rules: boolean, team: boolean, imprint: boolean, userstream: boolean, gallery_images: boolean, matches: boolean}}
+     * @private
+     */
+    var _content = {
+        mainpage                : false,
+        profile                 : false,
+        groups_new              : false,
+        groups_group_list       : false,
+        groups_show_group       : false,
+        msg                     : false,
+        news_archive            : false,
+        headlines_overview      : false,
+        www                     : false,
+        widget_create_ticker    : false,
+        guides                  : false,
+        articles                : false,
+        news                    : false,
+        search                  : false,
+        match_overview          : false,
+        db                      : false,
+        coverages               : false,
+        demo_overview_pov       : false,
+        demo_overview_hltv      : false,
+        demo_overview           : false,
+        video_overview          : false,
+        gallery_sets            : false,
+        forum_forum             : false,
+        forum_board             : false,
+        forum_thread            : false,
+        forum_edit              : false,
+        forum_newtopic          : false,
+        community               : false,
+        blog                    : false,
+        poll_archive            : false,
+        rules                   : false,
+        team                    : false,
+        imprint                 : false,
+        userstream              : false,
+        gallery_images          : false,
+        matches                 : false
+    };
+
+    /**
+     * Aktuelle Seite auf der wir uns befinden
+     * @type {string}
+     * @private
+     */
+    var _currentPage = '';
+
+    _init = function(){
+
+        _readCurrentPage();
+
+        switch (_currentPage) {
+            case '':
+                _content.mainpage = true;
+                break;
+            case 'profile':
+                _content.profile = true;
+                break;
+            case 'forum/thread':
+                _content.forum_thread = true;
+                break;
+            case 'forum/forum':
+                _content.forum_forum = true;
+                break;
+            case 'forum/board':
+                _content.forum_board = true;
+                break;
+            case 'forum/edit':
+                _content.forum_edit = true;
+                break;
+            case 'matches':
+                _content.matches = true;
+                break;
+            case 'www':
+                _content.www = true;
+                break;
+            case 'userstream':
+                _content.userstream = true;
+                break;
+            case 'groups/new':
+                _content.groups_new = true;
+                break;
+            case 'groups/group_list':
+                _content.groups_group_list = true;
+                break;
+            case 'groups/show_group':
+                _content.groups_show_group = true;
+                break;
+            case 'msg':
+                _content.msg = true;
+                break;
+            case 'news_archive':
+                _content.news_archive = true;
+                break;
+            case 'headlines_overview':
+                _content.headlines_overview = true;
+                break;
+            case 'widget/create_ticker':
+                _content.widget_create_ticker = true;
+                break;
+            case 'guides':
+                _content.guides = true;
+                break;
+            case 'articles':
+                _content.articles = true;
+                break;
+            case 'news':
+                _content.news = true;
+                break;
+            case 'search':
+                _content.search = true;
+                break;
+            case 'match_overview':
+                _content.match_overview = true;
+                break;
+            case 'db':
+                _content.db = true;
+                break;
+            case 'coverages':
+                _content.coverages = true;
+                break;
+            case 'demo_overview_pov':
+                _content.demo_overview_pov = true;
+                break;
+            case 'demo_overview_hltv':
+                _content.demo_overview_hltv = true;
+                break;
+            case 'demo_overview':
+                _content.demo_overview = true;
+                break;
+            case 'video_overview':
+                _content.video_overview = true;
+                break;
+            case 'gallery_sets':
+                _content.gallery_sets = true;
+                break;
+            case 'forum/newtopic':
+                _content.forum_newtopic = true;
+                break;
+            case 'community':
+                _content.community = true;
+                break;
+            case 'blog':
+                _content.blog = true;
+                break;
+            case 'poll_archive':
+                _content.poll_archive = true;
+                break;
+            case 'rules':
+                _content.rules = true;
+                break;
+            case 'team':
+                _content.team = true;
+                break;
+            case 'imprint':
+                _content.imprint = true;
+                break;
+            case 'gallery_images':
+                _content.gallery_images = true;
+                break;
+            default:
+                _content.mainpage = true;
+                break;
+        }
+    }
+
+    /**
+     * Übergeben wird welche Seite abgefragt werden soll, die Funktion liefert dann true oder falls zurück,
+     * je nachdem ob wir aktuell auf der Seite sind oder nicht.
+     * @param what {String}
+     * @returns {Boolean}
+     */
+    this.getContent = function(what){
+        return _content[what];
+    }
+
+    /**
+     * Erlaubt es direkt mehrere Abfragen mit einer Methode zu erledigen. Ist minimal langsamer, bringt
+     * meiner Meinung nach aber einen Vorteil in der Übersichtlchkeit des Codes.
+     * @param what {Array}
+     * @param type {String} Möglichkeiten sind AND/OR. Wird ein andere Parameter übergeben, wird OR als
+     *                      Default-Wert gesetzt.
+     * @returns {boolean}
+     */
+    this.getMultipleContent = function(what, type){
+        var returnValue = false;
+        var that        = this;
+
+        switch(type){
+            // AND wurde angegeben
+            case 'AND':
+                returnValue = true;
+
+                $(what).each(function(index, value){
+                    if (!that.getContent(value)){
+                        return returnValue = false;
+                    }
+                });
+            break;
+
+            // OR oder ein falscher Parameter wurde angegeben
+            default:
+                $(what).each(function(index, value){
+                    if (that.getContent(value)){
+                        returnValue = true;
+                        return false;
+                    }
+                });
+            break;
+        }
+
+        return returnValue;
+    }
+
+    /**
+     * Liest aus der URL (codument.location) Parameter aus und extrahiert den Content-Part,
+     * damit wir wissen, auf welcher Seite wir und momentan befinden.
+     * @private
+     */
+    _readCurrentPage = function(){
+        var getVars = document.location.search.replace(/[?]/g, '').replace(/[&]/g, '=').split('=');
+        var curPage = '';
+
+        $.each(getVars, function (index, value) {
+            if (value == 'cont') {
+                curPage = getVars[index+1];
+            }
+        });
+
+        _currentPage = curPage;
+    }
+
+    /**
+     * Init Methode starten
+     */
+    _init();
+}
+/**
+ * RMUSOptions
+ * ===========
+ *
+ * Klasse um die Optionen des Userscript zu handeln. Braucht zum instanziieren keine weiteren
+ * Parameter, ruft direkt die _init() Methode auf um die Settings auszulesen.
+ */
+function RMUSOptions(){
+    /**
+     * Name der benutzt wird um die Optionen im Localstorage zu speichern.
+     * @type {string}
+     */
+    var LOCALSTORAGE_NAME = 'userscriptOptions';
+
+    /**
+     * Name der benutzt wird um das Backup der Optionen im Localstorage zu speichern.
+     * @type {string}
+     */
+    var LOCALSTORAGE_NAME_BACKUP = 'userscriptOptionsBackup';
+
+    /**
+     * Version des Scriptes, wird durch GrundJS im Buildprozess ersetzt.
+     * @type {string}
+     * @private
+     */
+    var _version = '2.1.8';
+
+    /**
+     * Property für die Optionen. Werden über entsprechende Methoden abgefragt, sind daher
+     * nicht mehr public.
+     * @type {{}}
+     * @private
+     */
+    var _options = {};
+
+    /**
+     * Missbrauche diese Funktion einfach mal als Konstuktor-Ersatz. Finde es einfach schöner
+     * dafür eine separate Methode zu haben. Wird als letzte Zeile ausgerufen.     *
+     * @private
+     */
+    _init = function(){
+        // Optionen aus dem Localstorage auslesen
+        _readOptionsFromLocalstorage();
+    };
+
+    /**
+     * Funktion um den Wert einer bestimmten Option zurückzugeben.
+     * @param {String}
+     */
+    this.getOption = function(what){
+        return _options[what];
+    }
+
+    /**
+     * Gibt die aktuelle Version zurück.
+     * @returns {string}
+     */
+    this.getVersion = function(){
+        return _version;
+    }
+
+    /**
+     * Fügt den Link für die Optionen in die Userbar auf der Readmore Seite ein.
+     * Dadurch wird später das Fenster mit den Einstellungen verfügbar.
+     */
+    this.insertOptionsLink = function(){
+        $('div.floatl.vcenter.elf.dgray:last').after('<div class="floatl vcenter" style="padding-top:4px;"><img src="http://images.readmore.de/img/header/line.jpg" alt="" style="height:25px; width:2px;"></div><div class="floatl vcenter elf dgray" style="margin:11px 10px;"><a id="openUserscriptOptions" href="#" class="black">Userscript</a></div>');
+    }
+
+    /**
+     * Liest die Optionen aus dem HTML aus und speichert sie anschließend als JSON-String den Localstorage
+     * des Browsers. Gibt im Fehlerfall eine einfache Meldung zurück.
+     * @return {boolean}
+     */
+    this.saveOptions = function(){
+        _readOptionsFromHTML();
+
+        try {
+            localStorage.setItem(LOCALSTORAGE_NAME, JSON.stringify(_options));
+        } catch (e) {
+            alert('Es ist ein Fehler beim Speichern aufgetreten: ' + e);
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Funktion um die Optionen als JSON-String auszulesen und zurück zu geben. Wird für den
+     * Export der Settings benutzt.
+     * @returns {String}
+     */
+    this.getOptionsRaw = function () {
+        return localStorage.getItem(LOCALSTORAGE_NAME);
+    }
+
+    /**
+     * Funktion um die Optionen als JSON-String zu übergeben und in den Localstorage zu speichern. Wird für
+     * den Import benutzt.
+     * @param options {String}
+     */
+    this.setOptionsRaw = function (options) {
+        localStorage.setItem(LOCALSTORAGE_NAME, options + "");
+    }
+
+    /**
+     * Sichert die aktuelle Konfiguration für Backupzwecke. Falls ein Import schief geht kann so der alte
+     * Stand wieder hergestellt werdne.
+     */
+    this.backupOptions = function () {
+        localStorage.setItem(LOCALSTORAGE_NAME_BACKUP, localStorage.getItem(LOCALSTORAGE_NAME));
+    }
+
+    /**
+     * Blendet das Fenster mit den Optionen ein.
+     */
+    this.showOptions = function () {
+        _writeOptionsToHTML();
+
+        $('div#userscriptOptionsOverlay').css('height', $(document).height()).fadeIn(200, function () {
+            // Reset scroll
+            $('div#userscriptOptions div.rmus-options-content').animate({scrollTop: 0}, 50);
+
+            // Im-/Export ausblenden
+            $('div#rmus-options-imexport').hide();
+            $('div#userscriptOptions').fadeIn(250);
+        });
+    }
+
+    /**
+     * Schließt das Fenster mit den Optionen.
+     */
+    this.hideOptions = function () {
+        $('div#userscriptOptions').fadeOut(250, function () {
+            $('div#userscriptOptionsOverlay').fadeOut(200);
+        });
+
+        _readOptionsFromLocalstorage();
+    }
+
+    /**
+     * Private Methode um die aktuellen Einstellung aus den Input-Feldern der Optionen auszulesen
+     * und in das entsprechende Property zu schreiben.     *
+     * @private
+     */
+    _readOptionsFromHTML = function(){
+        var userscriptOptions = {};
+
+        // Geht alle Checkboxen durch, prüft ob die Box gechecked ist und setzt den passenden
+        // Wert in den Optionen.
+        $('input[type=checkbox].userscriptOptions').each(function () {
+            var attr = $(this).attr('checked');
+            if (attr == true || attr == 'checked') {
+                userscriptOptions[$(this).attr('name')] = 'checked';
+            } else {
+                userscriptOptions[$(this).attr('name')] = false;
+            }
+        });
+
+        // Liest den Wert der Textfelder aus.
+        $('input.userscriptOptions[type!=checkbox]').each(function () {
+            userscriptOptions[$(this).attr('name')] = $(this).val();
+        });
+
+        // Liest den Wert der Selects aus.
+        $('select.userscriptOptions').each(function () {
+            userscriptOptions[$(this).attr('name')] = $(this).val();
+        });
+
+        // Nachdem alle Daten eingelesen wurden, werden die Settings in dem Attribut gesichert.
+        _options = userscriptOptions;
+    }
+
+    /**
+     * Liest den JSON-String aus dem Localstorage aus und setzt das passende
+     * Attribut der klasse. Wird im Konstruktor aufgerunden, sollte also stets verfügbar sein.     *
+     * @private
+     */
+    _readOptionsFromLocalstorage = function(){
+        // JSON-String aus dem Localstorage auslesen und wieder in ein Objekt umwandeln
+        _options = JSON.parse(localStorage.getItem(LOCALSTORAGE_NAME));
+
+        if (_options == null) {
+            _options = {};
+        }
+    }
+
+    /**
+     * Private Methode um die Inputboxen im Menu zu setzen. Die Optionen werden aus dem
+     * Attribut entnommen.
+     * @private
+     */
+    _writeOptionsToHTML = function(){
+        var type = '';
+
+        if (!$.isEmptyObject(_options)) {
+            $.each(_options, function (index, value) {
+                // Typ der Option bestimmen
+                type = $('[name=' + index + ']').attr('type');
+
+                // Checkboxen auslesen und den Wert zuweisen
+                if (type == 'checkbox') {
+                    // Checkboxen setzen
+                    if (value == 'checked') {
+                        $('[name=' + index + ']').attr('checked', true);
+                    } else {
+                        $('[name=' + index + ']').attr('checked', false);
+                    }
+                    return true;
+                }
+
+                // Textfelder auslesen und den Wert zuweisen
+                if (type == 'text' || type == null) {
+                    $('[name=' + index + ']').val(value);
+                    return true;
+                }
+
+                // Selectboxen auslesen und den Wert zuweisen
+                if (index.match('rightColumn_forum_hideForum_') != null) {
+                    $('[name=' + index + ']').val(value);
+                    return true;
+                }
+            });
+        }
+    }
+
+    /**
+     * Init Methode aufrufen!
+     */
+    _init();
+}
 /*global $, RMUS*/
 
 RMUS.browser = {
@@ -297,7 +779,7 @@ RMUS.messages = {
             async: true,
             cache: false,
             url: 'http://www.readmore.de/index.php?cont=msg',
-            contentType: 'text/html; charset=iso-8859-1;', 
+            contentType: 'text/html; charset=iso-8859-1;',
             dataType: 'html',
             success: function (data) {
                 var newMsgCount = $('div#content table.p0:first td.ofhidden.bold', data).length,
@@ -361,20 +843,20 @@ RMUS.messages = {
             msg = 'Du hast eine neue Nachricht erhalten!';
         }
 
-        if (RMUS.options.options.miscellaneous_reloadMessages_desktopNotifications == 'checked') {
+        if (Options.getOption('miscellaneous_reloadMessages_desktopNotifications') == 'checked') {
             RMUS.messages.notifications.create(title, msg);
         }
 
-        if (RMUS.options.options.miscellaneous_reloadMessages_alertBox == 'checked') {
+        if (Options.getOption('miscellaneous_reloadMessages_alertBox') == 'checked') {
             alert(msg);
         }
 
-        if (RMUS.options.options.miscellaneous_reloadMessages_playSound == 'checked') {
+        if (Options.getOption('miscellaneous_reloadMessages_playSound') == 'checked') {
             RMUS.messages.playSound();
         }
     },
     playSound: function () {
-        var audioUrl = RMUS.options.options.miscellaneous_reloadMessages_playSoundUrl;
+        var audioUrl = Options.getOption('miscellaneous_reloadMessages_playSoundUrl');
 
         if (audioUrl) {
             try {
@@ -416,7 +898,7 @@ RMUS.middleColumn = {
     forum : {
 
         threadlink : '',
-        page : '',	
+        page : '',
 
         // Link zum Thread ohne Seitenzahl ermitteln
         readThreadlink : function () {
@@ -456,9 +938,9 @@ RMUS.middleColumn = {
 
                 if (lastpage.substr(lastpage.length-4) == '</b>'){
                     // Seiten endlos erweitern
-                    if (RMUS.options.options.middleColumn_forum_reloadPosts_endlessPage == 'checked') {
+                    if (Options.getOption('middleColumn_forum_reloadPosts_endlessPage') == 'checked') {
                         RMUS.middleColumn.forum.reloadPosts.endlessPage();
-                    } 
+                    }
 
                     // Der eigentliche Reload
                     $.ajax({
@@ -466,7 +948,7 @@ RMUS.middleColumn = {
                         async: true,
                         cache: false,
                         url: RMUS.middleColumn.forum.threadlink + '&pagenum=' + RMUS.middleColumn.forum.page,
-                        contentType: 'text/html; charset=iso-8859-1;', 
+                        contentType: 'text/html; charset=iso-8859-1;',
                         dataType: 'html',
                         success: function (data) {
                             var posts = data.match(/\<tr class=\"post\_[^"]+\"\>[^]+?\<\/tr\>/g);
@@ -487,15 +969,15 @@ RMUS.middleColumn = {
 
                                 RMUS.middleColumn.forum.reloadPosts.oldLimit = window.pageYOffset + (window.innerHeight * 0.55);
                                 // Beiträge aus den neuen Posts ignorieren
-                                if (RMUS.options.options.miscellaneous_ignoreUser == 'checked') RMUS.miscellaneous.ignoreUser.doIgnore(true, false, false);									
+                                if (Options.getOption('miscellaneous_ignoreUser') == 'checked') RMUS.miscellaneous.ignoreUser.doIgnore(true, false, false);
                                 // Edit vorbereiten
-                                if (RMUS.options.options.middleColumn_forum_editPost == 'checked') RMUS.middleColumn.forum.editPost.initializeEvent();	
+                                if (Options.getOption('middleColumn_forum_editPost') == 'checked') RMUS.middleColumn.forum.editPost.initializeEvent();
                                 // Notzizen einblenden
-                                if(RMUS.options.options.miscellaneous_note == 'checked') RMUS.miscellaneous.note.initialize();
-                                // Edit vorbereiten	
-                                if (RMUS.options.options.middleColumn_forum_editPost == 'checked') RMUS.middleColumn.forum.editPost.initializeEvent();	
+                                if(Options.getOption('miscellaneous_note') == 'checked') RMUS.miscellaneous.note.initialize();
+                                // Edit vorbereiten
+                                if (Options.getOption('middleColumn_forum_editPost') == 'checked') RMUS.middleColumn.forum.editPost.initializeEvent();
                                 // Youtubeplayer ersetzen
-                                if(RMUS.options.options.miscellaneous_convertYoutube == 'checked') RMUS.miscellaneous.convertYoutube();									
+                                if(Options.getOption('miscellaneous_convertYoutube') == 'checked') RMUS.miscellaneous.convertYoutube();
                             }
                         },
                         beforeSend: function(jqXHR) {
@@ -504,9 +986,9 @@ RMUS.middleColumn = {
                     });
 
                     // Rausfinden ob eine neue Seite existiert
-                    if (RMUS.options.options.middleColumn_forum_reloadPosts_endlessPage != 'checked') RMUS.middleColumn.forum.reloadPosts.checkForNewPage();
+                    if (Options.getOption('middleColumn_forum_reloadPosts_endlessPage') != 'checked') RMUS.middleColumn.forum.reloadPosts.checkForNewPage();
                     return false;
-                }					
+                }
             },
 
             // Neue Posts markieren
@@ -538,7 +1020,7 @@ RMUS.middleColumn = {
                     if(value < limit && limit != RMUS.middleColumn.forum.reloadPosts.oldLimit) {
                         $('[class^=post_]:eq(' + (RMUS.middleColumn.forum.reloadPosts.postcount - (RMUS.middleColumn.forum.reloadPosts.unseenPosts.length) + i) + ')').css('background-color', '#FFF');
                         i++;
-                        deleteArray.push(index);						
+                        deleteArray.push(index);
                     }
                 });
 
@@ -555,10 +1037,10 @@ RMUS.middleColumn = {
                     RMUS.middleColumn.forum.reloadPosts.oldTitle = $('title').text();
                 }
 
-                var title = RMUS.middleColumn.forum.reloadPosts.oldTitle;					
+                var title = RMUS.middleColumn.forum.reloadPosts.oldTitle;
                 if (RMUS.middleColumn.forum.reloadPosts.unseenPosts.length) title = '(' + RMUS.middleColumn.forum.reloadPosts.unseenPosts.length + ') ' + title;
 
-                $('title').text(title);	
+                $('title').text(title);
                 return false;
             },
 
@@ -568,19 +1050,19 @@ RMUS.middleColumn = {
                 if (RMUS.middleColumn.forum.reloadPosts.unseenPosts.length > 0 && currentIcon == '/favicon.ico') {
                     $('head>link[rel="shortcut icon"]').remove();
                     $('head').append('<link rel="shortcut icon" type="image/png" href="http://readmore.thextor.de/userscript/img/favicon.png">');
-                } 
+                }
                 if (RMUS.middleColumn.forum.reloadPosts.unseenPosts.length == 0 && currentIcon == 'http://readmore.thextor.de/userscript/img/favicon.png') {
                     $('head>link[rel="shortcut icon"]').remove();
                     $('head').append('<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">');
-                } 
+                }
                 return false;
             },
 
             // Setzt die Farbe (HEX + GRB) in der die neuen Posts markiert werden
             setMarkPostColor : function () {
                 // Nur wenn eine HEX-Zahl eingegeben wurde
-                if (RMUS.options.options.middleColumn_forum_reloadPosts_markPostColor[0] == '#' && RMUS.options.options.middleColumn_forum_reloadPosts_markPostColor.length == 7) {
-                    RMUS.middleColumn.forum.reloadPosts.markPostColor = RMUS.options.options.middleColumn_forum_reloadPosts_markPostColor;
+                if (Options.getOption('middleColumn_forum_reloadPosts_markPostColor')[0] == '#' && Options.getOption('middleColumn_forum_reloadPosts_markPostColor').length == 7) {
+                    RMUS.middleColumn.forum.reloadPosts.markPostColor = Options.getOption('middleColumn_forum_reloadPosts_markPostColor');
                     RMUS.middleColumn.forum.reloadPosts.markPostColorRgb = "rgb(" + parseInt(RMUS.middleColumn.forum.reloadPosts.markPostColor.substr(1, 2), 16).toString() + ", " + parseInt(RMUS.middleColumn.forum.reloadPosts.markPostColor.substr(3, 2), 16).toString() + ", " + parseInt(RMUS.middleColumn.forum.reloadPosts.markPostColor.substr(5, 2), 16).toString() + ")";
                 }
                 return false;
@@ -598,7 +1080,7 @@ RMUS.middleColumn = {
 
             // Prüft ob eine neue Seite im Forum vorhanden ist
             checkForNewPage : function () {
-                if (RMUS.options.options.middleColumn_forum_reloadPosts_checkForNewPage == 'checked'){
+                if (Options.getOption('middleColumn_forum_reloadPosts_checkForNewPage') == 'checked'){
                     if (RMUS.middleColumn.forum.reloadPosts.postcount == (25 + (25 * RMUS.middleColumn.forum.reloadPosts.finishedPages)) && $('#userscriptNewPage').length < 1) {
 
                         $.ajax({
@@ -606,7 +1088,7 @@ RMUS.middleColumn = {
                             async: true,
                             cache: false,
                             url: RMUS.middleColumn.forum.threadlink + '&pagenum=' + (RMUS.middleColumn.forum.page + 1),
-                            contentType: 'text/html; charset=iso-8859-1;', 
+                            contentType: 'text/html; charset=iso-8859-1;',
                             dataType: 'html',
                             success: function (data) {
                                 var posts = data.match(/\<tr class=\"post\_[^"]+\"\>[^]+?\<\/tr\>/g);
@@ -630,17 +1112,17 @@ RMUS.middleColumn = {
                 oldmimit : 0,
 
                 setWaitUntilNextJump : function(){
-                    var timeToWait = parseInt(RMUS.options.options.middleColumn_forum_reloadPosts_jumpToNewPosts_waitUntilNextJump, 10);
+                    var timeToWait = parseInt(Options.getOption('middleColumn_forum_reloadPosts_jumpToNewPosts_waitUntilNextJump'), 10);
                     if (timeToWait > 0){
                         RMUS.middleColumn.forum.reloadPosts.jumpToNewPosts.waitUntilNextJump = timeToWait;
                     }
                     return false;
                 },
 
-                jump : function(){						
+                jump : function(){
                     if (RMUS.middleColumn.forum.reloadPosts.unseenPosts.length > 0){
                         if ($('#userscript_enable_jump').attr('checked') == 'checked'){
-                            var jumpto = RMUS.middleColumn.forum.reloadPosts.unseenPosts[0] - (window.innerHeight * 0.55) + 25;								
+                            var jumpto = RMUS.middleColumn.forum.reloadPosts.unseenPosts[0] - (window.innerHeight * 0.55) + 25;
                             if (jumpto <= RMUS.middleColumn.forum.reloadPosts.jumpToNewPosts.oldmimit) jumpto = RMUS.middleColumn.forum.reloadPosts.jumpToNewPosts.oldmimit + 25;
                             window.scrollTo(0, jumpto);
                             RMUS.middleColumn.forum.reloadPosts.jumpToNewPosts.oldmimit = jumpto;
@@ -689,7 +1171,7 @@ RMUS.middleColumn = {
                     fourthRow = '<span style="font-size: 10px;">Beitr&auml;ge: 1337</span><br><br>',
                     fifthRow = '<a href="index.php?cont=profile&amp;id=' + RMUS.middleColumn.forum.preview.userid + '" title="' + RMUS.middleColumn.forum.preview.username + '"><img src="' + $('.floatl.vcenter.elf.dgray.vcenter:first').html().match(/src="(.+?)" alt/)[1] + '"></a>';
 
-                $('#previewleft').html(firstRow + secontRow + thirdRow + fourthRow + fifthRow);	
+                $('#previewleft').html(firstRow + secontRow + thirdRow + fourthRow + fifthRow);
                 return false;
             },
 
@@ -745,7 +1227,7 @@ RMUS.middleColumn = {
                 if (urlPreview) {
                     $.each(urlPreview, function (key) {
                         var link = urlPreview[key].replace(/\[url=/, '').replace(/http:\/\//, '').replace(/https:\/\//, ''),
-                            regEx = new RegExp('\\' + urlPreview[key].replace(/\(/g, '\\(').replace(/\)/g, '\\)').replace(/\?/g, '\\?') + '\\]'); 
+                            regEx = new RegExp('\\' + urlPreview[key].replace(/\(/g, '\\(').replace(/\)/g, '\\)').replace(/\?/g, '\\?') + '\\]');
                         text = text.replace(regEx, '<a href="http://' + link + '">');
                     });
                 }
@@ -755,7 +1237,7 @@ RMUS.middleColumn = {
                 if (colorPreview) {
                     $.each(colorPreview, function (key) {
                         var color = text.match(/\[color=(.+?)\]/)[1],
-                            regEx = new RegExp('\\' + colorPreview[key] + '\\]'); 
+                            regEx = new RegExp('\\' + colorPreview[key] + '\\]');
                         text = text.replace(regEx, '<span style="color: ' + color + ';">');
                     });
                 }
@@ -776,7 +1258,7 @@ RMUS.middleColumn = {
                     });
                 }
 
-                text = text.replace(/\[\/quote\]/g, '</div>');				
+                text = text.replace(/\[\/quote\]/g, '</div>');
                 return text;
             },
 
@@ -847,10 +1329,10 @@ RMUS.middleColumn = {
             replacePost['%C3%BA'] = '%FA';		// ú
             replacePost['%C3%9A'] = '%DA';		// Ú
             replacePost['%C3%BB'] = '%FB';		// û
-            replacePost['%C3%9B'] = '%DB';		// Û				
+            replacePost['%C3%9B'] = '%DB';		// Û
             replacePost['%C2%A7'] = '%A7';		// §
 
-            replacePost['%E2%82%AC'] = '%80';		// €				
+            replacePost['%E2%82%AC'] = '%80';		// €
             replacePost['%E2%95%AF'] = '%26#9583;';		// ╯
             replacePost['%E2%96%A1'] = '%26#9633;';		// □
             replacePost['%EF%BC%89'] = '%26#65289;';	// ）
@@ -884,12 +1366,12 @@ RMUS.middleColumn = {
 
             // Der eigentliche Post
             $.ajax({
-                type:'POST', 
-                url: '?cont=forum/do_reply', 
-                data: post, 
+                type:'POST',
+                url: '?cont=forum/do_reply',
+                data: post,
                 async: true,
                 cache: false,
-                contentType: 'application/x-www-form-urlencoded; charset=iso-8859-1;', 
+                contentType: 'application/x-www-form-urlencoded; charset=iso-8859-1;',
                 dataType: 'html',
 
                 success: function (response) {
@@ -930,7 +1412,7 @@ RMUS.middleColumn = {
                         async: false,
                         cache: false,
                         url: String(RMUS.middleColumn.forum.threadlink + '&pagenum=' + (RMUS.middleColumn.forum.page + 1)),
-                        contentType: 'text/html; charset=iso-8859-1;', 
+                        contentType: 'text/html; charset=iso-8859-1;',
                         dataType: 'html',
                         success: function (data) {
                             var posts = data.match(/\<tr class=\"post\_[^"]+\"\>[^]+?\<\/tr\>/g);
@@ -947,10 +1429,10 @@ RMUS.middleColumn = {
 
                                     RMUS.middleColumn.forum.page++;
                                     // Beiträge aus den neuen Posts ignorieren
-                                    if (RMUS.options.options.miscellaneous_ignoreUser == 'checked') RMUS.miscellaneous.ignoreUser.doIgnore(true, false, false);
+                                    if (Options.getOption('miscellaneous_ignoreUser') == 'checked') RMUS.miscellaneous.ignoreUser.doIgnore(true, false, false);
                                     // Notzizen einblenden
-                                    if(RMUS.options.options.miscellaneous_note == 'checked') RMUS.miscellaneous.note.initialize();
-                                }										
+                                    if(Options.getOption('miscellaneous_note') == 'checked') RMUS.miscellaneous.note.initialize();
+                                }
                             }
                         },
                         beforeSend: function(jqXHR) {
@@ -961,7 +1443,7 @@ RMUS.middleColumn = {
 
                 return false;
             },
-            editboxTop : function (){               
+            editboxTop : function (){
                 $('#content h1:first').after('<a id="RMUSeditboxTop" href="javascript:void(0);" style="float: right;" onclick="$(\'#content h1:first\').after($(\'form[name=submitpost]\')); $(this).css(\'display\',\'none\'); $(\'#RMUSeditboxBottom\').css(\'display\',\'\');">Editbox anzeigen<br /><br /></a>');
                 $('#content br.clear:last').after('<a id="RMUSeditboxBottom" href="javascript:void(0);" style="float: right; display: none;" onclick="$(\'#content br.clear:last\').after($(\'form[name=submitpost]\')); $(this).css(\'display\',\'none\'); $(\'#RMUSeditboxTop\').css(\'display\',\'\');">Editbox anzeigen<br /><br /></a>');
             }
@@ -977,7 +1459,7 @@ RMUS.middleColumn = {
                     var hrefParts = String($(this).attr('href')).match(/postid=(.*)/);
 
                     if (null !== hrefParts) {
-                        var postid = parseInt(hrefParts[1], 10);	
+                        var postid = parseInt(hrefParts[1], 10);
                         $(this).attr('href', 'javascript:void(0);');
 
                         RMUS.middleColumn.forum.editPost.loadPost(postid);
@@ -1013,7 +1495,7 @@ RMUS.middleColumn = {
                 return false;
             },
 
-            showEditMenu : function(postid){					
+            showEditMenu : function(postid){
                 var submit = '<a class="edit_submit_' + postid + '" href="javascript:void(0);" style="margin-right: 4px;">Edit absenden</a>';
                 var cancel = '<a class="edit_cancel_' + postid + '"href="javascript:void(0);" style="color: gray;">Edit abrechen</a>&nbsp;|&nbsp;';
                 $('tr[class*=footer_' + postid + ']>td').append('<div>' + cancel + submit + '</div>');
@@ -1035,7 +1517,7 @@ RMUS.middleColumn = {
                 $('tr[class*=footer_' + postid + ']>td>a:eq(1)').attr('href', 'http://www.readmore.de/index.php?cont=forum/edit&postid=' + postid);
 
                 $('tr[class=post_' + postid + ']>td:last').html(RMUS.middleColumn.forum.editPost.originalPosts[postid]);
-                RMUS.middleColumn.forum.editPost.originalPosts[postid] = null;				
+                RMUS.middleColumn.forum.editPost.originalPosts[postid] = null;
 
                 $('tr[class*=footer_' + postid + ']>td>div>a:first').off('click');
                 $('tr[class*=footer_' + postid + ']>td>div>a:last').off('click');
@@ -1044,7 +1526,7 @@ RMUS.middleColumn = {
                 return false;
             },
 
-            submitEdit : function(postid){	
+            submitEdit : function(postid){
                 var newpost = '';
                 var postdata = '';
 
@@ -1053,7 +1535,7 @@ RMUS.middleColumn = {
                     async: false,
                     cache: false,
                     url: 'http://www.readmore.de/index.php?cont=forum/edit&postid=' + postid,
-                    contentType: 'text/html; charset=iso-8859-1;', 
+                    contentType: 'text/html; charset=iso-8859-1;',
                     dataType: 'html',
                     success: function (datafirst) {
                         var f_uid = $(datafirst).find('input[name="f_uid"]').val();
@@ -1066,16 +1548,16 @@ RMUS.middleColumn = {
                         postdata = 'f_uid=' + f_uid + '&thread[boardid]=' + boardid + '&thread[threadid]=' + threadid + '&post[postid]=' + postidedit + '&postnew_newposttext=' + encodeURI(newpost).replace(/&amp;/g, '&').replace(/&/g, '%26');
                         if (threadtopic != null){
                             if (threadtopic.trim().length > 0) postdata += '&thread[threadtopic]=' + encodeURI(threadtopic).replace(/&amp;/g, '&').replace(/&/g, '%26');
-                        } 
+                        }
                         postdata = RMUS.middleColumn.forum.replaceSpecialChars(postdata);
 
                         $.ajax({
                             type: 'POST',
                             async: false,
                             cache: false,
-                            url: 'http://www.readmore.de/index.php?cont=forum/do_edit',	
+                            url: 'http://www.readmore.de/index.php?cont=forum/do_edit',
                             data: postdata,
-                            contentType: 'application/x-www-form-urlencoded; charset=iso-8859-1;', 
+                            contentType: 'application/x-www-form-urlencoded; charset=iso-8859-1;',
                             dataType: 'html',
                             success: function (response) {
                                 var content = $(response).find('#content').html();
@@ -1086,7 +1568,7 @@ RMUS.middleColumn = {
                             error: function (){
                                 alert('Es ist leider ein Fehler aufgetreten. Bitte lade die Seite neu!');
                             }
-                        });								
+                        });
                     },
                     beforeSend: function(jqXHR) {
                         jqXHR.overrideMimeType('text/html;charset=iso-8859-1');
@@ -1099,7 +1581,7 @@ RMUS.middleColumn = {
 
                 $('tr[class*=footer_' + postid + ']>td>div').remove();
                 $('tr[class=post_' + postid + ']>td:last').html(RMUS.middleColumn.forum.preview.convertToPreview(newpost.replace(/(\r\n|\n|\r)/gm, '<br />')));
-                $('tr[class*=footer_' + postid + ']>td>a:eq(1)').attr('href', 'http://www.readmore.de/index.php?cont=forum/edit&postid=' + postid);					
+                $('tr[class*=footer_' + postid + ']>td>a:eq(1)').attr('href', 'http://www.readmore.de/index.php?cont=forum/edit&postid=' + postid);
                 RMUS.middleColumn.forum.editPost.initializeEvent();
 
                 return false;
@@ -1141,7 +1623,7 @@ RMUS.miscellaneous = {
         $('title').text(title);
         return false;
     },
-    
+
     // Wandelt Bilder-URLs in eigentliche Bilder um
     convertImageLinks: function() {
     	$('a[href$=".png"], a[href$=".jpg"], a[href$=".gif"], a[href$=".bmp"]').each(function() {
@@ -1154,7 +1636,7 @@ RMUS.miscellaneous = {
         var lastpage = document.location.href.match(/pagenum=lastpage/);
         if (lastpage != null) {
             if (lastpage[0] == 'pagenum=lastpage') {
-                window.scrollTo(0, $('td.ten.vtop:last').offset().top - 50);					
+                window.scrollTo(0, $('td.ten.vtop:last').offset().top - 50);
             }
         }
 
@@ -1424,7 +1906,7 @@ RMUS.miscellaneous = {
             var link = 'http://www.youtube.com/watch?v=' + String($(this).attr('src')).trim().replace('http://www.youtube.com/embed/', '');
             $(this).after('<a href="' + link + '">' + link + '</a>');
             $(this).remove();
-        });		
+        });
 
         return false;
     },
@@ -1435,7 +1917,7 @@ RMUS.miscellaneous = {
 
         setUser : function(){
             var user = [];
-            $(String(RMUS.options.options.miscellaneous_ignoreUser_usernames).split(',')).each(function(index, value){					
+            $(String(Options.getOption('miscellaneous_ignoreUser_usernames')).split(',')).each(function(index, value){
                 user.push(value.trim());
             });
 
@@ -1448,7 +1930,7 @@ RMUS.miscellaneous = {
                 RMUS.miscellaneous.ignoreUser.setUser();
             }
 
-            if (thread) {					
+            if (thread) {
                 $(RMUS.miscellaneous.ignoreUser.user).each(function(index, value) {
                     $('tr[class*=post_]:has(a[title="' + value + '"]) td').each(function() {
 
@@ -1457,14 +1939,14 @@ RMUS.miscellaneous = {
                                 RMUS.miscellaneous.ignoreUser.ignoreCount--;
                                 $(this).html('<div style="display:none;" class="ignored_' + RMUS.miscellaneous.ignoreUser.ignoreCount + '">' + $(this).html() + '</div>');
                                 RMUS.miscellaneous.ignoreUser.ignoreCount = RMUS.miscellaneous.ignoreUser.ignoreCount + 2;
-                            } 
+                            }
                             else{
                                 $(this).html('<a style="font-size: 9px;" href="javascript:void(0)" onclick="$(\'.ignored_' + RMUS.miscellaneous.ignoreUser.ignoreCount + '\').toggle(); if(this.innerHTML == \'Beitrag einblenden\'){this.innerHTML = \'Beitrag ausblenden\';}else{this.innerHTML = \'Beitrag einblenden\';}">Beitrag einblenden</a><br/>' + '<br/><div style="display:none;" class="ignored_' + RMUS.miscellaneous.ignoreUser.ignoreCount + '">' + $(this).html() + '</div>');
                                 RMUS.miscellaneous.ignoreUser.ignoreCount++;
-                            }	
+                            }
                         }
                     });
-                });					
+                });
             }
 
             if (ticker || profile) {
@@ -1473,7 +1955,7 @@ RMUS.miscellaneous = {
                         $(this).html('<a href="javascript:void(0)" onclick="$(\'.ignored_' + RMUS.miscellaneous.ignoreUser.ignoreCount + '\').toggle();">Beitrag einblenden</a><br/>' + '<br/><div style="display:none;" class="ignored_' + RMUS.miscellaneous.ignoreUser.ignoreCount + '">' + $(this).html() + '</div>');
                         RMUS.miscellaneous.ignoreUser.ignoreCount++;
                     });
-                });					
+                });
             }
 
             return false;
@@ -1487,7 +1969,7 @@ RMUS.miscellaneous = {
                 var user = String($(this).find('a.bml').attr('title'));
                 var notenr = RMUS.miscellaneous.note.notenumber++;
 
-                if ($($(this).html()).length > 0) br = '<br /><br />';						
+                if ($($(this).html()).length > 0) br = '<br /><br />';
                 $(this).append(br + '<center><a href="javascript:void(o);" name="note_' + user + '_' + notenr + '">Notiz</a><br /><br /><textarea style="display:none;height:100px;width:98%" name="note_' + user + '_' + notenr + '"></textarea></center>');
 
                 $('a[name="note_' + user + '_' + notenr + '"]').click(function () {
@@ -1511,131 +1993,6 @@ RMUS.miscellaneous = {
             return false;
         }
     }
-};
-RMUS.options = {
-
-    version : '2.1.8',
-    options : {},
-
-    // Fügt den Link zum öffnen der Optionen ein
-    insertOptionsLink : function () {
-        $('div.floatl.vcenter.elf.dgray:last').after('<div class="floatl vcenter" style="padding-top:4px;"><img src="http://images.readmore.de/img/header/line.jpg" alt="" style="height:25px; width:2px;"></div><div class="floatl vcenter elf dgray" style="margin:11px 10px;"><a id="openUserscriptOptions" href="#" class="black">Userscript</a></div>');
-        return false;
-    },
-
-    // Speichert die Optionen im LocalStorage
-    saveOptions : function () {
-        var userscriptOptions = {};
-
-        // Alle Checkboxen
-        $('input[type=checkbox].userscriptOptions').each(function () {
-            var attr = $(this).attr('checked');
-            if (attr == true || attr == 'checked') {
-                userscriptOptions[$(this).attr('name')] = 'checked';
-            } else {
-                userscriptOptions[$(this).attr('name')] = false;
-            }
-        });
-
-        // Alle Textfelder
-        $('input.userscriptOptions[type!=checkbox]').each(function () {
-            userscriptOptions[$(this).attr('name')] = $(this).val();
-        });
-
-        // Alle Selectfelder
-        $('select.userscriptOptions').each(function () {
-            userscriptOptions[$(this).attr('name')] = $(this).val();
-        });
-
-        try {
-            // Json-Speichern
-            localStorage.setItem('userscriptOptions', JSON.stringify(userscriptOptions));
-        } catch (e) {
-            alert('Es ist ein Fehler beim Speichern aufgetreten: ' + e);
-            return false;
-        }
-
-        return true;
-    },
-
-    // Optionen laden
-    loadOptions : function () {
-        var type = '',
-            userscriptOptions = JSON.parse(localStorage.getItem('userscriptOptions'));
-
-        if (userscriptOptions != null) {
-            $.each(userscriptOptions, function (index, value) {
-                type = $('[name=' + index + ']').attr('type');
-                if (type == 'checkbox') {
-                    // Checkboxen setzen
-                    if (value == 'checked') {
-                        $('[name=' + index + ']').attr('checked', true);
-                    } else {
-                        $('[name=' + index + ']').attr('checked', false);
-                    }
-                    return true;
-                }
-
-                if (type == 'text' || type == null) {
-                    // Textfelder füllen
-                    $('[name=' + index + ']').val(value);
-                    return true;
-                }
-
-                // Selectboxen auswählen
-                if (index.match('rightColumn_forum_hideForum_') != null) {
-                    $('[name=' + index + ']').val(value);
-                    return true;
-                }
-            });
-        }
-
-        return false;
-    },
-
-    // Optionen auslesen
-    readOptions : function () {
-        // Json auslesen und in Objekt umwandeln
-        this.options = JSON.parse(localStorage.getItem('userscriptOptions'));
-
-        if (this.options == null) {
-            this.options = [];
-        }
-
-        return false;
-    },
-
-    getOptionsRaw: function () {
-        return localStorage.getItem('userscriptOptions');
-    },
-
-    setOptionsRaw: function (options) {
-        localStorage.setItem('userscriptOptions', options + "");
-    },
-
-    backupOptions: function () {
-        localStorage.setItem('userscriptOptionsBackup', localStorage.getItem('userscriptOptions'));
-    },
-
-    showOptions: function () {
-        RMUS.options.loadOptions();
-
-        $('div#userscriptOptionsOverlay').css('height', $(document).height()).fadeIn(200, function () {
-            // Reset scroll
-            $('div#userscriptOptions div.rmus-options-content').animate({scrollTop: 0}, 50);
-            // Im-/Export ausblenden
-            $('div#rmus-options-imexport').hide();
-
-            $('div#userscriptOptions').fadeIn(250);
-        });
-    },
-
-    hideOptions: function () {
-        $('div#userscriptOptions').fadeOut(250, function () {
-            $('div#userscriptOptionsOverlay').fadeOut(200);
-        });
-    }
-
 };
 RMUS.rightColumn = {
 
@@ -1739,7 +2096,7 @@ RMUS.rightColumn = {
         // Startet das umsortieren des Forums
         initializeForum : function () {
             var html = '';
-            var sortForum = [RMUS.options.options.rightColumn_forum_hideForum_0, RMUS.options.options.rightColumn_forum_hideForum_1, RMUS.options.options.rightColumn_forum_hideForum_2, RMUS.options.options.rightColumn_forum_hideForum_3, RMUS.options.options.rightColumn_forum_hideForum_4];
+            var sortForum = [Options.getOption('rightColumn_forum_hideForum_0'), Options.getOption('rightColumn_forum_hideForum_1'), Options.getOption('rightColumn_forum_hideForum_2'), Options.getOption('rightColumn_forum_hideForum_3'), Options.getOption('rightColumn_forum_hideForum_4')];
             var menuItems	= document.getElementsByClassName('cont_box')[1].children;
             var sections	= ['','','','',''];
 
@@ -1806,7 +2163,7 @@ RMUS.rightColumn = {
 
             if (reloadData && reloadData.length > 0) {
                 $('.cont_box:last').html(reloadData);
-                if (RMUS.options.options.rightColumn_forum_sections == 'checked') RMUS.rightColumn.forum.initializeForum();
+                if (Options.getOption('rightColumn_forum_sections') == 'checked') RMUS.rightColumn.forum.initializeForum();
             }
 
             return false;
@@ -1833,14 +2190,16 @@ RMUS.rightColumn = {
     }
 };
 RMUS.start = function () {
+
+    var Options = new RMUSOptions();
+    var Content = new RMUSContent();
+
     /********************************
     *	Funktionen aktivieren	*
     *********************************/
 
     // Bereich auf der Readmore.de Seite rausfinden
-    var cont = '',
-        action = document.location.search.match(/action=([a-zA-Z]+)/i),
-        getVars = document.location.search.replace(/[?]/g, '').replace(/[&]/g, '=').split('=');
+    var action = document.location.search.match(/action=([a-zA-Z]+)/i);
 
     if (action && action[1]) {
         action = action[1];
@@ -1848,203 +2207,38 @@ RMUS.start = function () {
         action = null;
     }
 
-    $.each(getVars, function (index, value) {
-        if (value == 'cont') {
-            cont = getVars[index+1];
-        }
-    });
-
-    content = {
-        mainpage                : false,
-        profile                 : false,
-        groups_new              : false,
-        groups_group_list       : false,
-        groups_show_group       : false,
-        msg                     : false,
-        news_archive            : false,
-        headlines_overview      : false,
-        www                     : false,
-        widget_create_ticker    : false,
-        guides                  : false,
-        articles                : false,
-        news                    : false,
-        search                  : false,
-        match_overview          : false,
-        db                      : false,
-        coverages               : false,
-        demo_overview_pov       : false,
-        demo_overview_hltv      : false,
-        demo_overview           : false,
-        video_overview          : false,
-        gallery_sets            : false,
-        forum_forum             : false,
-        forum_board             : false,
-        forum_thread            : false,
-        forum_edit              : false,
-        forum_newtopic          : false,
-        community               : false,
-        blog                    : false,
-        poll_archive            : false,
-        rules                   : false,
-        team                    : false,
-        imprint                 : false,
-        userstream              : false,
-        gallery_images          : false,
-        matches                 : false
-    };
-
-    switch (cont) {
-        case '':
-            content.mainpage = true;
-            break;
-        case 'profile':
-            content.profile = true;
-            break;
-        case 'forum/thread':
-            content.forum_thread = true;
-            break;
-        case 'forum/forum':
-            content.forum_forum = true;
-            break;
-        case 'forum/board':
-            content.forum_board = true;
-            break;
-        case 'forum/edit':
-            content.forum_edit = true;
-            break;
-        case 'matches':
-            content.matches = true;
-            break;
-        case 'www':
-            content.www = true;
-            break;
-        case 'userstream':
-            content.userstream = true;
-            break;
-        case 'groups/new':
-            content.groups_new = true;
-            break;
-        case 'groups/group_list':
-            content.groups_group_list = true;
-            break;
-        case 'groups/show_group':
-            content.groups_show_group = true;
-            break;
-        case 'msg':
-            content.msg = true;
-            break;
-        case 'news_archive':
-            content.news_archive = true;
-            break;
-        case 'headlines_overview':
-            content.headlines_overview = true;
-            break;
-        case 'widget/create_ticker':
-            content.widget_create_ticker = true;
-            break;
-        case 'guides':
-            content.guides = true;
-            break;
-        case 'articles':
-            content.articles = true;
-            break;
-        case 'news':
-            content.news = true;
-            break;
-        case 'search':
-            content.search = true;
-            break;
-        case 'match_overview':
-            content.match_overview = true;
-            break;
-        case 'db':
-            content.db = true;
-            break;
-        case 'coverages':
-            content.coverages = true;
-            break;
-        case 'demo_overview_pov':
-            content.demo_overview_pov = true;
-            break;
-        case 'demo_overview_hltv':
-            content.demo_overview_hltv = true;
-            break;
-        case 'demo_overview':
-            content.demo_overview = true;
-            break;
-        case 'video_overview':
-            content.video_overview = true;
-            break;
-        case 'gallery_sets':
-            content.gallery_sets = true;
-            break;
-        case 'forum/newtopic':
-            content.forum_newtopic = true;
-            break;
-        case 'community':
-            content.community = true;
-            break;
-        case 'blog':
-            content.blog = true;
-            break;
-        case 'poll_archive':
-            content.poll_archive = true;
-            break;
-        case 'rules':
-            content.rules = true;
-            break;
-        case 'team':
-            content.team = true;
-            break;
-        case 'imprint':
-            content.imprint = true;
-            break;
-        case 'gallery_images':
-            content.gallery_images = true;
-            break;
-        default:
-            content.mainpage = true;
-            break;
-    }
-
-    // Optionen laden und Link in der Usereiste einfügen
-    $('body').append('<style type="text/css">div#userscriptOptionsOverlay { position: absolute; top: 0; left: 0; width: 100%; z-index: 1337; display: none; background-color: #fff; opacity: 0.8; } #userscriptOptions.rmus-options { display: none; box-shadow: 0px 0px 6px 1px #80D4EE; position: absolute; width: 600px; left: 50%; margin-left: -300px; top: 75px; border: 2px solid #00aeed; border-radius: 3px; background-color: #fff; z-index: 1338; } #userscriptOptions.rmus-options-wrapper { position: relative; } #userscriptOptions .rmus-options-header { border-bottom: 2px solid #e2e2e2; padding: 10px; color: #fff; background: #46c1ea; background: -moz-linear-gradient(top, #46c1ea 0%, #00aeed 100%); background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#46c1ea), color-stop(100%,#00aeed)); background: -webkit-linear-gradient(top, #46c1ea 0%,#00aeed 100%); background: -o-linear-gradient(top, #46c1ea 0%,#00aeed 100%); background: -ms-linear-gradient(top, #46c1ea 0%,#00aeed 100%); background: linear-gradient(to bottom, #46c1ea 0%,#00aeed 100%); } #userscriptOptions .rmus-options-header h1 { font-size: 16px; text-transform: uppercase; float: left; text-shadow: 1px 1px #A0A0A0; color: #fff; } #userscriptOptions .rmus-options-header a { color: #fff; border-bottom: 1px dotted #fff; } #userscriptOptions .rmus-options-header a:hover { text-decoration: none; } #userscriptOptions .rmus-options-header .rmus-links { float: right; margin-top: 2px; } #userscriptOptions .rmus-options-header .rmus-links .rmus-version { font-weight: bold; } #userscriptOptions .rmus-options-content { overflow-y: scroll; height: 592px; } #userscriptOptions .rmus-options-content table { border: none; width: 100%; margin-top: -1px; } #userscriptOptions .rmus-options-content table .menuparent { background-color: #fff; padding: 0; } #userscriptOptions .rmus-options-content table .menufirstchild { display: none; background-color: #f1f1f1; margin: 0; padding: 0; } #userscriptOptions .rmus-options-content table .menusecondchild { display: none; background-color: #e2e2e2; margin: 0; padding: 0; } #userscriptOptions .rmus-options-content table .headline td { color: #7A7A7A; font-size: 14px; margin: 0px; padding: 5px 0 5px 39px; width: 100%; border-top: 1px solid #ccc; border-bottom: 1px solid #ccc; background: #f2f5f6; background: -moz-linear-gradient(top, #f2f5f6 0%, #e3eaed 100%); background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f2f5f6), color-stop(100%,#e3eaed)); background: -webkit-linear-gradient(top, #f2f5f6 0%,#e3eaed 100%); background: -o-linear-gradient(top, #f2f5f6 0%,#e3eaed 100%); background: -ms-linear-gradient(top, #f2f5f6 0%,#e3eaed 100%); background: linear-gradient(to bottom, #f2f5f6 0%,#e3eaed 100%); } #userscriptOptions .rmus-options-footer { text-align: right; padding: 8px 10px; border-top: 1px solid #ccc; background: #ffffff; background: -moz-linear-gradient(top, #ffffff 0%, #ededed 100%); background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#ededed)); background: -webkit-linear-gradient(top, #ffffff 0%,#ededed 100%); background: -o-linear-gradient(top, #ffffff 0%,#ededed 100%); background: -ms-linear-gradient(top, #ffffff 0%,#ededed 100%); background: linear-gradient(to bottom, #ffffff 0%,#ededed 100%); } #userscriptOptions .rmus-options-footer #rmus-options-imexport { clear: both; text-align: left; margin-top: 10px; display: none; } #userscriptOptions .rmus-options-footer #rmus-options-imexport .rmus-options-imexport-help { font-size: 10px; } #userscriptOptions .rmus-options-footer #rmus-options-imexport textarea { width: 568px; font-family: Verdana; font-size: 10px; padding: 5px; margin: 5px 0 3px; height: 21px; } #userscriptOptions input[type=checkbox], #userscriptOptions input[type=select], #userscriptOptions input[type=text] { margin: 0; padding: 0; } .btn-rm { background-color: #fff; border: 1px solid #ccccce; color: #222222; font-family: Verdana; font-size: 10px; min-height: 14px; padding: 4px 8px; } .btn-rm.primary { color: #fff; border-color: #00A4E4; background: #00bded; background: -moz-linear-gradient(top, #00bded 0%, #00aeed 100%); background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#00bded), color-stop(100%,#00aeed)); background: -webkit-linear-gradient(top, #00bded 0%,#00aeed 100%); background: -o-linear-gradient(top, #00bded 0%,#00aeed 100%); background: -ms-linear-gradient(top, #00bded 0%,#00aeed 100%); background: linear-gradient(to bottom, #00bded 0%,#00aeed 100%); }</style><div id="userscriptOptions" class="rmus-options"><div class="rmus-options-wrapper"><div class="rmus-options-header"><h1>RM Userscript - Optionen</h1><div class="rmus-links"><a href="index.php?cont=forum/thread&threadid=111239&pagenum=1">Thread</a> | Version <span class="rmus-version">2.1.8</span></div><div style="clear: both"></div></div><div class="rmus-options-content"><table><tr class="headline"><td colspan="4">Funktionen</td></tr><tr><td style="width:30px"></td><td></td><td style="width:180px"></td><td style="width:25px"></td></tr><tr class="menuparent"><td align="center"><img id="toggle_sub_middleColumn_forum_reloadPosts_readNewPosts" src="http://readmore.thextor.de/userscript/img/plus_alt_16x16.png" alt="more" title="Weitere Optionen"></td><td align="left">Neue Forenbeitr&auml;ge im Hintergrund nachladen</td><td align="right"><input type="checkbox" class="userscriptOptions" name="middleColumn_forum_reloadPosts_readNewPosts"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Neue Beitr&auml;ge im Readmore.de-Froum werden automatisch nachgeladen. Ein Refresh des Threads entf&auml;llt somit."></td></tr><tr class="menufirstchild sub_middleColumn_forum_reloadPosts_readNewPosts"><td align="center"><img id="toggle_sub_middleColumn_forum_reloadPosts_endlessPage" src="http://readmore.thextor.de/userscript/img/plus_alt_16x16.png" alt="more" title="Weitere Optionen"></td><td align="left">Seite endlos erweitern</td><td align="right"><input type="checkbox" class="userscriptOptions" name="middleColumn_forum_reloadPosts_endlessPage"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Neue Posts werden einfach eingeblendet. Es muss also nicht mehr auf eine neue Seite gewechselt werden."></td></tr><tr class="menusecondchild sub_middleColumn_forum_reloadPosts_endlessPage"><td align="center"></td><td align="left">Automatisch zu neuen Posts scrollen/springen</td><td align="right"><input type="checkbox" class="userscriptOptions" name="middleColumn_forum_reloadPosts_jumpToNewPosts"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Springt zu neuen posts."></td></tr><tr class="menusecondchild sub_middleColumn_forum_reloadPosts_endlessPage"><td align="center"></td><td align="left">Zeit zwischen zwei Spr&uuml;ngen</td><td align="right"><input type="text" class="userscriptOptions" name="middleColumn_forum_reloadPosts_jumpToNewPosts_waitUntilNextJump" value="10"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Zeit in Sekunden, die zwischen 2 Spr&uuml;ngen mindestens vergehen muss."></td></tr><tr class="menufirstchild sub_middleColumn_forum_reloadPosts_readNewPosts"><td align="center"><img id="toggle_sub_middleColumn_forum_reloadPosts_markNewPosts" src="http://readmore.thextor.de/userscript/img/plus_alt_16x16.png" alt="more" title="Weitere Optionen"></td><td align="left">Neue Eintr&auml;ge farblich markieren</td><td align="right"><input type="checkbox" class="userscriptOptions" name="middleColumn_forum_reloadPosts_markNewPosts"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Die neu eingetragenen Posts werden markiert."></td></tr><tr class="menusecondchild sub_middleColumn_forum_reloadPosts_markNewPosts"><td align="center"></td><td align="left">Farbe ausw&auml;hlen (HEX-Code)</td><td align="right"><input type="text" class="userscriptOptions" name="middleColumn_forum_reloadPosts_markPostColor" value="#EEEEEE"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Bitte eine HEX Zahl eingeben. Beispiel: #FFEE11"></td></tr><tr class="menusecondchild sub_middleColumn_forum_reloadPosts_markNewPosts"><td align="center"></td><td align="left">Ungelesene Posts im Titel / Tab anzeigen</td><td align="right"><input type="checkbox" class="userscriptOptions" name="middleColumn_forum_reloadPosts_showNewPostsTitle"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Die Anzahl der Ungelesenen Posts im Tab anzeigen."></td></tr><tr class="menusecondchild sub_middleColumn_forum_reloadPosts_markNewPosts"><td align="center"></td><td align="left">Favicon ver&auml;ndern</td><td align="right"><input type="checkbox" class="userscriptOptions" name="middleColumn_forum_reloadPosts_changeFavicon"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Bei ungelesenen Posts das Favicon ver&auml;ndern."></td></tr><tr class="menufirstchild sub_middleColumn_forum_reloadPosts_readNewPosts"><td align="center"></td><td align="left">Hinweis bei neuen Seiten einblenden</td><td align="right"><input type="checkbox" class="userscriptOptions" name="middleColumn_forum_reloadPosts_checkForNewPage"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Achtung: Funktioniert nur, wenn Seite endlos erweitern deaktiv ist. Weist auf eine neue Seite hin."></td></tr><tr class="menufirstchild sub_middleColumn_forum_reloadPosts_readNewPosts"><td align="center"></td><td align="left">Zeit zwischen dem Nachladen (Sekunden)</td><td align="right"><input type="text" class="userscriptOptions" name="middleColumn_forum_reloadPosts_timeToWait" value="15"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Sekunden die zwischen dem Nachladen gewartet werden muss."></td></tr><tr class="menuparent"><td align="center"><img id="toggle_sub_miscellaneous_reloadMessages" src="http://readmore.thextor.de/userscript/img/plus_alt_16x16.png" alt="more" title="Weitere Optionen"></td><td align="left">Neue Nachrichten im Hintergrund nachladen</td><td align="right"><input type="checkbox" class="userscriptOptions" name="miscellaneous_reloadMessages"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Neue Nachrichten (PM) werden nachgeladen. Ein Refresh der Seite entf&auml;llt somit."></td></tr><tr class="menufirstchild sub_miscellaneous_reloadMessages"><td align="center"></td><td align="left">Desktop-Benachrichtigungen aktivieren</td><td align="right"><input type="checkbox" class="userscriptOptions" id="miscellaneous_reloadMessages_desktopNotifications" name="miscellaneous_reloadMessages_desktopNotifications"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Deskop-Benachrichtigungen anzeigen sobald es neue Nachrichten gibt. Dies wird derzeit nicht von allen Browsern unterstützt (caniuse.com/notifications)."></td></tr><tr class="menufirstchild sub_miscellaneous_reloadMessages"><td align="center"></td><td align="left">Alert-Box bei neuen Nachrichten anzeigen</td><td align="right"><input type="checkbox" class="userscriptOptions" name="miscellaneous_reloadMessages_alertBox"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Benachrichtigungen sobald es neue Nachrichten gibt."></td></tr><tr class="menufirstchild sub_miscellaneous_reloadMessages"><td align="center"></td><td align="left">Sound bei neuen Nachrichten abspielen</td><td align="right"><input type="checkbox" class="userscriptOptions" id="notification_playsound_cb" name="miscellaneous_reloadMessages_playSound"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Deskop-Benachrichtigungen sobald es neue Nachrichten gibt."></td></tr><tr class="menufirstchild sub_miscellaneous_reloadMessages"><td align="center"></td><td align="left">URL f&uuml;r die Audiodatei</td><td align="right"><input type="text" class="userscriptOptions" id="miscellaneous_reloadMessages_playSoundUrl" name="miscellaneous_reloadMessages_playSoundUrl" value="http://"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Direkt-Url für den Notification Sound"></td></tr><tr class="menuparent"><td align="center"><img id="toggle_sub_miscellaneous_ignoreUser" src="http://readmore.thextor.de/userscript/img/plus_alt_16x16.png" alt="more" title="Weitere Optionen"></td><td align="left">Readmore User ignorieren</td><td align="right"><input type="checkbox" class="userscriptOptions" name="miscellaneous_ignoreUser"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Blendet Foreneintr&auml;ge, Tickercomments und G&auml;stebucheintr&auml;ge aus."></td></tr><tr class="menufirstchild sub_miscellaneous_ignoreUser"><td align="center"></td><td align="left">Usernamen (kommasepariert)</td><td align="right"><input type="text" class="userscriptOptions" id="miscellaneous_reloadMessages_playSoundUrl" name="miscellaneous_ignoreUser_usernames" value=" "></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Beispielsweise: DanielaKatzenberger,ScriptKiddy99,randomreadmoremod. Gross und Kleinschreibung beachten!"></td></tr><tr class="menuparent"><td align="center"></td><td align="left">Beitr&auml;ge ohne Reload senden</td><td align="right"><input type="checkbox" class="userscriptOptions" name="middleColumn_forum_postPerAjax"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Beitr&auml;ge werden im Hintergrund gepostet. Ein manueller Refresh der Seite entfällt."></td></tr><tr class="menuparent"><td align="center"></td><td align="left">Editieren ohne Reload</td><td align="right"><input type="checkbox" class="userscriptOptions" name="middleColumn_forum_editPost"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Beitr&auml;ge werden im Hintergrund Editiert. Ein manueller Refresh der Seite entfällt."></td></tr><tr class="menuparent"><td align="center"></td><td align="left">Streams aktualisieren</td><td align="right"><input type="checkbox" class="userscriptOptions" name="leftColumn_streams_reloadStreams"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Aktualisiert die Streams im Hintergund."></td></tr><tr class="menuparent"><td align="center"></td><td align="left">Matchticker aktualisieren</td><td align="right"><input type="checkbox" class="userscriptOptions" name="rightColumn_ticker_reloadTicker"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Aktualisiert den Matchticker im Hintergund."></td></tr><tr class="menuparent"><td align="center"></td><td align="left">Forennavigation aktualisieren</td><td align="right"><input type="checkbox" class="userscriptOptions" name="rightColumn_forum_reloadForum"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Aktualisiert die Navigation des Forums (unten rechts) im Hintergund."></td></tr><tr class="menuparent"><td align="center"></td><td align="left">Vorschaufunktion aktivieren</td><td align="right"><input type="checkbox" class="userscriptOptions" name="middleColumn_forum_preview"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Vorschau f&uuml;r neue Beitr&auml;ge einbinden."></td></tr><tr class="menuparent"><td align="center"><img id="toggle_sub_middleColumn_forum_scrollForNewPage" src="http://readmore.thextor.de/userscript/img/plus_alt_16x16.png" alt="more" title="Weitere Optionen"></td><td align="left">Scrollen bis zum Seitenende l&auml;dt die N&auml;chste</td><td align="right"><input type="checkbox" class="userscriptOptions" name="middleColumn_forum_scrollForNewPage"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Beim ereichen des letzten Posts ggf. die n&auml;chste Seite nachladen."></td></tr><tr class="menufirstchild sub_middleColumn_forum_scrollForNewPage"><td align="center"></td><td align="left">Postbox nach oben verschieben</td><td align="right"><input type="checkbox" class="userscriptOptions" name="middleColumn_forum_hideForum_editboxTop"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Kopiert die Box zum Posten an den Anfang der Seite."></td></tr><tr><td style="width:30px"></td><td></td><td style="width:180px"></td><td style="width:25px"></td></tr><tr class="headline"><td colspan="4">Optische Ver&auml;nderungen</td></tr><tr><td style="width:30px"></td><td></td><td style="width:180px"></td><td style="width:25px"></td></tr><tr class="menuparent"><td align="center"><img id="toggle_sub_rightColumn_forum_hideForum" src="http://readmore.thextor.de/userscript/img/plus_alt_16x16.png" alt="more" title="Weitere Optionen"></td><td align="left">Forum ausblenden und umsortieren</td><td align="right"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Das Forum ausblenden oder umsortieren."></td></tr><tr class="menufirstchild sub_rightColumn_forum_hideForum"><td align="center"></td><td align="left">Komplett ausblenden</td><td align="right"><input type="checkbox" class="userscriptOptions" name="rightColumn_forum_hideForum"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Das komplette Forum ausblenden."></td></tr><tr class="menufirstchild sub_rightColumn_forum_hideForum"><td align="center"><img id="toggle_sub_rightColumn_forum_sections" src="http://readmore.thextor.de/userscript/img/plus_alt_16x16.png" alt="more" title="Weitere Optionen"></td><td align="left">Foren umsortieren</td><td align="right"><input type="checkbox" class="userscriptOptions" name="rightColumn_forum_sections"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Ermöglicht das Umsortieren des Forums."></td></tr><tr class="menusecondchild sub_rightColumn_forum_sections"><td align="center"></td><td align="left">An erster Stelle</td><td align="right"><select size="1" class="userscriptOptions" name="rightColumn_forum_hideForum_0"><option value="">Nichts anzeigen</option><option value="featuredthreads">Featured Threads</option><option value="esportforen">eSport Foren</option><option value="technik">Technik</option><option value="offtopicforen">Offtopic Foren</option><option value="spiele">Spiele</option></select></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Erste Stelle bei der Anzeige der Foren."></td></tr><tr class="menusecondchild sub_rightColumn_forum_sections"><td align="center"></td><td align="left">An zweiter Stelle</td><td align="right"><select size="1" class="userscriptOptions" name="rightColumn_forum_hideForum_1"><option value="">Nichts anzeigen</option><option value="featuredthreads">Featured Threads</option><option value="esportforen">eSport Foren</option><option value="technik">Technik</option><option value="offtopicforen">Offtopic Foren</option><option value="spiele">Spiele</option></select></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Zweite Stelle bei der Anzeige der Foren."></td></tr><tr class="menusecondchild sub_rightColumn_forum_sections"><td align="center"></td><td align="left">An dritter Stelle</td><td align="right"><select size="1" class="userscriptOptions" name="rightColumn_forum_hideForum_2"><option value="">Nichts anzeigen</option><option value="featuredthreads">Featured Threads</option><option value="esportforen">eSport Foren</option><option value="technik">Technik</option><option value="offtopicforen">Offtopic Foren</option><option value="spiele">Spiele</option></select></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Dritte Stelle bei der Anzeige der Foren."></td></tr><tr class="menusecondchild sub_rightColumn_forum_sections"><td align="center"></td><td align="left">An vierter Stelle</td><td align="right"><select size="1" class="userscriptOptions" name="rightColumn_forum_hideForum_3"><option value="">Nichts anzeigen</option><option value="featuredthreads">Featured Threads</option><option value="esportforen">eSport Foren</option><option value="technik">Technik</option><option value="offtopicforen">Offtopic Foren</option><option value="spiele">Spiele</option></select></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Viere Stelle bei der Anzeige der Foren."></td></tr><tr class="menusecondchild sub_rightColumn_forum_sections"><td align="center"></td><td align="left">An f&uuml;nfter Stelle</td><td align="right"><select size="1" class="userscriptOptions" name="rightColumn_forum_hideForum_4"><option value="">Nichts anzeigen</option><option value="featuredthreads">Featured Threads</option><option value="esportforen">eSport Foren</option><option value="technik">Technik</option><option value="offtopicforen">Offtopic Foren</option><option value="spiele">Spiele</option></select></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="F&uuml;nfte Stelle bei der Anzeige der Foren."></td></tr><tr class="menuparent"><td align="center"><img id="toggle_sub_rightColumn_headlines_hideHeadlines" src="http://readmore.thextor.de/userscript/img/plus_alt_16x16.png" alt="more" title="Weitere Optionen"></td><td align="left">Schlagzeilen ausblenden</td><td align="right"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Bestimmte oder alle Schlagzeilen ausblenden"></td></tr><tr class="menufirstchild sub_rightColumn_headlines_hideHeadlines"><td align="center"></td><td align="left">Alle ausblenden</td><td align="right"><input type="checkbox" class="userscriptOptions" name="rightColumn_headlines_hideHeadlines"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Blendet alle Schlagzeilen aus."></td></tr><tr class="menufirstchild sub_rightColumn_headlines_hideHeadlines"><td align="center"></td><td align="left">Counter-Strike ausblenden</td><td align="right"><input type="checkbox" class="userscriptOptions" name="rightColumn_headlines_hideCounterstrike"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Blendet die Counter-Strike Schlagzeilen aus."></td></tr><tr class="menufirstchild sub_rightColumn_headlines_hideHeadlines"><td align="center"></td><td align="left">Starcraft ausblenden</td><td align="right"><input type="checkbox" class="userscriptOptions" name="rightColumn_headlines_hideStarcraft"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Blendet die Starcraft Schlagzeilen aus."></td></tr><tr class="menufirstchild sub_rightColumn_headlines_hideHeadlines"><td align="center"></td><td align="left">DotA ausblenden</td><td align="right"><input type="checkbox" class="userscriptOptions" name="rightColumn_headlines_hideDefenseOfTheAncients"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Blendet die DotA Schlagzeilen aus."></td></tr><tr class="menufirstchild sub_rightColumn_headlines_hideHeadlines"><td align="center"></td><td align="left">League of Legends ausblenden</td><td align="right"><input type="checkbox" class="userscriptOptions" name="rightColumn_headlines_hideLeagueOfLegends"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Blendet die League of Legends Schlagzeilen aus."></td></tr><tr class="menufirstchild sub_rightColumn_headlines_hideHeadlines"><td align="center"></td><td align="left">Warcraft 3 ausblenden</td><td align="right"><input type="checkbox" class="userscriptOptions" name="rightColumn_headlines_hideWarcraft3"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Blendet die Warcraft 3 Schlagzeilen aus."></td></tr><tr class="menufirstchild sub_rightColumn_headlines_hideHeadlines"><td align="center"></td><td align="left">Sonstiges ausblenden</td><td align="right"><input type="checkbox" class="userscriptOptions" name="rightColumn_headlines_hideSonstiges"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Blendet die Sonstigen Schlagzeilen aus."></td></tr><tr class="menuparent"><td align="center"></td><td align="left">Alle Streams ausblenden</td><td align="right"><input type="checkbox" class="userscriptOptions" name="leftColumn_streams_hideStreams"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Alle Streams ausblenden"></td></tr><tr class="menuparent"><td align="center"></td><td align="left">Fixierte Toolbar</td><td align="right"><input type="checkbox" class="userscriptOptions" name="miscellaneous_fixedToolbar"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Die Toolbar wird am oberen Fensterrand fixiert."></td></tr><tr class="menuparent"><td align="center"></td><td align="left">Ticker ausblenden</td><td align="right"><input type="checkbox" class="userscriptOptions" name="rightColumn_ticker_hideTicker"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Der Ticker wird komplett ausgeblendet."></td></tr><tr class="menuparent"><td align="center"></td><td align="left">Wer? Wohin? Warum? ausblenden</td><td align="right"><input type="checkbox" class="userscriptOptions" name="leftColumn_www_hideWww"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Blendet die komplette Wer? Wohin? Warum? Sektion aus."></td></tr><tr class="menuparent"><td align="center"></td><td align="left">Bilderlinks umwandeln</td><td align="right"><input type="checkbox" class="userscriptOptions" name="miscellaneous_convertImageLinks"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Wandelt Bilderlinks automatisch in Bilder um."></td></tr><tr><td style="width:30px"></td><td></td><td style="width:180px"></td><td style="width:25px"></td></tr><tr class="headline"><td colspan="4">Sonstiges</td></tr><tr><td style="width:30px"></td><td></td><td style="width:180px"></td><td style="width:25px"></td></tr><tr class="menuparent"><td align="center"></td><td align="left">Notizen</td><td align="right"><input type="checkbox" class="userscriptOptions" name="miscellaneous_note"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Ermöglicht es für jeden Forenuser eine Notiz zu hinterlegen."></td></tr><tr class="menuparent"><td align="center"></td><td align="left">Titel / Tab umsortieren</td><td align="right"><input type="checkbox" class="userscriptOptions" name="miscellaneous_reSortTitle"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Wenn diese Option aktiviert ist, wird der Threadname an den Anfang des Titels gestellt. Offene Tabs können so besser den verschiedenen Threads zugeordnet werden."></td></tr><tr class="menuparent"><td align="center"></td><td align="left">Readmore Extrabuttons</td><td align="right"><input type="checkbox" class="userscriptOptions" name="miscellaneous_extraButtons"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Mehr Buttons um einen Post im Forum ansehnlicher zu gestalten."></td></tr><tr class="menuparent"><td align="center"></td><td align="left">Youtubeplayer ersetzen</td><td align="right"><input type="checkbox" class="userscriptOptions" name="miscellaneous_convertYoutube"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Ersetzt den Youtubeplayer durch einen einfachen Link."></td></tr><tr class="menuparent"><td align="center"></td><td align="left">Avataranimationen anhalten</td><td align="right"><input type="checkbox" class="userscriptOptions" name="miscellaneous_stopAvatarAnimation"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Die Animation von Avataren stoppen."></td></tr><tr class="menuparent"><td align="center"></td><td align="left">Button zum Hochscrollen anzeigen</td><td align="right"><input type="checkbox" class="userscriptOptions" name="miscellaneous_buttonScrollUp"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Im Forum wird ein Icon eingefügt, beim betätigen wird zum ersten Post gesprungen."></td></tr><tr class="menuparent"><td align="center"></td><td align="left">Button zum Runterscrollen anzeigen</td><td align="right"><input type="checkbox" class="userscriptOptions" name="miscellaneous_buttonScrollDown"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Im Forum wird ein Icon eingefügt, beim betätigen wird zum letzten Post gesprungen."></td></tr><tr class="menuparent"><td align="center"></td><td align="left">In der Suche zum letzten Post springen</td><td align="right"><input type="checkbox" class="userscriptOptions" name="middleColumn_search_jump_to_last_page"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Hinter den Suchergebnissen wird ein Icon eingefügt, beim betätigen wird zum letzten Post gesprungen."></td></tr><tr class="menuparent"><td align="center"></td><td align="left">Last-Page-Pfeil springt zum letzten Post</td><td align="right"><input type="checkbox" class="userscriptOptions" name="miscellaneous_lastPageJumpToLastPost"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Nach dem Bet&auml;tigen des Pfeils (ganz Recht im Forum, hinter den Threads) wird zum aktuellsten Post gesprungen."></td></tr><tr><td style="width:30px"></td><td></td><td style="width:180px"></td><td style="width:25px"></td></tr></table></div><div class="rmus-options-footer"><div style="float: left"><input class="btn-rm imexp" type="button" id="importUserscriptOptions" value="Import">&nbsp;<input class="btn-rm imexp" type="button" id="exportUserscriptOptions" value="Export"></div><input class="btn-rm" type="button" id="closeUserscriptOptions" value="Abbrechen">&nbsp;<input class="btn-rm primary" type="button" value="Speichern" id="saveUserscriptOptions"><div id="rmus-options-imexport"><div class="rmus-options-imexport-help"></div><textarea class="btn-rm"></textarea><input class="btn-rm primary" style="margin-right: 4px" type="button" value="Importieren" id="importUserscriptOptionsBtn"><input class="btn-rm" type="button" value="Schlie&szlig;en" id="imexportUserscriptOptionsCloseBtn"></div></div></div></div><div id="userscriptOptionsOverlay"></div>');
-    RMUS.options.readOptions();
-    RMUS.options.loadOptions();
-    RMUS.options.insertOptionsLink();
-
     // BC: Einmal speichern, damit auch die nicht-selektierten Checkboxen gespeichert werden.
     if (!localStorage.getItem('bcOptionsSaved')) {
-        RMUS.options.saveOptions();
+        Options.saveOptions();
         localStorage.setItem('bcOptionsSaved', true);
     }
 
-    if (RMUS.options.options.miscellaneous_fixedToolbar) {
-        RMUS.miscellaneous.createFixedToolbar();	
+    if (Options.getOption('miscellaneous_fixedToolbar')) {
+        RMUS.miscellaneous.createFixedToolbar();
     }
 
     // WWW, Streams, Galerie, Ergebnisticker, Schlagzeilen und Forum angezeigt
-    if (!content.profile && !content.guides) {
+    if (!Content.getMultipleContent(['profile', 'guides'], 'OR')) {
         // WWW ausblenden
-        if (RMUS.options.options.leftColumn_www_hideWww === 'checked') RMUS.leftColumn.www.hideWww();
+        if (Options.getOption('leftColumn_www_hideWww') === 'checked') RMUS.leftColumn.www.hideWww();
 
         // Streams ausblenden
-        if (RMUS.options.options.leftColumn_streams_hideStreams === 'checked') {
+        if (Options.getOption('leftColumn_streams_hideStreams') === 'checked') {
             RMUS.leftColumn.streams.hideStreams();
-        } 
+        }
 
         // Ticker ausblenden
-        if (RMUS.options.options.rightColumn_ticker_hideTicker === 'checked') RMUS.rightColumn.ticker.hideTicker();
+        if (Options.getOption('rightColumn_ticker_hideTicker') === 'checked') RMUS.rightColumn.ticker.hideTicker();
 
         // Schlagzeilen ausblenden
-        if (RMUS.options.options.rightColumn_headlines_hideHeadlines === 'checked') RMUS.rightColumn.headlines.hideHeadlines();  // Alle
+        if (Options.getOption('rightColumn_headlines_hideHeadlines') === 'checked') RMUS.rightColumn.headlines.hideHeadlines();  // Alle
         else{	// Individuell
-            if (RMUS.options.options.rightColumn_headlines_hideCounterstrike === 'checked') RMUS.rightColumn.headlines.hideCounterstrike();
-            if (RMUS.options.options.rightColumn_headlines_hideStarcraft === 'checked') RMUS.rightColumn.headlines.hideStarcraft();
-            if (RMUS.options.options.rightColumn_headlines_hideDefenseOfTheAncients === 'checked') RMUS.rightColumn.headlines.hideDefenseOfTheAncients();
-            if (RMUS.options.options.rightColumn_headlines_hideLeagueOfLegends === 'checked') RMUS.rightColumn.headlines.hideLeagueOfLegends();
-            if (RMUS.options.options.rightColumn_headlines_hideWarcraft3 === 'checked') RMUS.rightColumn.headlines.hideWarcraft3();
-            if (RMUS.options.options.rightColumn_headlines_hideSonstiges === 'checked') RMUS.rightColumn.headlines.hideSonstiges();
+            if (Options.getOption('rightColumn_headlines_hideCounterstrike') === 'checked') RMUS.rightColumn.headlines.hideCounterstrike();
+            if (Options.getOption('rightColumn_headlines_hideStarcraft') === 'checked') RMUS.rightColumn.headlines.hideStarcraft();
+            if (Options.getOption('rightColumn_headlines_hideDefenseOfTheAncients') === 'checked') RMUS.rightColumn.headlines.hideDefenseOfTheAncients();
+            if (Options.getOption('rightColumn_headlines_hideLeagueOfLegends') === 'checked') RMUS.rightColumn.headlines.hideLeagueOfLegends();
+            if (Options.getOption('rightColumn_headlines_hideWarcraft3') === 'checked') RMUS.rightColumn.headlines.hideWarcraft3();
+            if (Options.getOption('rightColumn_headlines_hideSonstiges') === 'checked') RMUS.rightColumn.headlines.hideSonstiges();
 
             // Fixt die Größe des Bildes
             $('#nav_schlagzeilen img[alt=activity]').css('height', '11px');
@@ -2052,15 +2246,15 @@ RMUS.start = function () {
         }
 
         // Forum ausblenden
-        if (RMUS.options.options.rightColumn_forum_hideForum === 'checked')	RMUS.rightColumn.forum.hideForum();	// Komplett ausblenden
+        if (Options.getOption('rightColumn_forum_hideForum') === 'checked')	RMUS.rightColumn.forum.hideForum();	// Komplett ausblenden
         else{	// Individuell
-            if (RMUS.options.options.rightColumn_forum_sections === 'checked') {
+            if (Options.getOption('rightColumn_forum_sections') === 'checked') {
                 RMUS.rightColumn.forum.initializeForum();
             }
         }
 
-        // Neuladen der Forannavigation beziehungsweise der Streams oder Ticker	
-        if (RMUS.options.options.rightColumn_forum_reloadForum === 'checked' || RMUS.options.options.leftColumn_streams_reloadStreams === 'checked' || RMUS.options.options.rightColumn_ticker_reloadTicker === 'checked'){
+        // Neuladen der Forannavigation beziehungsweise der Streams oder Ticker
+        if (Options.getOption('rightColumn_forum_reloadForum') === 'checked' || Options.getOption('leftColumn_streams_reloadStreams') === 'checked' || Options.getOption('rightColumn_ticker_reloadTicker') === 'checked'){
             RMUS.miscellaneous.reloadMainpageData.readPage();
         }
 
@@ -2070,40 +2264,40 @@ RMUS.start = function () {
     }
 
         // Sprung zur letzten Seite in den Suchergebnissen
-        if (content.search){
-            if (RMUS.options.options.middleColumn_search_jump_to_last_page === 'checked') RMUS.middleColumn.searchJumpToLastpage.displayLink();
+        if (Content.getContent('search')){
+            if (Options.getOption('middleColumn_search_jump_to_last_page') === 'checked') RMUS.middleColumn.searchJumpToLastpage.displayLink();
         }
 
     // Nur im Forum (Threadansicht) aktivieren
-    if (content.forum_thread) {
+    if (Content.getContent('forum_thread')) {
 
         // Link zum Thread und Seite herausfinden
         RMUS.middleColumn.forum.readThreadlink();
         RMUS.middleColumn.forum.readPage();
 
         // Wenn Lastpage gesetzt ist, zum letzten Post springen
-        if (RMUS.options.options.miscellaneous_lastPageJumpToLastPost === 'checked') RMUS.miscellaneous.lastPageJumpToLastPost();
+        if (Options.getOption('miscellaneous_lastPageJumpToLastPost') === 'checked') RMUS.miscellaneous.lastPageJumpToLastPost();
 
         // Knopf zum hochscrollen
-        if (RMUS.options.options.miscellaneous_buttonScrollUp === 'checked') RMUS.miscellaneous.buttonScrollUp();
+        if (Options.getOption('miscellaneous_buttonScrollUp') === 'checked') RMUS.miscellaneous.buttonScrollUp();
 
         // Knopf zum runterscrollen
-        if (RMUS.options.options.miscellaneous_buttonScrollDown === 'checked') RMUS.miscellaneous.buttonScrollDown();
+        if (Options.getOption('miscellaneous_buttonScrollDown') === 'checked') RMUS.miscellaneous.buttonScrollDown();
 
         // Titel umsortieren
-        if (RMUS.options.options.miscellaneous_reSortTitle === 'checked') RMUS.miscellaneous.reSortTitle();
-        
+        if (Options.getOption('miscellaneous_reSortTitle') === 'checked') RMUS.miscellaneous.reSortTitle();
+
         // Bilderlinks umwandeln
-        if (RMUS.options.options.miscellaneous_convertImageLinks === 'checked') RMUS.miscellaneous.convertImageLinks();
-        
+        if (Options.getOption('miscellaneous_convertImageLinks') === 'checked') RMUS.miscellaneous.convertImageLinks();
+
         // Vorschau
-        if (RMUS.options.options.middleColumn_forum_preview === 'checked') {
+        if (Options.getOption('middleColumn_forum_preview') === 'checked') {
             RMUS.middleColumn.forum.preview.insertPreviewHtml();
             $('#triggerPreview').click(RMUS.middleColumn.forum.preview.triggerPreview);
         }
 
         // Posten im Hintergrund
-        if (RMUS.options.options.middleColumn_forum_postPerAjax === 'checked') {
+        if (Options.getOption('middleColumn_forum_postPerAjax') === 'checked') {
             $('input[name=submit_thread]').click(function (event) {
                 event.preventDefault();
                 RMUS.middleColumn.forum.postPerAjax();
@@ -2111,62 +2305,62 @@ RMUS.start = function () {
         }
 
         // Posts nachladen
-        if (RMUS.options.options.middleColumn_forum_reloadPosts_readNewPosts === 'checked') {
+        if (Options.getOption('middleColumn_forum_reloadPosts_readNewPosts') === 'checked') {
             RMUS.middleColumn.forum.reloadPosts.readPostcount();
 
-            // Ungelesene Posts markieren		
-            if (RMUS.options.options.middleColumn_forum_reloadPosts_markNewPosts === 'checked') {
+            // Ungelesene Posts markieren
+            if (Options.getOption('middleColumn_forum_reloadPosts_markNewPosts') === 'checked') {
                 // Farbe zum markieren setzen
-                if (RMUS.options.options.middleColumn_forum_reloadPosts_markPostColor &&
-                    RMUS.options.options.middleColumn_forum_reloadPosts_markPostColor.length){
+                if (Options.getOption('middleColumn_forum_reloadPosts_markPostColor') &&
+                    Options.getOption('middleColumn_forum_reloadPosts_markPostColor').length){
 
                     RMUS.middleColumn.forum.reloadPosts.setMarkPostColor();
                 }
             }
 
-            if (RMUS.options.options.middleColumn_forum_reloadPosts_jumpToNewPosts === 'checked' && RMUS.options.options.middleColumn_forum_reloadPosts_endlessPage === 'checked'){
+            if (Options.getOption('options.middleColumn_forum_reloadPosts_jumpToNewPosts') === 'checked' && Options.getOption('middleColumn_forum_reloadPosts_endlessPage') === 'checked'){
                 $('a.bookmark').after('<input style="margin-left: 2px;" type="checkbox" id="userscript_enable_jump" name="userscript_enable_jump">');
                 RMUS.middleColumn.forum.reloadPosts.jumpToNewPosts.setWaitUntilNextJump();
                 window.setInterval(function () {
                     RMUS.middleColumn.forum.reloadPosts.jumpToNewPosts.jump();
-                }, parseInt(RMUS.middleColumn.forum.reloadPosts.jumpToNewPosts.waitUntilNextJump, 10) * 1000);	
+                }, parseInt(RMUS.middleColumn.forum.reloadPosts.jumpToNewPosts.waitUntilNextJump, 10) * 1000);
             }
-        }	
+        }
 
         // Avataranimationen stoppen
-        if (RMUS.options.options.miscellaneous_stopAvatarAnimation === 'checked') {
+        if (Options.getOption('miscellaneous_stopAvatarAnimation') === 'checked') {
             RMUS.miscellaneous.stopAvatarAnimation.stopAnimation();
         }
 
         // Notzizen einblenden
-        if(RMUS.options.options.miscellaneous_note === 'checked') {
+        if(Options.getOption('miscellaneous_note') === 'checked') {
             RMUS.miscellaneous.note.initialize();
         }
 
-        // Edit vorbereiten	
-        if (RMUS.options.options.middleColumn_forum_editPost === 'checked'){
+        // Edit vorbereiten
+        if (Options.getOption('middleColumn_forum_editPost') === 'checked'){
             RMUS.middleColumn.forum.editPost.initializeEvent();
         }
 
         // Youtubeplayer ersetzen
-        if(RMUS.options.options.miscellaneous_convertYoutube === 'checked') {
+        if(Options.getOption('miscellaneous_convertYoutube') === 'checked') {
             RMUS.miscellaneous.convertYoutube();
         }
-        
+
         // Editbox verschieben
-        if (RMUS.options.options.middleColumn_forum_hideForum_editboxTop){
+        if (Options.getOption('middleColumn_forum_hideForum_editboxTop')){
             RMUS.middleColumn.forum.scrollForNewPage.editboxTop();
         }
     }
 
     // User ignorieren
-    if (RMUS.options.options.miscellaneous_ignoreUser === 'checked'){
-        RMUS.miscellaneous.ignoreUser.doIgnore(content.forum_thread, content.matches, content.profile);
+    if (Options.getOption('miscellaneous_ignoreUser') === 'checked'){
+        RMUS.miscellaneous.ignoreUser.doIgnore(Content.getContent('forum_thread'), Content.getContent('matches'), Content.getContent('profile'));
     }
 
     // Extrabuttons in den entsprechenden Seiten initialisieren
-    if (content.forum_thread || content.forum_newtopic || content.forum_edit || content.matches || content.msg || content.profile || content.groups_show_group) {
-        if (RMUS.options.options.miscellaneous_extraButtons === 'checked') {
+    if (Content.getMultipleContent(['forum_thread', 'forum_newtopic', 'forum_edit', 'matches', 'msg', 'profile', 'groups_show_group'], 'OR')) {
+        if (Options.getOption('miscellaneous_extraButtons') === 'checked') {
             RMUS.miscellaneous.extrabuttons.init();
         }
     }
@@ -2174,17 +2368,23 @@ RMUS.start = function () {
     // Fix image jumping in forum box between requests
     $('head').append('<style type="text/css">div#nav_schlagzeilen div.listing > a > img {width: 11px; height: 11px;} div.cont_box div.listing > img {width: 5px; height: 7px;}</style>');
 
+    // Optionen einfügen
+    $('body').append('<style type="text/css">div#userscriptOptionsOverlay { position: absolute; top: 0; left: 0; width: 100%; z-index: 1337; display: none; background-color: #fff; opacity: 0.8; } #userscriptOptions.rmus-options { display: none; box-shadow: 0px 0px 6px 1px #80D4EE; position: absolute; width: 600px; left: 50%; margin-left: -300px; top: 75px; border: 2px solid #00aeed; border-radius: 3px; background-color: #fff; z-index: 1338; } #userscriptOptions.rmus-options-wrapper { position: relative; } #userscriptOptions .rmus-options-header { border-bottom: 2px solid #e2e2e2; padding: 10px; color: #fff; background: #46c1ea; background: -moz-linear-gradient(top, #46c1ea 0%, #00aeed 100%); background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#46c1ea), color-stop(100%,#00aeed)); background: -webkit-linear-gradient(top, #46c1ea 0%,#00aeed 100%); background: -o-linear-gradient(top, #46c1ea 0%,#00aeed 100%); background: -ms-linear-gradient(top, #46c1ea 0%,#00aeed 100%); background: linear-gradient(to bottom, #46c1ea 0%,#00aeed 100%); } #userscriptOptions .rmus-options-header h1 { font-size: 16px; text-transform: uppercase; float: left; text-shadow: 1px 1px #A0A0A0; color: #fff; } #userscriptOptions .rmus-options-header a { color: #fff; border-bottom: 1px dotted #fff; } #userscriptOptions .rmus-options-header a:hover { text-decoration: none; } #userscriptOptions .rmus-options-header .rmus-links { float: right; margin-top: 2px; } #userscriptOptions .rmus-options-header .rmus-links .rmus-version { font-weight: bold; } #userscriptOptions .rmus-options-content { overflow-y: scroll; height: 592px; } #userscriptOptions .rmus-options-content table { border: none; width: 100%; margin-top: -1px; } #userscriptOptions .rmus-options-content table .menuparent { background-color: #fff; padding: 0; } #userscriptOptions .rmus-options-content table .menufirstchild { display: none; background-color: #f1f1f1; margin: 0; padding: 0; } #userscriptOptions .rmus-options-content table .menusecondchild { display: none; background-color: #e2e2e2; margin: 0; padding: 0; } #userscriptOptions .rmus-options-content table .headline td { color: #7A7A7A; font-size: 14px; margin: 0px; padding: 5px 0 5px 39px; width: 100%; border-top: 1px solid #ccc; border-bottom: 1px solid #ccc; background: #f2f5f6; background: -moz-linear-gradient(top, #f2f5f6 0%, #e3eaed 100%); background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f2f5f6), color-stop(100%,#e3eaed)); background: -webkit-linear-gradient(top, #f2f5f6 0%,#e3eaed 100%); background: -o-linear-gradient(top, #f2f5f6 0%,#e3eaed 100%); background: -ms-linear-gradient(top, #f2f5f6 0%,#e3eaed 100%); background: linear-gradient(to bottom, #f2f5f6 0%,#e3eaed 100%); } #userscriptOptions .rmus-options-footer { text-align: right; padding: 8px 10px; border-top: 1px solid #ccc; background: #ffffff; background: -moz-linear-gradient(top, #ffffff 0%, #ededed 100%); background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#ededed)); background: -webkit-linear-gradient(top, #ffffff 0%,#ededed 100%); background: -o-linear-gradient(top, #ffffff 0%,#ededed 100%); background: -ms-linear-gradient(top, #ffffff 0%,#ededed 100%); background: linear-gradient(to bottom, #ffffff 0%,#ededed 100%); } #userscriptOptions .rmus-options-footer #rmus-options-imexport { clear: both; text-align: left; margin-top: 10px; display: none; } #userscriptOptions .rmus-options-footer #rmus-options-imexport .rmus-options-imexport-help { font-size: 10px; } #userscriptOptions .rmus-options-footer #rmus-options-imexport textarea { width: 568px; font-family: Verdana; font-size: 10px; padding: 5px; margin: 5px 0 3px; height: 21px; } #userscriptOptions input[type=checkbox], #userscriptOptions input[type=select], #userscriptOptions input[type=text] { margin: 0; padding: 0; } .btn-rm { background-color: #fff; border: 1px solid #ccccce; color: #222222; font-family: Verdana; font-size: 10px; min-height: 14px; padding: 4px 8px; } .btn-rm.primary { color: #fff; border-color: #00A4E4; background: #00bded; background: -moz-linear-gradient(top, #00bded 0%, #00aeed 100%); background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#00bded), color-stop(100%,#00aeed)); background: -webkit-linear-gradient(top, #00bded 0%,#00aeed 100%); background: -o-linear-gradient(top, #00bded 0%,#00aeed 100%); background: -ms-linear-gradient(top, #00bded 0%,#00aeed 100%); background: linear-gradient(to bottom, #00bded 0%,#00aeed 100%); }</style><div id="userscriptOptions" class="rmus-options"><div class="rmus-options-wrapper"><div class="rmus-options-header"><h1>RM Userscript - Optionen</h1><div class="rmus-links"><a href="index.php?cont=forum/thread&threadid=111239&pagenum=1">Thread</a> | Version <span class="rmus-version">2.1.8</span></div><div style="clear: both"></div></div><div class="rmus-options-content"><table><tr class="headline"><td colspan="4">Funktionen</td></tr><tr><td style="width:30px"></td><td></td><td style="width:180px"></td><td style="width:25px"></td></tr><tr class="menuparent"><td align="center"><img id="toggle_sub_middleColumn_forum_reloadPosts_readNewPosts" src="http://readmore.thextor.de/userscript/img/plus_alt_16x16.png" alt="more" title="Weitere Optionen"></td><td align="left">Neue Forenbeitr&auml;ge im Hintergrund nachladen</td><td align="right"><input type="checkbox" class="userscriptOptions" name="middleColumn_forum_reloadPosts_readNewPosts"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Neue Beitr&auml;ge im Readmore.de-Froum werden automatisch nachgeladen. Ein Refresh des Threads entf&auml;llt somit."></td></tr><tr class="menufirstchild sub_middleColumn_forum_reloadPosts_readNewPosts"><td align="center"><img id="toggle_sub_middleColumn_forum_reloadPosts_endlessPage" src="http://readmore.thextor.de/userscript/img/plus_alt_16x16.png" alt="more" title="Weitere Optionen"></td><td align="left">Seite endlos erweitern</td><td align="right"><input type="checkbox" class="userscriptOptions" name="middleColumn_forum_reloadPosts_endlessPage"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Neue Posts werden einfach eingeblendet. Es muss also nicht mehr auf eine neue Seite gewechselt werden."></td></tr><tr class="menusecondchild sub_middleColumn_forum_reloadPosts_endlessPage"><td align="center"></td><td align="left">Automatisch zu neuen Posts scrollen/springen</td><td align="right"><input type="checkbox" class="userscriptOptions" name="middleColumn_forum_reloadPosts_jumpToNewPosts"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Springt zu neuen posts."></td></tr><tr class="menusecondchild sub_middleColumn_forum_reloadPosts_endlessPage"><td align="center"></td><td align="left">Zeit zwischen zwei Spr&uuml;ngen</td><td align="right"><input type="text" class="userscriptOptions" name="middleColumn_forum_reloadPosts_jumpToNewPosts_waitUntilNextJump" value="10"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Zeit in Sekunden, die zwischen 2 Spr&uuml;ngen mindestens vergehen muss."></td></tr><tr class="menufirstchild sub_middleColumn_forum_reloadPosts_readNewPosts"><td align="center"><img id="toggle_sub_middleColumn_forum_reloadPosts_markNewPosts" src="http://readmore.thextor.de/userscript/img/plus_alt_16x16.png" alt="more" title="Weitere Optionen"></td><td align="left">Neue Eintr&auml;ge farblich markieren</td><td align="right"><input type="checkbox" class="userscriptOptions" name="middleColumn_forum_reloadPosts_markNewPosts"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Die neu eingetragenen Posts werden markiert."></td></tr><tr class="menusecondchild sub_middleColumn_forum_reloadPosts_markNewPosts"><td align="center"></td><td align="left">Farbe ausw&auml;hlen (HEX-Code)</td><td align="right"><input type="text" class="userscriptOptions" name="middleColumn_forum_reloadPosts_markPostColor" value="#EEEEEE"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Bitte eine HEX Zahl eingeben. Beispiel: #FFEE11"></td></tr><tr class="menusecondchild sub_middleColumn_forum_reloadPosts_markNewPosts"><td align="center"></td><td align="left">Ungelesene Posts im Titel / Tab anzeigen</td><td align="right"><input type="checkbox" class="userscriptOptions" name="middleColumn_forum_reloadPosts_showNewPostsTitle"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Die Anzahl der Ungelesenen Posts im Tab anzeigen."></td></tr><tr class="menusecondchild sub_middleColumn_forum_reloadPosts_markNewPosts"><td align="center"></td><td align="left">Favicon ver&auml;ndern</td><td align="right"><input type="checkbox" class="userscriptOptions" name="middleColumn_forum_reloadPosts_changeFavicon"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Bei ungelesenen Posts das Favicon ver&auml;ndern."></td></tr><tr class="menufirstchild sub_middleColumn_forum_reloadPosts_readNewPosts"><td align="center"></td><td align="left">Hinweis bei neuen Seiten einblenden</td><td align="right"><input type="checkbox" class="userscriptOptions" name="middleColumn_forum_reloadPosts_checkForNewPage"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Achtung: Funktioniert nur, wenn Seite endlos erweitern deaktiv ist. Weist auf eine neue Seite hin."></td></tr><tr class="menufirstchild sub_middleColumn_forum_reloadPosts_readNewPosts"><td align="center"></td><td align="left">Zeit zwischen dem Nachladen (Sekunden)</td><td align="right"><input type="text" class="userscriptOptions" name="middleColumn_forum_reloadPosts_timeToWait" value="15"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Sekunden die zwischen dem Nachladen gewartet werden muss."></td></tr><tr class="menuparent"><td align="center"><img id="toggle_sub_miscellaneous_reloadMessages" src="http://readmore.thextor.de/userscript/img/plus_alt_16x16.png" alt="more" title="Weitere Optionen"></td><td align="left">Neue Nachrichten im Hintergrund nachladen</td><td align="right"><input type="checkbox" class="userscriptOptions" name="miscellaneous_reloadMessages"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Neue Nachrichten (PM) werden nachgeladen. Ein Refresh der Seite entf&auml;llt somit."></td></tr><tr class="menufirstchild sub_miscellaneous_reloadMessages"><td align="center"></td><td align="left">Desktop-Benachrichtigungen aktivieren</td><td align="right"><input type="checkbox" class="userscriptOptions" id="miscellaneous_reloadMessages_desktopNotifications" name="miscellaneous_reloadMessages_desktopNotifications"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Deskop-Benachrichtigungen anzeigen sobald es neue Nachrichten gibt. Dies wird derzeit nicht von allen Browsern unterstützt (caniuse.com/notifications)."></td></tr><tr class="menufirstchild sub_miscellaneous_reloadMessages"><td align="center"></td><td align="left">Alert-Box bei neuen Nachrichten anzeigen</td><td align="right"><input type="checkbox" class="userscriptOptions" name="miscellaneous_reloadMessages_alertBox"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Benachrichtigungen sobald es neue Nachrichten gibt."></td></tr><tr class="menufirstchild sub_miscellaneous_reloadMessages"><td align="center"></td><td align="left">Sound bei neuen Nachrichten abspielen</td><td align="right"><input type="checkbox" class="userscriptOptions" id="notification_playsound_cb" name="miscellaneous_reloadMessages_playSound"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Deskop-Benachrichtigungen sobald es neue Nachrichten gibt."></td></tr><tr class="menufirstchild sub_miscellaneous_reloadMessages"><td align="center"></td><td align="left">URL f&uuml;r die Audiodatei</td><td align="right"><input type="text" class="userscriptOptions" id="miscellaneous_reloadMessages_playSoundUrl" name="miscellaneous_reloadMessages_playSoundUrl" value="http://"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Direkt-Url für den Notification Sound"></td></tr><tr class="menuparent"><td align="center"><img id="toggle_sub_miscellaneous_ignoreUser" src="http://readmore.thextor.de/userscript/img/plus_alt_16x16.png" alt="more" title="Weitere Optionen"></td><td align="left">Readmore User ignorieren</td><td align="right"><input type="checkbox" class="userscriptOptions" name="miscellaneous_ignoreUser"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Blendet Foreneintr&auml;ge, Tickercomments und G&auml;stebucheintr&auml;ge aus."></td></tr><tr class="menufirstchild sub_miscellaneous_ignoreUser"><td align="center"></td><td align="left">Usernamen (kommasepariert)</td><td align="right"><input type="text" class="userscriptOptions" id="miscellaneous_reloadMessages_playSoundUrl" name="miscellaneous_ignoreUser_usernames" value=" "></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Beispielsweise: DanielaKatzenberger,ScriptKiddy99,randomreadmoremod. Gross und Kleinschreibung beachten!"></td></tr><tr class="menuparent"><td align="center"></td><td align="left">Beitr&auml;ge ohne Reload senden</td><td align="right"><input type="checkbox" class="userscriptOptions" name="middleColumn_forum_postPerAjax"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Beitr&auml;ge werden im Hintergrund gepostet. Ein manueller Refresh der Seite entfällt."></td></tr><tr class="menuparent"><td align="center"></td><td align="left">Editieren ohne Reload</td><td align="right"><input type="checkbox" class="userscriptOptions" name="middleColumn_forum_editPost"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Beitr&auml;ge werden im Hintergrund Editiert. Ein manueller Refresh der Seite entfällt."></td></tr><tr class="menuparent"><td align="center"></td><td align="left">Streams aktualisieren</td><td align="right"><input type="checkbox" class="userscriptOptions" name="leftColumn_streams_reloadStreams"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Aktualisiert die Streams im Hintergund."></td></tr><tr class="menuparent"><td align="center"></td><td align="left">Matchticker aktualisieren</td><td align="right"><input type="checkbox" class="userscriptOptions" name="rightColumn_ticker_reloadTicker"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Aktualisiert den Matchticker im Hintergund."></td></tr><tr class="menuparent"><td align="center"></td><td align="left">Forennavigation aktualisieren</td><td align="right"><input type="checkbox" class="userscriptOptions" name="rightColumn_forum_reloadForum"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Aktualisiert die Navigation des Forums (unten rechts) im Hintergund."></td></tr><tr class="menuparent"><td align="center"></td><td align="left">Vorschaufunktion aktivieren</td><td align="right"><input type="checkbox" class="userscriptOptions" name="middleColumn_forum_preview"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Vorschau f&uuml;r neue Beitr&auml;ge einbinden."></td></tr><tr class="menuparent"><td align="center"><img id="toggle_sub_middleColumn_forum_scrollForNewPage" src="http://readmore.thextor.de/userscript/img/plus_alt_16x16.png" alt="more" title="Weitere Optionen"></td><td align="left">Scrollen bis zum Seitenende l&auml;dt die N&auml;chste</td><td align="right"><input type="checkbox" class="userscriptOptions" name="middleColumn_forum_scrollForNewPage"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Beim ereichen des letzten Posts ggf. die n&auml;chste Seite nachladen."></td></tr><tr class="menufirstchild sub_middleColumn_forum_scrollForNewPage"><td align="center"></td><td align="left">Postbox nach oben verschieben</td><td align="right"><input type="checkbox" class="userscriptOptions" name="middleColumn_forum_hideForum_editboxTop"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Kopiert die Box zum Posten an den Anfang der Seite."></td></tr><tr><td style="width:30px"></td><td></td><td style="width:180px"></td><td style="width:25px"></td></tr><tr class="headline"><td colspan="4">Optische Ver&auml;nderungen</td></tr><tr><td style="width:30px"></td><td></td><td style="width:180px"></td><td style="width:25px"></td></tr><tr class="menuparent"><td align="center"><img id="toggle_sub_rightColumn_forum_hideForum" src="http://readmore.thextor.de/userscript/img/plus_alt_16x16.png" alt="more" title="Weitere Optionen"></td><td align="left">Forum ausblenden und umsortieren</td><td align="right"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Das Forum ausblenden oder umsortieren."></td></tr><tr class="menufirstchild sub_rightColumn_forum_hideForum"><td align="center"></td><td align="left">Komplett ausblenden</td><td align="right"><input type="checkbox" class="userscriptOptions" name="rightColumn_forum_hideForum"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Das komplette Forum ausblenden."></td></tr><tr class="menufirstchild sub_rightColumn_forum_hideForum"><td align="center"><img id="toggle_sub_rightColumn_forum_sections" src="http://readmore.thextor.de/userscript/img/plus_alt_16x16.png" alt="more" title="Weitere Optionen"></td><td align="left">Foren umsortieren</td><td align="right"><input type="checkbox" class="userscriptOptions" name="rightColumn_forum_sections"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Ermöglicht das Umsortieren des Forums."></td></tr><tr class="menusecondchild sub_rightColumn_forum_sections"><td align="center"></td><td align="left">An erster Stelle</td><td align="right"><select size="1" class="userscriptOptions" name="rightColumn_forum_hideForum_0"><option value="">Nichts anzeigen</option><option value="featuredthreads">Featured Threads</option><option value="esportforen">eSport Foren</option><option value="technik">Technik</option><option value="offtopicforen">Offtopic Foren</option><option value="spiele">Spiele</option></select></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Erste Stelle bei der Anzeige der Foren."></td></tr><tr class="menusecondchild sub_rightColumn_forum_sections"><td align="center"></td><td align="left">An zweiter Stelle</td><td align="right"><select size="1" class="userscriptOptions" name="rightColumn_forum_hideForum_1"><option value="">Nichts anzeigen</option><option value="featuredthreads">Featured Threads</option><option value="esportforen">eSport Foren</option><option value="technik">Technik</option><option value="offtopicforen">Offtopic Foren</option><option value="spiele">Spiele</option></select></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Zweite Stelle bei der Anzeige der Foren."></td></tr><tr class="menusecondchild sub_rightColumn_forum_sections"><td align="center"></td><td align="left">An dritter Stelle</td><td align="right"><select size="1" class="userscriptOptions" name="rightColumn_forum_hideForum_2"><option value="">Nichts anzeigen</option><option value="featuredthreads">Featured Threads</option><option value="esportforen">eSport Foren</option><option value="technik">Technik</option><option value="offtopicforen">Offtopic Foren</option><option value="spiele">Spiele</option></select></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Dritte Stelle bei der Anzeige der Foren."></td></tr><tr class="menusecondchild sub_rightColumn_forum_sections"><td align="center"></td><td align="left">An vierter Stelle</td><td align="right"><select size="1" class="userscriptOptions" name="rightColumn_forum_hideForum_3"><option value="">Nichts anzeigen</option><option value="featuredthreads">Featured Threads</option><option value="esportforen">eSport Foren</option><option value="technik">Technik</option><option value="offtopicforen">Offtopic Foren</option><option value="spiele">Spiele</option></select></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Viere Stelle bei der Anzeige der Foren."></td></tr><tr class="menusecondchild sub_rightColumn_forum_sections"><td align="center"></td><td align="left">An f&uuml;nfter Stelle</td><td align="right"><select size="1" class="userscriptOptions" name="rightColumn_forum_hideForum_4"><option value="">Nichts anzeigen</option><option value="featuredthreads">Featured Threads</option><option value="esportforen">eSport Foren</option><option value="technik">Technik</option><option value="offtopicforen">Offtopic Foren</option><option value="spiele">Spiele</option></select></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="F&uuml;nfte Stelle bei der Anzeige der Foren."></td></tr><tr class="menuparent"><td align="center"><img id="toggle_sub_rightColumn_headlines_hideHeadlines" src="http://readmore.thextor.de/userscript/img/plus_alt_16x16.png" alt="more" title="Weitere Optionen"></td><td align="left">Schlagzeilen ausblenden</td><td align="right"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Bestimmte oder alle Schlagzeilen ausblenden"></td></tr><tr class="menufirstchild sub_rightColumn_headlines_hideHeadlines"><td align="center"></td><td align="left">Alle ausblenden</td><td align="right"><input type="checkbox" class="userscriptOptions" name="rightColumn_headlines_hideHeadlines"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Blendet alle Schlagzeilen aus."></td></tr><tr class="menufirstchild sub_rightColumn_headlines_hideHeadlines"><td align="center"></td><td align="left">Counter-Strike ausblenden</td><td align="right"><input type="checkbox" class="userscriptOptions" name="rightColumn_headlines_hideCounterstrike"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Blendet die Counter-Strike Schlagzeilen aus."></td></tr><tr class="menufirstchild sub_rightColumn_headlines_hideHeadlines"><td align="center"></td><td align="left">Starcraft ausblenden</td><td align="right"><input type="checkbox" class="userscriptOptions" name="rightColumn_headlines_hideStarcraft"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Blendet die Starcraft Schlagzeilen aus."></td></tr><tr class="menufirstchild sub_rightColumn_headlines_hideHeadlines"><td align="center"></td><td align="left">DotA ausblenden</td><td align="right"><input type="checkbox" class="userscriptOptions" name="rightColumn_headlines_hideDefenseOfTheAncients"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Blendet die DotA Schlagzeilen aus."></td></tr><tr class="menufirstchild sub_rightColumn_headlines_hideHeadlines"><td align="center"></td><td align="left">League of Legends ausblenden</td><td align="right"><input type="checkbox" class="userscriptOptions" name="rightColumn_headlines_hideLeagueOfLegends"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Blendet die League of Legends Schlagzeilen aus."></td></tr><tr class="menufirstchild sub_rightColumn_headlines_hideHeadlines"><td align="center"></td><td align="left">Warcraft 3 ausblenden</td><td align="right"><input type="checkbox" class="userscriptOptions" name="rightColumn_headlines_hideWarcraft3"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Blendet die Warcraft 3 Schlagzeilen aus."></td></tr><tr class="menufirstchild sub_rightColumn_headlines_hideHeadlines"><td align="center"></td><td align="left">Sonstiges ausblenden</td><td align="right"><input type="checkbox" class="userscriptOptions" name="rightColumn_headlines_hideSonstiges"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Blendet die Sonstigen Schlagzeilen aus."></td></tr><tr class="menuparent"><td align="center"></td><td align="left">Alle Streams ausblenden</td><td align="right"><input type="checkbox" class="userscriptOptions" name="leftColumn_streams_hideStreams"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Alle Streams ausblenden"></td></tr><tr class="menuparent"><td align="center"></td><td align="left">Fixierte Toolbar</td><td align="right"><input type="checkbox" class="userscriptOptions" name="miscellaneous_fixedToolbar"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Die Toolbar wird am oberen Fensterrand fixiert."></td></tr><tr class="menuparent"><td align="center"></td><td align="left">Ticker ausblenden</td><td align="right"><input type="checkbox" class="userscriptOptions" name="rightColumn_ticker_hideTicker"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Der Ticker wird komplett ausgeblendet."></td></tr><tr class="menuparent"><td align="center"></td><td align="left">Wer? Wohin? Warum? ausblenden</td><td align="right"><input type="checkbox" class="userscriptOptions" name="leftColumn_www_hideWww"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Blendet die komplette Wer? Wohin? Warum? Sektion aus."></td></tr><tr class="menuparent"><td align="center"></td><td align="left">Bilderlinks umwandeln</td><td align="right"><input type="checkbox" class="userscriptOptions" name="miscellaneous_convertImageLinks"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Wandelt Bilderlinks automatisch in Bilder um."></td></tr><tr><td style="width:30px"></td><td></td><td style="width:180px"></td><td style="width:25px"></td></tr><tr class="headline"><td colspan="4">Sonstiges</td></tr><tr><td style="width:30px"></td><td></td><td style="width:180px"></td><td style="width:25px"></td></tr><tr class="menuparent"><td align="center"></td><td align="left">Notizen</td><td align="right"><input type="checkbox" class="userscriptOptions" name="miscellaneous_note"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Ermöglicht es für jeden Forenuser eine Notiz zu hinterlegen."></td></tr><tr class="menuparent"><td align="center"></td><td align="left">Titel / Tab umsortieren</td><td align="right"><input type="checkbox" class="userscriptOptions" name="miscellaneous_reSortTitle"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Wenn diese Option aktiviert ist, wird der Threadname an den Anfang des Titels gestellt. Offene Tabs können so besser den verschiedenen Threads zugeordnet werden."></td></tr><tr class="menuparent"><td align="center"></td><td align="left">Readmore Extrabuttons</td><td align="right"><input type="checkbox" class="userscriptOptions" name="miscellaneous_extraButtons"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Mehr Buttons um einen Post im Forum ansehnlicher zu gestalten."></td></tr><tr class="menuparent"><td align="center"></td><td align="left">Youtubeplayer ersetzen</td><td align="right"><input type="checkbox" class="userscriptOptions" name="miscellaneous_convertYoutube"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Ersetzt den Youtubeplayer durch einen einfachen Link."></td></tr><tr class="menuparent"><td align="center"></td><td align="left">Avataranimationen anhalten</td><td align="right"><input type="checkbox" class="userscriptOptions" name="miscellaneous_stopAvatarAnimation"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Die Animation von Avataren stoppen."></td></tr><tr class="menuparent"><td align="center"></td><td align="left">Button zum Hochscrollen anzeigen</td><td align="right"><input type="checkbox" class="userscriptOptions" name="miscellaneous_buttonScrollUp"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Im Forum wird ein Icon eingefügt, beim betätigen wird zum ersten Post gesprungen."></td></tr><tr class="menuparent"><td align="center"></td><td align="left">Button zum Runterscrollen anzeigen</td><td align="right"><input type="checkbox" class="userscriptOptions" name="miscellaneous_buttonScrollDown"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Im Forum wird ein Icon eingefügt, beim betätigen wird zum letzten Post gesprungen."></td></tr><tr class="menuparent"><td align="center"></td><td align="left">In der Suche zum letzten Post springen</td><td align="right"><input type="checkbox" class="userscriptOptions" name="middleColumn_search_jump_to_last_page"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Hinter den Suchergebnissen wird ein Icon eingefügt, beim betätigen wird zum letzten Post gesprungen."></td></tr><tr class="menuparent"><td align="center"></td><td align="left">Last-Page-Pfeil springt zum letzten Post</td><td align="right"><input type="checkbox" class="userscriptOptions" name="miscellaneous_lastPageJumpToLastPost"></td><td align="right"><img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Nach dem Bet&auml;tigen des Pfeils (ganz Recht im Forum, hinter den Threads) wird zum aktuellsten Post gesprungen."></td></tr><tr><td style="width:30px"></td><td></td><td style="width:180px"></td><td style="width:25px"></td></tr></table></div><div class="rmus-options-footer"><div style="float: left"><input class="btn-rm imexp" type="button" id="importUserscriptOptions" value="Import">&nbsp;<input class="btn-rm imexp" type="button" id="exportUserscriptOptions" value="Export"></div><input class="btn-rm" type="button" id="closeUserscriptOptions" value="Abbrechen">&nbsp;<input class="btn-rm primary" type="button" value="Speichern" id="saveUserscriptOptions"><div id="rmus-options-imexport"><div class="rmus-options-imexport-help"></div><textarea class="btn-rm"></textarea><input class="btn-rm primary" style="margin-right: 4px" type="button" value="Importieren" id="importUserscriptOptionsBtn"><input class="btn-rm" type="button" value="Schlie&szlig;en" id="imexportUserscriptOptionsCloseBtn"></div></div></div></div><div id="userscriptOptionsOverlay"></div>');
+    Options.insertOptionsLink();
+
     // Eventhandler für die Optionen setzen
     $('#saveUserscriptOptions').click(function () {
-        if (RMUS.options.saveOptions()) {
-            RMUS.options.hideOptions();
+        if (Options.saveOptions()){
+            Options.hideOptions();
         }
     });
+
     $('#openUserscriptOptions').click(function () {
-        RMUS.options.showOptions();
+        Options.showOptions();
     });
+
     $('#closeUserscriptOptions,#userscriptOptionsOverlay').click(function () {
-        RMUS.options.hideOptions();
+        Options.hideOptions();
     });
 
     $('div#userscriptOptions input.imexp').click(function () {
@@ -2202,7 +2402,7 @@ RMUS.start = function () {
             textarea.val('');
             textarea.focus();
         } else {
-            var opts = RMUS.options.getOptionsRaw();
+            var opts = Options.getOptionsRaw();
 
             if (opts === 'null') {
                 alert('Es sind keine gespeicherten Optionen zum Exportieren vorhanden. Bitte speichere deine Optionen zuerst ab.');
@@ -2230,13 +2430,11 @@ RMUS.start = function () {
         }
 
         if (validJson) {
-            RMUS.options.backupOptions();
-            RMUS.options.setOptionsRaw(opts);
+            Options.backupOptions();
+            Options.setOptionsRaw(opts);
 
             // Optionen schließen, damit sie neu geladen werden beim nächsten öffnen.
-            RMUS.options.hideOptions();
-            RMUS.options.loadOptions();
-            RMUS.options.readOptions();
+            Options.hideOptions();
 
             alert('Die Optionen wurden erfolgreich importiert! Du musst die Seite neu laden, damit die Optionen vollständig übernommen werden.');
         } else {
@@ -2322,9 +2520,9 @@ RMUS.start = function () {
     // Prüfen ob eine neue Version erschienen ist
     RMUS.update.checkVersion();
 
-    // content in den LocalStorage speichern
+/*    // content in den LocalStorage speichern
     var seen = [];
-    localStorage.setItem('userscriptContent', 
+    localStorage.setItem('userscriptContent',
         JSON.stringify(content, function(key, val) {
             if (typeof val == "object") {
                 if (seen.indexOf(val) >= 0) {
@@ -2336,60 +2534,60 @@ RMUS.start = function () {
             return val;
         })
     );
-
+*/
     // Im Hintergrund ausgeführte Aktionen starten (zeitunkritisch)
     window.setInterval(function(){
 
-        // content auslesen
+/*        // content auslesen
         if (!content){
             content = JSON.parse(localStorage.getItem('userscriptContent'));
         }
-
+*/
         // Wenn wir uns in einem Thread befinden
-        if (content.forum_thread) {
+        if (Content.getContent('forum_thread')) {
 
             // Posts nachladen
-            if (RMUS.options.options.middleColumn_forum_reloadPosts_readNewPosts === 'checked') {
+            if (Options.getOption('middleColumn_forum_reloadPosts_readNewPosts') === 'checked') {
                 RMUS.middleColumn.forum.reloadPosts.readNewPosts();
-            }		
+            }
 
             // Avataranimationen stoppen
-            if (RMUS.options.options.miscellaneous_stopAvatarAnimation === 'checked') {
+            if (Options.getOption('miscellaneous_stopAvatarAnimation') === 'checked') {
                 RMUS.miscellaneous.stopAvatarAnimation.stopAnimation();
             }
-        }	
-    }, (parseInt(RMUS.options.options.sub_middleColumn_forum_reloadPosts_timeToWait, 10) > 2) ? parseInt(RMUS.options.options.sub_middleColumn_forum_reloadPosts_timeToWait, 10) * 1000 : 3000);
+        }
+    }, (parseInt(Options.getOption('sub_middleColumn_forum_reloadPosts_timeToWait'), 10) > 2) ? parseInt(Options.getOption('sub_middleColumn_forum_reloadPosts_timeToWait'), 10) * 1000 : 3000);
 
     // Im Hintergrund ausgeführte Aktionen starten (3x in der Sekunde, sehr zeitkritisch)
     window.setInterval(function(){
 
-        // Content auslesen
+/*        // Content auslesen
         if (!content){
             content = JSON.parse(localStorage.getItem('userscriptContent'));
         }
-
-        if (content.forum_thread) {
-            if (RMUS.options.options.middleColumn_forum_reloadPosts_readNewPosts === 'checked') {
-                if (RMUS.options.options.middleColumn_forum_reloadPosts_markNewPosts === 'checked') {
+*/
+        if (Content.getContent('forum_thread')) {
+            if (Options.getOption('middleColumn_forum_reloadPosts_readNewPosts') === 'checked') {
+                if (Options.getOption('middleColumn_forum_reloadPosts_markNewPosts') === 'checked') {
                     // (de)-Markieren
-                    RMUS.middleColumn.forum.reloadPosts.markNewPosts();			
+                    RMUS.middleColumn.forum.reloadPosts.markNewPosts();
 
                     // Favicon verändern
-                    if (RMUS.options.options.middleColumn_forum_reloadPosts_changeFavicon === 'checked'){
+                    if (Options.getOption('middleColumn_forum_reloadPosts_changeFavicon') === 'checked'){
                         RMUS.middleColumn.forum.reloadPosts.changeFavicon();
                     }
 
                     // Postanzahl im Tab anzeigen
-                    if (RMUS.options.options.middleColumn_forum_reloadPosts_showNewPostsTitle === 'checked') {
+                    if (Options.getOption('middleColumn_forum_reloadPosts_showNewPostsTitle') === 'checked') {
                         RMUS.middleColumn.forum.reloadPosts.showNewPostsTitle();
                     }
                 }
             }
 
             // Beim ereichen des letzten Posts ggf. die nächste Seite nachladen. Nur wenn wir uns nicht auf der letzten Seite befinden!
-            if (RMUS.options.options.middleColumn_forum_scrollForNewPage === 'checked' && $.trim($('div.floatl.m2.elf').html()).substr($.trim($('div.floatl.m2.elf').html()).length-4) != '</b>') {
+            if (Options.getOption('middleColumn_forum_scrollForNewPage') === 'checked' && $.trim($('div.floatl.m2.elf').html()).substr($.trim($('div.floatl.m2.elf').html()).length-4) != '</b>') {
                 RMUS.middleColumn.forum.scrollForNewPage.insertPosts();
-            }           
+            }
         }
     }, 500);
 
@@ -2397,34 +2595,34 @@ RMUS.start = function () {
     window.setInterval(function(){
 
         // Außer auf dem Profil und der Guides
-        if (!content.profile && !content.guides) {
+        if (!Content.getMultipleContent(['profile', 'guides'], 'OR')) {
 
             // Streams und Forennavigation nachladen (Nur, wenn auch eingeblendet)
-            if (RMUS.options.options.rightColumn_forum_reloadForum === 'checked' && RMUS.options.options.rightColumn_forum_hideForum != 'checked'
-                || RMUS.options.options.leftColumn_streams_reloadStreams === 'checked' && RMUS.options.options.leftColumn_streams_hideStreams != 'checked'
-                || RMUS.options.options.rightColumn_ticker_reloadTicker === 'checked' && RMUS.options.options.rightColumn_ticker_hideTicker != 'checked') {
+            if (Options.getOption('rightColumn_forum_reloadForum') === 'checked' && Options.getOption('rightColumn_forum_hideForum') != 'checked'
+                || Options.getOption('leftColumn_streams_reloadStreams') === 'checked' && Options.getOption('options.leftColumn_streams_hideStreams') != 'checked'
+                || Options.getOption('rightColumn_ticker_reloadTicker') === 'checked' && Options.getOption('rightColumn_ticker_hideTicker') != 'checked') {
 
                 RMUS.miscellaneous.reloadMainpageData.readPage();
 
                 // Forennavigation
-                if (RMUS.options.options.rightColumn_forum_hideForum !== 'checked'
-                    && RMUS.options.options.rightColumn_forum_reloadForum === 'checked') {
+                if (Options.getOption('rightColumn_forum_hideForum') !== 'checked'
+                    && Options.getOption('rightColumn_forum_reloadForum') === 'checked') {
 
                     // Lag im FF vermindern
-                    window.setTimeout(RMUS.rightColumn.forum.reloadForum(), 2000);					
+                    window.setTimeout(RMUS.rightColumn.forum.reloadForum(), 2000);
                 }
 
                 // Streams
-                if (RMUS.options.options.leftColumn_streams_hideStreams != 'checked'
-                    && RMUS.options.options.leftColumn_streams_reloadStreams === 'checked') {
+                if (Options.getOption('leftColumn_streams_hideStream') != 'checked'
+                    && Options.getOption('leftColumn_streams_reloadStreams') === 'checked') {
 
                     // Lag im FF vermindern
-                    window.setTimeout(RMUS.leftColumn.streams.reloadStreams(), 4000);			
+                    window.setTimeout(RMUS.leftColumn.streams.reloadStreams(), 4000);
                 }
 
                 // Ticker
-                if (RMUS.options.options.rightColumn_ticker_hideTicker != 'checked'
-                    && RMUS.options.options.rightColumn_ticker_reloadTicker === 'checked') {
+                if (Options.getOption('rightColumn_ticker_hideTicker') != 'checked'
+                    && Options.getOption('rightColumn_ticker_reloadTicker') === 'checked') {
 
                     // Lag im FF vermindern
                     window.setTimeout(RMUS.rightColumn.ticker.reloadTicker(), 6000);
@@ -2433,11 +2631,11 @@ RMUS.start = function () {
         }
 
         // PMs auf jeder Seite überprüfen (Usernavi buggy, daher nicht Teil der mainPageData)
-        if(RMUS.options.options.miscellaneous_reloadMessages === 'checked') {
+        if(Options.getOption('miscellaneous_reloadMessages') === 'checked') {
             RMUS.messages.checkForNewMessages();
         }
 
-    }, 15000);  
+    }, 15000);
 };
 RMUS.update = {
 
@@ -2469,7 +2667,7 @@ RMUS.update = {
                 if (posts !== null) {
                     var latestPrettyVersion = $.trim(posts[0].match(/<span class="i">-(.+?)-<\/span>/)[1]),
                         latestRawVersion = self.getRawVersion(latestPrettyVersion),
-                        currentRawVersion = self.getRawVersion(RMUS.options.version);
+                        currentRawVersion = self.getRawVersion(Options.getVersion());
 
                     if (currentRawVersion < latestRawVersion) {
                         self.showUpdateMsg();
@@ -2505,7 +2703,7 @@ RMUS.update = {
                 lastCheck.setDate(lastCheck.getDate() + 1);
 
                 if (lastCheck > today) {
-                    var currentRawVersion = self.getRawVersion(RMUS.options.version);
+                    var currentRawVersion = self.getRawVersion(Options.getVersion());
 
                     // Ist die cached Version neuer als die aktuelle Version?
                     if (lastVersionCheck.version > currentRawVersion) {

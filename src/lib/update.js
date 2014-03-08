@@ -28,7 +28,7 @@ RMUS.update = {
                 if (posts !== null) {
                     var latestPrettyVersion = $.trim(posts[0].match(/<span class="i">-(.+?)-<\/span>/)[1]),
                         latestRawVersion = self.getRawVersion(latestPrettyVersion),
-                        currentRawVersion = self.getRawVersion(RMUS.options.version);
+                        currentRawVersion = self.getRawVersion(Options.getVersion());
 
                     if (currentRawVersion < latestRawVersion) {
                         self.showUpdateMsg();
@@ -64,7 +64,7 @@ RMUS.update = {
                 lastCheck.setDate(lastCheck.getDate() + 1);
 
                 if (lastCheck > today) {
-                    var currentRawVersion = self.getRawVersion(RMUS.options.version);
+                    var currentRawVersion = self.getRawVersion(Options.getVersion());
 
                     // Ist die cached Version neuer als die aktuelle Version?
                     if (lastVersionCheck.version > currentRawVersion) {
