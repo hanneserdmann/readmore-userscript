@@ -3,7 +3,7 @@
 // @version         2.1.8
 // @description     Fügt der deutschen eSport-Webseite zusätzliche Funktionen hinzu
 // @author          thextor, vntw
-// @credits         IllDependence (Extrabuttons)
+// @credits         IllDependence (Extrabuttons), Biki (RM Plus)
 // @namespace       readmore
 // @include         *.readmore.de/*
 // ==/UserScript==
@@ -225,7 +225,7 @@ function RMUS() {
 function RMUSContent(){
 
     /**
-     * Property in dem alle content Möglichkeiten aufgelistet sind. Default sind alle falsch, die _init Methode
+     * Property in dem alle content Möglichkeiten aufgelistet sind. Default sind alle false, die _init Methode
      * liest die aktuelle Seite aus.
      * @type {{mainpage: boolean, profile: boolean, groups_new: boolean, groups_group_list: boolean, groups_show_group: boolean, msg: boolean, news_archive: boolean, headlines_overview: boolean, www: boolean, widget_create_ticker: boolean, guides: boolean, articles: boolean, news: boolean, search: boolean, match_overview: boolean, db: boolean, coverages: boolean, demo_overview_pov: boolean, demo_overview_hltv: boolean, demo_overview: boolean, video_overview: boolean, gallery_sets: boolean, forum_forum: boolean, forum_board: boolean, forum_thread: boolean, forum_edit: boolean, forum_newtopic: boolean, community: boolean, blog: boolean, poll_archive: boolean, rules: boolean, team: boolean, imprint: boolean, userstream: boolean, gallery_images: boolean, matches: boolean}}
      * @private
@@ -270,130 +270,36 @@ function RMUSContent(){
     };
 
     /**
+     * Action Parameter in der URL
+     * @type {String | Null}
+     * @private
+     */
+    var _action = null;
+
+    /**
      * Aktuelle Seite auf der wir uns befinden
      * @type {string}
      * @private
      */
     var _currentPage = '';
 
-    _init = function(){
+    /**
+     * Methode wird bei der Instanziierung des Objektes ausgeführt. Liest sowohl den Action und die
+     * aktuelle Seite aus.
+     * @private
+     */
+    var _init = function(){
 
+        _readAction();
         _readCurrentPage();
 
-        switch (_currentPage) {
-            case '':
-                _content.mainpage = true;
-                break;
-            case 'profile':
-                _content.profile = true;
-                break;
-            case 'forum/thread':
-                _content.forum_thread = true;
-                break;
-            case 'forum/forum':
-                _content.forum_forum = true;
-                break;
-            case 'forum/board':
-                _content.forum_board = true;
-                break;
-            case 'forum/edit':
-                _content.forum_edit = true;
-                break;
-            case 'matches':
-                _content.matches = true;
-                break;
-            case 'www':
-                _content.www = true;
-                break;
-            case 'userstream':
-                _content.userstream = true;
-                break;
-            case 'groups/new':
-                _content.groups_new = true;
-                break;
-            case 'groups/group_list':
-                _content.groups_group_list = true;
-                break;
-            case 'groups/show_group':
-                _content.groups_show_group = true;
-                break;
-            case 'msg':
-                _content.msg = true;
-                break;
-            case 'news_archive':
-                _content.news_archive = true;
-                break;
-            case 'headlines_overview':
-                _content.headlines_overview = true;
-                break;
-            case 'widget/create_ticker':
-                _content.widget_create_ticker = true;
-                break;
-            case 'guides':
-                _content.guides = true;
-                break;
-            case 'articles':
-                _content.articles = true;
-                break;
-            case 'news':
-                _content.news = true;
-                break;
-            case 'search':
-                _content.search = true;
-                break;
-            case 'match_overview':
-                _content.match_overview = true;
-                break;
-            case 'db':
-                _content.db = true;
-                break;
-            case 'coverages':
-                _content.coverages = true;
-                break;
-            case 'demo_overview_pov':
-                _content.demo_overview_pov = true;
-                break;
-            case 'demo_overview_hltv':
-                _content.demo_overview_hltv = true;
-                break;
-            case 'demo_overview':
-                _content.demo_overview = true;
-                break;
-            case 'video_overview':
-                _content.video_overview = true;
-                break;
-            case 'gallery_sets':
-                _content.gallery_sets = true;
-                break;
-            case 'forum/newtopic':
-                _content.forum_newtopic = true;
-                break;
-            case 'community':
-                _content.community = true;
-                break;
-            case 'blog':
-                _content.blog = true;
-                break;
-            case 'poll_archive':
-                _content.poll_archive = true;
-                break;
-            case 'rules':
-                _content.rules = true;
-                break;
-            case 'team':
-                _content.team = true;
-                break;
-            case 'imprint':
-                _content.imprint = true;
-                break;
-            case 'gallery_images':
-                _content.gallery_images = true;
-                break;
-            default:
-                _content.mainpage = true;
-                break;
+        if (_content.hasOwnProperty(_currentPage)){
+            _content[_currentPage] = true;
         }
-    }
+        else{
+            _content['mainpage'] = true;
+        }
+    };
 
     /**
      * Übergeben wird welche Seite abgefragt werden soll, die Funktion liefert dann true oder falls zurück,
@@ -403,7 +309,7 @@ function RMUSContent(){
      */
     this.getContent = function(what){
         return _content[what];
-    }
+    };
 
     /**
      * Erlaubt es direkt mehrere Abfragen mit einer Methode zu erledigen. Ist minimal langsamer, bringt
@@ -441,25 +347,315 @@ function RMUSContent(){
         }
 
         return returnValue;
-    }
+    };
+
+    /**
+     * Gibt den Action-Parameter zurück
+     * @returns {String|Null}
+     */
+    this.getAction = function(){
+        return _action;
+    };
 
     /**
      * Liest aus der URL (codument.location) Parameter aus und extrahiert den Content-Part,
      * damit wir wissen, auf welcher Seite wir und momentan befinden.
      * @private
      */
-    _readCurrentPage = function(){
+    var _readCurrentPage = function(){
         var getVars = document.location.search.replace(/[?]/g, '').replace(/[&]/g, '=').split('=');
         var curPage = '';
 
         $.each(getVars, function (index, value) {
             if (value == 'cont') {
-                curPage = getVars[index+1];
+                curPage = getVars[index+1].replace(/\//g, '_');
             }
         });
 
         _currentPage = curPage;
-    }
+    };
+
+    /**
+     * Liest den action Parameter aus der URL aus. Wird beispielsweise in den Gruppen gesetzt. Die Extrabuttons
+     * benötigen diese Informationen.
+     * @private
+     */
+    var _readAction = function(){
+        var action = document.location.search.match(/action=([a-zA-Z]+)/i);
+
+        if (action && action[1]) {
+            action = action[1];
+        } else {
+            action = null;
+        }
+
+        _action = action;
+    };
+
+    /**
+     * Init Methode starten
+     */
+    _init();
+}
+/**
+ * RMUSExtrabuttons
+ * ================
+ *
+ * Klasse für die Extrabuttons. Ursprünglich von IllDepence entwickelt.
+ * http://www.readmore.de/index.php?cont=profile&id=29432
+ * @param Content {RMUSContent}
+ * @constructor
+ */
+
+function RMUSExtrabuttons(Content){
+
+    var _form       = null;
+    var _commentBox = null;
+    var _toolbar    = null;
+    var _colorSet   = [
+        ["#ff0000", "http://readmore.thextor.de/userscript/img/extrabuttons/yK4UQ.png"],
+        ["#ff8000", "http://readmore.thextor.de/userscript/img/extrabuttons/xdj9r.png"],
+        ["#ffff00", "http://readmore.thextor.de/userscript/img/extrabuttons/cQrl0.png"],
+        ["#80ff00", "http://readmore.thextor.de/userscript/img/extrabuttons/KTpVX.png"],
+        ["#00ff00", "http://readmore.thextor.de/userscript/img/extrabuttons/NhpYN.png"],
+        ["#00ff80", "http://readmore.thextor.de/userscript/img/extrabuttons/D4JCR.png"],
+        ["#00ffff", "http://readmore.thextor.de/userscript/img/extrabuttons/jA74E.png"],
+        ["#0080ff", "http://readmore.thextor.de/userscript/img/extrabuttons/cQpDh.png"],
+        ["#0000ff", "http://readmore.thextor.de/userscript/img/extrabuttons/7DXlk.png"],
+        ["#8000ff", "http://readmore.thextor.de/userscript/img/extrabuttons/t79Yf.png"],
+        ["#ff00ff", "http://readmore.thextor.de/userscript/img/extrabuttons/IwKL1.png"],
+        ["#ff0080", "http://readmore.thextor.de/userscript/img/extrabuttons/cKrre.png"],
+        ["#000000", "http://readmore.thextor.de/userscript/img/extrabuttons/eeX1k.png"],
+        ["#333333", "http://readmore.thextor.de/userscript/img/extrabuttons/B4ToQ.png"],
+        ["#666666", "http://readmore.thextor.de/userscript/img/extrabuttons/OuClO.png"],
+        ["#999999", "http://readmore.thextor.de/userscript/img/extrabuttons/gc8Za.png"],
+        ["#cccccc", "http://readmore.thextor.de/userscript/img/extrabuttons/TwNb6.png"],
+        ["#ffffff", "http://readmore.thextor.de/userscript/img/extrabuttons/uq9mG.png"]
+    ];
+    var _toolbarButtonTags = [
+        ["http://images.readmore.de/img/icons/ubb/b.png", "fett", "b", 0, true],
+        ["http://images.readmore.de/img/icons/ubb/i.png", "kursiv", "i", 0, true],
+        ["http://images.readmore.de/img/icons/ubb/u.png", "unterstrichen", "u", 0, true],
+        ["http://images.readmore.de/img/icons/ubb/s.png", "durchgestrichen", "s", 0, true],
+        ["http://readmore.thextor.de/userscript/img/extrabuttons//yPNsn.png", "zentriert", "center", 0, true],
+        ["http://readmore.thextor.de/userscript/img/extrabuttons//74lEI.png", "hr", "hr", 0, false],
+        ["http://images.readmore.de/img/icons/ubb/url2.png", "url", "url", 0, true],
+        ["http://images.readmore.de/img/icons/ubb/quote.png", "quote", "quote", 0, true],
+        ["http://images.readmore.de/img/icons/ubb/spoil.png", "spoiler", "spoiler", 0, true],
+        ["http://images.readmore.de/img/icons/ubb/youtube.png", "youtube", "youtube", 0, true],
+        ["http://readmore.thextor.de/userscript/img/extrabuttons/ZQ5jN.png", "img", "img", 0, true]
+    ];
+    var _ubbHelp = '<a onclick="window.open(\'http://www.readmore.de/mod/ubb.mod.php\', \'UBB Hilfe\', \'scrollbars=1,width=600,height=490,left=100,top=200\');return false;" href="/index.php?cont=ubb" style="font-weight:bold; color:#fff; margin-left: 8px; font-size: 11px;" class="ten hgray">?</a>';
+
+    /**
+     * Quasi-Konstuktor. Methode wird bei der Instanziierung des Objektes ausgeführt.
+     * Selektiert das Formular, die CommentBox und startet anschließend die Initialisierung
+     * der Extrabuttons.
+     * @private
+     */
+    var _init = function(){
+        _form       = _getForm();
+        _commentBox = _getCommentBox();
+        _toolbar    = _getToolbar();
+
+        try {
+            _getToolbar().css('height', 'auto').html(_getToolbarHtml());
+        } catch (e) {}
+
+        $('a.rmus-control-btn').click(function (e) {
+            e.preventDefault();
+
+            var btype   = $(this).attr('data-btype');
+            var params  = $(this).attr('data-params');
+
+            switch(btype) {
+                case 'tag':
+                    params = params.split(',');
+                    _insertTag(params[0], params[1], params[2]);
+                    break;
+            }
+        });
+    };
+
+    /**
+     * Gibt die Toolbar für die RM Extrabuttons zurück
+     * @returns {{}}
+     * @private
+     */
+    var _getToolbar = function(){
+        var toolbar = '';
+        var container = '';
+        var returnValue = null;
+
+        if (Content.getMultipleContent(['news', 'matches', 'profile'], 'OR')) {
+            container = _form.parent('div.center');
+
+            if ($('div.headline_bg', container).length === 0) {
+                toolbar = $('<div class="headline_bg" />');
+                toolbar.css('padding', '3px 0px');
+                container.prepend(toolbar);
+            }
+
+            returnValue = $('div.headline_bg', container);
+        } else if (Content.getMultipleContent(['forum_thread', 'forum_edit', 'forum_newtopic'], 'OR')) {
+            returnValue = $('div.headline_bg', _form);
+        } else if (Content.getContent('msg')) {
+            container = _commentBox.parent();
+
+            if ($('div.headline_bg', container).length === 0) {
+                toolbar = $('<div class="headline_bg" />');
+                toolbar.css('padding', '3px 0px');
+                container.prepend(toolbar);
+            }
+
+            returnValue = $('div.headline_bg', container);
+        } else if (Content.getContent('groups_show_group')) {
+            // First Post im Thread?
+            if ($('input[name="threadtitle"]').length === 1) {
+                container = $('<div/>').insertBefore(_commentBox);
+            } else {
+                container = _commentBox.parent();
+            }
+
+            if ($('div.headline_bg', container).length === 0) {
+                toolbar = $('<div class="headline_bg" />');
+                toolbar.css('padding', '3px 0px');
+                container.prepend(toolbar);
+            }
+
+            returnValue = $('div.headline_bg', container);
+        }
+
+        return returnValue;
+    };
+
+    /**
+     * Gibt das DOM-Object des Formulars zurück
+     * @returns {Null, {}}
+     * @private
+     */
+    var _getForm = function(){
+        var returnValue = null;
+
+        if (Content.getMultipleContent(['news', 'matches', 'profile'], 'OR')) {
+            returnValue = $('form[name=form_comment]');
+        } else if (Content.getMultipleContent(['forum_thread', 'forum_newtopic'], 'OR')) {
+            returnValue = $('form[name=submitpost]');
+        } else if (Content.getContent('forum_edit')) {
+            returnValue = $('form[name=submiteditthread]');
+        } else if (Content.getContent('msg')) {
+            returnValue = $('td.text_h1_j form');
+        } else if (Content.getContent('groups_show_group')) {
+            if (Content.getAction() === 'threadedit') {
+                returnValue = $('form[name="submiteditthread"]');
+            }
+
+            if (returnValue === null){
+                returnValue = $('div.elf form[name="submitpost"]');
+            }
+        }
+
+        return returnValue;
+    };
+
+    /**
+     * Gibt die Textbox für den neuen Beitrag zurück.
+     * @returns {{}}
+     * @private
+     */
+    var _getCommentBox = function(){
+        var returnValue = null;
+
+        if (Content.getContent('profile')) {
+            returnValue = $('textarea[name=comment]', _form);
+        } else if (Content.getContent('msg')) {
+            returnValue = $('textarea[name=msg]', _form);
+        } else if (Content.getContent('groups_show_group')) {
+            if (Content.getAction() === 'threadedit') {
+                returnValue = $('textarea[name=new_comment].form', _form);
+            }
+
+            if (returnValue === null){
+                returnValue = $('textarea[name=comment].form', _form);
+            }
+        }
+
+        if (returnValue === null){
+            returnValue = $('textarea#c_comment', _form);
+        }
+
+        return returnValue;
+    };
+
+    /**
+     * Fügt ein Tag in der CommentBox hinzu.
+     * @param tname {String}
+     * @param attr {*}
+     * @param endTag {String}
+     * @private
+     */
+    var _insertTag = function(tname, attr, endTag){
+        if (tname === 'url') {
+            attr = prompt('Bitte gib den gewünschten Link an: ', 'http://');
+        }
+
+        var commentBox  = _commentBox.get(0);
+        var currText    = commentBox.value;
+        var pos1        = commentBox.selectionStart + tname.length + 2 + (attr != 0 ? (attr.length + 1) : 0);
+        var pos2        = commentBox.selectionEnd + tname.length + 2 + (attr != 0 ? (attr.length + 1) : 0) + (endTag ? (tname.length + 3) : 0);
+        var range       = (commentBox.selectionStart != commentBox.selectionEnd);
+
+        commentBox.value = currText.substring(0, commentBox.selectionStart) + '[' + tname + (attr != 0 ? '=' + attr + '' : '') + ']' + (endTag ? currText.substring(commentBox.selectionStart, commentBox.selectionEnd) + '[/' + tname + ']' : '') + currText.substring(commentBox.selectionEnd, currText.length);
+        commentBox.focus();
+
+        if (range) {
+            commentBox.setSelectionRange(pos2, pos2);
+        } else {
+            commentBox.setSelectionRange(pos1, pos1);
+        }
+    };
+
+    /**
+     * Generiert ein Tag und gibt es zurück.
+     * @param img
+     * @param text
+     * @param tag
+     * @param attr
+     * @param endTag
+     * @returns {string}
+     * @private
+     */
+    var _makeTag = function (img, text, tag, attr, endTag) {
+        return '<a href="" class="rmus-control-btn" data-btype="tag" data-params="' + tag + ',' + attr + ',' + endTag + '"><img style="vertical-align: text-top;" src="' + img + '" alt="' + text + '" title="' + text + '" /></a>';
+    };
+
+    /**
+     * Generiert die Toolbar als HTML, fügt also alle Bestandteile zusammen
+     * und gibt sie anschließend zurück.
+     * @returns {string}
+     * @private
+     */
+    var _getToolbarHtml = function () {
+        var colorButtons    = '';
+        var btnTags         = '';
+
+        $.each(_colorSet, function (index, color) {
+            colorButtons += (index > 0 ? '&thinsp;' : '') + _makeTag(color[1], color[0], 'color', color[0], true);
+        });
+
+        $.each(_toolbarButtonTags, function (index, btnTag) {
+            btnTags += _makeTag(btnTag[0], btnTag[1], btnTag[2], btnTag[3]) + '&nbsp;';
+        });
+
+        return  '<div id="rmus-container" style="text-align: left; color: #fff; font-weight: bold; padding-left: 5px; font-size: 11px;">Text' +
+                '<div id="rmus-toolbar" style="margin-right: 12px; float: right;">' +
+                '<div id="rmus-toolbar-main" style="margin-bottom: 1px;text-align:right;">' +
+                btnTags + '&emsp;' +
+                colorButtons +
+                _ubbHelp +
+                '</div></div></div>' +
+                '<div style="clear: right;"></div></div>';
+    };
 
     /**
      * Init Methode starten
@@ -513,11 +709,11 @@ function RMUSOptions(){
 
     /**
      * Funktion um den Wert einer bestimmten Option zurückzugeben.
-     * @param {String}
+     * @param {String} what
      */
     this.getOption = function(what){
         return _options[what];
-    }
+    };
 
     /**
      * Gibt die aktuelle Version zurück.
@@ -525,7 +721,7 @@ function RMUSOptions(){
      */
     this.getVersion = function(){
         return _version;
-    }
+    };
 
     /**
      * Fügt den Link für die Optionen in die Userbar auf der Readmore Seite ein.
@@ -533,7 +729,7 @@ function RMUSOptions(){
      */
     this.insertOptionsLink = function(){
         $('div.floatl.vcenter.elf.dgray:last').after('<div class="floatl vcenter" style="padding-top:4px;"><img src="http://images.readmore.de/img/header/line.jpg" alt="" style="height:25px; width:2px;"></div><div class="floatl vcenter elf dgray" style="margin:11px 10px;"><a id="openUserscriptOptions" href="#" class="black">Userscript</a></div>');
-    }
+    };
 
     /**
      * Liest die Optionen aus dem HTML aus und speichert sie anschließend als JSON-String den Localstorage
@@ -551,7 +747,7 @@ function RMUSOptions(){
         }
 
         return true;
-    }
+    };
 
     /**
      * Funktion um die Optionen als JSON-String auszulesen und zurück zu geben. Wird für den
@@ -560,7 +756,7 @@ function RMUSOptions(){
      */
     this.getOptionsRaw = function () {
         return localStorage.getItem(LOCALSTORAGE_NAME);
-    }
+    };
 
     /**
      * Funktion um die Optionen als JSON-String zu übergeben und in den Localstorage zu speichern. Wird für
@@ -569,7 +765,7 @@ function RMUSOptions(){
      */
     this.setOptionsRaw = function (options) {
         localStorage.setItem(LOCALSTORAGE_NAME, options + "");
-    }
+    };
 
     /**
      * Sichert die aktuelle Konfiguration für Backupzwecke. Falls ein Import schief geht kann so der alte
@@ -577,7 +773,7 @@ function RMUSOptions(){
      */
     this.backupOptions = function () {
         localStorage.setItem(LOCALSTORAGE_NAME_BACKUP, localStorage.getItem(LOCALSTORAGE_NAME));
-    }
+    };
 
     /**
      * Blendet das Fenster mit den Optionen ein.
@@ -593,7 +789,7 @@ function RMUSOptions(){
             $('div#rmus-options-imexport').hide();
             $('div#userscriptOptions').fadeIn(250);
         });
-    }
+    };
 
     /**
      * Schließt das Fenster mit den Optionen.
@@ -604,14 +800,14 @@ function RMUSOptions(){
         });
 
         _readOptionsFromLocalstorage();
-    }
+    };
 
     /**
      * Private Methode um die aktuellen Einstellung aus den Input-Feldern der Optionen auszulesen
      * und in das entsprechende Property zu schreiben.     *
      * @private
      */
-    _readOptionsFromHTML = function(){
+    var _readOptionsFromHTML = function(){
         var userscriptOptions = {};
 
         // Geht alle Checkboxen durch, prüft ob die Box gechecked ist und setzt den passenden
@@ -637,28 +833,28 @@ function RMUSOptions(){
 
         // Nachdem alle Daten eingelesen wurden, werden die Settings in dem Attribut gesichert.
         _options = userscriptOptions;
-    }
+    };
 
     /**
      * Liest den JSON-String aus dem Localstorage aus und setzt das passende
      * Attribut der klasse. Wird im Konstruktor aufgerunden, sollte also stets verfügbar sein.     *
      * @private
      */
-    _readOptionsFromLocalstorage = function(){
+    var _readOptionsFromLocalstorage = function(){
         // JSON-String aus dem Localstorage auslesen und wieder in ein Objekt umwandeln
         _options = JSON.parse(localStorage.getItem(LOCALSTORAGE_NAME));
 
         if (_options == null) {
             _options = {};
         }
-    }
+    };
 
     /**
      * Private Methode um die Inputboxen im Menu zu setzen. Die Optionen werden aus dem
      * Attribut entnommen.
      * @private
      */
-    _writeOptionsToHTML = function(){
+    var _writeOptionsToHTML = function(){
         var type = '';
 
         if (!$.isEmptyObject(_options)) {
@@ -690,40 +886,13 @@ function RMUSOptions(){
                 }
             });
         }
-    }
+    };
 
     /**
      * Init Methode aufrufen!
      */
     _init();
 }
-/*global $, RMUS*/
-
-RMUS.browser = {
-    _browser: null,
-    getBrowser: function () {
-        if (null === RMUS.browser._browser) {
-            RMUS.browser._detect();
-        }
-
-        return RMUS.browser._browser;
-    },
-    _detect: function () {
-        var browser = 'unknown';
-
-        if ($.browser.webkit) {
-            browser = 'webkit';
-        } else if ($.browser.mozilla) {
-            browser = 'mozilla';
-        } else if ($.browser.opera) {
-            browser = 'opera';
-        } else if ($.browser.msie) {
-            browser = 'msie';
-        }
-
-        RMUS.browser._browser = browser;
-    }
-};
 RMUS.leftColumn = {
 
     www : {
@@ -1651,197 +1820,6 @@ RMUS.miscellaneous = {
         $('div#wrapper').css('margin-top', '34px');
     },
 
-    // Erweiterung des RM BBCodes um weitere Buttons/Quicklinks
-    extrabuttons: {
-        getToolbar: function () {
-            var form = RMUS.miscellaneous.extrabuttons.getForm(),
-                toolbar,
-                container;
-
-            if (content.news || content.matches || content.profile) {
-                container = form.parent('div.center');
-
-                if ($('div.headline_bg', container).length === 0) {
-                    toolbar = $('<div class="headline_bg" />');
-                    toolbar.css('padding', '3px 0px');
-                    container.prepend(toolbar);
-                }
-
-                return $('div.headline_bg', container);
-            } else if (content.forum_thread || content.forum_edit || content.forum_newtopic) {
-                return $('div.headline_bg', RMUS.miscellaneous.extrabuttons.getForm());
-            } else if (content.msg) {
-                container = RMUS.miscellaneous.extrabuttons.getCommentBox().parent();
-
-                if ($('div.headline_bg', container).length === 0) {
-                    toolbar = $('<div class="headline_bg" />');
-                    toolbar.css('padding', '3px 0px');
-                    container.prepend(toolbar);
-                }
-
-                return $('div.headline_bg', container);
-            } else if (content.groups_show_group) {
-                // First Post im Thread?
-                if ($('input[name="threadtitle"]').length === 1) {
-                    container = $('<div/>').insertBefore(RMUS.miscellaneous.extrabuttons.getCommentBox());
-                } else {
-                    container = RMUS.miscellaneous.extrabuttons.getCommentBox().parent();
-                }
-
-                if ($('div.headline_bg', container).length === 0) {
-                    toolbar = $('<div class="headline_bg" />');
-                    toolbar.css('padding', '3px 0px');
-                    container.prepend(toolbar);
-                }
-
-                return $('div.headline_bg', container);
-            }
-
-            return null;
-        },
-        getForm: function () {
-            if (content.news || content.matches || content.profile) {
-                return $('form[name=form_comment]');
-            } else if (content.forum_thread || content.forum_newtopic) {
-                return $('form[name=submitpost]');
-            } else if (content.forum_edit) {
-                return $('form[name=submiteditthread]');
-            } else if (content.msg) {
-                return $('td.text_h1_j form');
-            } else if (content.groups_show_group) {
-                if (action === 'threadedit') {
-                    return $('form[name="submiteditthread"]');
-                }
-
-                return $('div.elf form[name="submitpost"]');
-            }
-
-            return null;
-        },
-        getCommentBox: function () {
-            if (content.profile) {
-                return $('textarea[name=comment]', RMUS.miscellaneous.extrabuttons.getForm());
-            } else if (content.msg) {
-                return $('textarea[name=msg]', RMUS.miscellaneous.extrabuttons.getForm());
-            } else if (content.groups_show_group) {
-                if (action === 'threadedit') {
-                return $('textarea[name=new_comment].form', RMUS.miscellaneous.extrabuttons.getForm());
-                }
-
-                return $('textarea[name=comment].form', RMUS.miscellaneous.extrabuttons.getForm());
-            }
-
-            return $('textarea#c_comment', RMUS.miscellaneous.extrabuttons.getForm());
-        },
-        insertTag: function (tname, attr, endTag) {
-            if ('url' === tname) {
-                attr = prompt('Bitte gib den gewünschten Link an: ', 'http://');
-            }
-
-            var commentBox = RMUS.miscellaneous.extrabuttons.getCommentBox().get(0),
-                currText = commentBox.value,
-                pos1 = commentBox.selectionStart + tname.length + 2 + (attr != 0 ? (attr.length + 1) : 0),
-                pos2 = commentBox.selectionEnd + tname.length + 2 + (attr != 0 ? (attr.length + 1) : 0) + (endTag ? (tname.length + 3) : 0),
-                range = (commentBox.selectionStart != commentBox.selectionEnd);
-
-            commentBox.value = currText.substring(0, commentBox.selectionStart) + '[' + tname + (attr != 0 ? '=' + attr + '' : '') + ']' + (endTag ? currText.substring(commentBox.selectionStart, commentBox.selectionEnd) + '[/' + tname + ']' : '') + currText.substring(commentBox.selectionEnd, currText.length);
-            commentBox.focus();
-
-            if (range) {
-                commentBox.setSelectionRange(pos2, pos2);
-            } else {
-                commentBox.setSelectionRange(pos1, pos1);
-            }
-        },
-        insertText: function (text) {
-            var commentBox = RMUS.miscellaneous.extrabuttons.getCommentBox().get(0),
-                currText = commentBox.value,
-                pos = commentBox.selectionStart + text.length;
-
-            commentBox.value = currText.substring(0, commentBox.selectionStart) + text + currText.substring(commentBox.selectionEnd, currText.length);
-            commentBox.focus();
-            commentBox.setSelectionRange(pos, pos);
-        },
-        makeTag: function (img, text, tag, attr, endTag) {
-            return '<a href="" class="rmus-control-btn" data-btype="tag" data-params="' + tag + ',' + attr + ',' + endTag + '"><img style="vertical-align: text-top;" src="' + img + '" alt="' + text + '" title="' + text + '" /></a>';
-        },
-        colorSet:	[["#ff0000", "http://readmore.thextor.de/userscript/img/extrabuttons/yK4UQ.png"],
-                    ["#ff8000", "http://readmore.thextor.de/userscript/img/extrabuttons/xdj9r.png"],
-                    ["#ffff00", "http://readmore.thextor.de/userscript/img/extrabuttons/cQrl0.png"],
-                    ["#80ff00", "http://readmore.thextor.de/userscript/img/extrabuttons/KTpVX.png"],
-                    ["#00ff00", "http://readmore.thextor.de/userscript/img/extrabuttons/NhpYN.png"],
-                    ["#00ff80", "http://readmore.thextor.de/userscript/img/extrabuttons/D4JCR.png"],
-                    ["#00ffff", "http://readmore.thextor.de/userscript/img/extrabuttons/jA74E.png"],
-                    ["#0080ff", "http://readmore.thextor.de/userscript/img/extrabuttons/cQpDh.png"],
-                    ["#0000ff", "http://readmore.thextor.de/userscript/img/extrabuttons/7DXlk.png"],
-                    ["#8000ff", "http://readmore.thextor.de/userscript/img/extrabuttons/t79Yf.png"],
-                    ["#ff00ff", "http://readmore.thextor.de/userscript/img/extrabuttons/IwKL1.png"],
-                    ["#ff0080", "http://readmore.thextor.de/userscript/img/extrabuttons/cKrre.png"],
-                    ["#000000", "http://readmore.thextor.de/userscript/img/extrabuttons/eeX1k.png"],
-                    ["#333333", "http://readmore.thextor.de/userscript/img/extrabuttons/B4ToQ.png"],
-                    ["#666666", "http://readmore.thextor.de/userscript/img/extrabuttons/OuClO.png"],
-                    ["#999999", "http://readmore.thextor.de/userscript/img/extrabuttons/gc8Za.png"],
-                    ["#cccccc", "http://readmore.thextor.de/userscript/img/extrabuttons/TwNb6.png"],
-                    ["#ffffff", "http://readmore.thextor.de/userscript/img/extrabuttons/uq9mG.png"]],
-
-        toolbarButtonTags:	[["http://images.readmore.de/img/icons/ubb/b.png", "fett", "b", 0, true],
-                            ["http://images.readmore.de/img/icons/ubb/i.png", "kursiv", "i", 0, true],
-                            ["http://images.readmore.de/img/icons/ubb/u.png", "unterstrichen", "u", 0, true],
-                            ["http://images.readmore.de/img/icons/ubb/s.png", "durchgestrichen", "s", 0, true],
-                            ["http://readmore.thextor.de/userscript/img/extrabuttons//yPNsn.png", "zentriert", "center", 0, true],
-                            ["http://readmore.thextor.de/userscript/img/extrabuttons//74lEI.png", "hr", "hr", 0, false],
-                            ["http://images.readmore.de/img/icons/ubb/url2.png", "url", "url", 0, true],
-                            ["http://images.readmore.de/img/icons/ubb/quote.png", "quote", "quote", 0, true],
-                            ["http://images.readmore.de/img/icons/ubb/spoil.png", "spoiler", "spoiler", 0, true],
-                            ["http://images.readmore.de/img/icons/ubb/youtube.png", "youtube", "youtube", 0, true],
-                            ["http://readmore.thextor.de/userscript/img/extrabuttons/ZQ5jN.png", "img", "img", 0, true]],
-
-        ubbHelp: '<a onclick="window.open(\'http://www.readmore.de/mod/ubb.mod.php\', \'UBB Hilfe\', \'scrollbars=1,width=600,height=490,left=100,top=200\');return false;" href="/index.php?cont=ubb" style="font-weight:bold; color:#fff; margin-left: 8px; font-size: 11px;" class="ten hgray">?</a>',
-
-        getToolbarHtml: function () {
-            var colorButtons = '',
-                btnTags = '';
-
-            $.each(RMUS.miscellaneous.extrabuttons.colorSet, function (index, color) {
-                colorButtons += (index > 0 ? '&thinsp;' : '') + RMUS.miscellaneous.extrabuttons.makeTag(color[1], color[0], 'color', color[0], true);
-            });
-
-            $.each(RMUS.miscellaneous.extrabuttons.toolbarButtonTags, function (index, btnTag) {
-                btnTags += RMUS.miscellaneous.extrabuttons.makeTag(btnTag[0], btnTag[1], btnTag[2], btnTag[3]) + '&nbsp;';
-            });
-
-            return '<div id="rmus-container" style="text-align: left; color: #fff; font-weight: bold; padding-left: 5px; font-size: 11px;">Text' +
-            '<div id="rmus-toolbar" style="margin-right: 12px; float: right;">' +
-            '<div id="rmus-toolbar-main" style="margin-bottom: 1px;text-align:right;">' +
-
-            btnTags + '&emsp;' +
-            colorButtons +
-            this.ubbHelp +
-
-            '</div></div></div>' +
-            '<div style="clear: right;"></div></div>';
-        },
-        init: function () {
-            try {
-                RMUS.miscellaneous.extrabuttons.getToolbar().css('height', 'auto').html(RMUS.miscellaneous.extrabuttons.getToolbarHtml());
-            } catch (e) {}
-
-            $('a.rmus-control-btn').click(function (e) {
-                e.preventDefault();
-
-                var btype = $(this).attr('data-btype'),
-                    params = $(this).attr('data-params');
-
-                switch(btype) {
-                    case 'tag':
-                        params = params.split(',');
-                        RMUS.miscellaneous.extrabuttons.insertTag(params[0], params[1], params[2]);
-                        break;
-                }
-            });
-        }
-    },
-
     reloadMainpageData : {
         mainpageData : '',
 
@@ -2189,6 +2167,10 @@ RMUS.rightColumn = {
         }
     }
 };
+// Global FIX ME
+var Options = new RMUSOptions();
+var Content = new RMUSContent();
+
 RMUS.start = function () {
 
     var Options = new RMUSOptions();
@@ -2197,15 +2179,6 @@ RMUS.start = function () {
     /********************************
     *	Funktionen aktivieren	*
     *********************************/
-
-    // Bereich auf der Readmore.de Seite rausfinden
-    var action = document.location.search.match(/action=([a-zA-Z]+)/i);
-
-    if (action && action[1]) {
-        action = action[1];
-    } else {
-        action = null;
-    }
 
     // BC: Einmal speichern, damit auch die nicht-selektierten Checkboxen gespeichert werden.
     if (!localStorage.getItem('bcOptionsSaved')) {
@@ -2361,7 +2334,7 @@ RMUS.start = function () {
     // Extrabuttons in den entsprechenden Seiten initialisieren
     if (Content.getMultipleContent(['forum_thread', 'forum_newtopic', 'forum_edit', 'matches', 'msg', 'profile', 'groups_show_group'], 'OR')) {
         if (Options.getOption('miscellaneous_extraButtons') === 'checked') {
-            RMUS.miscellaneous.extrabuttons.init();
+            var Extrabuttons = new RMUSExtrabuttons(Content);
         }
     }
 

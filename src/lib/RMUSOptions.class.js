@@ -143,7 +143,7 @@ function RMUSOptions(){
      * und in das entsprechende Property zu schreiben.     *
      * @private
      */
-    _readOptionsFromHTML = function(){
+    var _readOptionsFromHTML = function(){
         var userscriptOptions = {};
 
         // Geht alle Checkboxen durch, prüft ob die Box gechecked ist und setzt den passenden
@@ -176,7 +176,7 @@ function RMUSOptions(){
      * Attribut der klasse. Wird im Konstruktor aufgerunden, sollte also stets verfügbar sein.     *
      * @private
      */
-    _readOptionsFromLocalstorage = function(){
+    var _readOptionsFromLocalstorage = function(){
         // JSON-String aus dem Localstorage auslesen und wieder in ein Objekt umwandeln
         _options = JSON.parse(localStorage.getItem(LOCALSTORAGE_NAME));
 
@@ -190,7 +190,7 @@ function RMUSOptions(){
      * Attribut entnommen.
      * @private
      */
-    _writeOptionsToHTML = function(){
+    var _writeOptionsToHTML = function(){
         var type = '';
 
         if (!$.isEmptyObject(_options)) {

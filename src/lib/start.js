@@ -1,3 +1,7 @@
+// Global FIX ME
+var Options = new RMUSOptions();
+var Content = new RMUSContent();
+
 RMUS.start = function () {
 
     var Options = new RMUSOptions();
@@ -6,15 +10,6 @@ RMUS.start = function () {
     /********************************
     *	Funktionen aktivieren	*
     *********************************/
-
-    // Bereich auf der Readmore.de Seite rausfinden
-    var action = document.location.search.match(/action=([a-zA-Z]+)/i);
-
-    if (action && action[1]) {
-        action = action[1];
-    } else {
-        action = null;
-    }
 
     // BC: Einmal speichern, damit auch die nicht-selektierten Checkboxen gespeichert werden.
     if (!localStorage.getItem('bcOptionsSaved')) {
@@ -170,7 +165,7 @@ RMUS.start = function () {
     // Extrabuttons in den entsprechenden Seiten initialisieren
     if (Content.getMultipleContent(['forum_thread', 'forum_newtopic', 'forum_edit', 'matches', 'msg', 'profile', 'groups_show_group'], 'OR')) {
         if (Options.getOption('miscellaneous_extraButtons') === 'checked') {
-            RMUS.miscellaneous.extrabuttons.init();
+            var Extrabuttons = new RMUSExtrabuttons(Content);
         }
     }
 

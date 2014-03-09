@@ -8,7 +8,7 @@
 function RMUSContent(){
 
     /**
-     * Property in dem alle content Möglichkeiten aufgelistet sind. Default sind alle falsch, die _init Methode
+     * Property in dem alle content Möglichkeiten aufgelistet sind. Default sind alle false, die _init Methode
      * liest die aktuelle Seite aus.
      * @type {{mainpage: boolean, profile: boolean, groups_new: boolean, groups_group_list: boolean, groups_show_group: boolean, msg: boolean, news_archive: boolean, headlines_overview: boolean, www: boolean, widget_create_ticker: boolean, guides: boolean, articles: boolean, news: boolean, search: boolean, match_overview: boolean, db: boolean, coverages: boolean, demo_overview_pov: boolean, demo_overview_hltv: boolean, demo_overview: boolean, video_overview: boolean, gallery_sets: boolean, forum_forum: boolean, forum_board: boolean, forum_thread: boolean, forum_edit: boolean, forum_newtopic: boolean, community: boolean, blog: boolean, poll_archive: boolean, rules: boolean, team: boolean, imprint: boolean, userstream: boolean, gallery_images: boolean, matches: boolean}}
      * @private
@@ -53,128 +53,34 @@ function RMUSContent(){
     };
 
     /**
+     * Action Parameter in der URL
+     * @type {String | Null}
+     * @private
+     */
+    var _action = null;
+
+    /**
      * Aktuelle Seite auf der wir uns befinden
      * @type {string}
      * @private
      */
     var _currentPage = '';
 
-    _init = function(){
+    /**
+     * Methode wird bei der Instanziierung des Objektes ausgeführt. Liest sowohl den Action und die
+     * aktuelle Seite aus.
+     * @private
+     */
+    var _init = function(){
 
+        _readAction();
         _readCurrentPage();
 
-        switch (_currentPage) {
-            case '':
-                _content.mainpage = true;
-                break;
-            case 'profile':
-                _content.profile = true;
-                break;
-            case 'forum/thread':
-                _content.forum_thread = true;
-                break;
-            case 'forum/forum':
-                _content.forum_forum = true;
-                break;
-            case 'forum/board':
-                _content.forum_board = true;
-                break;
-            case 'forum/edit':
-                _content.forum_edit = true;
-                break;
-            case 'matches':
-                _content.matches = true;
-                break;
-            case 'www':
-                _content.www = true;
-                break;
-            case 'userstream':
-                _content.userstream = true;
-                break;
-            case 'groups/new':
-                _content.groups_new = true;
-                break;
-            case 'groups/group_list':
-                _content.groups_group_list = true;
-                break;
-            case 'groups/show_group':
-                _content.groups_show_group = true;
-                break;
-            case 'msg':
-                _content.msg = true;
-                break;
-            case 'news_archive':
-                _content.news_archive = true;
-                break;
-            case 'headlines_overview':
-                _content.headlines_overview = true;
-                break;
-            case 'widget/create_ticker':
-                _content.widget_create_ticker = true;
-                break;
-            case 'guides':
-                _content.guides = true;
-                break;
-            case 'articles':
-                _content.articles = true;
-                break;
-            case 'news':
-                _content.news = true;
-                break;
-            case 'search':
-                _content.search = true;
-                break;
-            case 'match_overview':
-                _content.match_overview = true;
-                break;
-            case 'db':
-                _content.db = true;
-                break;
-            case 'coverages':
-                _content.coverages = true;
-                break;
-            case 'demo_overview_pov':
-                _content.demo_overview_pov = true;
-                break;
-            case 'demo_overview_hltv':
-                _content.demo_overview_hltv = true;
-                break;
-            case 'demo_overview':
-                _content.demo_overview = true;
-                break;
-            case 'video_overview':
-                _content.video_overview = true;
-                break;
-            case 'gallery_sets':
-                _content.gallery_sets = true;
-                break;
-            case 'forum/newtopic':
-                _content.forum_newtopic = true;
-                break;
-            case 'community':
-                _content.community = true;
-                break;
-            case 'blog':
-                _content.blog = true;
-                break;
-            case 'poll_archive':
-                _content.poll_archive = true;
-                break;
-            case 'rules':
-                _content.rules = true;
-                break;
-            case 'team':
-                _content.team = true;
-                break;
-            case 'imprint':
-                _content.imprint = true;
-                break;
-            case 'gallery_images':
-                _content.gallery_images = true;
-                break;
-            default:
-                _content.mainpage = true;
-                break;
+        if (_content.hasOwnProperty(_currentPage)){
+            _content[_currentPage] = true;
+        }
+        else{
+            _content['mainpage'] = true;
         }
     };
 
@@ -227,21 +133,46 @@ function RMUSContent(){
     };
 
     /**
+     * Gibt den Action-Parameter zurück
+     * @returns {String|Null}
+     */
+    this.getAction = function(){
+        return _action;
+    };
+
+    /**
      * Liest aus der URL (codument.location) Parameter aus und extrahiert den Content-Part,
      * damit wir wissen, auf welcher Seite wir und momentan befinden.
      * @private
      */
-    _readCurrentPage = function(){
+    var _readCurrentPage = function(){
         var getVars = document.location.search.replace(/[?]/g, '').replace(/[&]/g, '=').split('=');
         var curPage = '';
 
         $.each(getVars, function (index, value) {
             if (value == 'cont') {
-                curPage = getVars[index+1];
+                curPage = getVars[index+1].replace(/\//g, '_');
             }
         });
 
         _currentPage = curPage;
+    };
+
+    /**
+     * Liest den action Parameter aus der URL aus. Wird beispielsweise in den Gruppen gesetzt. Die Extrabuttons
+     * benötigen diese Informationen.
+     * @private
+     */
+    var _readAction = function(){
+        var action = document.location.search.match(/action=([a-zA-Z]+)/i);
+
+        if (action && action[1]) {
+            action = action[1];
+        } else {
+            action = null;
+        }
+
+        _action = action;
     };
 
     /**
