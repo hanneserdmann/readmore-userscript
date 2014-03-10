@@ -33,7 +33,7 @@ function RMUSPreview(){
      * @private
      */
     var _previewTags = {
-        '\\[b\\]'           : '<br>',
+        '\\[b\\]'           : '<b>',
         '\\[/b\\]'          : '</b>',
         '\\[i\\]'           : '<i>',
         '\\[/i\\]'          : '</i>',
