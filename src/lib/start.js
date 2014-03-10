@@ -6,6 +6,7 @@ RMUS.start = function () {
 
     var Options = new RMUSOptions();
     var Content = new RMUSContent();
+    var Preview = {};
 
     /********************************
     *	Funktionen aktivieren	*
@@ -96,8 +97,8 @@ RMUS.start = function () {
 
         // Vorschau
         if (Options.getOption('middleColumn_forum_preview') === 'checked') {
-            RMUS.middleColumn.forum.preview.insertPreviewHtml();
-            $('#triggerPreview').click(RMUS.middleColumn.forum.preview.triggerPreview);
+            Preview = new RMUSPreview();
+            $('#triggerPreview').on('click', Preview.triggerPreview);
         }
 
         // Posten im Hintergrund
