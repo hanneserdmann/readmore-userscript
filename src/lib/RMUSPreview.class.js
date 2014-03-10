@@ -106,7 +106,7 @@ function RMUSPreview(){
     var _insertPreviewHtml = function () {
         var $div = $('.center:last');
 
-        $('<br /><table border="0" id="previewtable" style="display: none"><tr><td valign="top" id="previewleft" style="border: solid 1px #dddddd; border-right: none; width:110px; height:auto; min-height: 150px;"></td><td valign="top" id="preview" style="font-size: 11px; border: solid 1px #dddddd; width:408px; height:auto; min-height: 150px;"></td><td><img style="border: none; marin: 0, padding: 0;" src="http://readmore.thextor.de/userscript/img/minheight150.gif"></img></td></tr><tr><td colspan="2" style="border: solid 1px #dddddd; border-top: none; background-color: #DEDEDE; height: 12px;"></td><td style="border: none;"></td></table>').insertAfter($div);
+        $('<br /><table border="0" id="previewtable" style="display: none"><tr><td valign="top" id="previewleft" style="border: solid 1px #dddddd; border-right: none; width:110px; height:auto; min-height: 150px;"></td><td valign="top" id="preview" style="font-size: 11px; border: solid 1px #dddddd; width:408px; height:auto; min-height: 150px;"></td><td><img style="border: none; margin: 0; padding: 0;" src="http://readmore.thextor.de/userscript/img/minheight150.gif"></td></tr><tr><td colspan="2" style="border: solid 1px #dddddd; border-top: none; background-color: #DEDEDE; height: 12px;"></td><td style="border: none;"></td></table>').insertAfter($div);
         $('<input type="button" value="Vorschau ein-/ausblenden" class="form" id="triggerPreview" style="margin-left: 10px;">').appendTo($div);
     };
 
@@ -222,6 +222,10 @@ function RMUSPreview(){
         console.log('YOO!');
     };
 
+    /**
+     * Preview einschalten
+     * @private
+     */
     var _activatePreview = function(){
         _showPreview();
 
@@ -232,13 +236,17 @@ function RMUSPreview(){
         _previewIsEnabled = true;
     };
 
+    /**
+     * Preview ausschalten
+     * @private
+     */
     var _deactivatePreview = function(){
         _previewtable.css('display', 'none');
         _c_comment.off('keyup', _showPreview);
         _c_comment.off('focus', _showPreview);
 
         _previewIsEnabled = false;
-    }
+    };
 
     /**
      * Öffentliche Methode um die Preview ein- oder auszuschalten. Orientiert sich an dem
@@ -248,10 +256,10 @@ function RMUSPreview(){
         console.log(_previewIsEnabled);
 
         if (_previewIsEnabled) {
-            //_deactivatePreview();
+            _deactivatePreview();
         }
         else {
-            //_activatePreview();
+            _activatePreview();
         }
     };
 
