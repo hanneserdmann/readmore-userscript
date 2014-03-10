@@ -219,7 +219,6 @@ function RMUSPreview(){
      */
     var _showPreview = function(){
         _previewElement.html(_convertToPreview(String(_c_comment.val().replace(/(\r\n|\n|\r)/gm, '<br />'))));
-        console.log('YOO!');
     };
 
     /**
