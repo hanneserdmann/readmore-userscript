@@ -252,8 +252,6 @@ function RMUSPreview(){
      * Attribut _previewIsEnabled.
      */
     this.triggerPreview = function() {
-        console.log(_previewIsEnabled);
-
         if (_previewIsEnabled) {
             _deactivatePreview();
         }
