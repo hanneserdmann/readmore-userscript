@@ -7,6 +7,7 @@ RMUS.start = function () {
     var Options = new RMUSOptions();
     var Content = new RMUSContent();
     var Preview = {};
+    var Update  = new RMUSUpdate(Options);
 
     /********************************
     *	Funktionen aktivieren	*
@@ -323,23 +324,9 @@ RMUS.start = function () {
     });
 
     // Prüfen ob eine neue Version erschienen ist
-    RMUS.update.checkVersion();
+    Update.checkVersion();
 
-/*    // content in den LocalStorage speichern
-    var seen = [];
-    localStorage.setItem('userscriptContent',
-        JSON.stringify(content, function(key, val) {
-            if (typeof val == "object") {
-                if (seen.indexOf(val) >= 0) {
-                    return undefined
-                }
-                seen.push(val);
-            }
 
-            return val;
-        })
-    );
-*/
     // Im Hintergrund ausgeführte Aktionen starten (zeitunkritisch)
     window.setInterval(function(){
 
@@ -361,7 +348,7 @@ RMUS.start = function () {
                 RMUS.miscellaneous.stopAvatarAnimation.stopAnimation();
             }
         }
-    }, (parseInt(Options.getOption('sub_middleColumn_forum_reloadPosts_timeToWait'), 10) > 2) ? parseInt(Options.getOption('sub_middleColumn_forum_reloadPosts_timeToWait'), 10) * 1000 : 3000);
+    }, (parseInt(Options.getOption('sub_middleColumn_forum_reloadPosts_timeToWait'), 10) > 2) ? parseInt(Options.getOption('middleColumn_forum_reloadPosts_timeToWait'), 10) * 1000 : 3000);
 
     // Im Hintergrund ausgeführte Aktionen starten (3x in der Sekunde, sehr zeitkritisch)
     window.setInterval(function(){
