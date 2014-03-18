@@ -2738,7 +2738,7 @@ RMUS.start = function () {
                 RMUS.miscellaneous.stopAvatarAnimation.stopAnimation();
             }
         }
-    }, (parseInt(Options.getOption('sub_middleColumn_forum_reloadPosts_timeToWait'), 10) > 2) ? parseInt(Options.getOption('middleColumn_forum_reloadPosts_timeToWait'), 10) * 1000 : 3000);
+    }, (parseInt(Options.getOption('middleColumn_forum_reloadPosts_timeToWait'), 10) > 2) ? parseInt(Options.getOption('middleColumn_forum_reloadPosts_timeToWait'), 10) * 1000 : 3000);
 
     // Im Hintergrund ausgeführte Aktionen starten (3x in der Sekunde, sehr zeitkritisch)
     window.setInterval(function(){
