@@ -1,13 +1,16 @@
 // Global FIX ME
-var Options = new RMUSOptions();
-var Content = new RMUSContent();
+var Options     = new RMUSOptions();
+var Content     = new RMUSContent();
+var Preview     = new RMUSPreview();
+var EditPosts   = new RMUSEditPosts(Preview);
 
 RMUS.start = function () {
 
-    var Options = new RMUSOptions();
-    var Content = new RMUSContent();
-    var Preview = {};
-    var Update  = new RMUSUpdate(Options);
+    var Options     = new RMUSOptions();
+    var Content     = new RMUSContent();
+    var Preview     = new RMUSPreview();
+    var Update      = new RMUSUpdate(Options);
+    var EditPosts   = new RMUSEditPosts(Preview);
 
     /********************************
     *	Funktionen aktivieren	*
@@ -98,7 +101,7 @@ RMUS.start = function () {
 
         // Vorschau
         if (Options.getOption('middleColumn_forum_preview') === 'checked') {
-            Preview = new RMUSPreview();
+            Preview.init();
             $('#triggerPreview').on('click', Preview.triggerPreview);
         }
 
@@ -145,7 +148,7 @@ RMUS.start = function () {
 
         // Edit vorbereiten
         if (Options.getOption('middleColumn_forum_editPost') === 'checked'){
-            RMUS.middleColumn.forum.editPost.initializeEvent();
+            EditPosts.initializeEvent();
         }
 
         // Youtubeplayer ersetzen

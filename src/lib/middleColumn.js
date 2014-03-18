@@ -79,11 +79,9 @@ RMUS.middleColumn = {
                                 // Beiträge aus den neuen Posts ignorieren
                                 if (Options.getOption('miscellaneous_ignoreUser') == 'checked') RMUS.miscellaneous.ignoreUser.doIgnore(true, false, false);
                                 // Edit vorbereiten
-                                if (Options.getOption('middleColumn_forum_editPost') == 'checked') RMUS.middleColumn.forum.editPost.initializeEvent();
+                                if (Options.getOption('middleColumn_forum_editPost') == 'checked') EditPosts.initializeEvent();
                                 // Notzizen einblenden
                                 if(Options.getOption('miscellaneous_note') == 'checked') RMUS.miscellaneous.note.initialize();
-                                // Edit vorbereiten
-                                if (Options.getOption('middleColumn_forum_editPost') == 'checked') RMUS.middleColumn.forum.editPost.initializeEvent();
                                 // Youtubeplayer ersetzen
                                 if(Options.getOption('miscellaneous_convertYoutube') == 'checked') RMUS.miscellaneous.convertYoutube();
                             }
@@ -277,7 +275,7 @@ RMUS.middleColumn = {
             replacePost['%C3%9B'] = '%DB';		// Û
             replacePost['%C2%A7'] = '%A7';		// §
 
-            replacePost['%E2%82%AC'] = '%80';		// €
+            replacePost['%E2%82%AC'] = '%80';		    // €
             replacePost['%E2%95%AF'] = '%26#9583;';		// ╯
             replacePost['%E2%96%A1'] = '%26#9633;';		// □
             replacePost['%EF%BC%89'] = '%26#65289;';	// ）
@@ -393,145 +391,6 @@ RMUS.middleColumn = {
                 $('#content br.clear:last').after('<a id="RMUSeditboxBottom" href="javascript:void(0);" style="float: right; display: none;" onclick="$(\'#content br.clear:last\').after($(\'form[name=submitpost]\')); $(this).css(\'display\',\'none\'); $(\'#RMUSeditboxTop\').css(\'display\',\'\');">Editbox anzeigen<br /><br /></a>');
             }
         },
-
-        // Edit ohne Reload
-        editPost : {
-
-            originalPosts : [],
-
-            initializeEvent : function(){
-                $('tr[class*=footer_]>td>a[href*=edit]').click(function () {
-                    var hrefParts = String($(this).attr('href')).match(/postid=(.*)/);
-
-                    if (null !== hrefParts) {
-                        var postid = parseInt(hrefParts[1], 10);
-                        $(this).attr('href', 'javascript:void(0);');
-
-                        RMUS.middleColumn.forum.editPost.loadPost(postid);
-                        RMUS.middleColumn.forum.editPost.showEditMenu(postid);
-                    }
-                });
-
-                return false;
-            },
-
-            loadPost : function(postid){
-                var height = $('tr[class=post_' + postid + ']>td:last').css('height');
-                RMUS.middleColumn.forum.editPost.originalPosts[postid] = $('tr[class=post_' + postid + ']>td:last').html();
-
-                $('tr[class=post_' + postid + ']>td:last').html('');
-                $('tr[class=post_' + postid + ']>td:last').append('<textarea style="width: 100%; height: ' + height + '; padding: 0; margin: 0;"></textarea>');
-
-                $.ajax({
-                    type: 'POST',
-                    async: true,
-                    cache: false,
-                    url: 'index.php?cont=forum/edit&postid=' + postid,
-                    contentType: 'text/html; charset=iso-8859-1;',
-                    dataType: 'html',
-                    success: function (data) {
-                        $('tr[class=post_' + postid + ']>td:last textarea').val(data.replace(/(\r\n|\n|\r)/gm,'[newline]').match(/<textarea(.*?)>(.*?)<\/textarea>/)[2].replace(/\[newline\]/g, '\r\n'));
-                    },
-                    beforeSend: function(jqXHR) {
-                        jqXHR.overrideMimeType('text/html;charset=iso-8859-1');
-                    }
-                });
-
-                return false;
-            },
-
-            showEditMenu : function(postid){
-                var submit = '<a class="edit_submit_' + postid + '" href="javascript:void(0);" style="margin-right: 4px;">Edit absenden</a>';
-                var cancel = '<a class="edit_cancel_' + postid + '"href="javascript:void(0);" style="color: gray;">Edit abrechen</a>&nbsp;|&nbsp;';
-                $('tr[class*=footer_' + postid + ']>td').append('<div>' + cancel + submit + '</div>');
-
-                $('tr[class*=footer_' + postid + ']>td>div>a:first').click(function () {
-                    RMUS.middleColumn.forum.editPost.cancelEdit(postid);
-                });
-
-                $('tr[class*=footer_' + postid + ']>td>div>a:last').click(function () {
-                    RMUS.middleColumn.forum.editPost.submitEdit(postid);
-                });
-
-                return false;
-            },
-
-            cancelEdit : function(postid){
-                $('tr[class*=footer_' + postid + ']>td>div').remove();
-                $('tr[class=post_' + postid + ']>td:last').html('');
-                $('tr[class*=footer_' + postid + ']>td>a:eq(1)').attr('href', 'http://www.readmore.de/index.php?cont=forum/edit&postid=' + postid);
-
-                $('tr[class=post_' + postid + ']>td:last').html(RMUS.middleColumn.forum.editPost.originalPosts[postid]);
-                RMUS.middleColumn.forum.editPost.originalPosts[postid] = null;
-
-                $('tr[class*=footer_' + postid + ']>td>div>a:first').off('click');
-                $('tr[class*=footer_' + postid + ']>td>div>a:last').off('click');
-                $('tr[class*=footer_' + postid + ']>td>a:eq(1)').off('click');
-                RMUS.middleColumn.forum.editPost.initializeEvent();
-                return false;
-            },
-
-            submitEdit : function(postid){
-                var newpost = '';
-                var postdata = '';
-
-                $.ajax({
-                    type: 'POST',
-                    async: false,
-                    cache: false,
-                    url: 'http://www.readmore.de/index.php?cont=forum/edit&postid=' + postid,
-                    contentType: 'text/html; charset=iso-8859-1;',
-                    dataType: 'html',
-                    success: function (datafirst) {
-                        var f_uid = $(datafirst).find('input[name="f_uid"]').val();
-                        var boardid = $(datafirst).find('input[name="thread[boardid]"]').val();
-                        var threadid = $(datafirst).find('input[name="thread[threadid]"]').val();
-                        var postidedit = $(datafirst).find('input[name="post[postid]"]').val();
-                        var threadtopic = $(datafirst).find('input[name="thread[threadtopic]"]').val();
-
-                        newpost = $('tr[class=post_' + postid + ']>td:last textarea').val();
-                        postdata = 'f_uid=' + f_uid + '&thread[boardid]=' + boardid + '&thread[threadid]=' + threadid + '&post[postid]=' + postidedit + '&postnew_newposttext=' + encodeURI(newpost).replace(/&amp;/g, '&').replace(/&/g, '%26');
-                        if (threadtopic != null){
-                            if (threadtopic.trim().length > 0) postdata += '&thread[threadtopic]=' + encodeURI(threadtopic).replace(/&amp;/g, '&').replace(/&/g, '%26');
-                        }
-                        postdata = RMUS.middleColumn.forum.replaceSpecialChars(postdata);
-
-                        $.ajax({
-                            type: 'POST',
-                            async: false,
-                            cache: false,
-                            url: 'http://www.readmore.de/index.php?cont=forum/do_edit',
-                            data: postdata,
-                            contentType: 'application/x-www-form-urlencoded; charset=iso-8859-1;',
-                            dataType: 'html',
-                            success: function (response) {
-                                var content = $(response).find('#content').html();
-                                if(content.match(/Fehler/)){
-                                    alert('Es ist leider ein Fehler aufgetreten. Bitte lade die Seite neu!');
-                                }
-                            },
-                            error: function (){
-                                alert('Es ist leider ein Fehler aufgetreten. Bitte lade die Seite neu!');
-                            }
-                        });
-                    },
-                    beforeSend: function(jqXHR) {
-                        jqXHR.overrideMimeType('text/html;charset=iso-8859-1');
-                    }
-                });
-
-                $('tr[class*=footer_' + postid + ']>td>div>a:first').off('click');
-                $('tr[class*=footer_' + postid + ']>td>div>a:last').off('click');
-                $('tr[class*=footer_' + postid + ']>td>a:eq(1)').off('click');
-
-                $('tr[class*=footer_' + postid + ']>td>div').remove();
-                $('tr[class=post_' + postid + ']>td:last').html(RMUS.middleColumn.forum.preview.convertToPreview(newpost.replace(/(\r\n|\n|\r)/gm, '<br />')));
-                $('tr[class*=footer_' + postid + ']>td>a:eq(1)').attr('href', 'http://www.readmore.de/index.php?cont=forum/edit&postid=' + postid);
-                RMUS.middleColumn.forum.editPost.initializeEvent();
-
-                return false;
-            }
-        }
     },
 
     searchJumpToLastpage : {

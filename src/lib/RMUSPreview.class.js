@@ -83,22 +83,6 @@ function RMUSPreview(){
     var _previewtable = {};
 
     /**
-     * Missbrauche diese Funktion einfach mal als Konstuktor-Ersatz. Finde es einfach schöner
-     * dafür eine separate Methode zu haben. Wird als letzte Zeile ausgerufen.
-     * Liest UserID und Name aus, fügt dann das Grundgerüst für die Preview ein.
-     * @private
-     */
-    _init = function(){
-        _readUseridAndUsername();
-        _insertPreviewHtml();
-        _initializePreview();
-
-        _previewElement = $('#preview');
-        _c_comment      = $('#c_comment');
-        _previewtable   = $('#previewtable');
-    };
-
-    /**
      * Fügt den Button zum ein und ausblenden sowie die Grundlage für das Gerüst der Vorschau
      * auf die Readmore Seite ein.
      * @private
@@ -153,13 +137,73 @@ function RMUSPreview(){
     };
 
     /**
+     * Stellt die Preview da
+     * @private
+     */
+    var _showPreview = function(){
+        _previewElement.html(_convertToPreview(String(_c_comment.val().replace(/(\r\n|\n|\r)/gm, '<br />'))));
+    };
+
+    /**
+     * Preview einschalten
+     * @private
+     */
+    var _activatePreview = function(){
+        _showPreview();
+
+        _previewtable.css('display', 'block');
+        _c_comment.on('keyup', _showPreview);
+        _c_comment.on('focus', _showPreview);
+
+        _previewIsEnabled = true;
+    };
+
+    /**
+     * Preview ausschalten
+     * @private
+     */
+    var _deactivatePreview = function(){
+        _previewtable.css('display', 'none');
+        _c_comment.off('keyup', _showPreview);
+        _c_comment.off('focus', _showPreview);
+
+        _previewIsEnabled = false;
+    };
+
+    /**
+     * Öffentliche Methode um die Preview ein- oder auszuschalten. Orientiert sich an dem
+     * Attribut _previewIsEnabled.
+     */
+    this.triggerPreview = function() {
+        if (_previewIsEnabled) {
+            _deactivatePreview();
+        }
+        else {
+            _activatePreview();
+        }
+    };
+
+    /**
+     * Liest UserID und Name aus, fügt dann das Grundgerüst für die Preview ein.
+     * @private
+     */
+    this.init = function(){
+        _readUseridAndUsername();
+        _insertPreviewHtml();
+        _initializePreview();
+
+        _previewElement = $('#preview');
+        _c_comment      = $('#c_comment');
+        _previewtable   = $('#previewtable');
+    };
+
+    /**
      * Ersetzt den Text mit BBCODE durch HTML-Code.
      * Herzstück der Preview.
      * @param raw_post  {String}    Beitrag mit BBCODE
      * @returns         {String}    Beitrag übersetzt nach HTML
-     * @private
      */
-    var _convertToPreview = function(raw_post){
+    this.convertToPreview = function(raw_post){
         var text            = raw_post;
         var urlPreview      = '';
         var colorPreview    = '';
@@ -212,56 +256,4 @@ function RMUSPreview(){
         text = text.replace(/\[\/quote\]/g, '</div>');
         return text;
     };
-
-    /**
-     * Stellt die Preview da
-     * @private
-     */
-    var _showPreview = function(){
-        _previewElement.html(_convertToPreview(String(_c_comment.val().replace(/(\r\n|\n|\r)/gm, '<br />'))));
-    };
-
-    /**
-     * Preview einschalten
-     * @private
-     */
-    var _activatePreview = function(){
-        _showPreview();
-
-        _previewtable.css('display', 'block');
-        _c_comment.on('keyup', _showPreview);
-        _c_comment.on('focus', _showPreview);
-
-        _previewIsEnabled = true;
-    };
-
-    /**
-     * Preview ausschalten
-     * @private
-     */
-    var _deactivatePreview = function(){
-        _previewtable.css('display', 'none');
-        _c_comment.off('keyup', _showPreview);
-        _c_comment.off('focus', _showPreview);
-
-        _previewIsEnabled = false;
-    };
-
-    /**
-     * Öffentliche Methode um die Preview ein- oder auszuschalten. Orientiert sich an dem
-     * Attribut _previewIsEnabled.
-     */
-    this.triggerPreview = function() {
-        if (_previewIsEnabled) {
-            _deactivatePreview();
-        }
-        else {
-            _activatePreview();
-        }
-    };
-
-    /**
-     * Init Methode aufrufen!
-     */
-    _init();
 }

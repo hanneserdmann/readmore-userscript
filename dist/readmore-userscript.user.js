@@ -398,6 +398,177 @@ function RMUSContent(){
     _init();
 }
 /**
+ * RMUSEditPosts
+ * =============
+ *
+ * Ermöglicht das Editieren von Posts ohne Reload.
+ */
+function RMUSEditPosts(_preview){
+
+    /**
+     * Array mit den original Posts, damit sie wiederhergestellt werden
+     * können.
+     * @type {Array}
+     * @private
+     */
+    var _originalPosts = [];
+
+    /**
+     * Fügt den Event-Handler ein um das Editieren für einen Post zu starten.
+     */
+    this.initializeEvent = function(){
+        $('tr[class*=footer_] a:contains("editieren")').on('click', function () {
+            var $this   = $(this);
+            var postid  = 0;
+
+            if ($this.data('postid') !== undefined){
+                postid = $this.data('postid');
+            }
+            else{
+                var hrefParts = String($this.attr('href')).match(/postid=(.*)/);
+                $this.attr('href', 'javascript:void(0);');
+
+                if (null !== hrefParts) {
+                    var postid = parseInt(hrefParts[1], 10);
+                    $this.attr('href', 'javascript:void(0);');
+                    $this.data('postid', postid);
+                }
+            }
+
+            if (postid){
+                _loadPost(postid);
+                _showEditMenu(postid);
+            }
+        });
+    };
+
+    /**
+     * Lädt den Post per AJAX nach
+     * @param postid {Integer}
+     * @private
+     */
+    var _loadPost = function(postid){
+        var height = $('tr[class=post_' + postid + ']>td:last').css('height');
+        _originalPosts[postid] = $('tr[class=post_' + postid + ']>td:last').html();
+
+        $('tr[class=post_' + postid + ']>td:last').html('');
+        $('tr[class=post_' + postid + ']>td:last').append('<textarea style="width: 100%; height: ' + height + '; padding: 0; margin: 0;"></textarea>');
+
+        $.ajax({
+            type: 'POST',
+            async: true,
+            cache: false,
+            url: 'index.php?cont=forum/edit&postid=' + postid,
+            contentType: 'text/html; charset=iso-8859-1;',
+            dataType: 'html',
+            success: function (data) {
+                $('tr[class=post_' + postid + ']>td:last textarea').val(data.replace(/(\r\n|\n|\r)/gm,'[newline]').match(/<textarea(.*?)>(.*?)<\/textarea>/)[2].replace(/\[newline\]/g, '\r\n'));
+            },
+            beforeSend: function(jqXHR) {
+                jqXHR.overrideMimeType('text/html;charset=iso-8859-1');
+            }
+        });
+    };
+
+    /**
+     * Zeigt die zusätzlichen Knöpfe für den Edit
+     * @param postid {Integer}
+     * @private
+     */
+    var _showEditMenu = function(postid){
+        var submit = '<a class="edit_submit_' + postid + '" href="javascript:void(0);" style="margin-right: 4px;">Edit absenden</a>';
+        var cancel = '<a class="edit_cancel_' + postid + '"href="javascript:void(0);" style="color: gray;">Edit abrechen</a>&nbsp;|&nbsp;';
+
+        $('tr[class*=footer_' + postid + ']>td').append('<div>' + cancel + submit + '</div>');
+
+        $('tr[class*=footer_' + postid + ']>td>div>a:first').on('click', function () {
+            _cancelEdit(postid);
+        });
+
+        $('tr[class*=footer_' + postid + ']>td>div>a:last').on('click', function () {
+            _submitEdit(postid);
+        });
+    };
+
+    /**
+     * Bricht den Edit ab
+     * @param postid {Integer}
+     * @private
+     */
+    var _cancelEdit = function(postid){
+        $('tr[class*=footer_' + postid + ']>td>div>a:first').off('click');
+        $('tr[class*=footer_' + postid + ']>td>div>a:last').off('click');
+
+        $('tr[class*=footer_' + postid + ']>td>div').remove();
+        $('tr[class=post_' + postid + ']>td:last').html(_originalPosts[postid]);
+
+        _originalPosts[postid] = null;
+    };
+
+    /**
+     * Feuert den Ajax Request ab um den Edit durchzuführen
+     * @param postid {Integer}
+     * @private
+     */
+    var _submitEdit = function(postid){
+        var newpost     = '';
+        var postdata    = '';
+
+        $.ajax({
+            type: 'POST',
+            async: false,
+            cache: false,
+            url: 'http://www.readmore.de/index.php?cont=forum/edit&postid=' + postid,
+            contentType: 'text/html; charset=iso-8859-1;',
+            dataType: 'html',
+            success: function (datafirst) {
+                var $datafirst  = $(datafirst);
+                var f_uid       = $datafirst.find('input[name="f_uid"]').val();
+                var boardid     = $datafirst.find('input[name="thread[boardid]"]').val();
+                var threadid    = $datafirst.find('input[name="thread[threadid]"]').val();
+                var postidedit  = $datafirst.find('input[name="post[postid]"]').val();
+                var threadtopic = $datafirst.find('input[name="thread[threadtopic]"]').val();
+
+                newpost = $('tr[class=post_' + postid + ']>td:last textarea').val();
+                postdata = 'f_uid=' + f_uid + '&thread[boardid]=' + boardid + '&thread[threadid]=' + threadid + '&post[postid]=' + postidedit + '&postnew_newposttext=' + encodeURI(newpost).replace(/&amp;/g, '&').replace(/&/g, '%26');
+                if (threadtopic != null){
+                    if (threadtopic.trim().length > 0) postdata += '&thread[threadtopic]=' + encodeURI(threadtopic).replace(/&amp;/g, '&').replace(/&/g, '%26');
+                }
+
+                // REPLACE ME
+                postdata = RMUS.middleColumn.forum.replaceSpecialChars(postdata);
+
+                $.ajax({
+                    type: 'POST',
+                    async: false,
+                    cache: false,
+                    url: 'http://www.readmore.de/index.php?cont=forum/do_edit',
+                    data: postdata,
+                    contentType: 'application/x-www-form-urlencoded; charset=iso-8859-1;',
+                    dataType: 'html',
+                    success: function (response) {
+                        var content = $(response).find('#content').html();
+                        if(content.match(/Fehler/)){
+                            alert('Es ist leider ein Fehler aufgetreten. Bitte lade die Seite neu!');
+                        }
+                    },
+                    error: function (){
+                        alert('Es ist leider ein Fehler aufgetreten. Bitte lade die Seite neu!');
+                    }
+                });
+            },
+            beforeSend: function(jqXHR) {
+                jqXHR.overrideMimeType('text/html;charset=iso-8859-1');
+            }
+        });
+
+        $('tr[class*=footer_' + postid + ']>td>div>a:first').off('click');
+        $('tr[class*=footer_' + postid + ']>td>div>a:last').off('click');
+        $('tr[class*=footer_' + postid + ']>td>div').remove();
+        $('tr[class=post_' + postid + ']>td:last').html(_preview.convertToPreview(newpost.replace(/(\r\n|\n|\r)/gm, '<br />')));
+    };
+}
+/**
  * RMUSExtrabuttons
  * ================
  *
@@ -978,22 +1149,6 @@ function RMUSPreview(){
     var _previewtable = {};
 
     /**
-     * Missbrauche diese Funktion einfach mal als Konstuktor-Ersatz. Finde es einfach schöner
-     * dafür eine separate Methode zu haben. Wird als letzte Zeile ausgerufen.
-     * Liest UserID und Name aus, fügt dann das Grundgerüst für die Preview ein.
-     * @private
-     */
-    _init = function(){
-        _readUseridAndUsername();
-        _insertPreviewHtml();
-        _initializePreview();
-
-        _previewElement = $('#preview');
-        _c_comment      = $('#c_comment');
-        _previewtable   = $('#previewtable');
-    };
-
-    /**
      * Fügt den Button zum ein und ausblenden sowie die Grundlage für das Gerüst der Vorschau
      * auf die Readmore Seite ein.
      * @private
@@ -1048,13 +1203,73 @@ function RMUSPreview(){
     };
 
     /**
+     * Stellt die Preview da
+     * @private
+     */
+    var _showPreview = function(){
+        _previewElement.html(_convertToPreview(String(_c_comment.val().replace(/(\r\n|\n|\r)/gm, '<br />'))));
+    };
+
+    /**
+     * Preview einschalten
+     * @private
+     */
+    var _activatePreview = function(){
+        _showPreview();
+
+        _previewtable.css('display', 'block');
+        _c_comment.on('keyup', _showPreview);
+        _c_comment.on('focus', _showPreview);
+
+        _previewIsEnabled = true;
+    };
+
+    /**
+     * Preview ausschalten
+     * @private
+     */
+    var _deactivatePreview = function(){
+        _previewtable.css('display', 'none');
+        _c_comment.off('keyup', _showPreview);
+        _c_comment.off('focus', _showPreview);
+
+        _previewIsEnabled = false;
+    };
+
+    /**
+     * Öffentliche Methode um die Preview ein- oder auszuschalten. Orientiert sich an dem
+     * Attribut _previewIsEnabled.
+     */
+    this.triggerPreview = function() {
+        if (_previewIsEnabled) {
+            _deactivatePreview();
+        }
+        else {
+            _activatePreview();
+        }
+    };
+
+    /**
+     * Liest UserID und Name aus, fügt dann das Grundgerüst für die Preview ein.
+     * @private
+     */
+    this.init = function(){
+        _readUseridAndUsername();
+        _insertPreviewHtml();
+        _initializePreview();
+
+        _previewElement = $('#preview');
+        _c_comment      = $('#c_comment');
+        _previewtable   = $('#previewtable');
+    };
+
+    /**
      * Ersetzt den Text mit BBCODE durch HTML-Code.
      * Herzstück der Preview.
      * @param raw_post  {String}    Beitrag mit BBCODE
      * @returns         {String}    Beitrag übersetzt nach HTML
-     * @private
      */
-    var _convertToPreview = function(raw_post){
+    this.convertToPreview = function(raw_post){
         var text            = raw_post;
         var urlPreview      = '';
         var colorPreview    = '';
@@ -1107,58 +1322,6 @@ function RMUSPreview(){
         text = text.replace(/\[\/quote\]/g, '</div>');
         return text;
     };
-
-    /**
-     * Stellt die Preview da
-     * @private
-     */
-    var _showPreview = function(){
-        _previewElement.html(_convertToPreview(String(_c_comment.val().replace(/(\r\n|\n|\r)/gm, '<br />'))));
-    };
-
-    /**
-     * Preview einschalten
-     * @private
-     */
-    var _activatePreview = function(){
-        _showPreview();
-
-        _previewtable.css('display', 'block');
-        _c_comment.on('keyup', _showPreview);
-        _c_comment.on('focus', _showPreview);
-
-        _previewIsEnabled = true;
-    };
-
-    /**
-     * Preview ausschalten
-     * @private
-     */
-    var _deactivatePreview = function(){
-        _previewtable.css('display', 'none');
-        _c_comment.off('keyup', _showPreview);
-        _c_comment.off('focus', _showPreview);
-
-        _previewIsEnabled = false;
-    };
-
-    /**
-     * Öffentliche Methode um die Preview ein- oder auszuschalten. Orientiert sich an dem
-     * Attribut _previewIsEnabled.
-     */
-    this.triggerPreview = function() {
-        if (_previewIsEnabled) {
-            _deactivatePreview();
-        }
-        else {
-            _activatePreview();
-        }
-    };
-
-    /**
-     * Init Methode aufrufen!
-     */
-    _init();
 }
 /**
  * RMUSUpdate
@@ -1524,11 +1687,9 @@ RMUS.middleColumn = {
                                 // Beiträge aus den neuen Posts ignorieren
                                 if (Options.getOption('miscellaneous_ignoreUser') == 'checked') RMUS.miscellaneous.ignoreUser.doIgnore(true, false, false);
                                 // Edit vorbereiten
-                                if (Options.getOption('middleColumn_forum_editPost') == 'checked') RMUS.middleColumn.forum.editPost.initializeEvent();
+                                if (Options.getOption('middleColumn_forum_editPost') == 'checked') EditPosts.initializeEvent();
                                 // Notzizen einblenden
                                 if(Options.getOption('miscellaneous_note') == 'checked') RMUS.miscellaneous.note.initialize();
-                                // Edit vorbereiten
-                                if (Options.getOption('middleColumn_forum_editPost') == 'checked') RMUS.middleColumn.forum.editPost.initializeEvent();
                                 // Youtubeplayer ersetzen
                                 if(Options.getOption('miscellaneous_convertYoutube') == 'checked') RMUS.miscellaneous.convertYoutube();
                             }
@@ -1722,7 +1883,7 @@ RMUS.middleColumn = {
             replacePost['%C3%9B'] = '%DB';		// Û
             replacePost['%C2%A7'] = '%A7';		// §
 
-            replacePost['%E2%82%AC'] = '%80';		// €
+            replacePost['%E2%82%AC'] = '%80';		    // €
             replacePost['%E2%95%AF'] = '%26#9583;';		// ╯
             replacePost['%E2%96%A1'] = '%26#9633;';		// □
             replacePost['%EF%BC%89'] = '%26#65289;';	// ）
@@ -1838,145 +1999,6 @@ RMUS.middleColumn = {
                 $('#content br.clear:last').after('<a id="RMUSeditboxBottom" href="javascript:void(0);" style="float: right; display: none;" onclick="$(\'#content br.clear:last\').after($(\'form[name=submitpost]\')); $(this).css(\'display\',\'none\'); $(\'#RMUSeditboxTop\').css(\'display\',\'\');">Editbox anzeigen<br /><br /></a>');
             }
         },
-
-        // Edit ohne Reload
-        editPost : {
-
-            originalPosts : [],
-
-            initializeEvent : function(){
-                $('tr[class*=footer_]>td>a[href*=edit]').click(function () {
-                    var hrefParts = String($(this).attr('href')).match(/postid=(.*)/);
-
-                    if (null !== hrefParts) {
-                        var postid = parseInt(hrefParts[1], 10);
-                        $(this).attr('href', 'javascript:void(0);');
-
-                        RMUS.middleColumn.forum.editPost.loadPost(postid);
-                        RMUS.middleColumn.forum.editPost.showEditMenu(postid);
-                    }
-                });
-
-                return false;
-            },
-
-            loadPost : function(postid){
-                var height = $('tr[class=post_' + postid + ']>td:last').css('height');
-                RMUS.middleColumn.forum.editPost.originalPosts[postid] = $('tr[class=post_' + postid + ']>td:last').html();
-
-                $('tr[class=post_' + postid + ']>td:last').html('');
-                $('tr[class=post_' + postid + ']>td:last').append('<textarea style="width: 100%; height: ' + height + '; padding: 0; margin: 0;"></textarea>');
-
-                $.ajax({
-                    type: 'POST',
-                    async: true,
-                    cache: false,
-                    url: 'index.php?cont=forum/edit&postid=' + postid,
-                    contentType: 'text/html; charset=iso-8859-1;',
-                    dataType: 'html',
-                    success: function (data) {
-                        $('tr[class=post_' + postid + ']>td:last textarea').val(data.replace(/(\r\n|\n|\r)/gm,'[newline]').match(/<textarea(.*?)>(.*?)<\/textarea>/)[2].replace(/\[newline\]/g, '\r\n'));
-                    },
-                    beforeSend: function(jqXHR) {
-                        jqXHR.overrideMimeType('text/html;charset=iso-8859-1');
-                    }
-                });
-
-                return false;
-            },
-
-            showEditMenu : function(postid){
-                var submit = '<a class="edit_submit_' + postid + '" href="javascript:void(0);" style="margin-right: 4px;">Edit absenden</a>';
-                var cancel = '<a class="edit_cancel_' + postid + '"href="javascript:void(0);" style="color: gray;">Edit abrechen</a>&nbsp;|&nbsp;';
-                $('tr[class*=footer_' + postid + ']>td').append('<div>' + cancel + submit + '</div>');
-
-                $('tr[class*=footer_' + postid + ']>td>div>a:first').click(function () {
-                    RMUS.middleColumn.forum.editPost.cancelEdit(postid);
-                });
-
-                $('tr[class*=footer_' + postid + ']>td>div>a:last').click(function () {
-                    RMUS.middleColumn.forum.editPost.submitEdit(postid);
-                });
-
-                return false;
-            },
-
-            cancelEdit : function(postid){
-                $('tr[class*=footer_' + postid + ']>td>div').remove();
-                $('tr[class=post_' + postid + ']>td:last').html('');
-                $('tr[class*=footer_' + postid + ']>td>a:eq(1)').attr('href', 'http://www.readmore.de/index.php?cont=forum/edit&postid=' + postid);
-
-                $('tr[class=post_' + postid + ']>td:last').html(RMUS.middleColumn.forum.editPost.originalPosts[postid]);
-                RMUS.middleColumn.forum.editPost.originalPosts[postid] = null;
-
-                $('tr[class*=footer_' + postid + ']>td>div>a:first').off('click');
-                $('tr[class*=footer_' + postid + ']>td>div>a:last').off('click');
-                $('tr[class*=footer_' + postid + ']>td>a:eq(1)').off('click');
-                RMUS.middleColumn.forum.editPost.initializeEvent();
-                return false;
-            },
-
-            submitEdit : function(postid){
-                var newpost = '';
-                var postdata = '';
-
-                $.ajax({
-                    type: 'POST',
-                    async: false,
-                    cache: false,
-                    url: 'http://www.readmore.de/index.php?cont=forum/edit&postid=' + postid,
-                    contentType: 'text/html; charset=iso-8859-1;',
-                    dataType: 'html',
-                    success: function (datafirst) {
-                        var f_uid = $(datafirst).find('input[name="f_uid"]').val();
-                        var boardid = $(datafirst).find('input[name="thread[boardid]"]').val();
-                        var threadid = $(datafirst).find('input[name="thread[threadid]"]').val();
-                        var postidedit = $(datafirst).find('input[name="post[postid]"]').val();
-                        var threadtopic = $(datafirst).find('input[name="thread[threadtopic]"]').val();
-
-                        newpost = $('tr[class=post_' + postid + ']>td:last textarea').val();
-                        postdata = 'f_uid=' + f_uid + '&thread[boardid]=' + boardid + '&thread[threadid]=' + threadid + '&post[postid]=' + postidedit + '&postnew_newposttext=' + encodeURI(newpost).replace(/&amp;/g, '&').replace(/&/g, '%26');
-                        if (threadtopic != null){
-                            if (threadtopic.trim().length > 0) postdata += '&thread[threadtopic]=' + encodeURI(threadtopic).replace(/&amp;/g, '&').replace(/&/g, '%26');
-                        }
-                        postdata = RMUS.middleColumn.forum.replaceSpecialChars(postdata);
-
-                        $.ajax({
-                            type: 'POST',
-                            async: false,
-                            cache: false,
-                            url: 'http://www.readmore.de/index.php?cont=forum/do_edit',
-                            data: postdata,
-                            contentType: 'application/x-www-form-urlencoded; charset=iso-8859-1;',
-                            dataType: 'html',
-                            success: function (response) {
-                                var content = $(response).find('#content').html();
-                                if(content.match(/Fehler/)){
-                                    alert('Es ist leider ein Fehler aufgetreten. Bitte lade die Seite neu!');
-                                }
-                            },
-                            error: function (){
-                                alert('Es ist leider ein Fehler aufgetreten. Bitte lade die Seite neu!');
-                            }
-                        });
-                    },
-                    beforeSend: function(jqXHR) {
-                        jqXHR.overrideMimeType('text/html;charset=iso-8859-1');
-                    }
-                });
-
-                $('tr[class*=footer_' + postid + ']>td>div>a:first').off('click');
-                $('tr[class*=footer_' + postid + ']>td>div>a:last').off('click');
-                $('tr[class*=footer_' + postid + ']>td>a:eq(1)').off('click');
-
-                $('tr[class*=footer_' + postid + ']>td>div').remove();
-                $('tr[class=post_' + postid + ']>td:last').html(RMUS.middleColumn.forum.preview.convertToPreview(newpost.replace(/(\r\n|\n|\r)/gm, '<br />')));
-                $('tr[class*=footer_' + postid + ']>td>a:eq(1)').attr('href', 'http://www.readmore.de/index.php?cont=forum/edit&postid=' + postid);
-                RMUS.middleColumn.forum.editPost.initializeEvent();
-
-                return false;
-            }
-        }
     },
 
     searchJumpToLastpage : {
@@ -2389,15 +2411,18 @@ RMUS.rightColumn = {
     }
 };
 // Global FIX ME
-var Options = new RMUSOptions();
-var Content = new RMUSContent();
+var Options     = new RMUSOptions();
+var Content     = new RMUSContent();
+var Preview     = new RMUSPreview();
+var EditPosts   = new RMUSEditPosts(Preview);
 
 RMUS.start = function () {
 
-    var Options = new RMUSOptions();
-    var Content = new RMUSContent();
-    var Preview = {};
-    var Update  = new RMUSUpdate(Options);
+    var Options     = new RMUSOptions();
+    var Content     = new RMUSContent();
+    var Preview     = new RMUSPreview();
+    var Update      = new RMUSUpdate(Options);
+    var EditPosts   = new RMUSEditPosts(Preview);
 
     /********************************
     *	Funktionen aktivieren	*
@@ -2488,7 +2513,7 @@ RMUS.start = function () {
 
         // Vorschau
         if (Options.getOption('middleColumn_forum_preview') === 'checked') {
-            Preview = new RMUSPreview();
+            Preview.init();
             $('#triggerPreview').on('click', Preview.triggerPreview);
         }
 
@@ -2535,7 +2560,7 @@ RMUS.start = function () {
 
         // Edit vorbereiten
         if (Options.getOption('middleColumn_forum_editPost') === 'checked'){
-            RMUS.middleColumn.forum.editPost.initializeEvent();
+            EditPosts.initializeEvent();
         }
 
         // Youtubeplayer ersetzen
