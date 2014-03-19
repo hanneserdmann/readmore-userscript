@@ -49,12 +49,12 @@ function RMUSExtrabuttons(Content){
     var _ubbHelp = '<a onclick="window.open(\'http://www.readmore.de/mod/ubb.mod.php\', \'UBB Hilfe\', \'scrollbars=1,width=600,height=490,left=100,top=200\');return false;" href="/index.php?cont=ubb" style="font-weight:bold; color:#fff; margin-left: 8px; font-size: 11px;" class="ten hgray">?</a>';
 
     /**
-     * Quasi-Konstuktor. Methode wird bei der Instanziierung des Objektes ausgeführt.
+     * Startet die Extrabuttons.
      * Selektiert das Formular, die CommentBox und startet anschließend die Initialisierung
      * der Extrabuttons.
      * @private
      */
-    var _init = function(){
+    this.init = function(){
         _form       = _getForm();
         _commentBox = _getCommentBox();
         _toolbar    = _getToolbar();
@@ -257,9 +257,4 @@ function RMUSExtrabuttons(Content){
                 '</div></div></div>' +
                 '<div style="clear: right;"></div></div>';
     };
-
-    /**
-     * Init Methode starten
-     */
-    _init();
 }

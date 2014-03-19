@@ -38,7 +38,7 @@ function RMUSOptions(){
      * dafür eine separate Methode zu haben. Wird als letzte Zeile ausgerufen.     *
      * @private
      */
-    _init = function(){
+    var _init = function(){
         // Optionen aus dem Localstorage auslesen
         _readOptionsFromLocalstorage();
     };

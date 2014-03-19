@@ -6,6 +6,9 @@
  */
 
 function RMUSPreview(){
+
+    var _self = this;
+
     /**
      * UserID des aktuellen Benutzers
      * @type {number}
@@ -141,7 +144,7 @@ function RMUSPreview(){
      * @private
      */
     var _showPreview = function(){
-        _previewElement.html(_convertToPreview(String(_c_comment.val().replace(/(\r\n|\n|\r)/gm, '<br />'))));
+        _previewElement.html(_self.convertToPreview(String(_c_comment.val().replace(/(\r\n|\n|\r)/gm, '<br />'))));
     };
 
     /**
@@ -150,6 +153,7 @@ function RMUSPreview(){
      */
     var _activatePreview = function(){
         _showPreview();
+
 
         _previewtable.css('display', 'block');
         _c_comment.on('keyup', _showPreview);
@@ -168,6 +172,14 @@ function RMUSPreview(){
         _c_comment.off('focus', _showPreview);
 
         _previewIsEnabled = false;
+    };
+
+    /**
+     * Gibt zurück ob die Preview aktuell an ist.
+     * @returns {boolean}
+     */
+    this.isEnabled = function(){
+        return _previewIsEnabled;
     };
 
     /**

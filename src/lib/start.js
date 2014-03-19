@@ -6,11 +6,13 @@ var EditPosts   = new RMUSEditPosts(Preview);
 
 RMUS.start = function () {
 
-    var Options     = new RMUSOptions();
-    var Content     = new RMUSContent();
-    var Preview     = new RMUSPreview();
-    var Update      = new RMUSUpdate(Options);
-    var EditPosts   = new RMUSEditPosts(Preview);
+    var Options         = new RMUSOptions();
+    var Content         = new RMUSContent();
+    var Preview         = new RMUSPreview();
+    var Update          = new RMUSUpdate(Options);
+    var EditPosts       = new RMUSEditPosts(Preview);
+    var ExtraButtons    = new RMUSExtrabuttons(Content);
+    var AjaxPost        = new RMUSAjaxPost(Preview);
 
     /********************************
     *	Funktionen aktivieren	*
@@ -107,10 +109,7 @@ RMUS.start = function () {
 
         // Posten im Hintergrund
         if (Options.getOption('middleColumn_forum_postPerAjax') === 'checked') {
-            $('input[name=submit_thread]').click(function (event) {
-                event.preventDefault();
-                RMUS.middleColumn.forum.postPerAjax();
-            });
+            AjaxPost.init();
         }
 
         // Posts nachladen
@@ -170,7 +169,7 @@ RMUS.start = function () {
     // Extrabuttons in den entsprechenden Seiten initialisieren
     if (Content.getMultipleContent(['forum_thread', 'forum_newtopic', 'forum_edit', 'matches', 'msg', 'profile', 'groups_show_group'], 'OR')) {
         if (Options.getOption('miscellaneous_extraButtons') === 'checked') {
-            var Extrabuttons = new RMUSExtrabuttons(Content);
+            ExtraButtons.init();
         }
     }
 
