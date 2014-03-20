@@ -2,8 +2,11 @@
  * RMUSEditPosts
  * =============
  *
- * Ermöglicht das Editieren von Posts ohne Reload.
+ * Ermöglicht das Editieren von Posts ohne Reload. Die Daten werden
+ * per Ajax übermittelt.
+ * @param _preview {RMUSPreview}
  */
+
 function RMUSEditPosts(_preview){
 
     /**
@@ -45,7 +48,7 @@ function RMUSEditPosts(_preview){
 
     /**
      * Lädt den Post per AJAX nach
-     * @param postid {integer}
+     * @param postid {Integer}
      * @private
      */
     var _loadPost = function(postid){
@@ -73,7 +76,7 @@ function RMUSEditPosts(_preview){
 
     /**
      * Zeigt die zusätzlichen Knöpfe für den Edit
-     * @param postid {integer}
+     * @param postid {Integer}
      * @private
      */
     var _showEditMenu = function(postid){
@@ -93,7 +96,7 @@ function RMUSEditPosts(_preview){
 
     /**
      * Bricht den Edit ab
-     * @param postid {integer}
+     * @param postid {Integer}
      * @private
      */
     var _cancelEdit = function(postid){
@@ -108,7 +111,7 @@ function RMUSEditPosts(_preview){
 
     /**
      * Feuert den Ajax Request ab um den Edit durchzuführen
-     * @param postid {integer}
+     * @param postid {Integer}
      * @private
      */
     var _submitEdit = function(postid){

@@ -86,56 +86,6 @@ RMUS.miscellaneous = {
         return false;
     },
 
-    ignoreUser : {
-        user : [],
-        ignoreCount : 0,
-
-        setUser : function(){
-            var user = [];
-            $(String(Options.getOption('miscellaneous_ignoreUser_usernames')).split(',')).each(function(index, value){
-                user.push(value.trim());
-            });
-
-            RMUS.miscellaneous.ignoreUser.user = user;
-            return false;
-        },
-
-        doIgnore : function(thread, ticker, profile) {
-            if (RMUS.miscellaneous.ignoreUser.user.length == 0) {
-                RMUS.miscellaneous.ignoreUser.setUser();
-            }
-
-            if (thread) {
-                $(RMUS.miscellaneous.ignoreUser.user).each(function(index, value) {
-                    $('tr[class*=post_]:has(a[title="' + value + '"]) td').each(function() {
-
-                        if (this.innerHTML.match(/ignored_/) == null){
-                            if (RMUS.miscellaneous.ignoreUser.ignoreCount % 2){
-                                RMUS.miscellaneous.ignoreUser.ignoreCount--;
-                                $(this).html('<div style="display:none;" class="ignored_' + RMUS.miscellaneous.ignoreUser.ignoreCount + '">' + $(this).html() + '</div>');
-                                RMUS.miscellaneous.ignoreUser.ignoreCount = RMUS.miscellaneous.ignoreUser.ignoreCount + 2;
-                            }
-                            else{
-                                $(this).html('<a style="font-size: 9px;" href="javascript:void(0)" onclick="$(\'.ignored_' + RMUS.miscellaneous.ignoreUser.ignoreCount + '\').toggle(); if(this.innerHTML == \'Beitrag einblenden\'){this.innerHTML = \'Beitrag ausblenden\';}else{this.innerHTML = \'Beitrag einblenden\';}">Beitrag einblenden</a><br/>' + '<br/><div style="display:none;" class="ignored_' + RMUS.miscellaneous.ignoreUser.ignoreCount + '">' + $(this).html() + '</div>');
-                                RMUS.miscellaneous.ignoreUser.ignoreCount++;
-                            }
-                        }
-                    });
-                });
-            }
-
-            if (ticker || profile) {
-                $(RMUS.miscellaneous.ignoreUser.user).each(function(index, value) {
-                    $('div .elf.cmt_kopf:has(a.cmt_head:contains(' + value + '))').next().each(function(){
-                        $(this).html('<a href="javascript:void(0)" onclick="$(\'.ignored_' + RMUS.miscellaneous.ignoreUser.ignoreCount + '\').toggle();">Beitrag einblenden</a><br/>' + '<br/><div style="display:none;" class="ignored_' + RMUS.miscellaneous.ignoreUser.ignoreCount + '">' + $(this).html() + '</div>');
-                        RMUS.miscellaneous.ignoreUser.ignoreCount++;
-                    });
-                });
-            }
-
-            return false;
-        }
-    },
     note : {
         notenumber : 0,
         initialize : function() {

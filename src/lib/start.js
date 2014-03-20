@@ -4,6 +4,7 @@ var Content         = new RMUSContent();
 var Preview         = new RMUSPreview();
 var EditPosts       = new RMUSEditPosts(Preview);
 var ReloadPageData  = new RMUSReloadPageData();
+var IgnoreUser      = new RMUSIgnoreUser(Options);
 
 RMUS.start = function () {
 
@@ -15,6 +16,7 @@ RMUS.start = function () {
     var ExtraButtons    = new RMUSExtrabuttons(Content);
     var AjaxPost        = new RMUSAjaxPost(Preview);
     var ReloadPageData  = new RMUSReloadPageData();
+    var IgnoreUser      = new RMUSIgnoreUser(Options);
 
     /********************************
     *	Funktionen aktivieren	*
@@ -165,7 +167,7 @@ RMUS.start = function () {
 
     // User ignorieren
     if (Options.getOption('miscellaneous_ignoreUser') === 'checked'){
-        RMUS.miscellaneous.ignoreUser.doIgnore(Content.getContent('forum_thread'), Content.getContent('matches'), Content.getContent('profile'));
+        IgnoreUser.ignore(Content.getContent('forum_thread'), Content.getContent('matches'), Content.getContent('profile'));
     }
 
     // Extrabuttons in den entsprechenden Seiten initialisieren

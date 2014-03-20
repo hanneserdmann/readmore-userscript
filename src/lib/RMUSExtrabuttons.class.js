@@ -4,11 +4,10 @@
  *
  * Klasse für die Extrabuttons. Ursprünglich von IllDepence entwickelt.
  * http://www.readmore.de/index.php?cont=profile&id=29432
- * @param Content {RMUSContent}
- * @constructor
+ * @param _content {RMUSContent}
  */
 
-function RMUSExtrabuttons(Content){
+function RMUSExtrabuttons(_content){
 
     var _form       = null;
     var _commentBox = null;
@@ -88,7 +87,7 @@ function RMUSExtrabuttons(Content){
         var container = '';
         var returnValue = null;
 
-        if (Content.getMultipleContent(['news', 'matches', 'profile'], 'OR')) {
+        if (_content.getMultipleContent(['news', 'matches', 'profile'], 'OR')) {
             container = _form.parent('div.center');
 
             if ($('div.headline_bg', container).length === 0) {
@@ -98,9 +97,9 @@ function RMUSExtrabuttons(Content){
             }
 
             returnValue = $('div.headline_bg', container);
-        } else if (Content.getMultipleContent(['forum_thread', 'forum_edit', 'forum_newtopic'], 'OR')) {
+        } else if (_content.getMultipleContent(['forum_thread', 'forum_edit', 'forum_newtopic'], 'OR')) {
             returnValue = $('div.headline_bg', _form);
-        } else if (Content.getContent('msg')) {
+        } else if (_content.getContent('msg')) {
             container = _commentBox.parent();
 
             if ($('div.headline_bg', container).length === 0) {
@@ -110,7 +109,7 @@ function RMUSExtrabuttons(Content){
             }
 
             returnValue = $('div.headline_bg', container);
-        } else if (Content.getContent('groups_show_group')) {
+        } else if (_content.getContent('groups_show_group')) {
             // First Post im Thread?
             if ($('input[name="threadtitle"]').length === 1) {
                 container = $('<div/>').insertBefore(_commentBox);
@@ -138,16 +137,16 @@ function RMUSExtrabuttons(Content){
     var _getForm = function(){
         var returnValue = null;
 
-        if (Content.getMultipleContent(['news', 'matches', 'profile'], 'OR')) {
+        if (_content.getMultipleContent(['news', 'matches', 'profile'], 'OR')) {
             returnValue = $('form[name=form_comment]');
-        } else if (Content.getMultipleContent(['forum_thread', 'forum_newtopic'], 'OR')) {
+        } else if (_content.getMultipleContent(['forum_thread', 'forum_newtopic'], 'OR')) {
             returnValue = $('form[name=submitpost]');
-        } else if (Content.getContent('forum_edit')) {
+        } else if (_content.getContent('forum_edit')) {
             returnValue = $('form[name=submiteditthread]');
-        } else if (Content.getContent('msg')) {
+        } else if (_content.getContent('msg')) {
             returnValue = $('td.text_h1_j form');
-        } else if (Content.getContent('groups_show_group')) {
-            if (Content.getAction() === 'threadedit') {
+        } else if (_content.getContent('groups_show_group')) {
+            if (_content.getAction() === 'threadedit') {
                 returnValue = $('form[name="submiteditthread"]');
             }
 
@@ -167,12 +166,12 @@ function RMUSExtrabuttons(Content){
     var _getCommentBox = function(){
         var returnValue = null;
 
-        if (Content.getContent('profile')) {
+        if (_content.getContent('profile')) {
             returnValue = $('textarea[name=comment]', _form);
-        } else if (Content.getContent('msg')) {
+        } else if (_content.getContent('msg')) {
             returnValue = $('textarea[name=msg]', _form);
-        } else if (Content.getContent('groups_show_group')) {
-            if (Content.getAction() === 'threadedit') {
+        } else if (_content.getContent('groups_show_group')) {
+            if (_content.getAction() === 'threadedit') {
                 returnValue = $('textarea[name=new_comment].form', _form);
             }
 

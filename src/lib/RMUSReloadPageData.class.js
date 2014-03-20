@@ -2,7 +2,8 @@
  * RMUSReloadPageData
  * ==================
  *
- * Ermöglicht das Posten ohne Seitenrefresh
+ * Ermöglicht das Posten ohne Seitenrefresh. Der Post wird über
+ * Ajax abgeschickt, danach wird die Seite im Hintergrund nachgeladen.
  */
 
 function RMUSReloadPageData(){
@@ -40,14 +41,12 @@ function RMUSReloadPageData(){
             dataType: 'html',
             timeout: 10000,
             success: function (data) {
-                var pageData = data;
-
-                if(pageData != null){
+                if(data != null){
                     // Prüft auf Fehler beim Laden der Seite
-                    if (pageData.search('<div class="error">') != -1) {
+                    if (data.search('<div class="error">') != -1) {
                         _self.readPage();
                     } else {
-                        _pageData = pageData.replace(/(\r\n|\n|\r)/gm,' ').replace(/\s+/g," ");
+                        _pageData = data.replace(/(\r\n|\n|\r)/gm,' ').replace(/\s+/g," ");
                     }
                 }
             },

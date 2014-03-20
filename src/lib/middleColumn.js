@@ -77,7 +77,7 @@ RMUS.middleColumn = {
 
                                 RMUS.middleColumn.forum.reloadPosts.oldLimit = window.pageYOffset + (window.innerHeight * 0.55);
                                 // Beiträge aus den neuen Posts ignorieren
-                                if (Options.getOption('miscellaneous_ignoreUser') == 'checked') RMUS.miscellaneous.ignoreUser.doIgnore(true, false, false);
+                                if (Options.getOption('miscellaneous_ignoreUser') == 'checked') IgnoreUser.ignore(true, false, false);
                                 // Edit vorbereiten
                                 if (Options.getOption('middleColumn_forum_editPost') == 'checked') EditPosts.initializeEvent();
                                 // Notzizen einblenden
@@ -321,7 +321,7 @@ RMUS.middleColumn = {
 
                                     RMUS.middleColumn.forum.page++;
                                     // Beiträge aus den neuen Posts ignorieren
-                                    if (Options.getOption('miscellaneous_ignoreUser') == 'checked') RMUS.miscellaneous.ignoreUser.doIgnore(true, false, false);
+                                    if (Options.getOption('miscellaneous_ignoreUser') == 'checked') IgnoreUser.ignore(true, false, false);
                                     // Notzizen einblenden
                                     if(Options.getOption('miscellaneous_note') == 'checked') RMUS.miscellaneous.note.initialize();
                                 }

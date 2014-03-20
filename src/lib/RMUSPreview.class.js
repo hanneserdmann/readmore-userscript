@@ -2,7 +2,8 @@
  * RMUSPreview
  * ===========
  *
- * Klasse für die Preview eines Readmore.de Posts.
+ * Klasse für die Preview eines Readmore.de Posts. Der BBCode wird durch das entsprechende
+ * HTML ersetzt.
  */
 
 function RMUSPreview(){
