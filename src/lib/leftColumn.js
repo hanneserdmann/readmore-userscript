@@ -14,19 +14,16 @@ RMUS.leftColumn = {
 
         // Alle Streams ausblenden
         hideStreams : function () {
-            $('#leftc>div.block:eq(1), #leftc>div.block:eq(2), #leftc>div.block:eq(4), .line2:eq(1), .line2:eq(2), .line2:eq(0)').css('display', 'none');			
+            $('#leftc>div.block:eq(1), #leftc>div.block:eq(2), #leftc>div.block:eq(4), .line2:eq(1), .line2:eq(2), .line2:eq(0)').css('display', 'none');
             return false;
         },
 
         // Forennavigation neuladen
         reloadStreams : function(){
-            var caster = '';
-            var player = '';
-            var user = '';
-
-            caster = $(RMUS.miscellaneous.reloadMainpageData.mainpageData).find('div.frontpage_stream:first').html();
-            player = $(RMUS.miscellaneous.reloadMainpageData.mainpageData).find('div.frontpage_stream:last').html();
-            user   = $(RMUS.miscellaneous.reloadMainpageData.mainpageData).find('#profilestream').html();
+            var $pageData   = $(ReloadPageData.getPageData());
+            var caster      = $pageData.find('div.frontpage_stream:first').html();
+            var player      = $pageData.find('div.frontpage_stream:last').html();
+            var user        = $pageData.find('#profilestream').html();
 
             $('div.frontpage_stream:first').html(caster);
             $('div.frontpage_stream:last').html(player);

@@ -1,8 +1,9 @@
 // Global FIX ME
-var Options     = new RMUSOptions();
-var Content     = new RMUSContent();
-var Preview     = new RMUSPreview();
-var EditPosts   = new RMUSEditPosts(Preview);
+var Options         = new RMUSOptions();
+var Content         = new RMUSContent();
+var Preview         = new RMUSPreview();
+var EditPosts       = new RMUSEditPosts(Preview);
+var ReloadPageData  = new RMUSReloadPageData();
 
 RMUS.start = function () {
 
@@ -13,6 +14,7 @@ RMUS.start = function () {
     var EditPosts       = new RMUSEditPosts(Preview);
     var ExtraButtons    = new RMUSExtrabuttons(Content);
     var AjaxPost        = new RMUSAjaxPost(Preview);
+    var ReloadPageData  = new RMUSReloadPageData();
 
     /********************************
     *	Funktionen aktivieren	*
@@ -66,7 +68,7 @@ RMUS.start = function () {
 
         // Neuladen der Forannavigation beziehungsweise der Streams oder Ticker
         if (Options.getOption('rightColumn_forum_reloadForum') === 'checked' || Options.getOption('leftColumn_streams_reloadStreams') === 'checked' || Options.getOption('rightColumn_ticker_reloadTicker') === 'checked'){
-            RMUS.miscellaneous.reloadMainpageData.readPage();
+            ReloadPageData.readPage();
         }
 
         // Button um die Forennavigation zu aktualisieren
@@ -396,7 +398,7 @@ RMUS.start = function () {
                 || Options.getOption('leftColumn_streams_reloadStreams') === 'checked' && Options.getOption('options.leftColumn_streams_hideStreams') != 'checked'
                 || Options.getOption('rightColumn_ticker_reloadTicker') === 'checked' && Options.getOption('rightColumn_ticker_hideTicker') != 'checked') {
 
-                RMUS.miscellaneous.reloadMainpageData.readPage();
+                ReloadPageData.readPage();
 
                 // Forennavigation
                 if (Options.getOption('rightColumn_forum_hideForum') !== 'checked'

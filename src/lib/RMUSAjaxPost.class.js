@@ -7,9 +7,24 @@
 
 function RMUSAjaxPost(_preview){
 
+    /**
+     * jQuery Object. Formular das serialisiert und dann abgeschickt wird.
+     * @type {{}}
+     * @private
+     */
     var _$submitForm = {};
+
+    /**
+     * jQuery Object. Knopf zum abschicken.
+     * @type {{}}
+     * @private
+     */
     var _$sendButton = {};
 
+    /**
+     * Schickt den Post per Ajax ab und triggert das Nachladen im Hintergrund.
+     * @private
+     */
     var _sendPost = function(){
         var post = _$submitForm.serialize();
 

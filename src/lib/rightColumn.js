@@ -11,8 +11,7 @@ RMUS.rightColumn = {
         },
 
         reloadTicker : function(){
-            var reloadData = '';
-            reloadData = $(RMUS.miscellaneous.reloadMainpageData.mainpageData).find('#nav_matchticker').html();
+            var reloadData = $(ReloadPageData.getPageData()).find('#nav_matchticker').html();
 
             if (reloadData && reloadData.length > 0) {
                 $('#nav_matchticker').html(reloadData);
@@ -162,8 +161,7 @@ RMUS.rightColumn = {
 
         // Forennavigation neuladen
         reloadForum : function() {
-            var reloadData = '';
-            reloadData = $(RMUS.miscellaneous.reloadMainpageData.mainpageData).find('div.cont_box:last').html();
+            var reloadData = $(ReloadPageData.getPageData()).find('div.cont_box:last').html();
 
             if (reloadData && reloadData.length > 0) {
                 $('.cont_box:last').html(reloadData);
@@ -181,7 +179,7 @@ RMUS.rightColumn = {
             },
 
             reload : function(){
-                RMUS.miscellaneous.reloadMainpageData.readPage();
+                ReloadPageData.readPage();
                 window.setTimeout(function () {RMUS.rightColumn.forum.reloadForum();}, 1500);
             }
         },

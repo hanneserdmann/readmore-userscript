@@ -49,38 +49,6 @@ RMUS.miscellaneous = {
         $('div#wrapper').css('margin-top', '34px');
     },
 
-    reloadMainpageData : {
-        mainpageData : '',
-
-        readPage : function() {
-            $.ajax({
-                type: 'POST',
-                async: true,
-                cache: false,
-                url: 'http://www.readmore.de/index.php?cont=userstream_overview',
-                contentType: 'text/html; charset=iso-8859-1;',
-                dataType: 'html',
-                success: function (data) {
-                    var pageData = data;
-
-                    if(pageData != null){
-                        // Prüft auf Fehler beim Laden der Seite
-                        if (pageData.search('<div class="error">') != -1) {
-                            RMUS.miscellaneous.reloadMainpageData.readPage();
-                        } else {
-                            RMUS.miscellaneous.reloadMainpageData.mainpageData = pageData.replace(/(\r\n|\n|\r)/gm,' ').replace(/\s+/g," ");
-                        }
-                    }
-                },
-                beforeSend: function(jqXHR) {
-                    jqXHR.overrideMimeType('text/html;charset=iso-8859-1');
-                }
-            });
-
-            return false;
-        }
-    },
-
     stopAvatarAnimation : {
         isGifImage : function(i){
             return /^(?!data:).*?\/user.*?\.gif/i.test(i.src);

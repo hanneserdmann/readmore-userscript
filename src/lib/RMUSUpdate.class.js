@@ -82,7 +82,7 @@ function RMUSUpdate(Options){
         else if (version1[2] > version2[2]) returnVal = true;
 
         return returnVal;
-    }
+    };
 
     /**
      * Triggert die Prüfung ob eine neue Version verfügbar ist. Ajax Request wird nur abgefeuert wenn die letzte
@@ -113,5 +113,5 @@ function RMUSUpdate(Options){
 
         // Refresh starten!
         _refreshLatestVersion();
-    }
+    };
 }
