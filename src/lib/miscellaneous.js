@@ -84,38 +84,5 @@ RMUS.miscellaneous = {
         });
 
         return false;
-    },
-
-    note : {
-        notenumber : 0,
-        initialize : function() {
-            $('tr[class*=post_]>td:even:not(:has(textarea))').each(function(){
-                var br = '<br />';
-                var user = String($(this).find('a.bml').attr('title'));
-                var notenr = RMUS.miscellaneous.note.notenumber++;
-
-                if ($($(this).html()).length > 0) br = '<br /><br />';
-                $(this).append(br + '<center><a href="javascript:void(o);" name="note_' + user + '_' + notenr + '">Notiz</a><br /><br /><textarea style="display:none;height:100px;width:98%" name="note_' + user + '_' + notenr + '"></textarea></center>');
-
-                $('a[name="note_' + user + '_' + notenr + '"]').click(function () {
-                    var notes = JSON.parse(localStorage.getItem('userscriptNote')),
-                        note = $('textarea[name="note_' + user + '_' + notenr + '"]'),
-                        closing = note.is(':visible');
-
-                    if (notes == null) notes = {};
-
-                    if (true === closing) {
-                        notes[user] = String(note.val()).trim();
-                    } else {
-                        note.val(notes[user]);
-                    }
-
-                    note.toggle();
-                    localStorage.setItem('userscriptNote', JSON.stringify(notes));
-                });
-            });
-
-            return false;
-        }
     }
 };

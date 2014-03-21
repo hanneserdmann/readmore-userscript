@@ -81,7 +81,7 @@ RMUS.middleColumn = {
                                 // Edit vorbereiten
                                 if (Options.getOption('middleColumn_forum_editPost') == 'checked') EditPosts.initializeEvent();
                                 // Notzizen einblenden
-                                if(Options.getOption('miscellaneous_note') == 'checked') RMUS.miscellaneous.note.initialize();
+                                if(Options.getOption('miscellaneous_note') == 'checked') Notes.init(false);
                                 // Youtubeplayer ersetzen
                                 if(Options.getOption('miscellaneous_convertYoutube') == 'checked') RMUS.miscellaneous.convertYoutube();
                             }
@@ -323,7 +323,7 @@ RMUS.middleColumn = {
                                     // Beiträge aus den neuen Posts ignorieren
                                     if (Options.getOption('miscellaneous_ignoreUser') == 'checked') IgnoreUser.ignore(true, false, false);
                                     // Notzizen einblenden
-                                    if(Options.getOption('miscellaneous_note') == 'checked') RMUS.miscellaneous.note.initialize();
+                                    if(Options.getOption('miscellaneous_note') == 'checked') Notes.init(false);
                                 }
                             }
                         },

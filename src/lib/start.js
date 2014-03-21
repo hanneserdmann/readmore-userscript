@@ -5,6 +5,7 @@ var Preview         = new RMUSPreview();
 var EditPosts       = new RMUSEditPosts(Preview);
 var ReloadPageData  = new RMUSReloadPageData();
 var IgnoreUser      = new RMUSIgnoreUser(Options);
+var Notes           = new RMUSNotes();
 
 RMUS.start = function () {
 
@@ -17,6 +18,7 @@ RMUS.start = function () {
     var AjaxPost        = new RMUSAjaxPost(Preview);
     var ReloadPageData  = new RMUSReloadPageData();
     var IgnoreUser      = new RMUSIgnoreUser(Options);
+    var Notes           = new RMUSNotes();
 
     /********************************
     *	Funktionen aktivieren	*
@@ -146,7 +148,7 @@ RMUS.start = function () {
 
         // Notzizen einblenden
         if(Options.getOption('miscellaneous_note') === 'checked') {
-            RMUS.miscellaneous.note.initialize();
+            Notes.init();
         }
 
         // Edit vorbereiten
