@@ -6,7 +6,7 @@
  * erkennbar wird der Post per jQuery Ajax abgeschickt.
  */
 
-function AjaxPost(_preview){
+function AjaxPost(_preview, _reloadPosts){
 
     /**
      * jQuery Object. Formular das serialisiert und dann abgeschickt wird.
@@ -36,8 +36,8 @@ function AjaxPost(_preview){
         _$sendButton.css('display', 'none');
 
         // Ist das Automatische neuladen deaktiviert, die nötigen Vorkehrungen dazu treffen
-        if(RMUS.middleColumn.forum.reloadPosts.postcount == 0) {
-            RMUS.middleColumn.forum.reloadPosts.readPostcount();
+        if(_reloadPosts.getPostcount() == 0) {
+            _reloadPosts.init();
         }
 
         // Der eigentliche Post
@@ -66,7 +66,7 @@ function AjaxPost(_preview){
                         _preview.triggerPreview();
                     }
 
-                    RMUS.middleColumn.forum.reloadPosts.readNewPosts();
+                    _reloadPosts.readNewPosts();
                 }
 
                 // Submit-Knopf wieder einblenden

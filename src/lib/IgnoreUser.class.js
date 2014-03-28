@@ -5,6 +5,7 @@
  * Bietet die Möglichkeit einen User auf der Readmore-Seite zu ignorieren. Die
  * Posts im Forum werden versteckt.
  * @param _options {Options}
+ * @constructor
  */
 
 function IgnoreUser(_options){

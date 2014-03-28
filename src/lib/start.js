@@ -5,10 +5,13 @@ var Preview         = new Preview();
 var Update          = new Update(Options);
 var EditPosts       = new EditPosts(Preview);
 var ExtraButtons    = new Extrabuttons(Content);
-var AjaxPost        = new AjaxPost(Preview);
 var ReloadPageData  = new ReloadPageData();
 var IgnoreUser      = new IgnoreUser(Options);
-var Notes           = new RMUSNotes();
+var Notes           = new Notes();
+var ReloadPosts     = new ReloadPosts(Options, IgnoreUser, EditPosts, Notes);
+var AjaxPost        = new AjaxPost(Preview, ReloadPosts);
+
+ReloadPosts.init();
 
 RMUS.start = function () {
 
@@ -112,24 +115,10 @@ RMUS.start = function () {
 
         // Posts nachladen
         if (Options.getOption('middleColumn_forum_reloadPosts_readNewPosts') === 'checked') {
-            RMUS.middleColumn.forum.reloadPosts.readPostcount();
-
-            // Ungelesene Posts markieren
-            if (Options.getOption('middleColumn_forum_reloadPosts_markNewPosts') === 'checked') {
-                // Farbe zum markieren setzen
-                if (Options.getOption('middleColumn_forum_reloadPosts_markPostColor') &&
-                    Options.getOption('middleColumn_forum_reloadPosts_markPostColor').length){
-
-                    RMUS.middleColumn.forum.reloadPosts.setMarkPostColor();
-                }
-            }
-
             if (Options.getOption('options.middleColumn_forum_reloadPosts_jumpToNewPosts') === 'checked' && Options.getOption('middleColumn_forum_reloadPosts_endlessPage') === 'checked'){
-                $('a.bookmark').after('<input style="margin-left: 2px;" type="checkbox" id="userscript_enable_jump" name="userscript_enable_jump">');
-                RMUS.middleColumn.forum.reloadPosts.jumpToNewPosts.setWaitUntilNextJump();
-                window.setInterval(function () {
-                    RMUS.middleColumn.forum.reloadPosts.jumpToNewPosts.jump();
-                }, parseInt(RMUS.middleColumn.forum.reloadPosts.jumpToNewPosts.waitUntilNextJump, 10) * 1000);
+                window.setInterval(function(){
+                    ReloadPosts.jumpToNewPosts();
+                }, (parseInt(Options.getOption('middleColumn_forum_reloadPosts_jumpToNewPosts_waitUntilNextJump'), 10) > 1 ? parseInt(Options.getOption('middleColumn_forum_reloadPosts_jumpToNewPosts_waitUntilNextJump'), 10) : 1) * 1000);
             }
         }
 
@@ -340,7 +329,7 @@ RMUS.start = function () {
 
             // Posts nachladen
             if (Options.getOption('middleColumn_forum_reloadPosts_readNewPosts') === 'checked') {
-                RMUS.middleColumn.forum.reloadPosts.readNewPosts();
+                ReloadPosts.readNewPosts();
             }
 
             // Avataranimationen stoppen
@@ -350,28 +339,22 @@ RMUS.start = function () {
         }
     }, (parseInt(Options.getOption('middleColumn_forum_reloadPosts_timeToWait'), 10) > 2) ? parseInt(Options.getOption('middleColumn_forum_reloadPosts_timeToWait'), 10) * 1000 : 3000);
 
-    // Im Hintergrund ausgeführte Aktionen starten (3x in der Sekunde, sehr zeitkritisch)
+    // Im Hintergrund ausgeführte Aktionen starten (2x in der Sekunde, sehr zeitkritisch)
     window.setInterval(function(){
-
-/*        // Content auslesen
-        if (!content){
-            content = JSON.parse(localStorage.getItem('userscriptContent'));
-        }
-*/
         if (Content.getContent('forum_thread')) {
             if (Options.getOption('middleColumn_forum_reloadPosts_readNewPosts') === 'checked') {
                 if (Options.getOption('middleColumn_forum_reloadPosts_markNewPosts') === 'checked') {
                     // (de)-Markieren
-                    RMUS.middleColumn.forum.reloadPosts.markNewPosts();
+                    ReloadPosts.unmarkNewPosts();
 
                     // Favicon verändern
                     if (Options.getOption('middleColumn_forum_reloadPosts_changeFavicon') === 'checked'){
-                        RMUS.middleColumn.forum.reloadPosts.changeFavicon();
+                        ReloadPosts.changeFavicon();
                     }
 
                     // Postanzahl im Tab anzeigen
-                    if (Options.getOption('middleColumn_forum_reloadPosts_showNewPostsTitle') === 'checked') {
-                        RMUS.middleColumn.forum.reloadPosts.showNewPostsTitle();
+                    if (Options.getOption('middleColumn_forum_reloadPosts_showNewPostsTitle') === 'checked'){
+                        ReloadPosts.showNewPostsTitle();
                     }
                 }
             }

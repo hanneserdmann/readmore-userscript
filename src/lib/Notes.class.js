@@ -1,12 +1,12 @@
 /**
- * RMUSNotes
- * =========
+ * Notes
+ * =====
  *
  * Notizfunktion um Text zu Usern zu verfassen.
  * Unter dem Avatar in Posts wird eine Textarea eingeblendet.
  */
 
-function RMUSNotes(){
+function Notes(){
 
     /**
      * Object aus dem Localstorage
