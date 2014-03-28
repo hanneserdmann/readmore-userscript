@@ -1,12 +1,12 @@
 /**
- * RMUSAjaxPost
- * ============
+ * AjaxPost
+ * ========
  *
  * Ermöglicht das Posten ohne Seitenrefresh. Wie schon am Namen
  * erkennbar wird der Post per jQuery Ajax abgeschickt.
  */
 
-function RMUSAjaxPost(_preview){
+function AjaxPost(_preview){
 
     /**
      * jQuery Object. Formular das serialisiert und dann abgeschickt wird.

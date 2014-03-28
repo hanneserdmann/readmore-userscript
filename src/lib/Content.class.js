@@ -1,11 +1,11 @@
 /**
- * RMUSContent
- * ===========
+ * Content
+ * =======
  *
- * Simple Klasse um auszulesen wo wir uns auf der Readmore.de Seite befinden.
+ * Simple Pseudoklasse um auszulesen wo wir uns auf der Readmore.de Seite befinden.
  * Dadurch werden Funktionen des Userscriptes gesteuert.
  */
-function RMUSContent(){
+function Content(){
 
     /**
      * Property in dem alle content Möglichkeiten aufgelistet sind. Default sind alle false, die _init Methode

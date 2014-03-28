@@ -1,24 +1,16 @@
 // Global FIX ME
-var Options         = new RMUSOptions();
-var Content         = new RMUSContent();
-var Preview         = new RMUSPreview();
-var EditPosts       = new RMUSEditPosts(Preview);
-var ReloadPageData  = new RMUSReloadPageData();
-var IgnoreUser      = new RMUSIgnoreUser(Options);
+var Options         = new Options();
+var Content         = new Content();
+var Preview         = new Preview();
+var Update          = new Update(Options);
+var EditPosts       = new EditPosts(Preview);
+var ExtraButtons    = new Extrabuttons(Content);
+var AjaxPost        = new AjaxPost(Preview);
+var ReloadPageData  = new ReloadPageData();
+var IgnoreUser      = new IgnoreUser(Options);
 var Notes           = new RMUSNotes();
 
 RMUS.start = function () {
-
-    var Options         = new RMUSOptions();
-    var Content         = new RMUSContent();
-    var Preview         = new RMUSPreview();
-    var Update          = new RMUSUpdate(Options);
-    var EditPosts       = new RMUSEditPosts(Preview);
-    var ExtraButtons    = new RMUSExtrabuttons(Content);
-    var AjaxPost        = new RMUSAjaxPost(Preview);
-    var ReloadPageData  = new RMUSReloadPageData();
-    var IgnoreUser      = new RMUSIgnoreUser(Options);
-    var Notes           = new RMUSNotes();
 
     /********************************
     *	Funktionen aktivieren	*

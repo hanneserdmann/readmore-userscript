@@ -1,14 +1,14 @@
 /**
- * RMUSUpdate
- * ==========
+ * Update
+ * ======
  *
- * Klasse um zu checken ob ein Update verfügbar ist. Schaut einfach im Thread nach
+ * Pseudoklasse um zu checken ob ein Update verfügbar ist. Schaut einfach im Thread nach
  * ob sich die Versionsnummer verändert hat. Autoupdate ist leider im Userscript nicht möglich,
  * für die Extensions ist die Funktion eigentlich überflüssig.
- * @param _options {RMUSOptions}
+ * @param _options {Options}
  */
 
-function RMUSUpdate(_options){
+function Update(_options){
 
     /**
      * Aktueller Timestamp

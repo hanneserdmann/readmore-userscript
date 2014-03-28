@@ -1,13 +1,13 @@
 /**
- * RMUSIgnoreUser
- * ==============
+ * IgnoreUser
+ * ==========
  *
  * Bietet die Möglichkeit einen User auf der Readmore-Seite zu ignorieren. Die
  * Posts im Forum werden versteckt.
- * @param _options {RMUSOptions}
+ * @param _options {Options}
  */
 
-function RMUSIgnoreUser(_options){
+function IgnoreUser(_options){
     var _user = [];
     var _ignoreCount = 0;
 

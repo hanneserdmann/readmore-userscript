@@ -1,12 +1,12 @@
 /**
- * RMUSReloadPageData
- * ==================
+ * ReloadPageData
+ * ==============
  *
  * Ermöglicht das Posten ohne Seitenrefresh. Der Post wird über
  * Ajax abgeschickt, danach wird die Seite im Hintergrund nachgeladen.
  */
 
-function RMUSReloadPageData(){
+function ReloadPageData(){
 
     var _self = this;
 

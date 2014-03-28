@@ -1,13 +1,13 @@
 /**
- * RMUSExtrabuttons
- * ================
+ * Extrabuttons
+ * ============
  *
- * Klasse für die Extrabuttons. Ursprünglich von IllDepence entwickelt.
+ * Pseudoklasse für die Extrabuttons. Ursprünglich von IllDepence entwickelt.
  * http://www.readmore.de/index.php?cont=profile&id=29432
- * @param _content {RMUSContent}
+ * @param _content {Content}
  */
 
-function RMUSExtrabuttons(_content){
+function Extrabuttons(_content){
 
     var _form       = null;
     var _commentBox = null;

@@ -1,13 +1,13 @@
 /**
- * RMUSEditPosts
- * =============
+ * EditPosts
+ * =========
  *
  * Ermöglicht das Editieren von Posts ohne Reload. Die Daten werden
  * per Ajax übermittelt.
- * @param _preview {RMUSPreview}
+ * @param _preview {Preview}
  */
 
-function RMUSEditPosts(_preview){
+function EditPosts(_preview){
 
     /**
      * Array mit den original Posts, damit sie wiederhergestellt werden

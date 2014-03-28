@@ -1,12 +1,12 @@
 /**
- * RMUSPreview
- * ===========
+ * Preview
+ * =======
  *
- * Klasse für die Preview eines Readmore.de Posts. Der BBCode wird durch das entsprechende
+ * Pseudoklasse für die Preview eines Readmore.de Posts. Der BBCode wird durch das entsprechende
  * HTML ersetzt.
  */
 
-function RMUSPreview(){
+function Preview(){
 
     var _self = this;
 

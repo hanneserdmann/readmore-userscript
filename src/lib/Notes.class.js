@@ -23,7 +23,7 @@ function RMUSNotes(){
      * @private
      */
     var _appendTextarea = function($element, userId){
-        $element.append('<textarea class="RMUSIgnoreUser" style="width: 95.5%; height: 80px;" data-userid="' + userId + '"></textarea>');
+        $element.append('<textarea class="IgnoreUser" style="width: 95.5%; height: 80px;" data-userid="' + userId + '"></textarea>');
     };
 
     /**
@@ -31,7 +31,7 @@ function RMUSNotes(){
      * @private
      */
     var _insertNoteText = function(){
-        $('textarea.RMUSIgnoreUser').each(function(){
+        $('textarea.IgnoreUser').each(function(){
             var $this   = $(this);
             var userId  = $this.data('userid');
 
@@ -47,7 +47,7 @@ function RMUSNotes(){
      * @private
      */
     var _addEventHandler = function(){
-        var $elements = $('textarea.RMUSIgnoreUser');
+        var $elements = $('textarea.IgnoreUser');
 
         // Alte Handler entfernen
         $elements.off('focusout');

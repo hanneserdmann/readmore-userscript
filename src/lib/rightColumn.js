@@ -153,7 +153,7 @@ RMUS.rightColumn = {
             // Einfügen
             document.getElementsByClassName('cont_box')[1].innerHTML = html;
 
-            // Größte der Bilder anpassen
+            // Größe der Bilder anpassen
             $('.userscript11px').css('height', '11px').css('width', '11px');
 
             return false;

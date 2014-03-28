@@ -216,13 +216,111 @@ function RMUS() {
     "use strict";
 }
 /**
- * RMUSContent
- * ===========
+ * AjaxPost
+ * ========
  *
- * Simple Klasse um auszulesen wo wir uns auf der Readmore.de Seite befinden.
+ * Ermöglicht das Posten ohne Seitenrefresh. Wie schon am Namen
+ * erkennbar wird der Post per jQuery Ajax abgeschickt.
+ */
+
+function AjaxPost(_preview){
+
+    /**
+     * jQuery Object. Formular das serialisiert und dann abgeschickt wird.
+     * @type {{}}
+     * @private
+     */
+    var _$submitForm = {};
+
+    /**
+     * jQuery Object. Knopf zum abschicken.
+     * @type {{}}
+     * @private
+     */
+    var _$sendButton = {};
+
+    /**
+     * Schickt den Post per Ajax ab und triggert das Nachladen im Hintergrund.
+     * @private
+     */
+    var _sendPost = function(){
+        var post = _$submitForm.serialize();
+
+        // Sonderzeichen ersetzen
+        post = String(RMUS.middleColumn.forum.replaceSpecialChars(post));
+
+        // Während der Wartezeiten den Submit-Knopf ausblenden
+        _$sendButton.css('display', 'none');
+
+        // Ist das Automatische neuladen deaktiviert, die nötigen Vorkehrungen dazu treffen
+        if(RMUS.middleColumn.forum.reloadPosts.postcount == 0) {
+            RMUS.middleColumn.forum.reloadPosts.readPostcount();
+        }
+
+        // Der eigentliche Post
+        $.ajax({
+            type:'POST',
+            url: '?cont=forum/do_reply',
+            data: post,
+            async: true,
+            cache: false,
+            contentType: 'application/x-www-form-urlencoded; charset=iso-8859-1;',
+            dataType: 'html',
+
+            success: function (response) {
+                // Prüft ob der Beitrag lang genug war
+                var error = response.match('Dein Beitrag muss aus mindestens 3 Zeichen bestehen.');
+
+                if(error != null) {
+                    // Fehlermeldung ausgeben
+                    alert('Dein Beitrag muss aus mindestens 3 Zeichen bestehen!');
+                } else {
+                    // Nachricht aus dem Feld löschen und Posts neuladen
+                    $('#c_comment').val('');
+
+                    // Falls die Preview an ist -> ausschalten
+                    if (_preview.isEnabled()){
+                        _preview.triggerPreview();
+                    }
+
+                    RMUS.middleColumn.forum.reloadPosts.readNewPosts();
+                }
+
+                // Submit-Knopf wieder einblenden
+                _$sendButton.css('display', 'block');
+            },
+            error: function (){
+                // Submit-Knopf wieder einblenden
+                _$sendButton.css('display', 'block');
+
+                // Fehlermeldung
+                alert('Leider ist ein Fehler ist aufgetreten!');
+            }
+        });
+    };
+
+    /**
+     * Fügt den Eventhandler hinzu und triggert so den eigentlichen
+     * Post im Hintergrund
+     */
+    this.init = function(){
+        _$submitForm = $('form[name=submitpost]');
+        _$sendButton = $('.center:last');
+
+        $('input[name=submit_thread]').click(function (event) {
+            event.preventDefault();
+            _sendPost();
+        });
+    };
+}
+/**
+ * Content
+ * =======
+ *
+ * Simple Pseudoklasse um auszulesen wo wir uns auf der Readmore.de Seite befinden.
  * Dadurch werden Funktionen des Userscriptes gesteuert.
  */
-function RMUSContent(){
+function Content(){
 
     /**
      * Property in dem alle content Möglichkeiten aufgelistet sind. Default sind alle false, die _init Methode
@@ -398,12 +496,15 @@ function RMUSContent(){
     _init();
 }
 /**
- * RMUSEditPosts
- * =============
+ * EditPosts
+ * =========
  *
- * Ermöglicht das Editieren von Posts ohne Reload.
+ * Ermöglicht das Editieren von Posts ohne Reload. Die Daten werden
+ * per Ajax übermittelt.
+ * @param _preview {Preview}
  */
-function RMUSEditPosts(_preview){
+
+function EditPosts(_preview){
 
     /**
      * Array mit den original Posts, damit sie wiederhergestellt werden
@@ -429,7 +530,7 @@ function RMUSEditPosts(_preview){
                 $this.attr('href', 'javascript:void(0);');
 
                 if (null !== hrefParts) {
-                    var postid = parseInt(hrefParts[1], 10);
+                    postid = parseInt(hrefParts[1], 10);
                     $this.attr('href', 'javascript:void(0);');
                     $this.data('postid', postid);
                 }
@@ -569,16 +670,15 @@ function RMUSEditPosts(_preview){
     };
 }
 /**
- * RMUSExtrabuttons
- * ================
+ * Extrabuttons
+ * ============
  *
- * Klasse für die Extrabuttons. Ursprünglich von IllDepence entwickelt.
+ * Pseudoklasse für die Extrabuttons. Ursprünglich von IllDepence entwickelt.
  * http://www.readmore.de/index.php?cont=profile&id=29432
- * @param Content {RMUSContent}
- * @constructor
+ * @param _content {Content}
  */
 
-function RMUSExtrabuttons(Content){
+function Extrabuttons(_content){
 
     var _form       = null;
     var _commentBox = null;
@@ -619,12 +719,12 @@ function RMUSExtrabuttons(Content){
     var _ubbHelp = '<a onclick="window.open(\'http://www.readmore.de/mod/ubb.mod.php\', \'UBB Hilfe\', \'scrollbars=1,width=600,height=490,left=100,top=200\');return false;" href="/index.php?cont=ubb" style="font-weight:bold; color:#fff; margin-left: 8px; font-size: 11px;" class="ten hgray">?</a>';
 
     /**
-     * Quasi-Konstuktor. Methode wird bei der Instanziierung des Objektes ausgeführt.
+     * Startet die Extrabuttons.
      * Selektiert das Formular, die CommentBox und startet anschließend die Initialisierung
      * der Extrabuttons.
      * @private
      */
-    var _init = function(){
+    this.init = function(){
         _form       = _getForm();
         _commentBox = _getCommentBox();
         _toolbar    = _getToolbar();
@@ -658,7 +758,7 @@ function RMUSExtrabuttons(Content){
         var container = '';
         var returnValue = null;
 
-        if (Content.getMultipleContent(['news', 'matches', 'profile'], 'OR')) {
+        if (_content.getMultipleContent(['news', 'matches', 'profile'], 'OR')) {
             container = _form.parent('div.center');
 
             if ($('div.headline_bg', container).length === 0) {
@@ -668,9 +768,9 @@ function RMUSExtrabuttons(Content){
             }
 
             returnValue = $('div.headline_bg', container);
-        } else if (Content.getMultipleContent(['forum_thread', 'forum_edit', 'forum_newtopic'], 'OR')) {
+        } else if (_content.getMultipleContent(['forum_thread', 'forum_edit', 'forum_newtopic'], 'OR')) {
             returnValue = $('div.headline_bg', _form);
-        } else if (Content.getContent('msg')) {
+        } else if (_content.getContent('msg')) {
             container = _commentBox.parent();
 
             if ($('div.headline_bg', container).length === 0) {
@@ -680,7 +780,7 @@ function RMUSExtrabuttons(Content){
             }
 
             returnValue = $('div.headline_bg', container);
-        } else if (Content.getContent('groups_show_group')) {
+        } else if (_content.getContent('groups_show_group')) {
             // First Post im Thread?
             if ($('input[name="threadtitle"]').length === 1) {
                 container = $('<div/>').insertBefore(_commentBox);
@@ -708,16 +808,16 @@ function RMUSExtrabuttons(Content){
     var _getForm = function(){
         var returnValue = null;
 
-        if (Content.getMultipleContent(['news', 'matches', 'profile'], 'OR')) {
+        if (_content.getMultipleContent(['news', 'matches', 'profile'], 'OR')) {
             returnValue = $('form[name=form_comment]');
-        } else if (Content.getMultipleContent(['forum_thread', 'forum_newtopic'], 'OR')) {
+        } else if (_content.getMultipleContent(['forum_thread', 'forum_newtopic'], 'OR')) {
             returnValue = $('form[name=submitpost]');
-        } else if (Content.getContent('forum_edit')) {
+        } else if (_content.getContent('forum_edit')) {
             returnValue = $('form[name=submiteditthread]');
-        } else if (Content.getContent('msg')) {
+        } else if (_content.getContent('msg')) {
             returnValue = $('td.text_h1_j form');
-        } else if (Content.getContent('groups_show_group')) {
-            if (Content.getAction() === 'threadedit') {
+        } else if (_content.getContent('groups_show_group')) {
+            if (_content.getAction() === 'threadedit') {
                 returnValue = $('form[name="submiteditthread"]');
             }
 
@@ -737,12 +837,12 @@ function RMUSExtrabuttons(Content){
     var _getCommentBox = function(){
         var returnValue = null;
 
-        if (Content.getContent('profile')) {
+        if (_content.getContent('profile')) {
             returnValue = $('textarea[name=comment]', _form);
-        } else if (Content.getContent('msg')) {
+        } else if (_content.getContent('msg')) {
             returnValue = $('textarea[name=msg]', _form);
-        } else if (Content.getContent('groups_show_group')) {
-            if (Content.getAction() === 'threadedit') {
+        } else if (_content.getContent('groups_show_group')) {
+            if (_content.getAction() === 'threadedit') {
                 returnValue = $('textarea[name=new_comment].form', _form);
             }
 
@@ -827,20 +927,191 @@ function RMUSExtrabuttons(Content){
                 '</div></div></div>' +
                 '<div style="clear: right;"></div></div>';
     };
-
-    /**
-     * Init Methode starten
-     */
-    _init();
 }
 /**
- * RMUSOptions
- * ===========
+ * IgnoreUser
+ * ==========
  *
- * Klasse um die Optionen des Userscript zu handeln. Braucht zum instanziieren keine weiteren
+ * Bietet die Möglichkeit einen User auf der Readmore-Seite zu ignorieren. Die
+ * Posts im Forum werden versteckt.
+ * @param _options {Options}
+ */
+
+function IgnoreUser(_options){
+    var _user = [];
+    var _ignoreCount = 0;
+
+    /**
+     * Liest die User aus den Optionen aus und packt sie in ein Array.
+     * @private
+     */
+    var _readUser = function(){
+        var user = [];
+        $(String(_options.getOption('miscellaneous_ignoreUser_usernames')).split(',')).each(function(index, value){
+            user.push(value.trim());
+        });
+
+        _user = user;
+    };
+
+    /**
+     * Blendet die Posts der User aus.
+     * @param thread {Boolean}
+     * @param ticker {Boolean}
+     * @param profile {Boolean}
+     */
+    this.ignore = function(thread, ticker, profile){
+        // Falls das Array mit den Usern leer ist, wird es eingelesen.
+        if (_user.length < 1){
+            _readUser();
+        }
+
+        if (thread) {
+            $(_user).each(function(index, value) {
+                $('tr[class*=post_]:has(a[title="' + value + '"]) td').each(function() {
+
+                    if (this.innerHTML.match(/ignored_/) == null){
+                        if (_ignoreCount % 2){
+                            _ignoreCount--;
+                            $(this).html('<div style="display:none;" class="ignored_' + _ignoreCount + '">' + $(this).html() + '</div>');
+                            _ignoreCount += 2;
+                        }
+                        else{
+                            $(this).html('<a style="font-size: 9px;" href="javascript:void(0)" onclick="$(\'.ignored_' + _ignoreCount + '\').toggle(); if(this.innerHTML == \'Beitrag einblenden\'){this.innerHTML = \'Beitrag ausblenden\';}else{this.innerHTML = \'Beitrag einblenden\';}">Beitrag einblenden</a><br/>' + '<br/><div style="display:none;" class="ignored_' + _ignoreCount + '">' + $(this).html() + '</div>');
+                            _ignoreCount++;
+                        }
+                    }
+                });
+            });
+        }
+
+        if (ticker || profile) {
+            $(_user).each(function(index, value) {
+                $('div .elf.cmt_kopf:has(a.cmt_head:contains(' + value + '))').next().each(function(){
+                    $(this).html('<a href="javascript:void(0)" onclick="$(\'.ignored_' + _ignoreCount + '\').toggle();">Beitrag einblenden</a><br/>' + '<br/><div style="display:none;" class="ignored_' + _ignoreCount + '">' + $(this).html() + '</div>');
+                    _ignoreCount++;
+                });
+            });
+        }
+    };
+}
+/**
+ * RMUSNotes
+ * =========
+ *
+ * Notizfunktion um Text zu Usern zu verfassen.
+ * Unter dem Avatar in Posts wird eine Textarea eingeblendet.
+ */
+
+function RMUSNotes(){
+
+    /**
+     * Object aus dem Localstorage
+     * @type {{}}
+     * @private
+     */
+    var _notes = {};
+
+    /**
+     * Fügt eine Textarea unter dem User-Avatar ein. Übergeben wird das TD und die
+     * Userid des Benutzers/Posts.
+     * @param $element {{}}
+     * @param userid {Integer}
+     * @private
+     */
+    var _appendTextarea = function($element, userId){
+        $element.append('<textarea class="IgnoreUser" style="width: 95.5%; height: 80px;" data-userid="' + userId + '"></textarea>');
+    };
+
+    /**
+     * Fügt den Text in die Textarea ein.
+     * @private
+     */
+    var _insertNoteText = function(){
+        $('textarea.IgnoreUser').each(function(){
+            var $this   = $(this);
+            var userId  = $this.data('userid');
+
+            if (_notes.hasOwnProperty(userId)){
+                $this.html(_notes[userId]);
+            }
+        });
+    };
+
+    /**
+     * Fügt den Event-Handler hinzu, damit die Notizen
+     * gespeichert werden.
+     * @private
+     */
+    var _addEventHandler = function(){
+        var $elements = $('textarea.IgnoreUser');
+
+        // Alte Handler entfernen
+        $elements.off('focusout');
+
+        // Beim rausklicken abfeuern
+        $elements.on('focusout', function(){
+            var $this   = $(this);
+            var userId  = $this.data('userid');
+
+            // Text einlesen
+            _notes[userId] = $this.val();
+
+            // Textareas updaten
+            _insertNoteText();
+            _saveNotes();
+        });
+    };
+
+    /**
+     * Liest die Notizen aus dem Localstorage aus. Falls readFromStorage mit false übergeben wird,
+     * werden die Notizen nicht aus dem localstorage geladen.
+     * @param readFromStorage {Boolean}
+     * @private
+     */
+    var _readNotes = function(){
+        _notes = JSON.parse(localStorage.getItem('userscriptNote'));
+    };
+
+    /**
+     * Speichert die Notes.
+     * @private
+     */
+    var _saveNotes = function(){
+        localStorage.setItem('userscriptNote', JSON.stringify(_notes));
+    }
+
+    /**
+     * Starten die Notizfunktion
+     * @param readFromStorage
+     */
+    this.init = function(readFromStorage){
+        var $posts = $('tr[class*=post_]');
+
+        readFromStorage = typeof readFromStorage !== 'undefined' ? readFromStorage : true;
+
+        if (readFromStorage){
+            _readNotes();
+        }
+
+        $posts.find('td:first').not(':has(textarea)').each(function(){
+            var $this   = $(this);
+            var userId  = $this.find('a.bml').attr('href').match(/&id=([0-9]+)/)[1];
+            _appendTextarea($this, userId);
+        });
+
+        _addEventHandler();
+        _insertNoteText();
+    };
+}
+/**
+ * Options
+ * =======
+ *
+ * Pseudoklasse um die Optionen des Userscript zu handeln. Braucht zum instanziieren keine weiteren
  * Parameter, ruft direkt die _init() Methode auf um die Settings auszulesen.
  */
-function RMUSOptions(){
+function Options(){
     /**
      * Name der benutzt wird um die Optionen im Localstorage zu speichern.
      * @type {string}
@@ -873,7 +1144,7 @@ function RMUSOptions(){
      * dafür eine separate Methode zu haben. Wird als letzte Zeile ausgerufen.     *
      * @private
      */
-    _init = function(){
+    var _init = function(){
         // Optionen aus dem Localstorage auslesen
         _readOptionsFromLocalstorage();
     };
@@ -1008,7 +1279,7 @@ function RMUSOptions(){
 
     /**
      * Liest den JSON-String aus dem Localstorage aus und setzt das passende
-     * Attribut der klasse. Wird im Konstruktor aufgerunden, sollte also stets verfügbar sein.     *
+     * Attribut der Pseudoklasse. Wird im Konstruktor aufgerunden, sollte also stets verfügbar sein.     *
      * @private
      */
     var _readOptionsFromLocalstorage = function(){
@@ -1065,13 +1336,17 @@ function RMUSOptions(){
     _init();
 }
 /**
- * RMUSPreview
- * ===========
+ * Preview
+ * =======
  *
- * Klasse für die Preview eines Readmore.de Posts.
+ * Pseudoklasse für die Preview eines Readmore.de Posts. Der BBCode wird durch das entsprechende
+ * HTML ersetzt.
  */
 
-function RMUSPreview(){
+function Preview(){
+
+    var _self = this;
+
     /**
      * UserID des aktuellen Benutzers
      * @type {number}
@@ -1207,7 +1482,7 @@ function RMUSPreview(){
      * @private
      */
     var _showPreview = function(){
-        _previewElement.html(_convertToPreview(String(_c_comment.val().replace(/(\r\n|\n|\r)/gm, '<br />'))));
+        _previewElement.html(_self.convertToPreview(String(_c_comment.val().replace(/(\r\n|\n|\r)/gm, '<br />'))));
     };
 
     /**
@@ -1216,6 +1491,7 @@ function RMUSPreview(){
      */
     var _activatePreview = function(){
         _showPreview();
+
 
         _previewtable.css('display', 'block');
         _c_comment.on('keyup', _showPreview);
@@ -1234,6 +1510,14 @@ function RMUSPreview(){
         _c_comment.off('focus', _showPreview);
 
         _previewIsEnabled = false;
+    };
+
+    /**
+     * Gibt zurück ob die Preview aktuell an ist.
+     * @returns {boolean}
+     */
+    this.isEnabled = function(){
+        return _previewIsEnabled;
     };
 
     /**
@@ -1324,15 +1608,74 @@ function RMUSPreview(){
     };
 }
 /**
- * RMUSUpdate
- * ==========
+ * ReloadPageData
+ * ==============
  *
- * Klasse um zu checken ob ein Update verfügbar ist. Schaut einfach im Thread nach
- * ob sich die Versionsnummer verändert hat. Autoupdate ist leider im Userscript nicht möglich,
- * für die Extensions ist die Funktion eigentlich überflüssig.
+ * Ermöglicht das Posten ohne Seitenrefresh. Der Post wird über
+ * Ajax abgeschickt, danach wird die Seite im Hintergrund nachgeladen.
  */
 
-function RMUSUpdate(Options){
+function ReloadPageData(){
+
+    var _self = this;
+
+    /**
+     * HTML String der Readmore-Stream-Übersicht,
+     * daraus werden verschiedene Teile der Page geupdated.
+     * @type {string}
+     * @private
+     */
+    var _pageData = '';
+
+    /**
+     * Gibt den HTML String zurück
+     * @returns {string}
+     */
+    this.getPageData = function(){
+      return _pageData;
+    };
+
+    /**
+     * Liest die Seite neu ein.
+     * Die Funktion ist asynchron.
+     * @returns {boolean}
+     */
+    this.readPage = function(){
+        $.ajax({
+            type: 'POST',
+            async: true,
+            cache: false,
+            url: 'http://www.readmore.de/index.php?cont=userstream_overview',
+            contentType: 'text/html; charset=iso-8859-1;',
+            dataType: 'html',
+            timeout: 10000,
+            success: function (data) {
+                if(data != null){
+                    // Prüft auf Fehler beim Laden der Seite
+                    if (data.search('<div class="error">') != -1) {
+                        _self.readPage();
+                    } else {
+                        _pageData = data.replace(/(\r\n|\n|\r)/gm,' ').replace(/\s+/g," ");
+                    }
+                }
+            },
+            beforeSend: function(jqXHR) {
+                jqXHR.overrideMimeType('text/html;charset=iso-8859-1');
+            }
+        });
+    };
+}
+/**
+ * Update
+ * ======
+ *
+ * Pseudoklasse um zu checken ob ein Update verfügbar ist. Schaut einfach im Thread nach
+ * ob sich die Versionsnummer verändert hat. Autoupdate ist leider im Userscript nicht möglich,
+ * für die Extensions ist die Funktion eigentlich überflüssig.
+ * @param _options {Options}
+ */
+
+function Update(_options){
 
     /**
      * Aktueller Timestamp
@@ -1346,7 +1689,7 @@ function RMUSUpdate(Options){
      * @type {string}
      * @private
      */
-    var _currentVersion = Options.getVersion();
+    var _currentVersion = _options.getVersion();
 
     /**
      * Zeigt in der Userbar den Hinweis an, dass eine neue Version des Userscriptes
@@ -1407,7 +1750,7 @@ function RMUSUpdate(Options){
         else if (version1[2] > version2[2]) returnVal = true;
 
         return returnVal;
-    }
+    };
 
     /**
      * Triggert die Prüfung ob eine neue Version verfügbar ist. Ajax Request wird nur abgefeuert wenn die letzte
@@ -1438,7 +1781,7 @@ function RMUSUpdate(Options){
 
         // Refresh starten!
         _refreshLatestVersion();
-    }
+    };
 }
 RMUS.leftColumn = {
 
@@ -1456,19 +1799,16 @@ RMUS.leftColumn = {
 
         // Alle Streams ausblenden
         hideStreams : function () {
-            $('#leftc>div.block:eq(1), #leftc>div.block:eq(2), #leftc>div.block:eq(4), .line2:eq(1), .line2:eq(2), .line2:eq(0)').css('display', 'none');			
+            $('#leftc>div.block:eq(1), #leftc>div.block:eq(2), #leftc>div.block:eq(4), .line2:eq(1), .line2:eq(2), .line2:eq(0)').css('display', 'none');
             return false;
         },
 
         // Forennavigation neuladen
         reloadStreams : function(){
-            var caster = '';
-            var player = '';
-            var user = '';
-
-            caster = $(RMUS.miscellaneous.reloadMainpageData.mainpageData).find('div.frontpage_stream:first').html();
-            player = $(RMUS.miscellaneous.reloadMainpageData.mainpageData).find('div.frontpage_stream:last').html();
-            user   = $(RMUS.miscellaneous.reloadMainpageData.mainpageData).find('#profilestream').html();
+            var $pageData   = $(ReloadPageData.getPageData());
+            var caster      = $pageData.find('div.frontpage_stream:first').html();
+            var player      = $pageData.find('div.frontpage_stream:last').html();
+            var user        = $pageData.find('#profilestream').html();
 
             $('div.frontpage_stream:first').html(caster);
             $('div.frontpage_stream:last').html(player);
@@ -1685,11 +2025,11 @@ RMUS.middleColumn = {
 
                                 RMUS.middleColumn.forum.reloadPosts.oldLimit = window.pageYOffset + (window.innerHeight * 0.55);
                                 // Beiträge aus den neuen Posts ignorieren
-                                if (Options.getOption('miscellaneous_ignoreUser') == 'checked') RMUS.miscellaneous.ignoreUser.doIgnore(true, false, false);
+                                if (Options.getOption('miscellaneous_ignoreUser') == 'checked') IgnoreUser.ignore(true, false, false);
                                 // Edit vorbereiten
                                 if (Options.getOption('middleColumn_forum_editPost') == 'checked') EditPosts.initializeEvent();
                                 // Notzizen einblenden
-                                if(Options.getOption('miscellaneous_note') == 'checked') RMUS.miscellaneous.note.initialize();
+                                if(Options.getOption('miscellaneous_note') == 'checked') Notes.init(false);
                                 // Youtubeplayer ersetzen
                                 if(Options.getOption('miscellaneous_convertYoutube') == 'checked') RMUS.miscellaneous.convertYoutube();
                             }
@@ -1900,57 +2240,6 @@ RMUS.middleColumn = {
             return text;
         },
 
-        // Post im Hintergrund
-        postPerAjax : function () {
-            var post = $('form[name=submitpost]').serialize();
-
-            // Sonderzeichen ersetzen
-             post = String(RMUS.middleColumn.forum.replaceSpecialChars(post));
-
-            // Während der Wartezeiten den Submit-Knopf ausblenden
-            $('.center:last').css('display', 'none');
-
-            // Ist das Automatische neuladen deaktiviert, die nötigen Vorkehrungen dazu treffen
-            if(RMUS.middleColumn.forum.reloadPosts.postcount == 0) {
-                RMUS.middleColumn.forum.reloadPosts.readPostcount();
-            }
-
-            // Der eigentliche Post
-            $.ajax({
-                type:'POST',
-                url: '?cont=forum/do_reply',
-                data: post,
-                async: true,
-                cache: false,
-                contentType: 'application/x-www-form-urlencoded; charset=iso-8859-1;',
-                dataType: 'html',
-
-                success: function (response) {
-                    // Prüft ob der Beitrag lang genug war
-                    var error = response.match('Dein Beitrag muss aus mindestens 3 Zeichen bestehen.');
-
-                    if(error != null) {
-                        // Fehlermeldung ausgeben
-                        alert('Dein Beitrag muss aus mindestens 3 Zeichen bestehen!');
-                    } else {
-                        // Nachricht aus dem Feld löschen und Posts neuladen
-                        $('#c_comment').val('');
-                        RMUS.middleColumn.forum.preview.deactivatePreview();
-                        RMUS.middleColumn.forum.reloadPosts.readNewPosts();
-                    }
-
-                    // Submit-Knopf wieder einblenden
-                    $('.center:last').css('display', 'block');
-                },
-                error: function (){
-                    // Submit-Knopf wieder einblenden
-                    $('.center:last').css('display', 'block');
-                }
-            });
-
-            return false;
-        },
-
         scrollForNewPage : {
             oldPosts : 0,
             insertPosts : function (){
@@ -1980,9 +2269,9 @@ RMUS.middleColumn = {
 
                                     RMUS.middleColumn.forum.page++;
                                     // Beiträge aus den neuen Posts ignorieren
-                                    if (Options.getOption('miscellaneous_ignoreUser') == 'checked') RMUS.miscellaneous.ignoreUser.doIgnore(true, false, false);
+                                    if (Options.getOption('miscellaneous_ignoreUser') == 'checked') IgnoreUser.ignore(true, false, false);
                                     // Notzizen einblenden
-                                    if(Options.getOption('miscellaneous_note') == 'checked') RMUS.miscellaneous.note.initialize();
+                                    if(Options.getOption('miscellaneous_note') == 'checked') Notes.init(false);
                                 }
                             }
                         },
@@ -1998,7 +2287,7 @@ RMUS.middleColumn = {
                 $('#content h1:first').after('<a id="RMUSeditboxTop" href="javascript:void(0);" style="float: right;" onclick="$(\'#content h1:first\').after($(\'form[name=submitpost]\')); $(this).css(\'display\',\'none\'); $(\'#RMUSeditboxBottom\').css(\'display\',\'\');">Editbox anzeigen<br /><br /></a>');
                 $('#content br.clear:last').after('<a id="RMUSeditboxBottom" href="javascript:void(0);" style="float: right; display: none;" onclick="$(\'#content br.clear:last\').after($(\'form[name=submitpost]\')); $(this).css(\'display\',\'none\'); $(\'#RMUSeditboxTop\').css(\'display\',\'\');">Editbox anzeigen<br /><br /></a>');
             }
-        },
+        }
     },
 
     searchJumpToLastpage : {
@@ -2063,38 +2352,6 @@ RMUS.miscellaneous = {
         $('div#wrapper').css('margin-top', '34px');
     },
 
-    reloadMainpageData : {
-        mainpageData : '',
-
-        readPage : function() {
-            $.ajax({
-                type: 'POST',
-                async: true,
-                cache: false,
-                url: 'http://www.readmore.de/index.php?cont=userstream_overview',
-                contentType: 'text/html; charset=iso-8859-1;',
-                dataType: 'html',
-                success: function (data) {
-                    var pageData = data;
-
-                    if(pageData != null){
-                        // Prüft auf Fehler beim Laden der Seite
-                        if (pageData.search('<div class="error">') != -1) {
-                            RMUS.miscellaneous.reloadMainpageData.readPage();
-                        } else {
-                            RMUS.miscellaneous.reloadMainpageData.mainpageData = pageData.replace(/(\r\n|\n|\r)/gm,' ').replace(/\s+/g," ");
-                        }
-                    }
-                },
-                beforeSend: function(jqXHR) {
-                    jqXHR.overrideMimeType('text/html;charset=iso-8859-1');
-                }
-            });
-
-            return false;
-        }
-    },
-
     stopAvatarAnimation : {
         isGifImage : function(i){
             return /^(?!data:).*?\/user.*?\.gif/i.test(i.src);
@@ -2130,89 +2387,6 @@ RMUS.miscellaneous = {
         });
 
         return false;
-    },
-
-    ignoreUser : {
-        user : [],
-        ignoreCount : 0,
-
-        setUser : function(){
-            var user = [];
-            $(String(Options.getOption('miscellaneous_ignoreUser_usernames')).split(',')).each(function(index, value){
-                user.push(value.trim());
-            });
-
-            RMUS.miscellaneous.ignoreUser.user = user;
-            return false;
-        },
-
-        doIgnore : function(thread, ticker, profile) {
-            if (RMUS.miscellaneous.ignoreUser.user.length == 0) {
-                RMUS.miscellaneous.ignoreUser.setUser();
-            }
-
-            if (thread) {
-                $(RMUS.miscellaneous.ignoreUser.user).each(function(index, value) {
-                    $('tr[class*=post_]:has(a[title="' + value + '"]) td').each(function() {
-
-                        if (this.innerHTML.match(/ignored_/) == null){
-                            if (RMUS.miscellaneous.ignoreUser.ignoreCount % 2){
-                                RMUS.miscellaneous.ignoreUser.ignoreCount--;
-                                $(this).html('<div style="display:none;" class="ignored_' + RMUS.miscellaneous.ignoreUser.ignoreCount + '">' + $(this).html() + '</div>');
-                                RMUS.miscellaneous.ignoreUser.ignoreCount = RMUS.miscellaneous.ignoreUser.ignoreCount + 2;
-                            }
-                            else{
-                                $(this).html('<a style="font-size: 9px;" href="javascript:void(0)" onclick="$(\'.ignored_' + RMUS.miscellaneous.ignoreUser.ignoreCount + '\').toggle(); if(this.innerHTML == \'Beitrag einblenden\'){this.innerHTML = \'Beitrag ausblenden\';}else{this.innerHTML = \'Beitrag einblenden\';}">Beitrag einblenden</a><br/>' + '<br/><div style="display:none;" class="ignored_' + RMUS.miscellaneous.ignoreUser.ignoreCount + '">' + $(this).html() + '</div>');
-                                RMUS.miscellaneous.ignoreUser.ignoreCount++;
-                            }
-                        }
-                    });
-                });
-            }
-
-            if (ticker || profile) {
-                $(RMUS.miscellaneous.ignoreUser.user).each(function(index, value) {
-                    $('div .elf.cmt_kopf:has(a.cmt_head:contains(' + value + '))').next().each(function(){
-                        $(this).html('<a href="javascript:void(0)" onclick="$(\'.ignored_' + RMUS.miscellaneous.ignoreUser.ignoreCount + '\').toggle();">Beitrag einblenden</a><br/>' + '<br/><div style="display:none;" class="ignored_' + RMUS.miscellaneous.ignoreUser.ignoreCount + '">' + $(this).html() + '</div>');
-                        RMUS.miscellaneous.ignoreUser.ignoreCount++;
-                    });
-                });
-            }
-
-            return false;
-        }
-    },
-    note : {
-        notenumber : 0,
-        initialize : function() {
-            $('tr[class*=post_]>td:even:not(:has(textarea))').each(function(){
-                var br = '<br />';
-                var user = String($(this).find('a.bml').attr('title'));
-                var notenr = RMUS.miscellaneous.note.notenumber++;
-
-                if ($($(this).html()).length > 0) br = '<br /><br />';
-                $(this).append(br + '<center><a href="javascript:void(o);" name="note_' + user + '_' + notenr + '">Notiz</a><br /><br /><textarea style="display:none;height:100px;width:98%" name="note_' + user + '_' + notenr + '"></textarea></center>');
-
-                $('a[name="note_' + user + '_' + notenr + '"]').click(function () {
-                    var notes = JSON.parse(localStorage.getItem('userscriptNote')),
-                        note = $('textarea[name="note_' + user + '_' + notenr + '"]'),
-                        closing = note.is(':visible');
-
-                    if (notes == null) notes = {};
-
-                    if (true === closing) {
-                        notes[user] = String(note.val()).trim();
-                    } else {
-                        note.val(notes[user]);
-                    }
-
-                    note.toggle();
-                    localStorage.setItem('userscriptNote', JSON.stringify(notes));
-                });
-            });
-
-            return false;
-        }
     }
 };
 RMUS.rightColumn = {
@@ -2228,8 +2402,7 @@ RMUS.rightColumn = {
         },
 
         reloadTicker : function(){
-            var reloadData = '';
-            reloadData = $(RMUS.miscellaneous.reloadMainpageData.mainpageData).find('#nav_matchticker').html();
+            var reloadData = $(ReloadPageData.getPageData()).find('#nav_matchticker').html();
 
             if (reloadData && reloadData.length > 0) {
                 $('#nav_matchticker').html(reloadData);
@@ -2371,7 +2544,7 @@ RMUS.rightColumn = {
             // Einfügen
             document.getElementsByClassName('cont_box')[1].innerHTML = html;
 
-            // Größte der Bilder anpassen
+            // Größe der Bilder anpassen
             $('.userscript11px').css('height', '11px').css('width', '11px');
 
             return false;
@@ -2379,8 +2552,7 @@ RMUS.rightColumn = {
 
         // Forennavigation neuladen
         reloadForum : function() {
-            var reloadData = '';
-            reloadData = $(RMUS.miscellaneous.reloadMainpageData.mainpageData).find('div.cont_box:last').html();
+            var reloadData = $(ReloadPageData.getPageData()).find('div.cont_box:last').html();
 
             if (reloadData && reloadData.length > 0) {
                 $('.cont_box:last').html(reloadData);
@@ -2398,7 +2570,7 @@ RMUS.rightColumn = {
             },
 
             reload : function(){
-                RMUS.miscellaneous.reloadMainpageData.readPage();
+                ReloadPageData.readPage();
                 window.setTimeout(function () {RMUS.rightColumn.forum.reloadForum();}, 1500);
             }
         },
@@ -2411,18 +2583,18 @@ RMUS.rightColumn = {
     }
 };
 // Global FIX ME
-var Options     = new RMUSOptions();
-var Content     = new RMUSContent();
-var Preview     = new RMUSPreview();
-var EditPosts   = new RMUSEditPosts(Preview);
+var Options         = new Options();
+var Content         = new Content();
+var Preview         = new Preview();
+var Update          = new Update(Options);
+var EditPosts       = new EditPosts(Preview);
+var ExtraButtons    = new Extrabuttons(Content);
+var AjaxPost        = new AjaxPost(Preview);
+var ReloadPageData  = new ReloadPageData();
+var IgnoreUser      = new IgnoreUser(Options);
+var Notes           = new RMUSNotes();
 
 RMUS.start = function () {
-
-    var Options     = new RMUSOptions();
-    var Content     = new RMUSContent();
-    var Preview     = new RMUSPreview();
-    var Update      = new RMUSUpdate(Options);
-    var EditPosts   = new RMUSEditPosts(Preview);
 
     /********************************
     *	Funktionen aktivieren	*
@@ -2476,7 +2648,7 @@ RMUS.start = function () {
 
         // Neuladen der Forannavigation beziehungsweise der Streams oder Ticker
         if (Options.getOption('rightColumn_forum_reloadForum') === 'checked' || Options.getOption('leftColumn_streams_reloadStreams') === 'checked' || Options.getOption('rightColumn_ticker_reloadTicker') === 'checked'){
-            RMUS.miscellaneous.reloadMainpageData.readPage();
+            ReloadPageData.readPage();
         }
 
         // Button um die Forennavigation zu aktualisieren
@@ -2519,10 +2691,7 @@ RMUS.start = function () {
 
         // Posten im Hintergrund
         if (Options.getOption('middleColumn_forum_postPerAjax') === 'checked') {
-            $('input[name=submit_thread]').click(function (event) {
-                event.preventDefault();
-                RMUS.middleColumn.forum.postPerAjax();
-            });
+            AjaxPost.init();
         }
 
         // Posts nachladen
@@ -2555,7 +2724,7 @@ RMUS.start = function () {
 
         // Notzizen einblenden
         if(Options.getOption('miscellaneous_note') === 'checked') {
-            RMUS.miscellaneous.note.initialize();
+            Notes.init();
         }
 
         // Edit vorbereiten
@@ -2576,13 +2745,13 @@ RMUS.start = function () {
 
     // User ignorieren
     if (Options.getOption('miscellaneous_ignoreUser') === 'checked'){
-        RMUS.miscellaneous.ignoreUser.doIgnore(Content.getContent('forum_thread'), Content.getContent('matches'), Content.getContent('profile'));
+        IgnoreUser.ignore(Content.getContent('forum_thread'), Content.getContent('matches'), Content.getContent('profile'));
     }
 
     // Extrabuttons in den entsprechenden Seiten initialisieren
     if (Content.getMultipleContent(['forum_thread', 'forum_newtopic', 'forum_edit', 'matches', 'msg', 'profile', 'groups_show_group'], 'OR')) {
         if (Options.getOption('miscellaneous_extraButtons') === 'checked') {
-            var Extrabuttons = new RMUSExtrabuttons(Content);
+            ExtraButtons.init();
         }
     }
 
@@ -2809,7 +2978,7 @@ RMUS.start = function () {
                 || Options.getOption('leftColumn_streams_reloadStreams') === 'checked' && Options.getOption('options.leftColumn_streams_hideStreams') != 'checked'
                 || Options.getOption('rightColumn_ticker_reloadTicker') === 'checked' && Options.getOption('rightColumn_ticker_hideTicker') != 'checked') {
 
-                RMUS.miscellaneous.reloadMainpageData.readPage();
+                ReloadPageData.readPage();
 
                 // Forennavigation
                 if (Options.getOption('rightColumn_forum_hideForum') !== 'checked'
