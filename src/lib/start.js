@@ -10,8 +10,7 @@ var IgnoreUser      = new IgnoreUser(Options);
 var Notes           = new Notes();
 var ReloadPosts     = new ReloadPosts(Options, IgnoreUser, EditPosts, Notes);
 var AjaxPost        = new AjaxPost(Preview, ReloadPosts);
-
-ReloadPosts.init();
+var Headlines       = new Headlines();
 
 RMUS.start = function () {
 
@@ -43,14 +42,29 @@ RMUS.start = function () {
         if (Options.getOption('rightColumn_ticker_hideTicker') === 'checked') RMUS.rightColumn.ticker.hideTicker();
 
         // Schlagzeilen ausblenden
-        if (Options.getOption('rightColumn_headlines_hideHeadlines') === 'checked') RMUS.rightColumn.headlines.hideHeadlines();  // Alle
-        else{	// Individuell
-            if (Options.getOption('rightColumn_headlines_hideCounterstrike') === 'checked') RMUS.rightColumn.headlines.hideCounterstrike();
-            if (Options.getOption('rightColumn_headlines_hideStarcraft') === 'checked') RMUS.rightColumn.headlines.hideStarcraft();
-            if (Options.getOption('rightColumn_headlines_hideDefenseOfTheAncients') === 'checked') RMUS.rightColumn.headlines.hideDefenseOfTheAncients();
-            if (Options.getOption('rightColumn_headlines_hideLeagueOfLegends') === 'checked') RMUS.rightColumn.headlines.hideLeagueOfLegends();
-            if (Options.getOption('rightColumn_headlines_hideWarcraft3') === 'checked') RMUS.rightColumn.headlines.hideWarcraft3();
-            if (Options.getOption('rightColumn_headlines_hideSonstiges') === 'checked') RMUS.rightColumn.headlines.hideSonstiges();
+        if (Options.getOption('rightColumn_headlines_hideHeadlines') === 'checked'){
+            Headlines.hideAllHeadlines();
+        }
+        // Individuell
+        else{
+            if (Options.getOption('rightColumn_headlines_hideCounterstrike') === 'checked'){
+                Headlines.hideCounterstrike();
+            }
+            if (Options.getOption('rightColumn_headlines_hideStarcraft') === 'checked'){
+                Headlines.hideStarcraft();
+            }
+            if (Options.getOption('rightColumn_headlines_hideDefenseOfTheAncients') === 'checked'){
+                Headlines.hideDefenseOfTheAncients();
+            }
+            if (Options.getOption('rightColumn_headlines_hideLeagueOfLegends') === 'checked'){
+                Headlines.hideLeagueOfLegends();
+            }
+            if (Options.getOption('rightColumn_headlines_hideWarcraft3') === 'checked'){
+                Headlines.hideWarcraft3();
+            }
+            if (Options.getOption('rightColumn_headlines_hideSonstiges') === 'checked'){
+                Headlines.hideSonstiges();
+            }
 
             // Fixt die Größe des Bildes
             $('#nav_schlagzeilen img[alt=activity]').css('height', '11px');
@@ -83,9 +97,7 @@ RMUS.start = function () {
     // Nur im Forum (Threadansicht) aktivieren
     if (Content.getContent('forum_thread')) {
 
-        // Link zum Thread und Seite herausfinden
-        RMUS.middleColumn.forum.readThreadlink();
-        RMUS.middleColumn.forum.readPage();
+        ReloadPosts.init();
 
         // Wenn Lastpage gesetzt ist, zum letzten Post springen
         if (Options.getOption('miscellaneous_lastPageJumpToLastPost') === 'checked') RMUS.miscellaneous.lastPageJumpToLastPost();

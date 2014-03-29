@@ -5,22 +5,6 @@ RMUS.middleColumn = {
 *************************/
     forum : {
 
-        threadlink : '',
-        page : '',
-
-        // Link zum Thread ohne Seitenzahl ermitteln
-        readThreadlink : function () {
-            RMUS.middleColumn.forum.threadlink = $(location).attr('href').replace(/\&pagenum=.+$/, '');
-            return false;
-        },
-
-        // Aktuelle Seite ermitteln
-        readPage : function () {
-            RMUS.middleColumn.forum.page = parseInt($('div.floatl.m2.elf').html().match(/<b>(.+?)<\/b>/)[1], 10);
-            return false;
-        },
-
-
         replaceSpecialChars : function(text){
             var replacePost = {};
 
