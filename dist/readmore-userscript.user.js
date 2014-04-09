@@ -1702,8 +1702,8 @@ function Options() {
         // Geht alle Checkboxen durch, prüft ob die Box gechecked ist und setzt den passenden
         // Wert in den Optionen.
         $('input[type=checkbox].userscriptOptions').each(function () {
-            var attr = $(this).attr('checked');
-            if (attr == true || attr == 'checked') {
+            var attr = $(this).prop('checked');
+            if (attr === true) {
                 userscriptOptions[$(this).attr('name')] = 'checked';
             } else {
                 userscriptOptions[$(this).attr('name')] = false;
@@ -3163,7 +3163,7 @@ function Update(_options){
 
                     // Ist die cached Version neuer als die aktuelle Version?
                     if (_compareVersions(lastVersionCheck.version, _currentVersion)) {
-                        self.showUpdateMsg();
+                        _showUpdateMsg();
                     }
 
                     // Arbeit ist getan, aus der Funktion springen!

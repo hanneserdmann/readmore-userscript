@@ -103,7 +103,7 @@ function Update(_options){
 
                     // Ist die cached Version neuer als die aktuelle Version?
                     if (_compareVersions(lastVersionCheck.version, _currentVersion)) {
-                        self.showUpdateMsg();
+                        _showUpdateMsg();
                     }
 
                     // Arbeit ist getan, aus der Funktion springen!

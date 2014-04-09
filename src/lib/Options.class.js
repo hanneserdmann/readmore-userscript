@@ -149,8 +149,8 @@ function Options() {
         // Geht alle Checkboxen durch, prüft ob die Box gechecked ist und setzt den passenden
         // Wert in den Optionen.
         $('input[type=checkbox].userscriptOptions').each(function () {
-            var attr = $(this).attr('checked');
-            if (attr == true || attr == 'checked') {
+            var attr = $(this).prop('checked');
+            if (attr === true) {
                 userscriptOptions[$(this).attr('name')] = 'checked';
             } else {
                 userscriptOptions[$(this).attr('name')] = false;
