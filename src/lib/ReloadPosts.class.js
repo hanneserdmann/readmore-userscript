@@ -202,16 +202,17 @@ function ReloadPosts(_options, _ignoreUser, _editPosts, _notes, _miscellaneous) 
             $('a.bookmark').after('<input style="margin-left: 2px;" type="checkbox" id="userscript_enable_jump" name="userscript_enable_jump">');
             _$jumpToChkElm = $('#userscript_enable_jump');
         }
+        else{
+            if (_unseenPosts.length > 0) {
+                if (_$jumpToChkElm.prop('checked')) {
+                    var jumpto = _unseenPosts[0] - (window.innerHeight * 0.55) + 25;
+                    if (jumpto <= _oldJumpLimit) {
+                        jumpto = _oldJumpLimit + 25;
+                    }
 
-        if (_unseenPosts.length > 0) {
-            if (_$jumpToChkElm.prop('checked')) {
-                var jumpto = _unseenPosts[0] - (window.innerHeight * 0.55) + 25;
-                if (jumpto <= _oldJumpLimit) {
-                    jumpto = _oldJumpLimit + 25;
+                    _oldJumpLimit = jumpto;
+                    window.scrollTo(0, jumpto);
                 }
-
-                _oldJumpLimit = jumpto;
-                window.scrollTo(0, jumpto);
             }
         }
     };

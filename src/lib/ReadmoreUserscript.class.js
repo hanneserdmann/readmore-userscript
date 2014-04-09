@@ -149,7 +149,8 @@ function ReadmoreUserscript() {
 
             // Posts nachladen
             if (_options.getOption('middleColumn_forum_reloadPosts_readNewPosts') === 'checked') {
-                if (_options.getOption('_options.middleColumn_forum_reloadPosts_jumpToNewPosts') === 'checked' && _options.getOption('middleColumn_forum_reloadPosts_endlessPage') === 'checked') {
+                if (_options.getOption('middleColumn_forum_reloadPosts_jumpToNewPosts') === 'checked' && _options.getOption('middleColumn_forum_reloadPosts_endlessPage') === 'checked') {
+                    _reloadPosts.jumpToNewPosts();
                     window.setInterval(function () {
                         _reloadPosts.jumpToNewPosts();
                     }, (parseInt(_options.getOption('middleColumn_forum_reloadPosts_jumpToNewPosts_waitUntilNextJump'), 10) > 1 ? parseInt(_options.getOption('middleColumn_forum_reloadPosts_jumpToNewPosts_waitUntilNextJump'), 10) : 1) * 1000);
