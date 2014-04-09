@@ -23,7 +23,7 @@ function Options() {
      * @type {string}
      * @private
      */
-    var _version = '2.1.8';
+    var _version = '3.0.0';
 
     /**
      * Property für die Optionen. Werden über entsprechende Methoden abgefragt, sind daher
