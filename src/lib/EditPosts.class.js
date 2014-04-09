@@ -7,7 +7,7 @@
  * @param _preview {Preview}
  */
 
-function EditPosts(_preview){
+function EditPosts(_preview) {
 
     /**
      * Array mit den original Posts, damit sie wiederhergestellt werden
@@ -20,15 +20,15 @@ function EditPosts(_preview){
     /**
      * Fügt den Event-Handler ein um das Editieren für einen Post zu starten.
      */
-    this.initializeEvent = function(){
+    this.initializeEvent = function () {
         $('tr[class*=footer_] a:contains("editieren")').on('click', function () {
-            var $this   = $(this);
-            var postid  = 0;
+            var $this = $(this);
+            var postid = 0;
 
-            if ($this.data('postid') !== undefined){
+            if ($this.data('postid') !== undefined) {
                 postid = $this.data('postid');
             }
-            else{
+            else {
                 var hrefParts = String($this.attr('href')).match(/postid=(.*)/);
                 $this.attr('href', 'javascript:void(0);');
 
@@ -39,24 +39,27 @@ function EditPosts(_preview){
                 }
             }
 
-            if (postid){
-                _loadPost(postid);
-                _showEditMenu(postid);
+            if (postid) {
+                if ($('tr[class*=footer_' + postid + ']').find('a[class^="edit_submit_"]').length <= 0) {
+                    _loadPost(postid);
+                    _showEditMenu(postid);
+                }
             }
         });
     };
 
     /**
      * Lädt den Post per AJAX nach
-     * @param postid {Integer}
+     * @param postid {number}
      * @private
      */
-    var _loadPost = function(postid){
-        var height = $('tr[class=post_' + postid + ']>td:last').css('height');
-        _originalPosts[postid] = $('tr[class=post_' + postid + ']>td:last').html();
+    var _loadPost = function (postid) {
+        var $postElm = $('tr[class=post_' + postid + ']>td:last');
+        var height = $postElm.css('height');
+        _originalPosts[postid] = $postElm.html();
 
-        $('tr[class=post_' + postid + ']>td:last').html('');
-        $('tr[class=post_' + postid + ']>td:last').append('<textarea style="width: 100%; height: ' + height + '; padding: 0; margin: 0;"></textarea>');
+        $postElm.html('');
+        $postElm.append('<textarea style="width: 100%; height: ' + height + '; padding: 0; margin: 0;"></textarea>');
 
         $.ajax({
             type: 'POST',
@@ -66,9 +69,9 @@ function EditPosts(_preview){
             contentType: 'text/html; charset=iso-8859-1;',
             dataType: 'html',
             success: function (data) {
-                $('tr[class=post_' + postid + ']>td:last textarea').val(data.replace(/(\r\n|\n|\r)/gm,'[newline]').match(/<textarea(.*?)>(.*?)<\/textarea>/)[2].replace(/\[newline\]/g, '\r\n'));
+                $('tr[class=post_' + postid + ']>td:last textarea').val(data.replace(/(\r\n|\n|\r)/gm, '[newline]').match(/<textarea(.*?)>(.*?)<\/textarea>/)[2].replace(/\[newline\]/g, '\r\n'));
             },
-            beforeSend: function(jqXHR) {
+            beforeSend: function (jqXHR) {
                 jqXHR.overrideMimeType('text/html;charset=iso-8859-1');
             }
         });
@@ -76,30 +79,30 @@ function EditPosts(_preview){
 
     /**
      * Zeigt die zusätzlichen Knöpfe für den Edit
-     * @param postid {Integer}
+     * @param postid {number}
      * @private
      */
-    var _showEditMenu = function(postid){
+    var _showEditMenu = function (postid) {
         var submit = '<a class="edit_submit_' + postid + '" href="javascript:void(0);" style="margin-right: 4px;">Edit absenden</a>';
         var cancel = '<a class="edit_cancel_' + postid + '"href="javascript:void(0);" style="color: gray;">Edit abrechen</a>&nbsp;|&nbsp;';
+        var $footerElm = $('tr[class*=footer_' + postid + ']');
 
-        $('tr[class*=footer_' + postid + ']>td').append('<div>' + cancel + submit + '</div>');
-
-        $('tr[class*=footer_' + postid + ']>td>div>a:first').on('click', function () {
+        $footerElm.find('>td').append('<div>' + cancel + submit + '</div>');
+        $footerElm.find('>td>div>a:first').on('click', function () {
             _cancelEdit(postid);
         });
 
-        $('tr[class*=footer_' + postid + ']>td>div>a:last').on('click', function () {
+        $footerElm.find('>td>div>a:last').on('click', function () {
             _submitEdit(postid);
         });
     };
 
     /**
      * Bricht den Edit ab
-     * @param postid {Integer}
+     * @param postid {number}
      * @private
      */
-    var _cancelEdit = function(postid){
+    var _cancelEdit = function (postid) {
         $('tr[class*=footer_' + postid + ']>td>div>a:first').off('click');
         $('tr[class*=footer_' + postid + ']>td>div>a:last').off('click');
 
@@ -111,12 +114,12 @@ function EditPosts(_preview){
 
     /**
      * Feuert den Ajax Request ab um den Edit durchzuführen
-     * @param postid {Integer}
+     * @param postid {number}
      * @private
      */
-    var _submitEdit = function(postid){
-        var newpost     = '';
-        var postdata    = '';
+    var _submitEdit = function (postid) {
+        var newpost = '';
+        var postdata = '';
 
         $.ajax({
             type: 'POST',
@@ -126,21 +129,20 @@ function EditPosts(_preview){
             contentType: 'text/html; charset=iso-8859-1;',
             dataType: 'html',
             success: function (datafirst) {
-                var $datafirst  = $(datafirst);
-                var f_uid       = $datafirst.find('input[name="f_uid"]').val();
-                var boardid     = $datafirst.find('input[name="thread[boardid]"]').val();
-                var threadid    = $datafirst.find('input[name="thread[threadid]"]').val();
-                var postidedit  = $datafirst.find('input[name="post[postid]"]').val();
+                var $datafirst = $(datafirst);
+                var f_uid = $datafirst.find('input[name="f_uid"]').val();
+                var boardid = $datafirst.find('input[name="thread[boardid]"]').val();
+                var threadid = $datafirst.find('input[name="thread[threadid]"]').val();
+                var postidedit = $datafirst.find('input[name="post[postid]"]').val();
                 var threadtopic = $datafirst.find('input[name="thread[threadtopic]"]').val();
 
                 newpost = $('tr[class=post_' + postid + ']>td:last textarea').val();
                 postdata = 'f_uid=' + f_uid + '&thread[boardid]=' + boardid + '&thread[threadid]=' + threadid + '&post[postid]=' + postidedit + '&postnew_newposttext=' + encodeURI(newpost).replace(/&amp;/g, '&').replace(/&/g, '%26');
-                if (threadtopic != null){
+                if (threadtopic != null) {
                     if (threadtopic.trim().length > 0) postdata += '&thread[threadtopic]=' + encodeURI(threadtopic).replace(/&amp;/g, '&').replace(/&/g, '%26');
                 }
 
-                // REPLACE ME
-                postdata = RMUS.middleColumn.forum.replaceSpecialChars(postdata);
+                postdata = ReadmoreUserscript.replaceSpecialChars(postdata);
 
                 $.ajax({
                     type: 'POST',
@@ -152,16 +154,16 @@ function EditPosts(_preview){
                     dataType: 'html',
                     success: function (response) {
                         var content = $(response).find('#content').html();
-                        if(content.match(/Fehler/)){
+                        if (content.match(/Fehler/)) {
                             alert('Es ist leider ein Fehler aufgetreten. Bitte lade die Seite neu!');
                         }
                     },
-                    error: function (){
+                    error: function () {
                         alert('Es ist leider ein Fehler aufgetreten. Bitte lade die Seite neu!');
                     }
                 });
             },
-            beforeSend: function(jqXHR) {
+            beforeSend: function (jqXHR) {
                 jqXHR.overrideMimeType('text/html;charset=iso-8859-1');
             }
         });

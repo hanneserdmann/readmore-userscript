@@ -1,8 +1,5 @@
-// Keine Ahnung warum, aber wenn ich diese Zeile hinzufüge läuft das Script auch mit Greasemonkey..
+// Greasemonkey FIX
 try {
     GM_log("[Readmore Userscript]");
-} catch (e) {}
-
-function RMUS() {
-    "use strict";
+} catch (e) {
 }

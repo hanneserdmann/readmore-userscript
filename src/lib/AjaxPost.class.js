@@ -30,7 +30,7 @@ function AjaxPost(_preview, _reloadPosts){
         var post = _$submitForm.serialize();
 
         // Sonderzeichen ersetzen
-        post = String(RMUS.middleColumn.forum.replaceSpecialChars(post));
+        post = String(ReadmoreUserscript.replaceSpecialChars(post));
 
         // Während der Wartezeiten den Submit-Knopf ausblenden
         _$sendButton.css('display', 'none');
