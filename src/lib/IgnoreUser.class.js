@@ -19,7 +19,10 @@ function IgnoreUser(_options){
     var _readUser = function(){
         var user = [];
         $(String(_options.getOption('miscellaneous_ignoreUser_usernames')).split(',')).each(function(index, value){
-            user.push(value.trim());
+            value = value.trim();
+            if (value !== ''){
+                user.push(value);
+            }
         });
 
         _user = user;
