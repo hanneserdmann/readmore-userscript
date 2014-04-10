@@ -1141,7 +1141,10 @@ function IgnoreUser(_options){
     var _readUser = function(){
         var user = [];
         $(String(_options.getOption('miscellaneous_ignoreUser_usernames')).split(',')).each(function(index, value){
-            user.push(value.trim());
+            value = value.trim();
+            if (value !== ''){
+                user.push(value);
+            }
         });
 
         _user = user;
@@ -1493,6 +1496,8 @@ function Notes(){
     var _addEventHandler = function(){
         var $elements = $('textarea.IgnoreUser');
 
+        console.log('_addEventHandler');
+
         // Alte Handler entfernen
         $elements.off('focusout');
 
@@ -1518,6 +1523,9 @@ function Notes(){
      */
     var _readNotes = function(){
         _notes = JSON.parse(localStorage.getItem('userscriptNote'));
+        if (typeof _notes === "undefined" || _notes === null){
+            _notes = {};
+        }
     };
 
     /**
@@ -2205,7 +2213,8 @@ function ReadmoreUserscript() {
 
             // Posts nachladen
             if (_options.getOption('middleColumn_forum_reloadPosts_readNewPosts') === 'checked') {
-                if (_options.getOption('_options.middleColumn_forum_reloadPosts_jumpToNewPosts') === 'checked' && _options.getOption('middleColumn_forum_reloadPosts_endlessPage') === 'checked') {
+                if (_options.getOption('middleColumn_forum_reloadPosts_jumpToNewPosts') === 'checked' && _options.getOption('middleColumn_forum_reloadPosts_endlessPage') === 'checked') {
+                    _reloadPosts.jumpToNewPosts();
                     window.setInterval(function () {
                         _reloadPosts.jumpToNewPosts();
                     }, (parseInt(_options.getOption('middleColumn_forum_reloadPosts_jumpToNewPosts_waitUntilNextJump'), 10) > 1 ? parseInt(_options.getOption('middleColumn_forum_reloadPosts_jumpToNewPosts_waitUntilNextJump'), 10) : 1) * 1000);
@@ -2789,14 +2798,16 @@ function ReloadPosts(_options, _ignoreUser, _editPosts, _notes, _miscellaneous) 
      * Zeigt die Anzahl der neuen Posts im Titel / Tab an.
      */
     this.showNewPostsTitle = function () {
-        var title = _oldTitle;
+        var title   = _oldTitle;
+        var $elm    = $('title');
 
         if (_unseenPosts.length) {
             title = '(' + _unseenPosts.length + ') ' + title;
         }
 
-        if (_$titleElm.text() !== title) {
-            _$titleElm.text(title);
+        if ($elm.text() !== title) {
+            $elm.remove();
+            $('head').append('<title>' + title + '</title>');
         }
     };
 
@@ -2827,16 +2838,17 @@ function ReloadPosts(_options, _ignoreUser, _editPosts, _notes, _miscellaneous) 
             $('a.bookmark').after('<input style="margin-left: 2px;" type="checkbox" id="userscript_enable_jump" name="userscript_enable_jump">');
             _$jumpToChkElm = $('#userscript_enable_jump');
         }
+        else{
+            if (_unseenPosts.length > 0) {
+                if (_$jumpToChkElm.prop('checked')) {
+                    var jumpto = _unseenPosts[0] - (window.innerHeight * 0.55) + 25;
+                    if (jumpto <= _oldJumpLimit) {
+                        jumpto = _oldJumpLimit + 25;
+                    }
 
-        if (_unseenPosts.length > 0) {
-            if (_$jumpToChkElm.prop('checked')) {
-                var jumpto = _unseenPosts[0] - (window.innerHeight * 0.55) + 25;
-                if (jumpto <= _oldJumpLimit) {
-                    jumpto = _oldJumpLimit + 25;
+                    _oldJumpLimit = jumpto;
+                    window.scrollTo(0, jumpto);
                 }
-
-                _oldJumpLimit = jumpto;
-                window.scrollTo(0, jumpto);
             }
         }
     };
@@ -2847,7 +2859,7 @@ function ReloadPosts(_options, _ignoreUser, _editPosts, _notes, _miscellaneous) 
      * @private
      */
     var _setMarkPostColor = function () {
-        var hexColor = _options.getOption('middleColumn_forum_reloadPosts_markPostColor');
+        var hexColor = _options.getOption('middleColumn_forum_reloadPosts_markPostColor') | [];
 
         // Nur wenn eine HEX-Zahl eingegeben wurde
         if (hexColor[0] === '#' && hexColor === 7) {

@@ -49,6 +49,8 @@ function Notes(){
     var _addEventHandler = function(){
         var $elements = $('textarea.IgnoreUser');
 
+        console.log('_addEventHandler');
+
         // Alte Handler entfernen
         $elements.off('focusout');
 
@@ -74,6 +76,9 @@ function Notes(){
      */
     var _readNotes = function(){
         _notes = JSON.parse(localStorage.getItem('userscriptNote'));
+        if (typeof _notes === "undefined" || _notes === null){
+            _notes = {};
+        }
     };
 
     /**
