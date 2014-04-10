@@ -164,14 +164,16 @@ function ReloadPosts(_options, _ignoreUser, _editPosts, _notes, _miscellaneous) 
      * Zeigt die Anzahl der neuen Posts im Titel / Tab an.
      */
     this.showNewPostsTitle = function () {
-        var title = _oldTitle;
+        var title   = _oldTitle;
+        var $elm    = $('title');
 
         if (_unseenPosts.length) {
             title = '(' + _unseenPosts.length + ') ' + title;
         }
 
-        if (_$titleElm.text() !== title) {
-            _$titleElm.text(title);
+        if ($elm.text() !== title) {
+            $elm.remove();
+            $('head').append('<title>' + title + '</title>');
         }
     };
 
