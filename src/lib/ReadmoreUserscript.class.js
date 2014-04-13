@@ -14,7 +14,7 @@ function ReadmoreUserscript() {
     var _ajaxPost = new AjaxPost(_preview, _reloadPosts);
     var _messages = new Messages(_options);
     var _streams = new Streams(_reloadPageData);
-    var _scrollForNewPage = new ScrollForNewPage(_reloadPosts, _ignoreUser, _notes);
+    var _scrollForNewPage = new ScrollForNewPage(_reloadPosts, _ignoreUser, _notes, _options);
     var _ticker = new Ticker(_reloadPageData);
     var _forumNavigation = new ForumNavigation(_options, _reloadPageData);
 

@@ -55,6 +55,14 @@ function ReloadPosts(_options, _ignoreUser, _editPosts, _notes, _miscellaneous) 
         return _threadlink;
     };
 
+    this.getCurrentPage = function(){
+        return _currentPage;
+    };
+
+    this.setCurrentPage = function(page){
+        _currentPage = page;
+    };
+
     this.setPostcount = function (postcount) {
         _postcount = postcount;
     };

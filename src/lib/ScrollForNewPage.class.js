@@ -5,19 +5,24 @@
  * Beim Runterscrollen werden neue Seiten nachgeladen und angezeigt.
  */
 
-function ScrollForNewPage(_reloadPosts, _ignoreUser, _notes) {
+function ScrollForNewPage(_reloadPosts, _ignoreUser, _notes, _options) {
     var _oldPosts = 0;
+    var _lastUpdate = 0;
 
     this.insertPosts = function () {
-        var limit = parseInt($('#c_comment').offset().top, 10) - 190;
-        var position = window.pageYOffset + (window.innerHeight * 0.55);
-        if (position >= limit) {
+        var limit       = parseInt($('#c_comment').offset().top, 10) - 190;
+        var position    = window.pageYOffset + (window.innerHeight * 0.55);
+        var timeDiff    = +new Date() - _lastUpdate;
+
+        if (position >= limit && timeDiff > 10000) {
+            _lastUpdate = +new Date();
+
             // Der eigentliche Reload
             $.ajax({
                 type: 'POST',
                 async: false,
                 cache: false,
-                url: String(_reloadPosts.getThreadlink() + '&pagenum=' + (_reloadPosts.getPostcount() + 1)),
+                url: String(_reloadPosts.getThreadlink() + '&pagenum=' + (_reloadPosts.getCurrentPage() + 1)),
                 contentType: 'text/html; charset=iso-8859-1;',
                 dataType: 'html',
                 success: function (data) {
@@ -35,14 +40,14 @@ function ScrollForNewPage(_reloadPosts, _ignoreUser, _notes) {
                                 $postsTable.append(footer[i]);
                             }
 
-                            _reloadPosts.setPostcount(_reloadPosts.getPostcount() + 1);
+                            _reloadPosts.setCurrentPage(_reloadPosts.getCurrentPage() + 1);
 
                             // Beiträge aus den neuen Posts ignorieren
-                            if (Options.getOption('miscellaneous_ignoreUser') == 'checked') {
+                            if (_options.getOption('miscellaneous_ignoreUser') == 'checked') {
                                 _ignoreUser.ignore(true, false, false);
                             }
                             // Notzizen einblenden
-                            if (Options.getOption('miscellaneous_note') == 'checked') {
+                            if (_options.getOption('miscellaneous_note') == 'checked') {
                                 _notes.init(false);
                             }
                         }
