@@ -223,10 +223,14 @@ function ReloadPosts(_options, _ignoreUser, _editPosts, _notes, _miscellaneous) 
      * @private
      */
     var _setMarkPostColor = function () {
-        var hexColor = _options.getOption('middleColumn_forum_reloadPosts_markPostColor') | [];
+        var hexColor = _options.getOption('middleColumn_forum_reloadPosts_markPostColor');
+
+        if (typeof hexColor === 'undefined' || hexColor === null){
+            hexColor = '';
+        }
 
         // Nur wenn eine HEX-Zahl eingegeben wurde
-        if (hexColor[0] === '#' && hexColor === 7) {
+        if (hexColor[0] === '#' && hexColor.length === 7) {
             _markPostColor.hex = hexColor;
             _markPostColor.rgb = "rgb(" + parseInt(_markPostColor.hex.substr(1, 2), 16).toString() + ", " + parseInt(_markPostColor.hex.substr(3, 2), 16).toString() + ", " + parseInt(_markPostColor.hex.substr(5, 2), 16).toString() + ")";
         }
