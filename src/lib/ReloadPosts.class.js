@@ -22,7 +22,6 @@ function ReloadPosts(_options, _ignoreUser, _editPosts, _notes, _miscellaneous) 
     var _threadlink = '';
     var _oldTitle = '';
     var _$postTableElm = null;
-    var _$titleElm = null;
     var _$headElm = null;
     var _$jumpToChkElm = null;
     var _unseenPosts = [];
@@ -36,9 +35,7 @@ function ReloadPosts(_options, _ignoreUser, _editPosts, _notes, _miscellaneous) 
      */
     this.init = function () {
         _$postTableElm = $('table.elf.forum.p2.bogray2');
-        _$titleElm = $('title');
         _$headElm = $('head');
-        _oldTitle = _$titleElm.text();
 
         _readCurrentPage();
         _readThreadLink();
@@ -164,16 +161,17 @@ function ReloadPosts(_options, _ignoreUser, _editPosts, _notes, _miscellaneous) 
      * Zeigt die Anzahl der neuen Posts im Titel / Tab an.
      */
     this.showNewPostsTitle = function () {
-        var title   = _oldTitle;
-        var $elm    = $('title');
+        if (_oldTitle === ''){
+            _oldTitle = document.title;
+        }
 
+        var title   = _oldTitle;
         if (_unseenPosts.length) {
             title = '(' + _unseenPosts.length + ') ' + title;
         }
 
-        if ($elm.text() !== title) {
-            $elm.remove();
-            $('head').append('<title>' + title + '</title>');
+        if (document.title !== title) {
+            document.title = title;
         }
     };
 

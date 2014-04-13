@@ -29,14 +29,12 @@ function Miscellaneous() {
     };
 
     this.reSortTitle = function () {
-        var $head = $('head');
-        var $title = $head.find('title');
+        var $title = $('head').find('title');
         var title = $title.text();
         var pieces = title.split('\u00BB');	// Bei den Doppelpfeilen trennen
 
         title = pieces[2] + ' ' + '\u00BB' + pieces[1] + '\u00BB' + ' ' + pieces[0];
-        $title.remove();
-        $head.append('<title>' + title + '</title>');
+        document.title = title;
     };
 
     this.lastPageJumpToLastPost = function () {
