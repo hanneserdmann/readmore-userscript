@@ -3,11 +3,17 @@ function ReadmoreUserscript() {
     var _siteLocation   = new SiteLocation();
     var _content        = new Content();
     var _reloadPosts    = new ReloadPosts(_content);
+    var _misc			= new Miscellaneous();
 
     this.start = function () {
 
         // Optionen einfügen
         _options.insertOptions();
+
+        // Header fixen
+        if (_options.getOption('miscellaneous_fixedToolbar')) {
+        	_misc.createFixedToolbar();
+        }
     };
 
     this.startIntervalReloadPosts = function () {
