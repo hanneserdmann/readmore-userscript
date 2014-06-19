@@ -1,18 +1,46 @@
 function ReadmoreUserscript() {
-    var _options = new Options();
-    var _siteLocation = new SiteLocation();
-    var _content = new Content();
-    var _reloadPosts = new ReloadPosts(_content);
-    var _misc = new Miscellaneous();
+    var _options = new Options(),
+        _siteLocation = new SiteLocation(),
+        _content = new Content(),
+        _reloadPosts = new ReloadPosts(_content),
+        _misc = new Miscellaneous(),
+        _headlines = new Headlines();
 
     this.start = function() {
-
         // Optionen einfügen
         _options.insertOptions();
 
         // Header fixen
         if (_options.getOption('miscellaneous_fixedToolbar')) {
             _misc.createFixedToolbar();
+        }
+
+        // Schlagzeilen ausblenden
+        if (_options.getOption('rightColumn_headlines_hideHeadlines') === 'checked') {
+            _headlines.hideAllHeadlines();
+        } else {
+            // Individuell
+            if (_options.getOption('rightColumn_headlines_hideCounterstrike') === 'checked') {
+                _headlines.hideCounterstrike();
+            }
+            if (_options.getOption('rightColumn_headlines_hideStarcraft') === 'checked') {
+                _headlines.hideStarcraft();
+            }
+            if (_options.getOption('rightColumn_headlines_hideDefenseOfTheAncients') === 'checked') {
+                _headlines.hideDefenseOfTheAncients();
+            }
+            if (_options.getOption('rightColumn_headlines_hideHearthstone') === 'checked') {
+                _headlines.hideHearthstone();
+            }
+            if (_options.getOption('rightColumn_headlines_hideLeagueOfLegends') === 'checked') {
+                _headlines.hideLeagueOfLegends();
+            }
+            if (_options.getOption('rightColumn_headlines_hideWarcraft3') === 'checked') {
+                _headlines.hideWarcraft3();
+            }
+            if (_options.getOption('rightColumn_headlines_hideSonstiges') === 'checked') {
+                _headlines.hideSonstiges();
+            }
         }
     };
 

@@ -33,6 +33,7 @@ Durch den Launch von readmore.de v3 im Juni 2014 muss das Userscript an vielen E
      * Hinweis bei neuen Seiten einblenden
 * Fixierte Toolbar
 * Titel / Tab umsortieren
+* Schlagzeilen ausblenden
 
 **Kommende, noch nicht implementierte Features**
  * Neue Nachrichten im Hintergrund nachladen (PM)
@@ -44,7 +45,6 @@ Durch den Launch von readmore.de v3 im Juni 2014 muss das Userscript an vielen E
  * Forennavigation aktualisieren
  * Scrollen bis zum Seitenende lädt die Nächste
  * Forum ausblenden und umsortieren
- * Schlagzeilen ausblenden
  * Streams ausblenden
  * Streams von Readmoreusern anzeigen
  * Ticker ausblenden
