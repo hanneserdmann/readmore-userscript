@@ -9,7 +9,9 @@ function ReadmoreUserscript() {
         _options.insertOptions();
         
         // Header fixen
-        _misc.createFixedToolbar();
+        if (_options.getOption('miscellaneous_fixedToolbar')) {
+        	_misc.createFixedToolbar();
+        }
     };
 
     this.startIntervalReloadPosts = function () {
