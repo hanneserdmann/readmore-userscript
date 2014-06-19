@@ -21,6 +21,20 @@ Eine Rückmeldung, ob die Userscripte Installiert sind, scheint es bei Opera lei
 Features
 ------------
 
+Durch den Launch von readmore.de v3 im Juni 2014 muss das Userscript an vielen Ecken angepasst werden. Wir werden die Features nach und nach wieder einbauen, beginnend mit den "wichtigsten".
+
+**Momentan implementierte Features für readmore v3**
+ * Neue Forenbeiträge im Hintergrund nachladen (Autoupdate)
+     * Seite endlos erweitern
+          * Automatisch zu neuen Posts scrollen/springen
+     * Neue Einträge markieren
+          * Ungelesene Posts im Titel / Tab anzeigen
+          * Favicon verändern
+     * Hinweis bei neuen Seiten einblenden
+* Fixierte Toolbar
+* Titel / Tab umsortieren
+
+**Kommende, noch nicht implementierte Features**
  * Neue Forenbeiträge im Hintergrund nachladen (Autoupdate)
      * Seite endlos erweitern
           * Automatisch zu neuen Posts scrollen/springen
@@ -60,6 +74,7 @@ Contributors
 
  * [@thextor](https://github.com/thextor)
  * [@venyii](https://github.com/venyii)
+ * [@biki](https://github.com/biki)
 
 Credits
 -------------
@@ -72,4 +87,4 @@ Links
 
 [Readmore Userscript Thread][1]
 
-[1]: http://www.readmore.de/index.php?cont=forum/thread&threadid=111239
+[1]: http://www.readmore.de/forums/91-technik/60-software/111239-readmore-userscript-chrome-extension
