@@ -1,995 +1,996 @@
-<style type="text/css"> 
+<style type="text/css">
 
     div#userscriptOptionsOverlay {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	z-index: 1337;
-	display: none;
-	background-color: #fff;
-	opacity: 0.8;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1337;
+        display: none;
+        background-color: #fff;
+        opacity: 0.8;
     }
 
     #userscriptOptions.rmus-options {
-	display: none;
-	box-shadow: 0px 0px 6px 1px #80D4EE;
-	position: absolute;
-	width: 600px;
-	left: 50%;
-	margin-left: -300px;
-	top: 75px;
-	border: 2px solid #00aeed;
-	border-radius: 3px;
-	background-color: #fff;
-	z-index: 1338;
+        display: none;
+        box-shadow: 0px 0px 6px 1px #80D4EE;
+        position: absolute;
+        width: 600px;
+        left: 50%;
+        margin-left: -300px;
+        top: 75px;
+        border: 2px solid #00aeed;
+        border-radius: 3px;
+        background-color: #fff;
+        z-index: 1338;
     }
 
     #userscriptOptions.rmus-options-wrapper {
-	position: relative;
+        position: relative;
     }
 
     #userscriptOptions .rmus-options-header {
-	border-bottom: 2px solid #e2e2e2;
-	padding: 10px;
-	color: #fff;
-	background: #46c1ea;
-	background: -moz-linear-gradient(top, #46c1ea 0%, #00aeed 100%);
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#46c1ea), color-stop(100%,#00aeed));
-	background: -webkit-linear-gradient(top, #46c1ea 0%,#00aeed 100%);
-	background: -o-linear-gradient(top, #46c1ea 0%,#00aeed 100%);
-	background: -ms-linear-gradient(top, #46c1ea 0%,#00aeed 100%);
-	background: linear-gradient(to bottom, #46c1ea 0%,#00aeed 100%);
+        border-bottom: 1px solid #e2e2e2;
+        padding: 10px;
+        color: #fff;
+        background: #46c1ea;
+        background: -moz-linear-gradient(top, #46c1ea 0%, #00aeed 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#46c1ea), color-stop(100%,#00aeed));
+        background: -webkit-linear-gradient(top, #46c1ea 0%,#00aeed 100%);
+        background: -o-linear-gradient(top, #46c1ea 0%,#00aeed 100%);
+        background: -ms-linear-gradient(top, #46c1ea 0%,#00aeed 100%);
+        background: linear-gradient(to bottom, #46c1ea 0%,#00aeed 100%);
     }
     #userscriptOptions .rmus-options-header h1 {
-	font-size: 16px;
-	text-transform: uppercase;
-	float: left;
-	text-shadow: 1px 1px #A0A0A0;
-	color: #fff;
+        font-size: 16px;
+        text-transform: uppercase;
+        float: left;
+        text-shadow: 1px 1px #A0A0A0;
+        color: #fff;
+        margin-bottom: 0;
     }
     #userscriptOptions .rmus-options-header a {
-	color: #fff;
-	border-bottom: 1px dotted #fff;
+        color: #fff;
+        border-bottom: 1px dotted #fff;
     }
     #userscriptOptions .rmus-options-header a:hover {
-	text-decoration: none;
+        text-decoration: none;
     }
     #userscriptOptions .rmus-options-header .rmus-links {
-	float: right;
-	margin-top: 2px;
+        float: right;
+        margin-top: 2px;
     }
     #userscriptOptions .rmus-options-header .rmus-links .rmus-version {
-	font-weight: bold;
+        font-weight: bold;
     }
 
     #userscriptOptions .rmus-options-content {
-	overflow-y: scroll;
-	height: 592px;
+        overflow-y: scroll;
+        height: 592px;
     }
     #userscriptOptions .rmus-options-content table {
-	border: none;
-	width: 100%;
-	margin-top: -1px;
+        border: none;
+        width: 100%;
+        margin-top: -1px;
     }
     #userscriptOptions .rmus-options-content table .menuparent {
-	background-color: #fff;
-	padding: 0;
+        background-color: #fff;
+        padding: 0;
     }
     #userscriptOptions .rmus-options-content table .menufirstchild {
-	display: none;
-	background-color: #f1f1f1;
-	margin: 0;
-	padding: 0;
+        display: none;
+        background-color: #f1f1f1;
+        margin: 0;
+        padding: 0;
     }
     #userscriptOptions .rmus-options-content table .menusecondchild {
-	display: none;
-	background-color: #e2e2e2;
-	margin: 0;
-	padding: 0;
+        display: none;
+        background-color: #e2e2e2;
+        margin: 0;
+        padding: 0;
     }
     #userscriptOptions .rmus-options-content table .headline td {
-	color: #7A7A7A;
-	font-size: 14px;
-	margin: 0px;
-	padding: 5px 0 5px 39px;
-	width: 100%;
-	border-top: 1px solid #ccc;
-	border-bottom: 1px solid #ccc;
-	background: #f2f5f6;
-	background: -moz-linear-gradient(top, #f2f5f6 0%, #e3eaed 100%);
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f2f5f6), color-stop(100%,#e3eaed));
-	background: -webkit-linear-gradient(top, #f2f5f6 0%,#e3eaed 100%);
-	background: -o-linear-gradient(top, #f2f5f6 0%,#e3eaed 100%);
-	background: -ms-linear-gradient(top, #f2f5f6 0%,#e3eaed 100%);
-	background: linear-gradient(to bottom, #f2f5f6 0%,#e3eaed 100%);
+        color: #7A7A7A;
+        font-size: 14px;
+        margin: 0px;
+        padding: 5px 0 5px 39px;
+        width: 100%;
+        border-top: 1px solid #ccc;
+        border-bottom: 1px solid #ccc;
+        background: #f2f5f6;
+        background: -moz-linear-gradient(top, #f2f5f6 0%, #e3eaed 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f2f5f6), color-stop(100%,#e3eaed));
+        background: -webkit-linear-gradient(top, #f2f5f6 0%,#e3eaed 100%);
+        background: -o-linear-gradient(top, #f2f5f6 0%,#e3eaed 100%);
+        background: -ms-linear-gradient(top, #f2f5f6 0%,#e3eaed 100%);
+        background: linear-gradient(to bottom, #f2f5f6 0%,#e3eaed 100%);
     }
 
     #userscriptOptions .rmus-options-footer {
-	text-align: right;
-	padding: 8px 10px;
-	border-top: 1px solid #ccc;
-	background: #ffffff;
-	background: -moz-linear-gradient(top, #ffffff 0%, #ededed 100%);
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#ededed));
-	background: -webkit-linear-gradient(top, #ffffff 0%,#ededed 100%);
-	background: -o-linear-gradient(top, #ffffff 0%,#ededed 100%);
-	background: -ms-linear-gradient(top, #ffffff 0%,#ededed 100%);
-	background: linear-gradient(to bottom, #ffffff 0%,#ededed 100%);
+        text-align: right;
+        padding: 8px 10px;
+        border-top: 1px solid #ccc;
+        background: #ffffff;
+        background: -moz-linear-gradient(top, #ffffff 0%, #ededed 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#ededed));
+        background: -webkit-linear-gradient(top, #ffffff 0%,#ededed 100%);
+        background: -o-linear-gradient(top, #ffffff 0%,#ededed 100%);
+        background: -ms-linear-gradient(top, #ffffff 0%,#ededed 100%);
+        background: linear-gradient(to bottom, #ffffff 0%,#ededed 100%);
     }
     #userscriptOptions .rmus-options-footer #rmus-options-imexport {
-	clear: both;
-	text-align: left;
-	margin-top: 10px;
-	display: none;
+        clear: both;
+        text-align: left;
+        margin-top: 10px;
+        display: none;
     }
     #userscriptOptions .rmus-options-footer #rmus-options-imexport .rmus-options-imexport-help {
-	font-size: 10px;
+        font-size: 10px;
     }
     #userscriptOptions .rmus-options-footer #rmus-options-imexport textarea {
-	width: 568px;
-	font-family: Verdana;
-	font-size: 10px;
-	padding: 5px;
-	margin: 5px 0 3px;
-	height: 21px;
+        width: 568px;
+        font-family: Verdana;
+        font-size: 10px;
+        padding: 5px;
+        margin: 5px 0 3px;
+        height: 21px;
     }
 
     #userscriptOptions input[type=checkbox],
     #userscriptOptions input[type=select],
     #userscriptOptions input[type=text] {
-	margin: 0;
-	padding: 0;
+        margin: 0;
+        padding: 0;
     }
 
     .btn-rm {
-	background-color: #fff;
-	border: 1px solid #ccccce;
-	color: #222222;
-	font-family: Verdana;
-	font-size: 10px;
-	min-height: 14px;
-	padding: 4px 8px;
+        background-color: #fff;
+        border: 1px solid #ccccce;
+        color: #222222;
+        font-family: Verdana;
+        font-size: 10px;
+        min-height: 14px;
+        padding: 4px 8px;
     }
     .btn-rm.primary {
-	color: #fff;
-	border-color: #00A4E4;
-	background: #00bded;
-	background: -moz-linear-gradient(top, #00bded 0%, #00aeed 100%);
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#00bded), color-stop(100%,#00aeed));
-	background: -webkit-linear-gradient(top, #00bded 0%,#00aeed 100%);
-	background: -o-linear-gradient(top, #00bded 0%,#00aeed 100%);
-	background: -ms-linear-gradient(top, #00bded 0%,#00aeed 100%);
-	background: linear-gradient(to bottom, #00bded 0%,#00aeed 100%);
+        color: #fff;
+        border-color: #00A4E4;
+        background: #00bded;
+        background: -moz-linear-gradient(top, #00bded 0%, #00aeed 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#00bded), color-stop(100%,#00aeed));
+        background: -webkit-linear-gradient(top, #00bded 0%,#00aeed 100%);
+        background: -o-linear-gradient(top, #00bded 0%,#00aeed 100%);
+        background: -ms-linear-gradient(top, #00bded 0%,#00aeed 100%);
+        background: linear-gradient(to bottom, #00bded 0%,#00aeed 100%);
     }
 
-</style>  
+</style>
 
 <div id="userscriptOptions" class="rmus-options">
-    <div class="rmus-options-wrapper">
-	<div class="rmus-options-header">
-	    <h1>RM Userscript - Optionen</h1>
-	    <div class="rmus-links">
-		<a href="index.php?cont=forum/thread&threadid=111239&pagenum=1">Thread</a> | Version <span class="rmus-version">{{version}}</span>
-	    </div>
-	    <div style="clear: both;"></div>
-	</div>
-	<div class="rmus-options-content">
-	    <table>
-		<tr class="headline">
-		    <td colspan="4">
-			Funktionen
-		    </td>
-		</tr>
-		<tr><td style="width:30px"></td><td></td><td style="width:180px"></td><td style="width:25px"></td></tr>
-		<tr class="menuparent">
-		    <td align="center">
-			<img id="toggle_sub_middleColumn_forum_reloadPosts_readNewPosts" src="http://readmore.thextor.de/userscript/img/plus_alt_16x16.png" alt="more" title="Weitere Optionen"/>
-		    </td>
-		    <td align="left">
-			Neue Forenbeitr&auml;ge im Hintergrund nachladen
-		    </td>
-		    <td align="right">
-			<input type="checkbox" class="userscriptOptions" name="middleColumn_forum_reloadPosts_readNewPosts"/>
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Neue Beitr&auml;ge im Readmore.de-Froum werden automatisch nachgeladen. Ein Refresh des Threads entf&auml;llt somit."/>
-		    </td>
-		</tr>		
-		<tr class="menufirstchild sub_middleColumn_forum_reloadPosts_readNewPosts">
-		    <td align="center">
-			<img id="toggle_sub_middleColumn_forum_reloadPosts_endlessPage" src="http://readmore.thextor.de/userscript/img/plus_alt_16x16.png" alt="more" title="Weitere Optionen"/>
-		    </td>
-		    <td align="left">
-			Seite endlos erweitern
-		    </td>
-		    <td align="right">
-			<input type="checkbox" class="userscriptOptions" name="middleColumn_forum_reloadPosts_endlessPage"/>
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Neue Posts werden einfach eingeblendet. Es muss also nicht mehr auf eine neue Seite gewechselt werden."/>
-		    </td>
-		</tr>
-		<tr class="menusecondchild sub_middleColumn_forum_reloadPosts_endlessPage">
-		    <td align="center">
-		    </td>
-		    <td align="left">
-			Automatisch zu neuen Posts scrollen/springen
-		    </td>
-		    <td align="right">
-			<input type="checkbox" class="userscriptOptions" name="middleColumn_forum_reloadPosts_jumpToNewPosts"/>
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Springt zu neuen posts."/>
-		    </td>
-		</tr>
-		<tr class="menusecondchild sub_middleColumn_forum_reloadPosts_endlessPage">
-		    <td align="center">
-		    </td>
-		    <td align="left">
-			Zeit zwischen zwei Spr&uuml;ngen
-		    </td>
-		    <td align="right">
-			<input type="text" class="userscriptOptions" name="middleColumn_forum_reloadPosts_jumpToNewPosts_waitUntilNextJump" value="10"/>
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Zeit in Sekunden, die zwischen 2 Spr&uuml;ngen mindestens vergehen muss."/>
-		    </td>
-		</tr>		
-		<tr class="menufirstchild sub_middleColumn_forum_reloadPosts_readNewPosts">
-		    <td align="center">
-			<img id="toggle_sub_middleColumn_forum_reloadPosts_markNewPosts" src="http://readmore.thextor.de/userscript/img/plus_alt_16x16.png" alt="more" title="Weitere Optionen"/>
-		    </td>
-		    <td align="left">
-			Neue Eintr&auml;ge farblich markieren
-		    </td>
-		    <td align="right">
-			<input type="checkbox" class="userscriptOptions" name="middleColumn_forum_reloadPosts_markNewPosts"/>
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Die neu eingetragenen Posts werden markiert."/>
-		    </td>
-		</tr>
-		<tr class="menusecondchild sub_middleColumn_forum_reloadPosts_markNewPosts">
-		    <td align="center">
-		    </td>
-		    <td align="left">
-			Farbe ausw&auml;hlen (HEX-Code)
-		    </td>
-		    <td align="right">
-			<input type="text" class="userscriptOptions" name="middleColumn_forum_reloadPosts_markPostColor" value="#EEEEEE"/>
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Bitte eine HEX Zahl eingeben. Beispiel: #FFEE11"/>
-		    </td>
-		</tr>
-		<tr class="menusecondchild sub_middleColumn_forum_reloadPosts_markNewPosts">
-		    <td align="center">
-		    </td>
-		    <td align="left">
-			Ungelesene Posts im Titel / Tab anzeigen
-		    </td>
-		    <td align="right">
-			<input type="checkbox" class="userscriptOptions" name="middleColumn_forum_reloadPosts_showNewPostsTitle"/>
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Die Anzahl der Ungelesenen Posts im Tab anzeigen."/>
-		    </td>
-		</tr>
-		<tr class="menusecondchild sub_middleColumn_forum_reloadPosts_markNewPosts">
-		    <td align="center">
-		    </td>
-		    <td align="left">
-			Favicon ver&auml;ndern
-		    </td>
-		    <td align="right">
-			<input type="checkbox" class="userscriptOptions" name="middleColumn_forum_reloadPosts_changeFavicon"/>
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Bei ungelesenen Posts das Favicon ver&auml;ndern."/>
-		    </td>
-		</tr>
-		<tr class="menufirstchild sub_middleColumn_forum_reloadPosts_readNewPosts">
-		    <td align="center">
-		    </td>
-		    <td align="left">
-			Hinweis bei neuen Seiten einblenden
-		    </td>
-		    <td align="right">
-			<input type="checkbox" class="userscriptOptions" name="middleColumn_forum_reloadPosts_checkForNewPage"/>
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Achtung: Funktioniert nur, wenn Seite endlos erweitern deaktiv ist. Weist auf eine neue Seite hin." />
-		    </td>
-		</tr>
-		<tr class="menufirstchild sub_middleColumn_forum_reloadPosts_readNewPosts">
-		    <td align="center">
-		    </td>
-		    <td align="left">
-			Zeit zwischen dem Nachladen (Sekunden)
-		    </td>
-		    <td align="right">
-			<input type="text" class="userscriptOptions" name="middleColumn_forum_reloadPosts_timeToWait" value="15"/>
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Sekunden die zwischen dem Nachladen gewartet werden muss." />
-		    </td>
-		</tr>
-		<tr class="menuparent">
-		    <td align="center">
-			<img id="toggle_sub_miscellaneous_reloadMessages" src="http://readmore.thextor.de/userscript/img/plus_alt_16x16.png" alt="more" title="Weitere Optionen"/>
-		    </td>
-		    <td align="left">
-			Neue Nachrichten im Hintergrund nachladen
-		    </td>
-		    <td align="right">
-			<input type="checkbox" class="userscriptOptions" name="miscellaneous_reloadMessages"/>
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Neue Nachrichten (PM) werden nachgeladen. Ein Refresh der Seite entf&auml;llt somit."/>
-		    </td>
-		</tr>
-		<tr class="menufirstchild sub_miscellaneous_reloadMessages">
-		    <td align="center">
-		    </td>
-		    <td align="left">
-			Desktop-Benachrichtigungen aktivieren
-		    </td>
-		    <td align="right">
-			<input type="checkbox" class="userscriptOptions" id="miscellaneous_reloadMessages_desktopNotifications" name="miscellaneous_reloadMessages_desktopNotifications" />
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Deskop-Benachrichtigungen anzeigen sobald es neue Nachrichten gibt. Dies wird derzeit nicht von allen Browsern unterstützt (caniuse.com/notifications)."/>
-		    </td>
-		</tr>
-		<tr class="menufirstchild sub_miscellaneous_reloadMessages">
-		    <td align="center">
-		    </td>
-		    <td align="left">
-			Alert-Box bei neuen Nachrichten anzeigen
-		    </td>
-		    <td align="right">
-			<input type="checkbox" class="userscriptOptions" name="miscellaneous_reloadMessages_alertBox" />
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Benachrichtigungen sobald es neue Nachrichten gibt."/>
-		    </td>
-		</tr>
-		<tr class="menufirstchild sub_miscellaneous_reloadMessages">
-		    <td align="center">
-		    </td>
-		    <td align="left">
-			Sound bei neuen Nachrichten abspielen
-		    </td>
-		    <td align="right">
-			<input type="checkbox" class="userscriptOptions" id="notification_playsound_cb" name="miscellaneous_reloadMessages_playSound" />
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Deskop-Benachrichtigungen sobald es neue Nachrichten gibt."/>
-		    </td>
-		</tr>
-		<tr class="menufirstchild sub_miscellaneous_reloadMessages">
-		    <td align="center">
-		    </td>
-		    <td align="left">
-			URL f&uuml;r die Audiodatei
-		    </td>
-		    <td align="right">
-			<input type="text" class="userscriptOptions" id="miscellaneous_reloadMessages_playSoundUrl" name="miscellaneous_reloadMessages_playSoundUrl" value="http://" />
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Direkt-Url für den Notification Sound"/>
-		    </td>
-		</tr>
-		<tr class="menuparent">
-		    <td align="center">
-			<img id="toggle_sub_miscellaneous_ignoreUser" src="http://readmore.thextor.de/userscript/img/plus_alt_16x16.png" alt="more" title="Weitere Optionen"/>
-		    </td>
-		    <td align="left">
-			Readmore User ignorieren
-		    </td>
-		    <td align="right">
-			<input type="checkbox" class="userscriptOptions" name="miscellaneous_ignoreUser"/>
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Blendet Foreneintr&auml;ge, Tickercomments und G&auml;stebucheintr&auml;ge aus."/>
-		    </td>
-		</tr>
-		<tr class="menufirstchild sub_miscellaneous_ignoreUser">
-		    <td align="center">
-		    </td>
-		    <td align="left">
-			Usernamen (kommasepariert)
-		    </td>
-		    <td align="right">
-			<input type="text" class="userscriptOptions" id="miscellaneous_reloadMessages_playSoundUrl" name="miscellaneous_ignoreUser_usernames" value=" " />
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Beispielsweise: DanielaKatzenberger,ScriptKiddy99,randomreadmoremod. Gross und Kleinschreibung beachten!"/>
-		    </td>
-		</tr>
-		<tr class="menuparent">
-		    <td align="center">
-		    </td>
-		    <td align="left">
-			Beitr&auml;ge ohne Reload senden
-		    </td>
-		    <td align="right">
-			<input type="checkbox" class="userscriptOptions" name="middleColumn_forum_postPerAjax"/>
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Beitr&auml;ge werden im Hintergrund gepostet. Ein manueller Refresh der Seite entfällt."/>
-		    </td>
-		</tr>
-		<tr class="menuparent">
-		    <td align="center">
-		    </td>
-		    <td align="left">
-			Editieren ohne Reload
-		    </td>
-		    <td align="right">
-			<input type="checkbox" class="userscriptOptions" name="middleColumn_forum_editPost"/>
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Beitr&auml;ge werden im Hintergrund Editiert. Ein manueller Refresh der Seite entfällt."/>
-		    </td>
-		</tr>		
-		<tr class="menuparent">
-		    <td align="center">
-		    </td>
-		    <td align="left">
-			Streams aktualisieren
-		    </td>
-		    <td align="right">
-			<input type="checkbox" class="userscriptOptions" name="leftColumn_streams_reloadStreams"/>
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Aktualisiert die Streams im Hintergund."/>
-		    </td>
-		</tr>
-		<tr class="menuparent">
-		    <td align="center">
-		    </td>
-		    <td align="left">
-			Matchticker aktualisieren
-		    </td>
-		    <td align="right">
-			<input type="checkbox" class="userscriptOptions" name="rightColumn_ticker_reloadTicker"/>
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Aktualisiert den Matchticker im Hintergund."/>
-		    </td>
-		</tr>
-		<tr class="menuparent">
-		    <td align="center">
-		    </td>
-		    <td align="left">
-			Forennavigation aktualisieren
-		    </td>
-		    <td align="right">
-			<input type="checkbox" class="userscriptOptions" name="rightColumn_forum_reloadForum"/>
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Aktualisiert die Navigation des Forums (unten rechts) im Hintergund."/>
-		    </td>
-		</tr>	
-		<tr class="menuparent">
-		    <td align="center">
-		    </td>
-		    <td align="left">
-			Vorschaufunktion aktivieren
-		    </td>
-		    <td align="right">
-			<input type="checkbox" class="userscriptOptions" name="middleColumn_forum_preview"/>
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Vorschau f&uuml;r neue Beitr&auml;ge einbinden."/>
-		    </td>
-		</tr>					
-		<tr class="menuparent">
-		    <td align="center">
-			<img id="toggle_sub_middleColumn_forum_scrollForNewPage" src="http://readmore.thextor.de/userscript/img/plus_alt_16x16.png" alt="more" title="Weitere Optionen"/>
-		    </td>
-		    <td align="left">
-			Scrollen bis zum Seitenende l&auml;dt die N&auml;chste
-		    </td>
-		    <td align="right">
-			<input type="checkbox" class="userscriptOptions" name="middleColumn_forum_scrollForNewPage"/>
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Beim ereichen des letzten Posts ggf. die n&auml;chste Seite nachladen."/>
-		    </td>
-		</tr>	
-		<tr class="menufirstchild sub_middleColumn_forum_scrollForNewPage">
-		    <td align="center">
-		    </td>
-		    <td align="left">
-			Postbox nach oben verschieben
-		    </td>
-		    <td align="right">
-			<input type="checkbox" class="userscriptOptions" name="middleColumn_forum_hideForum_editboxTop"/>
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Kopiert die Box zum Posten an den Anfang der Seite."/>
-		    </td>
-		</tr>
-		<tr>
-		    <td style="width:30px;"></td>
-		    <td></td>
-		    <td style="width:180px;"></td>
-		    <td style="width:25px;"></td>
-		</tr>
-		<tr class="headline">
-		    <td colspan="4">
-			Optische Ver&auml;nderungen
-		    </td>
-		</tr>
-		<tr><td style="width:30px"></td><td></td><td style="width:180px"></td><td style="width:25px"></td></tr>
-		<tr class="menuparent">
-		    <td align="center">
-			<img id="toggle_sub_rightColumn_forum_hideForum" src="http://readmore.thextor.de/userscript/img/plus_alt_16x16.png" alt="more" title="Weitere Optionen"/>
-		    </td>
-		    <td align="left">
-			Forum ausblenden und umsortieren
-		    </td>
-		    <td align="right">
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Das Forum ausblenden oder umsortieren."/>
-		    </td>
-		</tr>
-		<tr class="menufirstchild sub_rightColumn_forum_hideForum">
-		    <td align="center">
-		    </td>
-		    <td align="left">
-			Komplett ausblenden
-		    </td>
-		    <td align="right">
-			<input type="checkbox" class="userscriptOptions" name="rightColumn_forum_hideForum"/>
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Das komplette Forum ausblenden."/>
-		    </td>
-		</tr>
-		<tr class="menufirstchild sub_rightColumn_forum_hideForum">
-		    <td align="center">
-			<img id="toggle_sub_rightColumn_forum_sections" src="http://readmore.thextor.de/userscript/img/plus_alt_16x16.png" alt="more" title="Weitere Optionen"/>
-		    </td>
-		    <td align="left">
-			Foren umsortieren
-		    </td>
-		    <td align="right">
-			<input type="checkbox" class="userscriptOptions" name="rightColumn_forum_sections"/>
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Ermöglicht das Umsortieren des Forums."/>
-		    </td>
-		</tr>
-		<tr class="menusecondchild sub_rightColumn_forum_sections">
-		    <td align="center">
-		    </td>
-		    <td align="left">
-			An erster Stelle
-		    </td>
-		    <td align="right">
-			<select size="1" class="userscriptOptions" name="rightColumn_forum_hideForum_0">
-			    <option value="">Nichts anzeigen</option>
-			    <option value="featuredthreads">Featured Threads</option>
-			    <option value="esportforen">eSport Foren</option>
-			    <option value="technik">Technik</option>
-			    <option value="offtopicforen">Offtopic Foren</option>
-			    <option value="spiele">Spiele</option>
-			</select>
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Erste Stelle bei der Anzeige der Foren."/>
-		    </td>
-		</tr>
-		<tr class="menusecondchild sub_rightColumn_forum_sections">
-		    <td align="center">
-		    </td>
-		    <td align="left">
-			An zweiter Stelle
-		    </td>
-		    <td align="right">
-			<select size="1" class="userscriptOptions" name="rightColumn_forum_hideForum_1">
-			    <option value="">Nichts anzeigen</option>
-			    <option value="featuredthreads">Featured Threads</option>
-			    <option value="esportforen">eSport Foren</option>
-			    <option value="technik">Technik</option>
-			    <option value="offtopicforen">Offtopic Foren</option>
-			    <option value="spiele">Spiele</option>
-			</select>
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Zweite Stelle bei der Anzeige der Foren."/>
-		    </td>
-		</tr>
-		<tr class="menusecondchild sub_rightColumn_forum_sections">
-		    <td align="center">
-		    </td>
-		    <td align="left">
-			An dritter Stelle
-		    </td>
-		    <td align="right">
-			<select size="1" class="userscriptOptions" name="rightColumn_forum_hideForum_2">
-			    <option value="">Nichts anzeigen</option>
-			    <option value="featuredthreads">Featured Threads</option>
-			    <option value="esportforen">eSport Foren</option>
-			    <option value="technik">Technik</option>
-			    <option value="offtopicforen">Offtopic Foren</option>
-			    <option value="spiele">Spiele</option>
-			</select>
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Dritte Stelle bei der Anzeige der Foren."/>
-		    </td>
-		</tr>
-		<tr class="menusecondchild sub_rightColumn_forum_sections">
-		    <td align="center">
-		    </td>
-		    <td align="left">
-			An vierter Stelle
-		    </td>
-		    <td align="right">
-			<select size="1" class="userscriptOptions" name="rightColumn_forum_hideForum_3">
-			    <option value="">Nichts anzeigen</option>
-			    <option value="featuredthreads">Featured Threads</option>
-			    <option value="esportforen">eSport Foren</option>
-			    <option value="technik">Technik</option>
-			    <option value="offtopicforen">Offtopic Foren</option>
-			    <option value="spiele">Spiele</option>
-			</select>
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Viere Stelle bei der Anzeige der Foren."/>
-		    </td>
-		</tr>
-		<tr class="menusecondchild sub_rightColumn_forum_sections">
-		    <td align="center">
-		    </td>
-		    <td align="left">
-			An f&uuml;nfter Stelle
-		    </td>
-		    <td align="right">
-			<select size="1" class="userscriptOptions" name="rightColumn_forum_hideForum_4">
-			    <option value="">Nichts anzeigen</option>
-			    <option value="featuredthreads">Featured Threads</option>
-			    <option value="esportforen">eSport Foren</option>
-			    <option value="technik">Technik</option>
-			    <option value="offtopicforen">Offtopic Foren</option>
-			    <option value="spiele">Spiele</option>
-			</select>
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="F&uuml;nfte Stelle bei der Anzeige der Foren."/>
-		    </td>
-		</tr>
-		<tr class="menuparent">
-		    <td align="center">
-			<img id="toggle_sub_rightColumn_headlines_hideHeadlines" src="http://readmore.thextor.de/userscript/img/plus_alt_16x16.png" alt="more" title="Weitere Optionen"/>
-		    </td>
-		    <td align="left">
-			Schlagzeilen ausblenden
-		    </td>
-		    <td align="right">
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Bestimmte oder alle Schlagzeilen ausblenden"/>
-		    </td>
-		</tr>
-		<tr class="menufirstchild sub_rightColumn_headlines_hideHeadlines">
-		    <td align="center">
-		    </td>
-		    <td align="left">
-			Alle ausblenden
-		    </td>
-		    <td align="right">
-			<input type="checkbox" class="userscriptOptions" name="rightColumn_headlines_hideHeadlines"/>
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Blendet alle Schlagzeilen aus."/>
-		    </td>
-		</tr>
-		<tr class="menufirstchild sub_rightColumn_headlines_hideHeadlines">
-		    <td align="center">
-		    </td>
-		    <td align="left">
-			Counter-Strike ausblenden
-		    </td>
-		    <td align="right">
-			<input type="checkbox" class="userscriptOptions" name="rightColumn_headlines_hideCounterstrike"/>
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Blendet die Counter-Strike Schlagzeilen aus."/>
-		    </td>
-		</tr>
-		<tr class="menufirstchild sub_rightColumn_headlines_hideHeadlines">
-		    <td align="center">
-		    </td>
-		    <td align="left">
-			Starcraft ausblenden
-		    </td>
-		    <td align="right">
-			<input type="checkbox" class="userscriptOptions" name="rightColumn_headlines_hideStarcraft"/>
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Blendet die Starcraft Schlagzeilen aus."/>
-		    </td>
-		</tr>
-		<tr class="menufirstchild sub_rightColumn_headlines_hideHeadlines">
-		    <td align="center">
-		    </td>
-		    <td align="left">
-			DotA ausblenden
-		    </td>
-		    <td align="right">
-			<input type="checkbox" class="userscriptOptions" name="rightColumn_headlines_hideDefenseOfTheAncients"/>
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Blendet die DotA Schlagzeilen aus."/>
-		    </td>
-		</tr>
-		<tr class="menufirstchild sub_rightColumn_headlines_hideHeadlines">
-		    <td align="center">
-		    </td>
-		    <td align="left">
-			League of Legends ausblenden
-		    </td>
-		    <td align="right">
-			<input type="checkbox" class="userscriptOptions" name="rightColumn_headlines_hideLeagueOfLegends"/>
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Blendet die League of Legends Schlagzeilen aus."/>
-		    </td>
-		</tr>
-		<tr class="menufirstchild sub_rightColumn_headlines_hideHeadlines">
-		    <td align="center">
-		    </td>
-		    <td align="left">
-			Warcraft 3 ausblenden
-		    </td>
-		    <td align="right">
-			<input type="checkbox" class="userscriptOptions" name="rightColumn_headlines_hideWarcraft3"/>
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Blendet die Warcraft 3 Schlagzeilen aus."/>
-		    </td>
-		</tr>
-		<tr class="menufirstchild sub_rightColumn_headlines_hideHeadlines">
-		    <td align="center">
-		    </td>
-		    <td align="left">
-			Sonstiges ausblenden
-		    </td>
-		    <td align="right">
-			<input type="checkbox" class="userscriptOptions" name="rightColumn_headlines_hideSonstiges"/>
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Blendet die Sonstigen Schlagzeilen aus."/>
-		    </td>
-		</tr>			
-		<tr class="menuparent">
-		    <td align="center">
-		    </td>
-		    <td align="left">
-			Alle Streams ausblenden
-		    </td>
-		    <td align="right">
-			<input type="checkbox" class="userscriptOptions" name="leftColumn_streams_hideStreams"/>
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Alle Streams ausblenden"/>
-		    </td>
-		</tr>
-		<tr class="menuparent">
-		    <td align="center">
-		    </td>
-		    <td align="left">
-			Fixierte Toolbar
-		    </td>
-		    <td align="right">
-			<input type="checkbox" class="userscriptOptions" name="miscellaneous_fixedToolbar"/>
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Die Toolbar wird am oberen Fensterrand fixiert."/>
-		    </td>
-		</tr>
-		<tr class="menuparent">
-		    <td align="center">
-		    </td>
-		    <td align="left">
-			Ticker ausblenden
-		    </td>
-		    <td align="right">
-			<input type="checkbox" class="userscriptOptions" name="rightColumn_ticker_hideTicker"/>
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Der Ticker wird komplett ausgeblendet."/>
-		    </td>
-		</tr>		
-		<tr class="menuparent">
-		    <td align="center">
-		    </td>
-		    <td align="left">
-			Wer? Wohin? Warum? ausblenden
-		    </td>
-		    <td align="right">
-			<input type="checkbox" class="userscriptOptions" name="leftColumn_www_hideWww"/>
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Blendet die komplette Wer? Wohin? Warum? Sektion aus."/>
-		    </td>
-		</tr>
-		<tr class="menuparent">
-		    <td align="center">
-		    </td>
-		    <td align="left">
-		    Bilderlinks umwandeln
-		    </td>
-		    <td align="right">
-			<input type="checkbox" class="userscriptOptions" name="miscellaneous_convertImageLinks"/>
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Wandelt Bilderlinks automatisch in Bilder um."/>
-		    </td>
-		</tr>
-		<tr>
-		    <td style="width:30px;"></td>
-		    <td></td>
-		    <td style="width:180px;"></td>
-		    <td style="width:25px;"></td>
-		</tr>
-		<tr class="headline">
-		    <td colspan="4">
-			Sonstiges
-		    </td>
-		</tr>
-		<tr><td style="width:30px"></td><td></td><td style="width:180px"></td><td style="width:25px"></td></tr>
-		<tr class="menuparent">
-		    <td align="center">
-		    </td>
-		    <td align="left">
-			Notizen
-		    </td>
-		    <td align="right">
-			<input type="checkbox" class="userscriptOptions" name="miscellaneous_note"/>
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Ermöglicht es für jeden Forenuser eine Notiz zu hinterlegen."/>
-		    </td>
-		</tr>
-		<tr class="menuparent">
-		    <td align="center">
-		    </td>
-		    <td align="left">
-			Titel / Tab umsortieren
-		    </td>
-		    <td align="right">
-			<input type="checkbox" class="userscriptOptions" name="miscellaneous_reSortTitle"/>
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Wenn diese Option aktiviert ist, wird der Threadname an den Anfang des Titels gestellt. Offene Tabs können so besser den verschiedenen Threads zugeordnet werden."/>
-		    </td>
-		</tr>
-		<tr class="menuparent">
-		    <td align="center">
-		    </td>
-		    <td align="left">
-			Readmore Extrabuttons
-		    </td>
-		    <td align="right">
-			<input type="checkbox" class="userscriptOptions" name="miscellaneous_extraButtons"/>
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Mehr Buttons um einen Post im Forum ansehnlicher zu gestalten."/>
-		    </td>
-		</tr>		
-		<tr class="menuparent">
-		    <td align="center">
-		    </td>
-		    <td align="left">
-			Youtubeplayer ersetzen
-		    </td>
-		    <td align="right">
-			<input type="checkbox" class="userscriptOptions" name="miscellaneous_convertYoutube"/>
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Ersetzt den Youtubeplayer durch einen einfachen Link."/>
-		    </td>
-		</tr>
-		<tr class="menuparent">
-		    <td align="center">
-		    </td>
-		    <td align="left">
-			Avataranimationen anhalten
-		    </td>
-		    <td align="right">
-			<input type="checkbox" class="userscriptOptions" name="miscellaneous_stopAvatarAnimation"/>
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Die Animation von Avataren stoppen."/>
-		    </td>
-		</tr>		
-		<tr class="menuparent">
-		    <td align="center">
-		    </td>
-		    <td align="left">
-			Button zum Hochscrollen anzeigen
-		    </td>
-		    <td align="right">
-			<input type="checkbox" class="userscriptOptions" name="miscellaneous_buttonScrollUp"/>
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Im Forum wird ein Icon eingefügt, beim betätigen wird zum ersten Post gesprungen."/>
-		    </td>
-		</tr>
-		<tr class="menuparent">
-		    <td align="center">
-		    </td>
-		    <td align="left">
-			Button zum Runterscrollen anzeigen
-		    </td>
-		    <td align="right">
-			<input type="checkbox" class="userscriptOptions" name="miscellaneous_buttonScrollDown"/>
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Im Forum wird ein Icon eingefügt, beim betätigen wird zum letzten Post gesprungen."/>
-		    </td>
-		</tr>	
-		<tr class="menuparent">
-		    <td align="center">
-		    </td>
-		    <td align="left">
-			In der Suche zum letzten Post springen
-		    </td>
-		    <td align="right">
-			<input type="checkbox" class="userscriptOptions" name="middleColumn_search_jump_to_last_page"/>
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Hinter den Suchergebnissen wird ein Icon eingefügt, beim betätigen wird zum letzten Post gesprungen."/>
-		    </td>
-		</tr>
-		<tr class="menuparent">
-		    <td align="center">
-		    </td>
-		    <td align="left">
-			Last-Page-Pfeil springt zum letzten Post
-		    </td>
-		    <td align="right">
-			<input type="checkbox" class="userscriptOptions" name="miscellaneous_lastPageJumpToLastPost"/>
-		    </td>
-		    <td align="right">
-			<img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Nach dem Bet&auml;tigen des Pfeils (ganz Recht im Forum, hinter den Threads) wird zum aktuellsten Post gesprungen."/>
-		    </td>
-		</tr>
-		<tr>
-		    <td style="width:30px;"></td>
-		    <td></td>
-		    <td style="width:180px;"></td>
-		    <td style="width:25px;"></td>
-		</tr>
-	    </table>
-	</div>
-	<div class="rmus-options-footer">
-	    <div style="float: left;">
-		<input class="btn-rm imexp" type="button" id="importUserscriptOptions" value="Import"/>
-		&nbsp;
-		<input class="btn-rm imexp" type="button" id="exportUserscriptOptions" value="Export"/>
-	    </div>
-
-	    <input class="btn-rm" type="button" id="closeUserscriptOptions" value="Abbrechen"/>
-	    &nbsp;
-	    <input class="btn-rm primary" type="button" value="Speichern" id="saveUserscriptOptions"/>
-
-	    <div id="rmus-options-imexport">
-		<div class="rmus-options-imexport-help"></div>
-		<textarea class="btn-rm"></textarea>
-		<input class="btn-rm primary" style="margin-right: 4px;" type="button" value="Importieren" id="importUserscriptOptionsBtn"/>
-		<input class="btn-rm" type="button" value="Schlie&szlig;en" id="imexportUserscriptOptionsCloseBtn"/>
-	    </div>
-	</div>
+<div class="rmus-options-wrapper">
+<div class="rmus-options-header">
+    <h1>RM Userscript - Optionen</h1>
+    <div class="rmus-links">
+        <a href="index.php?cont=forum/thread&threadid=111239&pagenum=1">Thread</a> | Version <span class="rmus-version">{{version}}</span>
     </div>
+    <div style="clear: both;"></div>
+</div>
+<div class="rmus-options-content">
+<table>
+<tr class="headline">
+    <td colspan="4">
+        Funktionen
+    </td>
+</tr>
+<tr><td style="width:30px"></td><td></td><td style="width:180px"></td><td style="width:25px"></td></tr>
+<tr class="menuparent">
+    <td align="center">
+        <img id="toggle_sub_middleColumn_forum_reloadPosts_readNewPosts" src="http://readmore.thextor.de/userscript/img/plus_alt_16x16.png" alt="more" title="Weitere Optionen"/>
+    </td>
+    <td align="left">
+        Neue Forenbeitr&auml;ge im Hintergrund nachladen
+    </td>
+    <td align="right">
+        <input type="checkbox" class="userscriptOptions" name="middleColumn_forum_reloadPosts_readNewPosts"/>
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Neue Beitr&auml;ge im Readmore.de-Froum werden automatisch nachgeladen. Ein Refresh des Threads entf&auml;llt somit."/>
+    </td>
+</tr>
+<tr class="menufirstchild sub_middleColumn_forum_reloadPosts_readNewPosts">
+    <td align="center">
+        <img id="toggle_sub_middleColumn_forum_reloadPosts_endlessPage" src="http://readmore.thextor.de/userscript/img/plus_alt_16x16.png" alt="more" title="Weitere Optionen"/>
+    </td>
+    <td align="left">
+        Seite endlos erweitern
+    </td>
+    <td align="right">
+        <input type="checkbox" class="userscriptOptions" name="middleColumn_forum_reloadPosts_endlessPage"/>
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Neue Posts werden einfach eingeblendet. Es muss also nicht mehr auf eine neue Seite gewechselt werden."/>
+    </td>
+</tr>
+<tr class="menusecondchild sub_middleColumn_forum_reloadPosts_endlessPage">
+    <td align="center">
+    </td>
+    <td align="left">
+        Automatisch zu neuen Posts scrollen/springen
+    </td>
+    <td align="right">
+        <input type="checkbox" class="userscriptOptions" name="middleColumn_forum_reloadPosts_jumpToNewPosts"/>
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Springt zu neuen posts."/>
+    </td>
+</tr>
+<tr class="menusecondchild sub_middleColumn_forum_reloadPosts_endlessPage">
+    <td align="center">
+    </td>
+    <td align="left">
+        Zeit zwischen zwei Spr&uuml;ngen
+    </td>
+    <td align="right">
+        <input type="text" class="userscriptOptions" name="middleColumn_forum_reloadPosts_jumpToNewPosts_waitUntilNextJump" value="10"/>
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Zeit in Sekunden, die zwischen 2 Spr&uuml;ngen mindestens vergehen muss."/>
+    </td>
+</tr>
+<tr class="menufirstchild sub_middleColumn_forum_reloadPosts_readNewPosts">
+    <td align="center">
+        <img id="toggle_sub_middleColumn_forum_reloadPosts_markNewPosts" src="http://readmore.thextor.de/userscript/img/plus_alt_16x16.png" alt="more" title="Weitere Optionen"/>
+    </td>
+    <td align="left">
+        Neue Eintr&auml;ge farblich markieren
+    </td>
+    <td align="right">
+        <input type="checkbox" class="userscriptOptions" name="middleColumn_forum_reloadPosts_markNewPosts"/>
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Die neu eingetragenen Posts werden markiert."/>
+    </td>
+</tr>
+<tr class="menusecondchild sub_middleColumn_forum_reloadPosts_markNewPosts">
+    <td align="center">
+    </td>
+    <td align="left">
+        Farbe ausw&auml;hlen (HEX-Code)
+    </td>
+    <td align="right">
+        <input type="text" class="userscriptOptions" name="middleColumn_forum_reloadPosts_markPostColor" value="#EEEEEE"/>
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Bitte eine HEX Zahl eingeben. Beispiel: #FFEE11"/>
+    </td>
+</tr>
+<tr class="menusecondchild sub_middleColumn_forum_reloadPosts_markNewPosts">
+    <td align="center">
+    </td>
+    <td align="left">
+        Ungelesene Posts im Titel / Tab anzeigen
+    </td>
+    <td align="right">
+        <input type="checkbox" class="userscriptOptions" name="middleColumn_forum_reloadPosts_showNewPostsTitle"/>
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Die Anzahl der Ungelesenen Posts im Tab anzeigen."/>
+    </td>
+</tr>
+<tr class="menusecondchild sub_middleColumn_forum_reloadPosts_markNewPosts">
+    <td align="center">
+    </td>
+    <td align="left">
+        Favicon ver&auml;ndern
+    </td>
+    <td align="right">
+        <input type="checkbox" class="userscriptOptions" name="middleColumn_forum_reloadPosts_changeFavicon"/>
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Bei ungelesenen Posts das Favicon ver&auml;ndern."/>
+    </td>
+</tr>
+<tr class="menufirstchild sub_middleColumn_forum_reloadPosts_readNewPosts">
+    <td align="center">
+    </td>
+    <td align="left">
+        Hinweis bei neuen Seiten einblenden
+    </td>
+    <td align="right">
+        <input type="checkbox" class="userscriptOptions" name="middleColumn_forum_reloadPosts_checkForNewPage"/>
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Achtung: Funktioniert nur, wenn Seite endlos erweitern deaktiv ist. Weist auf eine neue Seite hin." />
+    </td>
+</tr>
+<tr class="menufirstchild sub_middleColumn_forum_reloadPosts_readNewPosts">
+    <td align="center">
+    </td>
+    <td align="left">
+        Zeit zwischen dem Nachladen (Sekunden)
+    </td>
+    <td align="right">
+        <input type="text" class="userscriptOptions" name="middleColumn_forum_reloadPosts_timeToWait" value="15"/>
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Sekunden die zwischen dem Nachladen gewartet werden muss." />
+    </td>
+</tr>
+<tr class="menuparent">
+    <td align="center">
+        <img id="toggle_sub_miscellaneous_reloadMessages" src="http://readmore.thextor.de/userscript/img/plus_alt_16x16.png" alt="more" title="Weitere Optionen"/>
+    </td>
+    <td align="left">
+        Neue Nachrichten im Hintergrund nachladen
+    </td>
+    <td align="right">
+        <input type="checkbox" class="userscriptOptions" name="miscellaneous_reloadMessages"/>
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Neue Nachrichten (PM) werden nachgeladen. Ein Refresh der Seite entf&auml;llt somit."/>
+    </td>
+</tr>
+<tr class="menufirstchild sub_miscellaneous_reloadMessages">
+    <td align="center">
+    </td>
+    <td align="left">
+        Desktop-Benachrichtigungen aktivieren
+    </td>
+    <td align="right">
+        <input type="checkbox" class="userscriptOptions" id="miscellaneous_reloadMessages_desktopNotifications" name="miscellaneous_reloadMessages_desktopNotifications" />
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Deskop-Benachrichtigungen anzeigen sobald es neue Nachrichten gibt. Dies wird derzeit nicht von allen Browsern unterstützt (caniuse.com/notifications)."/>
+    </td>
+</tr>
+<tr class="menufirstchild sub_miscellaneous_reloadMessages">
+    <td align="center">
+    </td>
+    <td align="left">
+        Alert-Box bei neuen Nachrichten anzeigen
+    </td>
+    <td align="right">
+        <input type="checkbox" class="userscriptOptions" name="miscellaneous_reloadMessages_alertBox" />
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Benachrichtigungen sobald es neue Nachrichten gibt."/>
+    </td>
+</tr>
+<tr class="menufirstchild sub_miscellaneous_reloadMessages">
+    <td align="center">
+    </td>
+    <td align="left">
+        Sound bei neuen Nachrichten abspielen
+    </td>
+    <td align="right">
+        <input type="checkbox" class="userscriptOptions" id="notification_playsound_cb" name="miscellaneous_reloadMessages_playSound" />
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Deskop-Benachrichtigungen sobald es neue Nachrichten gibt."/>
+    </td>
+</tr>
+<tr class="menufirstchild sub_miscellaneous_reloadMessages">
+    <td align="center">
+    </td>
+    <td align="left">
+        URL f&uuml;r die Audiodatei
+    </td>
+    <td align="right">
+        <input type="text" class="userscriptOptions" id="miscellaneous_reloadMessages_playSoundUrl" name="miscellaneous_reloadMessages_playSoundUrl" value="http://" />
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Direkt-Url für den Notification Sound"/>
+    </td>
+</tr>
+<tr class="menuparent">
+    <td align="center">
+        <img id="toggle_sub_miscellaneous_ignoreUser" src="http://readmore.thextor.de/userscript/img/plus_alt_16x16.png" alt="more" title="Weitere Optionen"/>
+    </td>
+    <td align="left">
+        Readmore User ignorieren
+    </td>
+    <td align="right">
+        <input type="checkbox" class="userscriptOptions" name="miscellaneous_ignoreUser"/>
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Blendet Foreneintr&auml;ge, Tickercomments und G&auml;stebucheintr&auml;ge aus."/>
+    </td>
+</tr>
+<tr class="menufirstchild sub_miscellaneous_ignoreUser">
+    <td align="center">
+    </td>
+    <td align="left">
+        Usernamen (kommasepariert)
+    </td>
+    <td align="right">
+        <input type="text" class="userscriptOptions" id="miscellaneous_reloadMessages_playSoundUrl" name="miscellaneous_ignoreUser_usernames" value=" " />
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Beispielsweise: DanielaKatzenberger,ScriptKiddy99,randomreadmoremod. Gross und Kleinschreibung beachten!"/>
+    </td>
+</tr>
+<tr class="menuparent">
+    <td align="center">
+    </td>
+    <td align="left">
+        Beitr&auml;ge ohne Reload senden
+    </td>
+    <td align="right">
+        <input type="checkbox" class="userscriptOptions" name="middleColumn_forum_postPerAjax"/>
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Beitr&auml;ge werden im Hintergrund gepostet. Ein manueller Refresh der Seite entfällt."/>
+    </td>
+</tr>
+<tr class="menuparent">
+    <td align="center">
+    </td>
+    <td align="left">
+        Editieren ohne Reload
+    </td>
+    <td align="right">
+        <input type="checkbox" class="userscriptOptions" name="middleColumn_forum_editPost"/>
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Beitr&auml;ge werden im Hintergrund Editiert. Ein manueller Refresh der Seite entfällt."/>
+    </td>
+</tr>
+<tr class="menuparent">
+    <td align="center">
+    </td>
+    <td align="left">
+        Streams aktualisieren
+    </td>
+    <td align="right">
+        <input type="checkbox" class="userscriptOptions" name="leftColumn_streams_reloadStreams"/>
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Aktualisiert die Streams im Hintergund."/>
+    </td>
+</tr>
+<tr class="menuparent">
+    <td align="center">
+    </td>
+    <td align="left">
+        Matchticker aktualisieren
+    </td>
+    <td align="right">
+        <input type="checkbox" class="userscriptOptions" name="rightColumn_ticker_reloadTicker"/>
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Aktualisiert den Matchticker im Hintergund."/>
+    </td>
+</tr>
+<tr class="menuparent">
+    <td align="center">
+    </td>
+    <td align="left">
+        Forennavigation aktualisieren
+    </td>
+    <td align="right">
+        <input type="checkbox" class="userscriptOptions" name="rightColumn_forum_reloadForum"/>
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Aktualisiert die Navigation des Forums (unten rechts) im Hintergund."/>
+    </td>
+</tr>
+<tr class="menuparent">
+    <td align="center">
+    </td>
+    <td align="left">
+        Vorschaufunktion aktivieren
+    </td>
+    <td align="right">
+        <input type="checkbox" class="userscriptOptions" name="middleColumn_forum_preview"/>
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Vorschau f&uuml;r neue Beitr&auml;ge einbinden."/>
+    </td>
+</tr>
+<tr class="menuparent">
+    <td align="center">
+        <img id="toggle_sub_middleColumn_forum_scrollForNewPage" src="http://readmore.thextor.de/userscript/img/plus_alt_16x16.png" alt="more" title="Weitere Optionen"/>
+    </td>
+    <td align="left">
+        Scrollen bis zum Seitenende l&auml;dt die N&auml;chste
+    </td>
+    <td align="right">
+        <input type="checkbox" class="userscriptOptions" name="middleColumn_forum_scrollForNewPage"/>
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Beim ereichen des letzten Posts ggf. die n&auml;chste Seite nachladen."/>
+    </td>
+</tr>
+<tr class="menufirstchild sub_middleColumn_forum_scrollForNewPage">
+    <td align="center">
+    </td>
+    <td align="left">
+        Postbox nach oben verschieben
+    </td>
+    <td align="right">
+        <input type="checkbox" class="userscriptOptions" name="middleColumn_forum_hideForum_editboxTop"/>
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Kopiert die Box zum Posten an den Anfang der Seite."/>
+    </td>
+</tr>
+<tr>
+    <td style="width:30px;"></td>
+    <td></td>
+    <td style="width:180px;"></td>
+    <td style="width:25px;"></td>
+</tr>
+<tr class="headline">
+    <td colspan="4">
+        Optische Ver&auml;nderungen
+    </td>
+</tr>
+<tr><td style="width:30px"></td><td></td><td style="width:180px"></td><td style="width:25px"></td></tr>
+<tr class="menuparent">
+    <td align="center">
+        <img id="toggle_sub_rightColumn_forum_hideForum" src="http://readmore.thextor.de/userscript/img/plus_alt_16x16.png" alt="more" title="Weitere Optionen"/>
+    </td>
+    <td align="left">
+        Forum ausblenden und umsortieren
+    </td>
+    <td align="right">
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Das Forum ausblenden oder umsortieren."/>
+    </td>
+</tr>
+<tr class="menufirstchild sub_rightColumn_forum_hideForum">
+    <td align="center">
+    </td>
+    <td align="left">
+        Komplett ausblenden
+    </td>
+    <td align="right">
+        <input type="checkbox" class="userscriptOptions" name="rightColumn_forum_hideForum"/>
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Das komplette Forum ausblenden."/>
+    </td>
+</tr>
+<tr class="menufirstchild sub_rightColumn_forum_hideForum">
+    <td align="center">
+        <img id="toggle_sub_rightColumn_forum_sections" src="http://readmore.thextor.de/userscript/img/plus_alt_16x16.png" alt="more" title="Weitere Optionen"/>
+    </td>
+    <td align="left">
+        Foren umsortieren
+    </td>
+    <td align="right">
+        <input type="checkbox" class="userscriptOptions" name="rightColumn_forum_sections"/>
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Ermöglicht das Umsortieren des Forums."/>
+    </td>
+</tr>
+<tr class="menusecondchild sub_rightColumn_forum_sections">
+    <td align="center">
+    </td>
+    <td align="left">
+        An erster Stelle
+    </td>
+    <td align="right">
+        <select size="1" class="userscriptOptions" name="rightColumn_forum_hideForum_0">
+            <option value="">Nichts anzeigen</option>
+            <option value="featuredthreads">Featured Threads</option>
+            <option value="esportforen">eSport Foren</option>
+            <option value="technik">Technik</option>
+            <option value="offtopicforen">Offtopic Foren</option>
+            <option value="spiele">Spiele</option>
+        </select>
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Erste Stelle bei der Anzeige der Foren."/>
+    </td>
+</tr>
+<tr class="menusecondchild sub_rightColumn_forum_sections">
+    <td align="center">
+    </td>
+    <td align="left">
+        An zweiter Stelle
+    </td>
+    <td align="right">
+        <select size="1" class="userscriptOptions" name="rightColumn_forum_hideForum_1">
+            <option value="">Nichts anzeigen</option>
+            <option value="featuredthreads">Featured Threads</option>
+            <option value="esportforen">eSport Foren</option>
+            <option value="technik">Technik</option>
+            <option value="offtopicforen">Offtopic Foren</option>
+            <option value="spiele">Spiele</option>
+        </select>
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Zweite Stelle bei der Anzeige der Foren."/>
+    </td>
+</tr>
+<tr class="menusecondchild sub_rightColumn_forum_sections">
+    <td align="center">
+    </td>
+    <td align="left">
+        An dritter Stelle
+    </td>
+    <td align="right">
+        <select size="1" class="userscriptOptions" name="rightColumn_forum_hideForum_2">
+            <option value="">Nichts anzeigen</option>
+            <option value="featuredthreads">Featured Threads</option>
+            <option value="esportforen">eSport Foren</option>
+            <option value="technik">Technik</option>
+            <option value="offtopicforen">Offtopic Foren</option>
+            <option value="spiele">Spiele</option>
+        </select>
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Dritte Stelle bei der Anzeige der Foren."/>
+    </td>
+</tr>
+<tr class="menusecondchild sub_rightColumn_forum_sections">
+    <td align="center">
+    </td>
+    <td align="left">
+        An vierter Stelle
+    </td>
+    <td align="right">
+        <select size="1" class="userscriptOptions" name="rightColumn_forum_hideForum_3">
+            <option value="">Nichts anzeigen</option>
+            <option value="featuredthreads">Featured Threads</option>
+            <option value="esportforen">eSport Foren</option>
+            <option value="technik">Technik</option>
+            <option value="offtopicforen">Offtopic Foren</option>
+            <option value="spiele">Spiele</option>
+        </select>
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Viere Stelle bei der Anzeige der Foren."/>
+    </td>
+</tr>
+<tr class="menusecondchild sub_rightColumn_forum_sections">
+    <td align="center">
+    </td>
+    <td align="left">
+        An f&uuml;nfter Stelle
+    </td>
+    <td align="right">
+        <select size="1" class="userscriptOptions" name="rightColumn_forum_hideForum_4">
+            <option value="">Nichts anzeigen</option>
+            <option value="featuredthreads">Featured Threads</option>
+            <option value="esportforen">eSport Foren</option>
+            <option value="technik">Technik</option>
+            <option value="offtopicforen">Offtopic Foren</option>
+            <option value="spiele">Spiele</option>
+        </select>
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="F&uuml;nfte Stelle bei der Anzeige der Foren."/>
+    </td>
+</tr>
+<tr class="menuparent">
+    <td align="center">
+        <img id="toggle_sub_rightColumn_headlines_hideHeadlines" src="http://readmore.thextor.de/userscript/img/plus_alt_16x16.png" alt="more" title="Weitere Optionen"/>
+    </td>
+    <td align="left">
+        Schlagzeilen ausblenden
+    </td>
+    <td align="right">
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Bestimmte oder alle Schlagzeilen ausblenden"/>
+    </td>
+</tr>
+<tr class="menufirstchild sub_rightColumn_headlines_hideHeadlines">
+    <td align="center">
+    </td>
+    <td align="left">
+        Alle ausblenden
+    </td>
+    <td align="right">
+        <input type="checkbox" class="userscriptOptions" name="rightColumn_headlines_hideHeadlines"/>
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Blendet alle Schlagzeilen aus."/>
+    </td>
+</tr>
+<tr class="menufirstchild sub_rightColumn_headlines_hideHeadlines">
+    <td align="center">
+    </td>
+    <td align="left">
+        Counter-Strike ausblenden
+    </td>
+    <td align="right">
+        <input type="checkbox" class="userscriptOptions" name="rightColumn_headlines_hideCounterstrike"/>
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Blendet die Counter-Strike Schlagzeilen aus."/>
+    </td>
+</tr>
+<tr class="menufirstchild sub_rightColumn_headlines_hideHeadlines">
+    <td align="center">
+    </td>
+    <td align="left">
+        Starcraft ausblenden
+    </td>
+    <td align="right">
+        <input type="checkbox" class="userscriptOptions" name="rightColumn_headlines_hideStarcraft"/>
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Blendet die Starcraft Schlagzeilen aus."/>
+    </td>
+</tr>
+<tr class="menufirstchild sub_rightColumn_headlines_hideHeadlines">
+    <td align="center">
+    </td>
+    <td align="left">
+        DotA ausblenden
+    </td>
+    <td align="right">
+        <input type="checkbox" class="userscriptOptions" name="rightColumn_headlines_hideDefenseOfTheAncients"/>
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Blendet die DotA Schlagzeilen aus."/>
+    </td>
+</tr>
+<tr class="menufirstchild sub_rightColumn_headlines_hideHeadlines">
+    <td align="center">
+    </td>
+    <td align="left">
+        League of Legends ausblenden
+    </td>
+    <td align="right">
+        <input type="checkbox" class="userscriptOptions" name="rightColumn_headlines_hideLeagueOfLegends"/>
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Blendet die League of Legends Schlagzeilen aus."/>
+    </td>
+</tr>
+<tr class="menufirstchild sub_rightColumn_headlines_hideHeadlines">
+    <td align="center">
+    </td>
+    <td align="left">
+        Warcraft 3 ausblenden
+    </td>
+    <td align="right">
+        <input type="checkbox" class="userscriptOptions" name="rightColumn_headlines_hideWarcraft3"/>
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Blendet die Warcraft 3 Schlagzeilen aus."/>
+    </td>
+</tr>
+<tr class="menufirstchild sub_rightColumn_headlines_hideHeadlines">
+    <td align="center">
+    </td>
+    <td align="left">
+        Sonstiges ausblenden
+    </td>
+    <td align="right">
+        <input type="checkbox" class="userscriptOptions" name="rightColumn_headlines_hideSonstiges"/>
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Blendet die Sonstigen Schlagzeilen aus."/>
+    </td>
+</tr>
+<tr class="menuparent">
+    <td align="center">
+    </td>
+    <td align="left">
+        Alle Streams ausblenden
+    </td>
+    <td align="right">
+        <input type="checkbox" class="userscriptOptions" name="leftColumn_streams_hideStreams"/>
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Alle Streams ausblenden"/>
+    </td>
+</tr>
+<tr class="menuparent">
+    <td align="center">
+    </td>
+    <td align="left">
+        Fixierte Toolbar
+    </td>
+    <td align="right">
+        <input type="checkbox" class="userscriptOptions" name="miscellaneous_fixedToolbar"/>
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Die Toolbar wird am oberen Fensterrand fixiert."/>
+    </td>
+</tr>
+<tr class="menuparent">
+    <td align="center">
+    </td>
+    <td align="left">
+        Ticker ausblenden
+    </td>
+    <td align="right">
+        <input type="checkbox" class="userscriptOptions" name="rightColumn_ticker_hideTicker"/>
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Der Ticker wird komplett ausgeblendet."/>
+    </td>
+</tr>
+<tr class="menuparent">
+    <td align="center">
+    </td>
+    <td align="left">
+        Wer? Wohin? Warum? ausblenden
+    </td>
+    <td align="right">
+        <input type="checkbox" class="userscriptOptions" name="leftColumn_www_hideWww"/>
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Blendet die komplette Wer? Wohin? Warum? Sektion aus."/>
+    </td>
+</tr>
+<tr class="menuparent">
+    <td align="center">
+    </td>
+    <td align="left">
+        Bilderlinks umwandeln
+    </td>
+    <td align="right">
+        <input type="checkbox" class="userscriptOptions" name="miscellaneous_convertImageLinks"/>
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Wandelt Bilderlinks automatisch in Bilder um."/>
+    </td>
+</tr>
+<tr>
+    <td style="width:30px;"></td>
+    <td></td>
+    <td style="width:180px;"></td>
+    <td style="width:25px;"></td>
+</tr>
+<tr class="headline">
+    <td colspan="4">
+        Sonstiges
+    </td>
+</tr>
+<tr><td style="width:30px"></td><td></td><td style="width:180px"></td><td style="width:25px"></td></tr>
+<tr class="menuparent">
+    <td align="center">
+    </td>
+    <td align="left">
+        Notizen
+    </td>
+    <td align="right">
+        <input type="checkbox" class="userscriptOptions" name="miscellaneous_note"/>
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Ermöglicht es für jeden Forenuser eine Notiz zu hinterlegen."/>
+    </td>
+</tr>
+<tr class="menuparent">
+    <td align="center">
+    </td>
+    <td align="left">
+        Titel / Tab umsortieren
+    </td>
+    <td align="right">
+        <input type="checkbox" class="userscriptOptions" name="miscellaneous_reSortTitle"/>
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Wenn diese Option aktiviert ist, wird der Threadname an den Anfang des Titels gestellt. Offene Tabs können so besser den verschiedenen Threads zugeordnet werden."/>
+    </td>
+</tr>
+<tr class="menuparent">
+    <td align="center">
+    </td>
+    <td align="left">
+        Readmore Extrabuttons
+    </td>
+    <td align="right">
+        <input type="checkbox" class="userscriptOptions" name="miscellaneous_extraButtons"/>
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Mehr Buttons um einen Post im Forum ansehnlicher zu gestalten."/>
+    </td>
+</tr>
+<tr class="menuparent">
+    <td align="center">
+    </td>
+    <td align="left">
+        Youtubeplayer ersetzen
+    </td>
+    <td align="right">
+        <input type="checkbox" class="userscriptOptions" name="miscellaneous_convertYoutube"/>
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Ersetzt den Youtubeplayer durch einen einfachen Link."/>
+    </td>
+</tr>
+<tr class="menuparent">
+    <td align="center">
+    </td>
+    <td align="left">
+        Avataranimationen anhalten
+    </td>
+    <td align="right">
+        <input type="checkbox" class="userscriptOptions" name="miscellaneous_stopAvatarAnimation"/>
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Die Animation von Avataren stoppen."/>
+    </td>
+</tr>
+<tr class="menuparent">
+    <td align="center">
+    </td>
+    <td align="left">
+        Button zum Hochscrollen anzeigen
+    </td>
+    <td align="right">
+        <input type="checkbox" class="userscriptOptions" name="miscellaneous_buttonScrollUp"/>
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Im Forum wird ein Icon eingefügt, beim betätigen wird zum ersten Post gesprungen."/>
+    </td>
+</tr>
+<tr class="menuparent">
+    <td align="center">
+    </td>
+    <td align="left">
+        Button zum Runterscrollen anzeigen
+    </td>
+    <td align="right">
+        <input type="checkbox" class="userscriptOptions" name="miscellaneous_buttonScrollDown"/>
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Im Forum wird ein Icon eingefügt, beim betätigen wird zum letzten Post gesprungen."/>
+    </td>
+</tr>
+<tr class="menuparent">
+    <td align="center">
+    </td>
+    <td align="left">
+        In der Suche zum letzten Post springen
+    </td>
+    <td align="right">
+        <input type="checkbox" class="userscriptOptions" name="middleColumn_search_jump_to_last_page"/>
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Hinter den Suchergebnissen wird ein Icon eingefügt, beim betätigen wird zum letzten Post gesprungen."/>
+    </td>
+</tr>
+<tr class="menuparent">
+    <td align="center">
+    </td>
+    <td align="left">
+        Last-Page-Pfeil springt zum letzten Post
+    </td>
+    <td align="right">
+        <input type="checkbox" class="userscriptOptions" name="miscellaneous_lastPageJumpToLastPost"/>
+    </td>
+    <td align="right">
+        <img src="http://readmore.thextor.de/userscript/img/magnifying_glass_16x16.png" alt="info" title="Nach dem Bet&auml;tigen des Pfeils (ganz Recht im Forum, hinter den Threads) wird zum aktuellsten Post gesprungen."/>
+    </td>
+</tr>
+<tr>
+    <td style="width:30px;"></td>
+    <td></td>
+    <td style="width:180px;"></td>
+    <td style="width:25px;"></td>
+</tr>
+</table>
+</div>
+<div class="rmus-options-footer">
+    <div style="float: left;">
+        <input class="btn-rm imexp" type="button" id="importUserscriptOptions" value="Import"/>
+        &nbsp;
+        <input class="btn-rm imexp" type="button" id="exportUserscriptOptions" value="Export"/>
+    </div>
+
+    <input class="btn-rm" type="button" id="closeUserscriptOptions" value="Abbrechen"/>
+    &nbsp;
+    <input class="btn-rm primary" type="button" value="Speichern" id="saveUserscriptOptions"/>
+
+    <div id="rmus-options-imexport">
+        <div class="rmus-options-imexport-help"></div>
+        <textarea class="btn-rm"></textarea>
+        <input class="btn-rm primary" style="margin-right: 4px;" type="button" value="Importieren" id="importUserscriptOptionsBtn"/>
+        <input class="btn-rm" type="button" value="Schlie&szlig;en" id="imexportUserscriptOptionsCloseBtn"/>
+    </div>
+</div>
+</div>
 </div>
 
 <div id="userscriptOptionsOverlay"></div>

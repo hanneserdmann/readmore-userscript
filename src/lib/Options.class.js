@@ -19,6 +19,13 @@ function Options() {
     var LOCALSTORAGE_NAME_BACKUP = 'userscriptOptionsBackup';
 
     /**
+     * Um das Object aus privaten Methoden heraus ansprechen zu können.
+     * @type {Options}
+     * @private
+     */
+    var _self = this;
+
+    /**
      * Version des Scriptes, wird durch GrundJS im Buildprozess ersetzt.
      * @type {string}
      * @private
@@ -60,11 +67,18 @@ function Options() {
     };
 
     /**
-     * Fügt den Link für die Optionen in die Userbar auf der Readmore Seite ein.
-     * Dadurch wird später das Fenster mit den Einstellungen verfügbar.
+     * Fügt zuerst den Quellcode der Optionen in die Seite ein, danach den Link / das Icon zum öffnen
+     * und zuletzt die diversen Eventhandler.
      */
-    this.insertOptionsLink = function () {
-        $('div.floatl.vcenter.elf.dgray:last').after('<div class="floatl vcenter" style="padding-top:4px;"><img src="http://images.readmore.de/img/header/line.jpg" alt="" style="height:25px; width:2px;"></div><div class="floatl vcenter elf dgray" style="margin:11px 10px;"><a id="openUserscriptOptions" href="#" class="black">Userscript</a></div>');
+    this.insertOptions = function () {
+        // Optionen einfügen
+        $('body').append('{{optionshtml}}');
+
+        // Link einfügen
+        $('div#header li.socials').prepend('<a id="openUserscriptOptions" href="" title="Userscript" style="margin-right: 3px;"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAABuklEQVR42n2Sv09TURTHvyCgQkKEgcWFhNHVEA1LYwQHEweSxjBgYFBjjLUlLZba99iMrDq5+S8wMTlJ0xAWSXTAxMGoiRJCE42WQvsOn3v7bEqbcJPzzrvnfL/n1z3S/5OxiwrsnsLog0I7RH/kfl2r1qesjemZXVHeRiTr0amzYBf03LKQKoANHUFc07Jd1YrN4nuDzOuRI7uzagNKENURA0uRac8TPTn6piB6T5Ad7jWv83ZXSThESWJ4rKLdB7TO/78WsVOcr2gvKX1IgLeIvI/xB/oPgAb/To6QWvwfeaLDFu0GGc+pK4MDFe0LlaTRd7hvenLTV8Z+rTmg0L52EOt+KK4cFzm020g19v1EXkFeFFFvAnyN41dMPsb2Qg9skMi9DGOmu6rotwD0M+4pX3/rGaJdyA9VsFvY3vkqTg+qJD2xYUAJLuUWsTmQGvdq3F/DZw2pKrAD8E+lnE34nkL7e+YzBNEGvaWQJeSylLZLftUCv2LuCT6hS8j3tp72fJYka+laa64dn4yNAlzA+ZZoc8hkXEU9zlih3xxtnVfXcUa3h36dCFawacifkW0CrjDd8fYFPwEUiX/TL0OkfAAAAABJRU5ErkJggg==" style="width: 14px;"/></a> | ');
+
+        // Eventhandler
+        _addEventHandler();
     };
 
     /**
@@ -222,6 +236,87 @@ function Options() {
                 }
             });
         }
+    };
+
+    /**
+     * Fügt die Eventhandler hinzu
+     * @private
+     */
+    var _addEventHandler = function(){
+
+        // Eventhandler für die Optionen setzen
+        $('#saveUserscriptOptions').click(function () {
+            if (_self.saveOptions()) {
+                _self.hideOptions();
+            }
+        });
+
+        $('#openUserscriptOptions').click(function (e) {
+            e.preventDefault();
+            _self.showOptions();
+        });
+
+        $('#closeUserscriptOptions,#userscriptOptionsOverlay').click(function (e) {
+            e.preventDefault();
+            _self.hideOptions();
+        });
+
+        $('div#userscriptOptions input.imexp').click(function () {
+            var $this = $(this),
+                imexportContainer = $('div#rmus-options-imexport'),
+                importBtn = $('div#rmus-options-imexport input#importUserscriptOptionsBtn'),
+                helpContainer = $('div.rmus-options-imexport-help', imexportContainer),
+                textarea = $('textarea', imexportContainer);
+
+            imexportContainer.hide();
+
+            if ($this.prop('id') === 'importUserscriptOptions') {
+                importBtn.show();
+                helpContainer.text('Füge den exportierten JSON-String in das Textfeld ein:');
+                textarea.val('');
+                textarea.focus();
+            } else {
+                var opts = _self.getOptionsRaw();
+
+                if (opts === 'null') {
+                    alert('Es sind keine gespeicherten Optionen zum Exportieren vorhanden. Bitte speichere deine Optionen zuerst ab.');
+                    return;
+                }
+
+                importBtn.hide();
+                helpContainer.text('Kopiere diesen JSON-String für den späteren Import:');
+                textarea.val(opts);
+            }
+
+            imexportContainer.slideToggle(250, function () {
+                textarea.select();
+            });
+        });
+        $('#imexportUserscriptOptionsCloseBtn').click(function () {
+            $('div#rmus-options-imexport').hide();
+        });
+        $('#importUserscriptOptionsBtn').click(function () {
+            var opts = $('div#rmus-options-imexport textarea').val(),
+                validJson = true;
+
+            try {
+                JSON.parse(opts);
+            } catch (e) {
+                validJson = false;
+            }
+
+            if (validJson) {
+                _self.backupOptions();
+                _self.setOptionsRaw(opts);
+
+                // Optionen schließen, damit sie neu geladen werden beim nächsten öffnen.
+                _self.hideOptions();
+
+                alert('Die Optionen wurden erfolgreich importiert! Du musst die Seite neu laden, damit die Optionen vollständig übernommen werden.');
+            } else {
+                alert('Die Optionen konnten nicht importiert werden! Der eingegebene Text ist kein valider JSON-String.');
+            }
+        });
     };
 
     /**
