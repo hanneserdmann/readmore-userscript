@@ -31,9 +31,9 @@ Durch den Launch von readmore.de v3 im Juni 2014 muss das Userscript an vielen E
           * Ungelesene Posts im Titel / Tab anzeigen
           * Favicon verändern
      * Hinweis bei neuen Seiten einblenden
-* Fixierte Toolbar
-* Titel / Tab umsortieren
-* Schlagzeilen ausblenden
+ * Fixierte Toolbar
+ * Titel / Tab umsortieren
+ * Schlagzeilen ausblenden
 
 **Kommende, noch nicht implementierte Features**
  * Neue Nachrichten im Hintergrund nachladen (PM)
