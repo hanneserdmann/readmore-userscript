@@ -51,6 +51,16 @@ function ReloadPosts(_options, _content) {
         setInterval(function() {
             _readNewPosts();
         }, (parseInt(_options.getOption('middleColumn_forum_reloadPosts_timeToWait'), 10) > 2) ? parseInt(_options.getOption('middleColumn_forum_reloadPosts_timeToWait'), 10) * 1000 : 3000);
+
+        if (_options.getOption('middleColumn_forum_reloadPosts_jumpToNewPosts') === 'checked' && _options.getOption('middleColumn_forum_reloadPosts_endlessPage') === 'checked') {
+            if (_isLastpage()){
+                _jumpToNewPosts();
+
+                setInterval(function () {
+                    _jumpToNewPosts();
+                }, (parseInt(_options.getOption('middleColumn_forum_reloadPosts_jumpToNewPosts_waitUntilNextJump'), 10) > 1 ? parseInt(_options.getOption('middleColumn_forum_reloadPosts_jumpToNewPosts_waitUntilNextJump'), 10) : 1) * 1000);
+            }
+        }
     };
 
     /**
@@ -218,15 +228,15 @@ function ReloadPosts(_options, _content) {
     /**
      * Springt automatisch zu neuen Posts.
      */
-/*    this.jumpToNewPosts = function () {
+    _jumpToNewPosts = function () {
         if (_$jumpToChkElm === null) {
-            $('a.bookmark').after('<input style="margin-left: 2px;" type="checkbox" id="userscript_enable_jump" name="userscript_enable_jump">');
+            $('#c_content>ul.breadcrumbs').append('<li style="float: right">Jump <input style="margin-left: 2px;" type="checkbox" id="userscript_enable_jump" name="userscript_enable_jump"></li>');
             _$jumpToChkElm = $('#userscript_enable_jump');
         }
         else{
             if (_unseenPosts.length > 0) {
                 if (_$jumpToChkElm.prop('checked')) {
-                    var jumpto = _unseenPosts[0] - (window.innerHeight * 0.55) + 25;
+                    var jumpto = _unseenPosts[0]['offset'] - (window.innerHeight * 0.60) + 25;
                     if (jumpto <= _oldJumpLimit) {
                         jumpto = _oldJumpLimit + 25;
                     }
@@ -237,7 +247,7 @@ function ReloadPosts(_options, _content) {
             }
         }
     };
-*/
+
     /**
      * Überschreibt die Farbe für die Markierung der Posts.
      * Wenn ein valider Hexwert in den Optionen angegeben ist.
