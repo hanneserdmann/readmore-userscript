@@ -4,7 +4,7 @@ function ReadmoreUserscript() {
         _content = new Content(),
         _reloadPosts = new ReloadPosts(_content),
         _misc = new Miscellaneous(),
-        _headlines = new Headlines(),
+        _headlines = new Headlines(_options),
         _reloadPageData = new ReloadPageData(),
         _forumNavigation = new ForumNavigation(_options, _reloadPageData, _misc);
 
@@ -22,38 +22,13 @@ function ReadmoreUserscript() {
             _misc.changeForumArrowBehavior();
         }
 
-        // Button um Forums nachzuladen einbauen
+        // Button ums Forum nachzuladen einbauen
         _forumNavigation.addReloadImage().click(function() {
             _forumNavigation.reloadForumManually();
         });
 
         // Schlagzeilen ausblenden
-        if (_options.getOption('rightColumn_headlines_hideHeadlines') === 'checked') {
-            _headlines.hideAllHeadlines();
-        } else {
-            // Individuell
-            if (_options.getOption('rightColumn_headlines_hideCounterstrike') === 'checked') {
-                _headlines.hideCounterstrike();
-            }
-            if (_options.getOption('rightColumn_headlines_hideStarcraft') === 'checked') {
-                _headlines.hideStarcraft();
-            }
-            if (_options.getOption('rightColumn_headlines_hideDefenseOfTheAncients') === 'checked') {
-                _headlines.hideDefenseOfTheAncients();
-            }
-            if (_options.getOption('rightColumn_headlines_hideHearthstone') === 'checked') {
-                _headlines.hideHearthstone();
-            }
-            if (_options.getOption('rightColumn_headlines_hideLeagueOfLegends') === 'checked') {
-                _headlines.hideLeagueOfLegends();
-            }
-            if (_options.getOption('rightColumn_headlines_hideWarcraft3') === 'checked') {
-                _headlines.hideWarcraft3();
-            }
-            if (_options.getOption('rightColumn_headlines_hideSonstiges') === 'checked') {
-                _headlines.hideSonstiges();
-            }
-        }
+        _headlines.init();
     };
 
     this.startIntervalReloadPosts = function() {

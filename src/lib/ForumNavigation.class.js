@@ -30,9 +30,13 @@ function ForumNavigation(_options, _reloadPageData, _misc) {
      * Fügt das Bild, mit dem man das Forum manuell neuladen kann, ein.
      */
     this.addReloadImage = function() {
-        return $("h3 > a[href$='/forums']").parent().append('<span style="float: right;"><img id="userscript_reloadForumButton" src="http://i.imgur.com/oPFco8X.png" style="height: 16px; padding-top: 2px; cursor: pointer;">&nbsp;</span>');
+        return $("h3 > a[href$='/forums']").parent().append('<span style="float: right;"><img id="userscript_reloadForumButton" title="Forum aktualisieren" src="http://i.imgur.com/oPFco8X.png" style="height: 16px; padding-top: 2px; cursor: pointer;">&nbsp;</span>');
     }
 
+    /**
+     * Lädt das Forum manuell neu, wenn auf den Button geklickt wird.
+     * @return {[type]} [description]
+     */
     this.reloadForumManually = function() {
         _reloadPageData.readPage();
         setTimeout(function() {

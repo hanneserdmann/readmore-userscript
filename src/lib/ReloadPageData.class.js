@@ -1,9 +1,6 @@
 /**
  * ReloadPageData
  * ==============
- *
- * Ermöglicht das Posten ohne Seitenrefresh. Der Post wird über
- * Ajax abgeschickt, danach wird die Seite im Hintergrund nachgeladen.
  */
 
 function ReloadPageData() {
@@ -27,7 +24,7 @@ function ReloadPageData() {
         $.ajax({
             type: "POST",
             cache: false,
-            url: "http://www.readmore.de/livestreams",
+            url: "http://www.readmore.de/start",
             timeout: 10000
         }).done(function(data) {
             if (data != null) {
