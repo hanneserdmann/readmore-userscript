@@ -44,4 +44,13 @@ function ForumNavigation(_options, _reloadPageData, _misc) {
         }, 500);
     }
 
+    /**
+     * Sortiert den Thread-Titel um, sodass dieser an erster Stelle steht.
+     */
+    this.resortTitle = function () {
+        var title = $('head').find('title').text();
+        var pieces = title.split(' \u00BB Thread: ');
+
+        document.title = pieces.reverse().join(' \u00BB ');
+    }
 }
