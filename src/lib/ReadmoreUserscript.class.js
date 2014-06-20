@@ -4,7 +4,7 @@ function ReadmoreUserscript() {
         _content            = new Content(),
         _reloadPosts        = new ReloadPosts(_options, _content),
         _misc               = new Miscellaneous(),
-        _headlines          = new Headlines(_options),
+        _headlines          = new Headlines(_options, _content),
         _reloadPageData     = new ReloadPageData(),
         _forumNavigation    = new ForumNavigation(_options, _reloadPageData, _misc);
 
@@ -35,7 +35,9 @@ function ReadmoreUserscript() {
         });
 
         // Schlagzeilen ausblenden
-        _headlines.init();
+        if (_content.get('headlines').length){
+            _headlines.init();
+        }
     };
 
     this.startIntervalReloadPosts = function() {

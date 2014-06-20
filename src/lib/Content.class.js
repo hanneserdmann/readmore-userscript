@@ -14,6 +14,10 @@ function Content(){
         'forumPosts': {
             'selector': 'div.forum_post',
             'elements': []
+        },
+        'headlines': {
+            'selector': '#headlines_list',
+            'elements': []
         }
     };
 

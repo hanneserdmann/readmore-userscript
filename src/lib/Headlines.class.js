@@ -5,7 +5,7 @@
  * Methoden um die Schlagezeilen auszublenden.
  */
 
-function Headlines(_options) {
+function Headlines(_options, _content) {
 
     var _self = this,
         _headlineElements = [],
@@ -15,7 +15,7 @@ function Headlines(_options) {
      * Alle Headlines ausblenden
      */
     this.hideAllHeadlines = function() {
-        $("div#headlines_list").hide().prev("h3").hide().prev("hr").hide();
+        _content.get('headlines').hide().prev("h3").hide().prev("hr").hide();
         $("a[href$='headlines/send']").hide().prev("br").remove();
     };
 
@@ -96,7 +96,7 @@ function Headlines(_options) {
      */
     _readHeadlineElements = function() {
         _headlineElements = [];
-        $("div#headlines_list div.headlines_cat").each(function(index, value) {
+        _content.get('headlines').find('div.headlines_cat').each(function(index, value) {
             _headlineElements.push(value);
         });
     };
@@ -120,7 +120,7 @@ function Headlines(_options) {
             _hideHeadlines();
         });
 
-        _observer.observe($("div#headlines_list")[0], {
+        _observer.observe(_content.get('headlines')[0], {
             attributes: true,
             childList: true,
             characterData: true
