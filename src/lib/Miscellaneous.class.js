@@ -18,6 +18,33 @@ function Miscellaneous() {
     };
 
     /**
+     * Vergrößert den Content-Bereich um 200px.
+     * Sorgt leider für ein "Flackern" wenn man die Seite lädt, da das CSS relativ spät geladen wird.
+     * Lässt sich glaube ich nicht ändern im Userscript.
+     */
+    this.makeContentWider = function() {
+        var maxWidth = 1200,
+            sidebarsWidth = 466,
+            padding = 4;
+
+        $("#header > div > div").css({
+            "width": maxWidth + "px"
+        });
+
+        $("#monkey").css({
+            "maxWidth": maxWidth + "px"
+        });
+
+        $("#container").css({
+            "width": maxWidth + "px"
+        });
+
+        $("#c_content").css({
+            "width": (maxWidth - sidebarsWidth - padding) + "px"
+        });
+    };
+
+    /**
      * Ändert den Pfeil im Forum so, dass er zum letzten Post springt, nicht zum letzten gelesenen.
      */
     this.changeForumArrowBehavior = function() {

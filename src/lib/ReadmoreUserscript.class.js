@@ -1,14 +1,18 @@
 function ReadmoreUserscript() {
-    var _options            = new Options(),
-        _siteLocation       = new SiteLocation(),
-        _content            = new Content(),
-        _reloadPosts        = new ReloadPosts(_options, _content),
-        _misc               = new Miscellaneous(),
-        _headlines          = new Headlines(_options, _content),
-        _reloadPageData     = new ReloadPageData(),
-        _forumNavigation    = new ForumNavigation(_options, _reloadPageData, _misc, _content);
+    var _options = new Options(),
+        _siteLocation = new SiteLocation(),
+        _content = new Content(),
+        _reloadPosts = new ReloadPosts(_options, _content),
+        _misc = new Miscellaneous(),
+        _headlines = new Headlines(_options, _content),
+        _reloadPageData = new ReloadPageData(),
+        _forumNavigation = new ForumNavigation(_options, _reloadPageData, _misc, _content);
 
     this.start = function() {
+        if (_options.getOption("miscellaneous_makeContentWider")) {
+            _misc.makeContentWider();
+        }
+
         // Optionen einfügen
         _options.insertOptions();
 
@@ -30,7 +34,7 @@ function ReadmoreUserscript() {
         }
 
         // Prüfen ob die Übersicht überhaupt vorhanden ist
-        if (_content.get('forumNavigation').length){
+        if (_content.get('forumNavigation').length) {
             // Button ums Forum nachzuladen einbauen
             _forumNavigation.addReloadImage().click(function() {
                 _forumNavigation.reloadForumManually();
@@ -38,7 +42,7 @@ function ReadmoreUserscript() {
         }
 
         // Schlagzeilen ausblenden
-        if (_content.get('headlines').length){
+        if (_content.get('headlines').length) {
             _headlines.init();
         }
     };
@@ -57,11 +61,11 @@ function ReadmoreUserscript() {
     this.startInvervalRapid = function() {
         setInterval(function() {
             // Posts unmarkieren
-            if (_options.getOption('middleColumn_forum_reloadPosts_markNewPosts') === 'checked'){
-                if (_siteLocation.getLocation('forums') && _content.get('forumPosts').length){
+            if (_options.getOption('middleColumn_forum_reloadPosts_markNewPosts') === 'checked') {
+                if (_siteLocation.getLocation('forums') && _content.get('forumPosts').length) {
                     _reloadPosts.unmarkNewPosts();
-                    if (_options.getOption('middleColumn_forum_reloadPosts_changeFavicon')      === 'checked')  _reloadPosts.changeFavicon();
-                    if (_options.getOption('middleColumn_forum_reloadPosts_showNewPostsTitle')  === 'checked')  _reloadPosts.showNewPostsTitle();
+                    if (_options.getOption('middleColumn_forum_reloadPosts_changeFavicon') === 'checked') _reloadPosts.changeFavicon();
+                    if (_options.getOption('middleColumn_forum_reloadPosts_showNewPostsTitle') === 'checked') _reloadPosts.showNewPostsTitle();
                 }
             }
         }, 333);
