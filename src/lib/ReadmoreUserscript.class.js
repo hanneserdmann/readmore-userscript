@@ -1,12 +1,12 @@
 function ReadmoreUserscript() {
-    var _options = new Options(),
-        _siteLocation = new SiteLocation(),
-        _content = new Content(),
-        _reloadPosts = new ReloadPosts(_content),
-        _misc = new Miscellaneous(),
-        _headlines = new Headlines(_options),
-        _reloadPageData = new ReloadPageData(),
-        _forumNavigation = new ForumNavigation(_options, _reloadPageData, _misc);
+    var _options            = new Options(),
+        _siteLocation       = new SiteLocation(),
+        _content            = new Content(),
+        _reloadPosts        = new ReloadPosts(_options, _content),
+        _misc               = new Miscellaneous(),
+        _headlines          = new Headlines(_options),
+        _reloadPageData     = new ReloadPageData(),
+        _forumNavigation    = new ForumNavigation(_options, _reloadPageData, _misc);
 
     this.start = function() {
         // Optionen einfügen
@@ -34,20 +34,24 @@ function ReadmoreUserscript() {
     this.startIntervalReloadPosts = function() {
         // Prüfen ob die Option gesetzt ist
         if (_options.getOption('middleColumn_forum_reloadPosts_readNewPosts') === 'checked') {
-
             // Prüfen ob wir uns im Forum befinden
             if (_siteLocation.getLocation('forums') && _content.get('forumPosts').length) {
-                // Nachladen von Posts vorbereiten
+                // Nachladen von Posts vorbereiten und invervall setzen
                 _reloadPosts.init();
-
-                setInterval(function() {
-                    _reloadPosts.readNewPosts();
-                }, (parseInt(_options.getOption('middleColumn_forum_reloadPosts_timeToWait'), 10) > 2) ? parseInt(_options.getOption('middleColumn_forum_reloadPosts_timeToWait'), 10) * 1000 : 3000);
             }
         }
     };
 
-    this.startInvervalRapid = function() {};
+    this.startInvervalRapid = function() {
+        setInterval(function() {
+            // Posts unmarkieren
+            if (_options.getOption('middleColumn_forum_reloadPosts_markNewPosts') === 'checked'){
+                if (_siteLocation.getLocation('forums') && _content.get('forumPosts').length){
+                    _reloadPosts.unmarkNewPosts();
+                }
+            }
+        }, 333);
+    };
 
     this.startInvervalSlow = function() {
         setInterval(function() {
