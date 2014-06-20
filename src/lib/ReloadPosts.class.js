@@ -5,27 +5,29 @@
  * Ermöglicht das nachladen von Posts im Hintergrund. Bietet außerdem
  * Methoden um das Favicon zu verändern oder die neuen Posts einzufärben.
  *
- * @param _options          {Options}
- * @param _ignoreUser       {IgnoreUser}
- * @param _editPosts        {EditPosts}
- * @param _notes            {Notes}
- * @param _miscellaneous    {Miscellaneous}
+ * @param _options      {Options}
+ * @param _content      {Content}
  * @constructor
  */
 
-function ReloadPosts(_options, _ignoreUser, _editPosts, _notes, _miscellaneous) {
-    var _postcount = 0;
-    var _finishedPages = 0;
-    var _currentPage = 1;
-    var _oldLimit = 0;
-    var _oldJumpLimit = 0;
-    var _threadlink = '';
-    var _oldTitle = '';
-    var _$postTableElm = null;
-    var _$headElm = null;
-    var _$jumpToChkElm = null;
-    var _unseenPosts = [];
-    var _markPostColor = {
+function ReloadPosts(_options, _content) {
+    var _postcount      = 0;
+    var _finishedPages  = 0;
+    var _currentPage    = 1;
+    var _oldLimit       = 0;
+    var _oldJumpLimit   = 0;
+
+    var _threadlink     = '';
+    var _oldTitle       = '';
+
+    var _$postInsertElement = null;
+    var _$headElm           = null;
+    var _$contentElm        = null;
+    var _$jumpToChkElm      = null;
+
+    var _favIcons       = [];
+    var _unseenPosts    = [];
+    var _markPostColor  = {
         hex: '#EEEEEE',
         rgb: 'rgb(238, 238, 238)'
     };
@@ -34,13 +36,31 @@ function ReloadPosts(_options, _ignoreUser, _editPosts, _notes, _miscellaneous) 
      * Bereitet das Nachladen vor.
      */
     this.init = function () {
-        _$postTableElm = $('table.elf.forum.p2.bogray2');
-        _$headElm = $('head');
+        var $insertElement  = $('div.pagination:last');
+        _$postInsertElement = $insertElement.length ? $insertElement : $('div.forum_thread_reply:last');
+
+        _$headElm       = $('head');
+        _$contentElm    = $('#c_content');
+        _oldTitle       = document.title;
 
         _readCurrentPage();
         _readThreadLink();
         _readPostcount();
         _setMarkPostColor();
+
+        setInterval(function() {
+            _readNewPosts();
+        }, (parseInt(_options.getOption('middleColumn_forum_reloadPosts_timeToWait'), 10) > 2) ? parseInt(_options.getOption('middleColumn_forum_reloadPosts_timeToWait'), 10) * 1000 : 3000);
+
+        if (_options.getOption('middleColumn_forum_reloadPosts_jumpToNewPosts') === 'checked' && _options.getOption('middleColumn_forum_reloadPosts_endlessPage') === 'checked') {
+            if (_isLastpage()){
+                _jumpToNewPosts();
+
+                setInterval(function () {
+                    _jumpToNewPosts();
+                }, (parseInt(_options.getOption('middleColumn_forum_reloadPosts_jumpToNewPosts_waitUntilNextJump'), 10) > 1 ? parseInt(_options.getOption('middleColumn_forum_reloadPosts_jumpToNewPosts_waitUntilNextJump'), 10) : 1) * 1000);
+            }
+        }
     };
 
     /**
@@ -71,7 +91,7 @@ function ReloadPosts(_options, _ignoreUser, _editPosts, _notes, _miscellaneous) 
      * Lädt die neuen Posts nach und führt anschließend eine ganze Reihe
      * an Funktionen aus (Favicon anpassen, Markieren der Posts, ...)
      */
-    this.readNewPosts = function () {
+    var _readNewPosts = function () {
         if (_isLastpage()) {
             // Seiten endlos erweitern
             if (_options.getOption('middleColumn_forum_reloadPosts_endlessPage') == 'checked') {
@@ -83,103 +103,97 @@ function ReloadPosts(_options, _ignoreUser, _editPosts, _notes, _miscellaneous) 
                 type: 'POST',
                 async: true,
                 cache: false,
-                url: _threadlink + '&pagenum=' + _currentPage,
-                contentType: 'text/html; charset=iso-8859-1;',
+                url: _threadlink + '&page=' + _currentPage,
+                contentType: 'text/html; charset=UTF-8;',
                 dataType: 'html',
                 success: function (data) {
-                    var posts = data.match(/\<tr class=\"post\_[^"]+\"\>[^]+?\<\/tr\>/g);
-                    if (posts != null) {
-                        var footer = data.match(/\<tr class=\"cellheadercolor footer\_[^"]+\"\>[^]+?\<\/tr\>/g);
+
+                    var $parsedData = $($.parseHTML(data));
+
+                    // Da Readmore nun bei zu hoher Page Nummer einfach die letzte Seite anzeigt,
+                    // muss überprüft werden ob der angegebene &page-Parameter mit der Seite übereinstimmt
+                    if (_currentPage !== 1){
+                        var pageNum = +$parsedData.find('div.pagination li.active').first().find('a').text();
+                        if (pageNum && pageNum !== _currentPage){
+                            return false;
+                        }
+                    }
+
+                    var posts = _content.get('forumPosts', $parsedData);
+
+                    if (posts.length) {
                         var oldPosts = (25 * _finishedPages);
                         var postNumber = posts.length + oldPosts;
                         var i = _postcount;
 
                         for (i; i < postNumber; i++) {
-                            _$postTableElm.append(posts[i - oldPosts]);
-                            _$postTableElm.append(footer[i - oldPosts]);
+                            posts[i - oldPosts] = $(posts[i - oldPosts]);
+                            _$postInsertElement.before(posts[i - oldPosts]);
 
-                            _unseenPosts.push(parseInt($('[class^=post_]:last').offset().top, 10));  // Zum markieren der neuen Posts
+                            var unseenPostData = {
+                                element:    posts[i - oldPosts],
+                                offset:     parseInt(posts[i - oldPosts].offset().top, 10),
+                                marked:     false
+                            };
+
+                            _unseenPosts.push(unseenPostData);  // Zum markieren der neuen Posts
                             _postcount++;
                         }
 
-                        _oldLimit = window.pageYOffset + (window.innerHeight * 0.55);
-
-                        // Beiträge aus den neuen Posts ignorieren
-                        if (_options.getOption('miscellaneous_ignoreUser') == 'checked') {
-                            _ignoreUser.ignore(true, false, false);
-                        }
-
-                        // Edit vorbereiten
-                        if (_options.getOption('middleColumn_forum_editPost') == 'checked') {
-                            _editPosts.initializeEvent();
-                        }
-
-                        // Notzizen einblenden
-                        if (_options.getOption('miscellaneous_note') == 'checked') {
-                            _notes.init(false);
-                        }
-
-                        // Youtubeplayer ersetzen
-                        if (_options.getOption('miscellaneous_convertYoutube') == 'checked') {
-                            _miscellaneous.convertYoutube();
-                        }
+                        _oldLimit = window.pageYOffset + (window.innerHeight * 0.60);
 
                         // Ungelesene Posts makieren
                         if (_options.getOption('middleColumn_forum_reloadPosts_markNewPosts') === 'checked') {
                             _markNewPosts();
                         }
                     }
-                },
-                beforeSend: function (jqXHR) {
-                    jqXHR.overrideMimeType('text/html;charset=iso-8859-1');
                 }
             });
 
             // Rausfinden ob eine neue Seite existiert
-            if (_options.getOption('middleColumn_forum_reloadPosts_endlessPage') != 'checked') {
+    /*        if (_options.getOption('middleColumn_forum_reloadPosts_endlessPage') != 'checked') {
                 _checkForNewPage();
             }
-        }
+     */   }
     };
 
     /**
      * Entfernt die Markierung und bereits gelesenen Posts.
      */
     this.unmarkNewPosts = function () {
-        var i = 0;
-        var limit = window.pageYOffset + (window.innerHeight * 0.55);
-        var deleteArray = [];
+        var limit           = window.pageYOffset + (window.innerHeight * 0.60);
+        var removeElements  = 0;
 
-        $(_unseenPosts).each(function (index, value) {
-            // Nur demarkieren, wenn wir das Limit überschritten und uns bewegt / gescrollt haben
-            if (value < limit && limit != _oldLimit) {
-                $('[class^=post_]:eq(' + (_postcount - (_unseenPosts.length) + i) + ')').css('background-color', '#FFF');
-                i++;
-                deleteArray.push(index);
+        // Nur wenn nach unten gescrollt wurde
+        if (limit != _oldLimit){
+            $.each(_unseenPosts, function(i, post){
+                if (!post.marked || post.offset > limit){
+                    return false;
+                }
+
+                post.element.css('background-color', '');
+                removeElements++
+            });
+
+            if (removeElements){
+                _unseenPosts.splice(0, removeElements);
             }
-        });
-
-        // Unmarkierte / Gelesene Posts aus dem Array entfernen
-        $(deleteArray).each(function (index, value) {
-            _unseenPosts.splice(value, 1);
-        });
+        }
     };
 
     /**
      * Zeigt die Anzahl der neuen Posts im Titel / Tab an.
      */
     this.showNewPostsTitle = function () {
-        if (_oldTitle === ''){
-            _oldTitle = document.title;
-        }
 
-        var title   = _oldTitle;
+        var tempTitle = _oldTitle;
+
         if (_unseenPosts.length) {
-            title = '(' + _unseenPosts.length + ') ' + title;
+            tempTitle = '(' + _unseenPosts.length + ') ' + tempTitle;
         }
 
-        if (document.title !== title) {
-            document.title = title;
+        if (document.title !== tempTitle) {
+            document.title = tempTitle;
         }
     };
 
@@ -187,17 +201,26 @@ function ReloadPosts(_options, _ignoreUser, _editPosts, _notes, _miscellaneous) 
      * Tauscht das Favicon falls ein ungelesener Post existiert
      */
     this.changeFavicon = function () {
-        var favIconElm = _$headElm.find('link[rel="shortcut icon"]');
-        var currentIcon = favIconElm.attr('href');
+        if (!_favIcons.length){
+            _favIcons = $('link[rel="shortcut icon"], link[rel="icon"]');
+        }
 
-        if (_unseenPosts.length > 0 && currentIcon == '/favicon.ico') {
-            favIconElm.remove();
-            _$headElm.append('<link rel="shortcut icon" type="image/png" href="http://readmore.thextor.de/userscript/img/favicon.png">');
+        if (_unseenPosts.length > 0 && _favIcons.attr('type') === 'image/vnd.microsoft.icon') {
+            _favIcons.remove();
+
+            _favIcons
+                .attr('href', 'http://readmore.thextor.de/userscript/img/favicon.png')
+                .attr('type', 'image/png');
+            _$headElm.append(_favIcons);
         }
         else {
-            if (_unseenPosts.length == 0 && currentIcon == 'http://readmore.thextor.de/userscript/img/favicon.png') {
-                favIconElm.remove();
-                _$headElm.append('<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">');
+            if (_unseenPosts.length == 0 && _favIcons.attr('type') === 'image/png') {
+                _favIcons.remove();
+
+                _favIcons
+                    .attr('href', 'http://themes.cdn.readmore.de/readmore/favicon.ico')
+                    .attr('type', 'image/vnd.microsoft.icon');
+                _$headElm.append(_favIcons);
             }
         }
     };
@@ -205,15 +228,15 @@ function ReloadPosts(_options, _ignoreUser, _editPosts, _notes, _miscellaneous) 
     /**
      * Springt automatisch zu neuen Posts.
      */
-    this.jumpToNewPosts = function () {
+    _jumpToNewPosts = function () {
         if (_$jumpToChkElm === null) {
-            $('a.bookmark').after('<input style="margin-left: 2px;" type="checkbox" id="userscript_enable_jump" name="userscript_enable_jump">');
+            $('#c_content>ul.breadcrumbs').append('<li style="float: right">Jump <input style="margin-left: 2px;" type="checkbox" id="userscript_enable_jump" name="userscript_enable_jump"></li>');
             _$jumpToChkElm = $('#userscript_enable_jump');
         }
         else{
             if (_unseenPosts.length > 0) {
                 if (_$jumpToChkElm.prop('checked')) {
-                    var jumpto = _unseenPosts[0] - (window.innerHeight * 0.55) + 25;
+                    var jumpto = _unseenPosts[0]['offset'] - (window.innerHeight * 0.60) + 25;
                     if (jumpto <= _oldJumpLimit) {
                         jumpto = _oldJumpLimit + 25;
                     }
@@ -249,18 +272,12 @@ function ReloadPosts(_options, _ignoreUser, _editPosts, _notes, _miscellaneous) 
      * @private
      */
     var _markNewPosts = function () {
-        var numberOfNewPosts = _unseenPosts.length;
-        var i = 1;
-
-        for (i; i <= numberOfNewPosts; i++) {
-            var $elm = $('[class^=post_]:eq(' + (_postcount - i) + ')');
-
-            // Überprüfen ob der Posts bereits markiert ist, wenn ja die Schleife verlassen
-            if ($.trim(($elm.css('background-color'))) == _markPostColor.rgb) {
-                break;
+        $.each(_unseenPosts, function(i, post){
+            if (!post.marked){
+                post.marked = true;
+                post.element.css('background-color', _markPostColor.rgb);
             }
-            $elm.css('background-color', _markPostColor.rgb);
-        }
+        });
     };
 
     /**
@@ -269,7 +286,7 @@ function ReloadPosts(_options, _ignoreUser, _editPosts, _notes, _miscellaneous) 
      * @private
      */
     var _readPostcount = function () {
-        _postcount = $('[class^=post_]').length;
+        _postcount = _content.get('forumPosts').length;
     };
 
     /**
@@ -278,14 +295,10 @@ function ReloadPosts(_options, _ignoreUser, _editPosts, _notes, _miscellaneous) 
      * @private
      */
     var _isLastpage = function () {
-        var lastPage = false;
-        var html = $.trim($('div.floatl.m2.elf').html());
+        var lastLi      = $('div.pagination:first>ul>li').last();
 
-        if (html.substr(html.length - 4) === '</b>') {
-            lastPage = true;
-        }
-
-        return lastPage;
+        // Wenn keine Navigation da ist true (es gibt nur eine Seite)
+        return lastLi.length ? lastLi.hasClass('active') : true;
     };
 
     /**
@@ -293,7 +306,7 @@ function ReloadPosts(_options, _ignoreUser, _editPosts, _notes, _miscellaneous) 
      * @private
      */
     var _prepareEndlessPage = function () {
-        if (_postcount == (25 + (25 * _finishedPages))) {
+        if (+_postcount === (25 + (25 * _finishedPages))) {
             _finishedPages++;
             _currentPage++;
         }
@@ -304,7 +317,9 @@ function ReloadPosts(_options, _ignoreUser, _editPosts, _notes, _miscellaneous) 
      * @private
      */
     var _readCurrentPage = function () {
-        _currentPage = parseInt($('div.floatl.m2.elf').html().match(/<b>(.+?)<\/b>/)[1], 10);
+        var pageText = $('div.pagination li.active').first().find('a').text();
+        // Empty String = Seite 1. Keine Page navigation vorhanden.
+        _currentPage = pageText !== '' ? +pageText : 1;
     };
 
     /**
@@ -312,7 +327,7 @@ function ReloadPosts(_options, _ignoreUser, _editPosts, _notes, _miscellaneous) 
      * @private
      */
     var _readThreadLink = function () {
-        _threadlink = $(location).attr('href').replace(/\&pagenum=.+$/, '');
+        _threadlink = document.location.href.replace(/&page=([\d]+|last)/, '').replace(/#p[\d]+/, '');
     };
 
     /**
@@ -320,7 +335,7 @@ function ReloadPosts(_options, _ignoreUser, _editPosts, _notes, _miscellaneous) 
      * eine Meldung ein.
      * @private
      */
-    var _checkForNewPage = function () {
+ /*   var _checkForNewPage = function () {
         if (_options.getOption('middleColumn_forum_reloadPosts_checkForNewPage') == 'checked') {
             if (_postcount === (25 + (25 * _finishedPages)) && $('#userscriptNewPage').length < 1) {
                 $.ajax({
@@ -343,4 +358,5 @@ function ReloadPosts(_options, _ignoreUser, _editPosts, _notes, _miscellaneous) 
             }
         }
     };
+*/
 }

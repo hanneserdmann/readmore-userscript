@@ -5,74 +5,88 @@
  * Methoden um die Schlagezeilen auszublenden.
  */
 
-function Headlines(){
-    _headlineElements = [];
+function Headlines(_options, _content) {
+
+    var _self = this,
+        _headlineElements = [],
+        _observer = null;
 
     /**
-     * Alle Headline ausblenden
+     * Alle Headlines ausblenden
      */
-    this.hideAllHeadlines = function(){
-        document.getElementById('headlines').style.display = "none";
+    this.hideAllHeadlines = function() {
+        _content.get('headlines').hide().prev("h3").hide().prev("hr").hide();
+        $("a[href$='headlines/send']").hide().prev("br").remove();
     };
 
     /**
      * Blendet Counterstrike aus
      */
-    this.hideCounterstrike = function(){
-        if (_headlineElements.length === 0){
+    this.hideCounterstrike = function() {
+        if (_headlineElements.length === 0) {
             _readHeadlineElements();
         }
-        $(_headlineElements[0]).css('display', 'none');
-    };
-
-    /**
-     * Blendet Starcraft aus
-     */
-    this.hideStarcraft = function(){
-        if (_headlineElements.length === 0){
-            _readHeadlineElements();
-        }
-        $(_headlineElements[1]).css('display', 'none');
+        $(_headlineElements[0]).css('display', 'none').next("ul").hide();
     };
 
     /**
      * Blendet Dota aus
      */
-    this.hideDefenseOfTheAncients = function(){
-        if (_headlineElements.length === 0){
+    this.hideDefenseOfTheAncients = function() {
+        if (_headlineElements.length === 0) {
             _readHeadlineElements();
         }
-        $(_headlineElements[2]).css('display', 'none');
+        $(_headlineElements[1]).css('display', 'none').next("ul").hide();
     };
 
     /**
      * Blendet LoL aus
      */
-    this.hideLeagueOfLegends = function(){
-        if (_headlineElements.length === 0){
+    this.hideLeagueOfLegends = function() {
+        if (_headlineElements.length === 0) {
             _readHeadlineElements();
         }
-        $(_headlineElements[3]).css('display', 'none');
+        $(_headlineElements[2]).css('display', 'none').next("ul").hide();
+    };
+
+    /**
+     * Blendet Hearthstone aus
+     */
+    this.hideHearthstone = function() {
+        if (_headlineElements.length === 0) {
+            _readHeadlineElements();
+        }
+        $(_headlineElements[3]).css('display', 'none').next("ul").hide();
+    };
+
+    /**
+     * Blendet Starcraft aus
+     */
+    this.hideStarcraft = function() {
+        if (_headlineElements.length === 0) {
+            _readHeadlineElements();
+        }
+        $(_headlineElements[4]).css('display', 'none').next("ul").hide();
     };
 
     /**
      * Blendet Warcraft aus
      */
-    this.hideWarcraft3 = function(){
-        if (_headlineElements.length === 0){
+    this.hideWarcraft3 = function() {
+        if (_headlineElements.length === 0) {
             _readHeadlineElements();
         }
-        $(_headlineElements[4]).css('display', 'none');
+        $(_headlineElements[5]).css('display', 'none').next("ul").hide();
     };
 
     /**
      * Blendet Sonstiges aus
      */
-    this.hideSonstiges = function(){
-        if (_headlineElements.length === 0){
+    this.hideSonstiges = function() {
+        if (_headlineElements.length === 0) {
             _readHeadlineElements();
         }
-        $(_headlineElements[5]).css('display', 'none');
+        $(_headlineElements[6]).css('display', 'none').next("ul").hide();
     };
 
     /**
@@ -80,18 +94,75 @@ function Headlines(){
      * einzelnen Kategorien vor.
      * @private
      */
-    _readHeadlineElements = function(){
-        var elements    = document.getElementById('nav_schlagzeilen').children;
-        var count       = elements.length - 4; // Einsenden, Archiv, Übersicht
-
+    _readHeadlineElements = function() {
         _headlineElements = [];
+        _content.get('headlines').find('div.headlines_cat').each(function(index, value) {
+            _headlineElements.push(value);
+        });
+    };
 
-        for(var i = 0, k = -1; i < count; i++){
-            if (elements[i].className === 'bml'){
-                _headlineElements[++k] = [];
+    /**
+     * Startet einen MutationObserver, der auf DOM-Änderungen im div#headlines_list listened.
+     * Bei Änderungen werden die Headlines neu eingelesen und wieder versteckt, da
+     * readmore.de bei einem Klick auf +/- die kompletten Headlines neu lädt.
+     *
+     * MutationObserver sind in allen modernen Browsern und IE ab v11 supported.
+     *
+     * Da die +/- Buttons einen Ajax-Request abschicken, müsste man irgendwie einen Callback übergeben,
+     * ich habe es aber nicht geschafft, mich in die originale Funktion "sidebar_headlines_setlimit" zu hooken.
+     * Ein normaler Click-Listener auf den Buttons hat durch die asynchrone Natur nicht funktioniert.
+     */
+    _catchHeadlineChange = function() {
+        MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+
+        _observer = new MutationObserver(function(mutations, observer) {
+            _readHeadlineElements();
+            _hideHeadlines();
+        });
+
+        _observer.observe(_content.get('headlines')[0], {
+            attributes: true,
+            childList: true,
+            characterData: true
+        });
+    };
+
+    _hideHeadlines = function() {
+        // Schlagzeilen ausblenden
+        if (_options.getOption('rightColumn_headlines_hideHeadlines') === 'checked') {
+            _self.hideAllHeadlines();
+        } else {
+            // Individuell
+            if (_options.getOption('rightColumn_headlines_hideCounterstrike') === 'checked') {
+                _self.hideCounterstrike();
             }
-
-            _headlineElements[k].push(elements[i]);
+            if (_options.getOption('rightColumn_headlines_hideStarcraft') === 'checked') {
+                _self.hideStarcraft();
+            }
+            if (_options.getOption('rightColumn_headlines_hideDefenseOfTheAncients') === 'checked') {
+                _self.hideDefenseOfTheAncients();
+            }
+            if (_options.getOption('rightColumn_headlines_hideHearthstone') === 'checked') {
+                _self.hideHearthstone();
+            }
+            if (_options.getOption('rightColumn_headlines_hideLeagueOfLegends') === 'checked') {
+                _self.hideLeagueOfLegends();
+            }
+            if (_options.getOption('rightColumn_headlines_hideWarcraft3') === 'checked') {
+                _self.hideWarcraft3();
+            }
+            if (_options.getOption('rightColumn_headlines_hideSonstiges') === 'checked') {
+                _self.hideSonstiges();
+            }
         }
     };
+
+    this.init = function() {
+        // Wenn NICHT alle headlines ausgeblendet werden sollen muss der Observer gestartet werden
+        if (_options.getOption('rightColumn_headlines_hideHeadlines') !== 'checked') {
+            _catchHeadlineChange();
+        }
+
+        _hideHeadlines();
+    }
 }
