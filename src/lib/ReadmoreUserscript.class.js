@@ -22,6 +22,13 @@ function ReadmoreUserscript() {
             _misc.changeForumArrowBehavior();
         }
 
+        // Titel umsortieren
+        if (_siteLocation.getLocation('forums')) {
+            if (_options.getOption("miscellaneous_reSortTitle")) {
+                _forumNavigation.resortTitle();
+            }
+        }
+
         // Button ums Forum nachzuladen einbauen
         _forumNavigation.addReloadImage().click(function() {
             _forumNavigation.reloadForumManually();
