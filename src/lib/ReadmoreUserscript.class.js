@@ -4,9 +4,9 @@ function ReadmoreUserscript() {
         _content = new Content(),
         _reloadPosts = new ReloadPosts(_options, _content),
         _misc = new Miscellaneous(),
-        _headlines = new Headlines(_options),
+        _headlines = new Headlines(_options, _content),
         _reloadPageData = new ReloadPageData(),
-        _forumNavigation = new ForumNavigation(_options, _reloadPageData, _misc);
+        _forumNavigation = new ForumNavigation(_options, _reloadPageData, _misc, _content);
 
     this.start = function() {
         if (_options.getOption("miscellaneous_makeContentWider")) {
@@ -33,13 +33,18 @@ function ReadmoreUserscript() {
             }
         }
 
-        // Button ums Forum nachzuladen einbauen
-        _forumNavigation.addReloadImage().click(function() {
-            _forumNavigation.reloadForumManually();
-        });
+        // Prüfen ob die Übersicht überhaupt vorhanden ist
+        if (_content.get('forumNavigation').length) {
+            // Button ums Forum nachzuladen einbauen
+            _forumNavigation.addReloadImage().click(function() {
+                _forumNavigation.reloadForumManually();
+            });
+        }
 
         // Schlagzeilen ausblenden
-        _headlines.init();
+        if (_content.get('headlines').length) {
+            _headlines.init();
+        }
     };
 
     this.startIntervalReloadPosts = function() {
@@ -71,7 +76,7 @@ function ReadmoreUserscript() {
             _reloadPageData.readPage();
 
             // Forum aktualisieren
-            if (_options.getOption("rightColumn_forum_reloadForum") === "checked") {
+            if (_options.getOption("rightColumn_forum_reloadForum") === "checked" && _content.get('forumNavigation').length) {
                 // Lag im FF verhindern
                 setTimeout(function() {
                     _forumNavigation.reloadForum();
