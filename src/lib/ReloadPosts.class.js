@@ -74,7 +74,6 @@ function ReloadPosts(_content/*_options, _ignoreUser, _editPosts, _notes, _misce
      */
     this.readNewPosts = function () {
         if (_isLastpage()) {
-
             // Seiten endlos erweitern
      //       if (_options.getOption('middleColumn_forum_reloadPosts_endlessPage') == 'checked') {
                 _prepareEndlessPage();
@@ -321,7 +320,7 @@ function ReloadPosts(_content/*_options, _ignoreUser, _editPosts, _notes, _misce
      * @private
      */
     var _readThreadLink = function () {
-        _threadlink = document.location.href.replace(/&page=([\d]+|last)/, '');
+        _threadlink = document.location.href.replace(/&page=([\d]+|last)/, '').replace(/#p[\d]+/, '');
     };
 
     /**
