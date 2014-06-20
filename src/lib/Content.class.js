@@ -11,6 +11,10 @@ function Content(){
      * @private
      */
     var _content = {
+        'forumNavigation': {
+            'selector': 'div#forums_list',
+            'elements': []
+        },
         'forumPosts': {
             'selector': 'div.forum_post',
             'elements': []

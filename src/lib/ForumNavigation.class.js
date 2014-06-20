@@ -5,7 +5,7 @@
  * Sorgt für das Umsortieren (TODO) und das Neuladen der Forumnavigation.
  */
 
-function ForumNavigation(_options, _reloadPageData, _misc) {
+function ForumNavigation(_options, _reloadPageData, _misc, _content) {
 
     var _self = this;
 
@@ -14,10 +14,10 @@ function ForumNavigation(_options, _reloadPageData, _misc) {
      * @return {[type]} [description]
      */
     this.reloadForum = function() {
-        var reloadData = $(_reloadPageData.getPageData()).find("div#forums_list");
+        var reloadData = _content.get('forumNavigation', _reloadPageData.getPageData());
 
-        if (reloadData && reloadData.length > 0) {
-            $("div#forums_list").html(reloadData);
+        if (reloadData.length) {
+            _content.get('forumNavigation').html(reloadData.html());
         }
 
         // Nachdem das Forum neugeladen wurde, müssen die Pfeile eventuell wieder angepasst werden
