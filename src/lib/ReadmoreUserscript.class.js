@@ -48,6 +48,8 @@ function ReadmoreUserscript() {
             if (_options.getOption('middleColumn_forum_reloadPosts_markNewPosts') === 'checked'){
                 if (_siteLocation.getLocation('forums') && _content.get('forumPosts').length){
                     _reloadPosts.unmarkNewPosts();
+                    if (_options.getOption('middleColumn_forum_reloadPosts_changeFavicon')      === 'checked')  _reloadPosts.changeFavicon();
+                    if (_options.getOption('middleColumn_forum_reloadPosts_showNewPostsTitle')  === 'checked')  _reloadPosts.showNewPostsTitle();
                 }
             }
         }, 333);

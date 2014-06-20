@@ -25,6 +25,7 @@ function ReloadPosts(_options, _content) {
     var _$contentElm        = null;
     var _$jumpToChkElm      = null;
 
+    var _favIcons       = [];
     var _unseenPosts    = [];
     var _markPostColor  = {
         hex: '#EEEEEE',
@@ -40,6 +41,7 @@ function ReloadPosts(_options, _content) {
 
         _$headElm       = $('head');
         _$contentElm    = $('#c_content');
+        _oldTitle       = document.title;
 
         _readCurrentPage();
         _readThreadLink();
@@ -173,39 +175,46 @@ function ReloadPosts(_options, _content) {
      * Zeigt die Anzahl der neuen Posts im Titel / Tab an.
      */
     this.showNewPostsTitle = function () {
-        if (_oldTitle === ''){
-            _oldTitle = document.title;
-        }
 
-        var title   = _oldTitle;
+        var tempTitle = _oldTitle;
+
         if (_unseenPosts.length) {
-            title = '(' + _unseenPosts.length + ') ' + title;
+            tempTitle = '(' + _unseenPosts.length + ') ' + tempTitle;
         }
 
-        if (document.title !== title) {
-            document.title = title;
+        if (document.title !== tempTitle) {
+            document.title = tempTitle;
         }
     };
 
     /**
      * Tauscht das Favicon falls ein ungelesener Post existiert
      */
-/*    this.changeFavicon = function () {
-        var favIconElm = _$headElm.find('link[rel="shortcut icon"]');
-        var currentIcon = favIconElm.attr('href');
+    this.changeFavicon = function () {
+        if (!_favIcons.length){
+            _favIcons = $('link[rel="shortcut icon"], link[rel="icon"]');
+        }
 
-        if (_unseenPosts.length > 0 && currentIcon == '/favicon.ico') {
-            favIconElm.remove();
-            _$headElm.append('<link rel="shortcut icon" type="image/png" href="http://readmore.thextor.de/userscript/img/favicon.png">');
+        if (_unseenPosts.length > 0 && _favIcons.attr('type') === 'image/vnd.microsoft.icon') {
+            _favIcons.remove();
+
+            _favIcons
+                .attr('href', 'http://readmore.thextor.de/userscript/img/favicon.png')
+                .attr('type', 'image/png');
+            _$headElm.append(_favIcons);
         }
         else {
-            if (_unseenPosts.length == 0 && currentIcon == 'http://readmore.thextor.de/userscript/img/favicon.png') {
-                favIconElm.remove();
-                _$headElm.append('<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">');
+            if (_unseenPosts.length == 0 && _favIcons.attr('type') === 'image/png') {
+                _favIcons.remove();
+
+                _favIcons
+                    .attr('href', 'http://themes.cdn.readmore.de/readmore/favicon.ico')
+                    .attr('type', 'image/vnd.microsoft.icon');
+                _$headElm.append(_favIcons);
             }
         }
     };
-*/
+
     /**
      * Springt automatisch zu neuen Posts.
      */
@@ -235,7 +244,7 @@ function ReloadPosts(_options, _content) {
      * @private
      */
     var _setMarkPostColor = function () {
-        var hexColor = 'ff0000'/*_options.getOption('middleColumn_forum_reloadPosts_markPostColor')*/;
+        var hexColor = _options.getOption('middleColumn_forum_reloadPosts_markPostColor');
 
         if (typeof hexColor === 'undefined' || hexColor === null){
             hexColor = '';
