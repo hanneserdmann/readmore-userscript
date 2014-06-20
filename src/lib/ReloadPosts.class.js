@@ -327,7 +327,10 @@ function ReloadPosts(_options, _content) {
      * @private
      */
     var _readThreadLink = function () {
-        _threadlink = document.location.href.replace(/&page=([\d]+|last)/, '').replace(/#p[\d]+/, '');
+        _threadlink = document.location.href
+                        .replace(/&page=([\d]+|last)/, '')
+                        .replace(/#p[\d]+/, '')
+                        .replace(/#plast/, '');
     };
 
     /**
