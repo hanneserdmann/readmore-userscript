@@ -31,9 +31,11 @@ Durch den Launch von readmore.de v3 im Juni 2014 muss das Userscript an vielen E
           * Ungelesene Posts im Titel / Tab anzeigen
           * Favicon verändern
      * Hinweis bei neuen Seiten einblenden
-* Fixierte Toolbar
-* Titel / Tab umsortieren
-* Schlagzeilen ausblenden
+ * Fixierte Toolbar
+ * Titel / Tab umsortieren
+ * Schlagzeilen ausblenden
+ * Forennavigation aktualisieren
+ * Last-Page-Pfeil springt zum letzten Post
 
 **Kommende, noch nicht implementierte Features**
  * Neue Nachrichten im Hintergrund nachladen (PM)
@@ -42,7 +44,6 @@ Durch den Launch von readmore.de v3 im Juni 2014 muss das Userscript an vielen E
  * Editieren ohne Reload
  * Streams aktualisieren
  * Vorschaufunktion
- * Forennavigation aktualisieren
  * Scrollen bis zum Seitenende lädt die Nächste
  * Forum ausblenden und umsortieren
  * Streams ausblenden
@@ -54,7 +55,6 @@ Durch den Launch von readmore.de v3 im Juni 2014 muss das Userscript an vielen E
  * Youtubeplayer ersetzen
  * Avataranimationen anhalten
  * Button zum Hoch- und Runterscrollen anzeigen
- * Last-Page-Pfeil springt zum letzten Post
 
 ToDo
 -------------

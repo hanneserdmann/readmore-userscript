@@ -4,16 +4,28 @@ function ReadmoreUserscript() {
         _content = new Content(),
         _reloadPosts = new ReloadPosts(_content),
         _misc = new Miscellaneous(),
-        _headlines = new Headlines();
+        _headlines = new Headlines(),
+        _reloadPageData = new ReloadPageData(),
+        _forumNavigation = new ForumNavigation(_options, _reloadPageData, _misc);
 
     this.start = function() {
         // Optionen einfügen
         _options.insertOptions();
 
         // Header fixen
-        if (_options.getOption('miscellaneous_fixedToolbar')) {
+        if (_options.getOption("miscellaneous_fixedToolbar")) {
             _misc.createFixedToolbar();
         }
+
+        // Pfeile anpassen
+        if (_options.getOption("miscellaneous_lastPageJumpToLastPost")) {
+            _misc.changeForumArrowBehavior();
+        }
+
+        // Button um Forums nachzuladen einbauen
+        _forumNavigation.addReloadImage().click(function() {
+            _forumNavigation.reloadForumManually();
+        });
 
         // Schlagzeilen ausblenden
         if (_options.getOption('rightColumn_headlines_hideHeadlines') === 'checked') {
@@ -62,5 +74,17 @@ function ReadmoreUserscript() {
 
     this.startInvervalRapid = function() {};
 
-    this.startInvervalSlow = function() {};
+    this.startInvervalSlow = function() {
+        setInterval(function() {
+            _reloadPageData.readPage();
+
+            // Forum aktualisieren
+            if (_options.getOption("rightColumn_forum_reloadForum") === "checked") {
+                // Lag im FF verhindern
+                setTimeout(function() {
+                    _forumNavigation.reloadForum();
+                }, 1000);
+            }
+        }, 15000);
+    };
 }
