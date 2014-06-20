@@ -1,14 +1,18 @@
 function ReadmoreUserscript() {
-    var _options            = new Options(),
-        _siteLocation       = new SiteLocation(),
-        _content            = new Content(),
-        _reloadPosts        = new ReloadPosts(_options, _content),
-        _misc               = new Miscellaneous(),
-        _headlines          = new Headlines(_options),
-        _reloadPageData     = new ReloadPageData(),
-        _forumNavigation    = new ForumNavigation(_options, _reloadPageData, _misc);
+    var _options = new Options(),
+        _siteLocation = new SiteLocation(),
+        _content = new Content(),
+        _reloadPosts = new ReloadPosts(_options, _content),
+        _misc = new Miscellaneous(),
+        _headlines = new Headlines(_options),
+        _reloadPageData = new ReloadPageData(),
+        _forumNavigation = new ForumNavigation(_options, _reloadPageData, _misc);
 
     this.start = function() {
+        if (_options.getOption("miscellaneous_makeContentWider")) {
+            _misc.makeContentWider();
+        }
+
         // Optionen einfügen
         _options.insertOptions();
 
@@ -52,11 +56,11 @@ function ReadmoreUserscript() {
     this.startInvervalRapid = function() {
         setInterval(function() {
             // Posts unmarkieren
-            if (_options.getOption('middleColumn_forum_reloadPosts_markNewPosts') === 'checked'){
-                if (_siteLocation.getLocation('forums') && _content.get('forumPosts').length){
+            if (_options.getOption('middleColumn_forum_reloadPosts_markNewPosts') === 'checked') {
+                if (_siteLocation.getLocation('forums') && _content.get('forumPosts').length) {
                     _reloadPosts.unmarkNewPosts();
-                    if (_options.getOption('middleColumn_forum_reloadPosts_changeFavicon')      === 'checked')  _reloadPosts.changeFavicon();
-                    if (_options.getOption('middleColumn_forum_reloadPosts_showNewPostsTitle')  === 'checked')  _reloadPosts.showNewPostsTitle();
+                    if (_options.getOption('middleColumn_forum_reloadPosts_changeFavicon') === 'checked') _reloadPosts.changeFavicon();
+                    if (_options.getOption('middleColumn_forum_reloadPosts_showNewPostsTitle') === 'checked') _reloadPosts.showNewPostsTitle();
                 }
             }
         }, 333);
