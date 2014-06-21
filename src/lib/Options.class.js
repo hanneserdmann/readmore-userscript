@@ -76,7 +76,8 @@ function Options() {
         $('body').append('{{optionshtml}}');
 
         // Link einfügen
-        $('div#header li.socials').prepend('<a id="openUserscriptOptions" href="" title="Userscript"><i class="rmus-icon rmus-icon-cog"></i></a> | ');
+        $('div#header li.ucp').after('<li class="userscriptOptionsLi"><a id="openUserscriptOptions" href="" title="Userscript"><i class="rmus-icon rmus-icon-cog"></i></a> | </li>');
+        $('div#header li.socials').css('margin-left', '0px');
 
         // Eventhandler
         _addEventHandler();
