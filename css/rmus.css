@@ -1,0 +1,162 @@
+div#userscriptOptionsOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1337;
+    display: none;
+    background-color: #fff;
+    opacity: 0.8;
+}
+#userscriptOptions.rmus-options {
+    display: none;
+    box-shadow: 0 0 6px 1px #91B5D6;
+    position: fixed;
+    width: 600px;
+    left: 50%;
+    margin-left: -300px;
+    top: 75px;
+    border: 2px solid #00A1ED;
+    border-radius: 3px;
+    background-color: #fff;
+    z-index: 1338;
+}
+#userscriptOptions .rmus-options-header {
+    border-bottom: 1px solid #e2e2e2;
+    padding: 10px;
+    color: #fff;
+    background: #0e92fc;
+    background: -moz-linear-gradient(top, #0e92fc 0%, #0086d1 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#0e92fc), color-stop(100%,#0086d1));
+    background: -webkit-linear-gradient(top, #0e92fc 0%,#0086d1 100%);
+    background: -o-linear-gradient(top, #0e92fc 0%,#0086d1 100%);
+    background: -ms-linear-gradient(top, #0e92fc 0%,#0086d1 100%);
+    background: linear-gradient(to bottom, #0e92fc 0%,#0086d1 100%);
+}
+#userscriptOptions .rmus-options-header h1 {
+    font-size: 16px;
+    text-transform: uppercase;
+    float: left;
+    text-shadow: 1px 1px #A0A0A0;
+    color: #fff;
+    margin-bottom: 0;
+}
+#userscriptOptions .rmus-options-header a {
+    color: #fff;
+    border-bottom: 1px dotted #fff;
+}
+#userscriptOptions .rmus-options-header a:hover {
+    text-decoration: none;
+}
+#userscriptOptions .rmus-options-header .rmus-links {
+    float: right;
+    margin-top: 2px;
+}
+#userscriptOptions .rmus-options-header .rmus-links .rmus-version {
+    font-weight: bold;
+}
+#userscriptOptions .rmus-options-content {
+    overflow-y: scroll;
+    height: 450px;
+}
+#userscriptOptions .rmus-options-content table {
+    border: none;
+    width: 100%;
+    margin-top: -1px;
+}
+#userscriptOptions .rmus-options-content table tr.menuparent {
+    background-color: #fff !important;
+    padding: 0;
+}
+#userscriptOptions .rmus-options-content table tr.menufirstchild {
+    display: none;
+    margin: 0;
+    padding: 0;
+}
+#userscriptOptions .rmus-options-content table tr.menufirstchild td {
+    background-color: #f1f1f1 !important;
+    padding-left: 10px;
+}
+#userscriptOptions .rmus-options-content table tr.menusecondchild {
+    display: none;
+    margin: 0;
+    padding: 0;
+}
+#userscriptOptions .rmus-options-content table tr.menusecondchild td {
+    background-color: #e2e2e2 !important;
+    padding-left: 20px;
+}
+#userscriptOptions .rmus-options-content table .headline td {
+    color: #7A7A7A;
+    font-size: 14px;
+    margin: 0;
+    padding: 5px 0 5px 39px;
+    width: 100%;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    background: #f2f5f6;
+    background: -moz-linear-gradient(top, #f2f5f6 0%, #e3eaed 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f2f5f6), color-stop(100%, #e3eaed));
+    background: -webkit-linear-gradient(top, #f2f5f6 0%, #e3eaed 100%);
+    background: -o-linear-gradient(top, #f2f5f6 0%, #e3eaed 100%);
+    background: -ms-linear-gradient(top, #f2f5f6 0%, #e3eaed 100%);
+    background: linear-gradient(to bottom, #f2f5f6 0%, #e3eaed 100%);
+}
+#userscriptOptions .rmus-options-footer {
+    text-align: right;
+    padding: 8px 10px;
+    border-top: 1px solid #ccc;
+    background: #ffffff;
+    background: -moz-linear-gradient(top, #ffffff 0%, #ededed 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffffff), color-stop(100%, #ededed));
+    background: -webkit-linear-gradient(top, #ffffff 0%, #ededed 100%);
+    background: -o-linear-gradient(top, #ffffff 0%, #ededed 100%);
+    background: -ms-linear-gradient(top, #ffffff 0%, #ededed 100%);
+    background: linear-gradient(to bottom, #ffffff 0%, #ededed 100%);
+}
+#userscriptOptions .rmus-options-footer #rmus-options-imexport {
+    clear: both;
+    text-align: left;
+    margin-top: 10px;
+    display: none;
+}
+#userscriptOptions .rmus-options-footer #rmus-options-imexport .rmus-options-imexport-help {
+    font-size: 10px;
+}
+#userscriptOptions .rmus-options-footer #rmus-options-imexport textarea {
+    width: 568px;
+    font-family: Verdana;
+    font-size: 10px;
+    padding: 5px;
+    margin: 5px 0 3px;
+    height: 21px;
+}
+#userscriptOptions input[type=checkbox], #userscriptOptions input[type=select], #userscriptOptions input[type=text] {
+    margin: 0;
+    padding: 0;
+}
+.btn-rm {
+    background-color: #fff;
+    border: 1px solid #ccccce;
+    color: #222222;
+    font-family: Verdana;
+    font-size: 10px;
+    min-height: 14px;
+    padding: 4px 8px;
+}
+.btn-rm.primary {
+    color: #fff;
+    border-color: #00A4E4;
+    background: #0e92fc;
+    background: -moz-linear-gradient(top, #0e92fc 0%, #0086d1 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#0e92fc), color-stop(100%,#0086d1));
+    background: -webkit-linear-gradient(top, #0e92fc 0%,#0086d1 100%);
+    background: -o-linear-gradient(top, #0e92fc 0%,#0086d1 100%);
+    background: -ms-linear-gradient(top, #0e92fc 0%,#0086d1 100%);
+    background: linear-gradient(to bottom, #0e92fc 0%,#0086d1 100%);
+}
+.rmus-icon {
+    font-size: 18px;
+    color: #19A1EC;
+}

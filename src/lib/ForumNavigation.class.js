@@ -27,10 +27,10 @@ function ForumNavigation(_options, _reloadPageData, _misc, _content) {
     };
 
     /**
-     * Fügt das Bild, mit dem man das Forum manuell neuladen kann, ein.
+     * Fügt den Button ein, mit dem man das Forum manuell neuladen kann.
      */
-    this.addReloadImage = function() {
-        return $("h3 > a[href$='/forums']").parent().append('<span style="float: right;"><img id="userscript_reloadForumButton" title="Forum aktualisieren" src="http://i.imgur.com/oPFco8X.png" style="height: 16px; padding-top: 2px; cursor: pointer;">&nbsp;</span>');
+    this.addReloadBtn = function() {
+        return $("h3 > a[href$='/forums']").parent().append('<span style="float: right;"><i id="userscript_reloadForumButton" title="Forum aktualisieren" class="rmus-icon rmus-icon-arrows-cw" style="cursor: pointer;"></i></span>');
     }
 
     /**

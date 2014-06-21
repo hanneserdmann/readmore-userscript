@@ -52,6 +52,14 @@ module.exports = function (grunt) {
                 dest: 'dist/tmp/readmore-userscript.user.js'
             },
 
+            // Styles zusammenführen
+            style: {
+                src: [
+                    'css/*.css'
+                ],
+                dest: 'dist/tmp/rmus.css'
+            },
+
             // Userscripthead hinzufügen
             header: {
                 src: [
@@ -68,6 +76,16 @@ module.exports = function (grunt) {
                     'dist/tmp/readmore-userscript.min.user.js'
                 ],
                 dest: 'dist/tmp/readmore-userscript.min.user.js'
+            }
+        },
+
+        cssmin: {
+            minify: {
+                expand: true,
+                cwd: 'dist/',
+                src: ['tmp/rmus-escaped.css'],
+                dest: 'dist/',
+                ext: '.min.css'
             }
         },
 
@@ -94,15 +112,56 @@ module.exports = function (grunt) {
         },
 
         'string-replace': {
-            // Menu in das Script einfügen
+            escapecss: {
+                options: {
+                    replacements: [
+                        {
+                            // Single Quotes ' => \'
+                            pattern: /'/ig,
+                            replacement: function () {
+                                return '\\\'';
+                            }
+                        },
+                        {
+                            // Unicode \e800 => \\e800
+                            pattern: /\\e([0-9A-F]{3,4})/ig,
+                            replacement: function (r) {
+                                return '\\' + r;
+                            }
+                        }
+                    ]
+                },
+                files: {
+                    'dist/tmp/rmus-escaped.css': 'dist/tmp/rmus.css'
+                }
+            },
+
+            includecss: {
+                options: {
+                    replacements: [
+                        {
+                            pattern: /\{\{style\}\}/ig,
+                            replacement: function () {
+                                return grunt.file.read('dist/tmp/rmus-escaped.min.css');
+                            }
+                        }
+                    ]
+                },
+                files: {
+                    'dist/tmp/options.html': 'dist/tmp/options.html'
+                }
+            },
+
             includemenu: {
                 options: {
-                    replacements: [{
-                        pattern: /\{\{optionshtml\}\}/ig,
-                        replacement: function () {
-                            return grunt.file.read('dist/tmp/options.html');
+                    replacements: [
+                        {
+                            pattern: /\{\{optionshtml\}\}/ig,
+                            replacement: function () {
+                                return grunt.file.read('dist/tmp/options.html');
+                            }
                         }
-                    }]
+                    ]
                 },
                 files: {
                     'dist/tmp/readmore-userscript.user.js': 'dist/tmp/readmore-userscript.user.js'
@@ -158,6 +217,7 @@ module.exports = function (grunt) {
 
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-htmlmin');
     grunt.loadNpmTasks('grunt-string-replace');
     grunt.loadNpmTasks('grunt-contrib-clean');
@@ -169,6 +229,10 @@ module.exports = function (grunt) {
     var tasks = [
         'mkdir',
         'htmlmin:scriptoptions',
+        'concat:style',
+        'string-replace:escapecss',
+        'cssmin:minify',
+        'string-replace:includecss',
         'concat:script',
         'string-replace:removelinebreak',
         'string-replace:removewhitespace',
