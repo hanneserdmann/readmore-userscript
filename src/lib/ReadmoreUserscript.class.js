@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 function ReadmoreUserscript($) {
 
     var _options = new Options($),
@@ -8,6 +9,18 @@ function ReadmoreUserscript($) {
         _headlines = new Headlines($, _options, _content),
         _reloadPageData = new ReloadPageData($),
         _forumNavigation = new ForumNavigation($, _options, _reloadPageData, _misc, _content);
+=======
+function ReadmoreUserscript() {
+    var _options = new Options(),
+        _siteLocation = new SiteLocation(),
+        _content = new Content(),
+        _reloadPosts = new ReloadPosts(_options, _content),
+        _misc = new Miscellaneous(),
+        _headlines = new Headlines(_options, _content),
+        _reloadPageData = new ReloadPageData(),
+        _ticker = new Ticker();
+        _forumNavigation = new ForumNavigation(_options, _reloadPageData, _misc, _content);
+>>>>>>> fork/master
 
     this.start = function() {
         if (_options.getOption("miscellaneous_makeContentWider")) {
@@ -45,6 +58,11 @@ function ReadmoreUserscript($) {
         // Schlagzeilen ausblenden
         if (_content.get('headlines').length) {
             _headlines.init();
+        }
+
+        // Ticker ausblenden
+        if (_options.getOption('rightColumn_ticker_hideTicker')) {
+            _ticker.hideTicker();
         }
     };
 
