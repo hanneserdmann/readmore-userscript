@@ -5,7 +5,7 @@
  * Simple Pseudoklasse um auszulesen wo wir uns auf der Readmore.de Seite befinden.
  * Dadurch werden Funktionen des Userscriptes gesteuert. Ist im Grunde die alte Content Klasse..
  */
-function SiteLocation(){
+function SiteLocation($){
 
     /**
      * Property in dem alle content Möglichkeiten aufgelistet sind. Default sind alle false, die _init Methode

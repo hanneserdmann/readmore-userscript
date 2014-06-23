@@ -1,12 +1,13 @@
-function ReadmoreUserscript() {
-    var _options = new Options(),
-        _siteLocation = new SiteLocation(),
-        _content = new Content(),
-        _reloadPosts = new ReloadPosts(_options, _content),
-        _misc = new Miscellaneous(),
-        _headlines = new Headlines(_options, _content),
-        _reloadPageData = new ReloadPageData(),
-        _forumNavigation = new ForumNavigation(_options, _reloadPageData, _misc, _content);
+function ReadmoreUserscript($) {
+
+    var _options = new Options($),
+        _siteLocation = new SiteLocation($),
+        _content = new Content($),
+        _reloadPosts = new ReloadPosts($, _options, _content),
+        _misc = new Miscellaneous($),
+        _headlines = new Headlines($, _options, _content),
+        _reloadPageData = new ReloadPageData($),
+        _forumNavigation = new ForumNavigation($, _options, _reloadPageData, _misc, _content);
 
     this.start = function() {
         if (_options.getOption("miscellaneous_makeContentWider")) {

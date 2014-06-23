@@ -2,7 +2,7 @@
  * [Miscellaneous description]
  */
 
-function Miscellaneous() {
+function Miscellaneous($) {
 
     /**
      * [createFixedToolbar description]
