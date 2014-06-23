@@ -6,6 +6,7 @@ function ReadmoreUserscript() {
         _misc = new Miscellaneous(),
         _headlines = new Headlines(_options, _content),
         _reloadPageData = new ReloadPageData(),
+        _ticker = new Ticker();
         _forumNavigation = new ForumNavigation(_options, _reloadPageData, _misc, _content);
 
     this.start = function() {
@@ -44,6 +45,11 @@ function ReadmoreUserscript() {
         // Schlagzeilen ausblenden
         if (_content.get('headlines').length) {
             _headlines.init();
+        }
+
+        // Ticker ausblenden
+        if (_options.getOption('rightColumn_ticker_hideTicker')) {
+            _ticker.hideTicker();
         }
     };
 
