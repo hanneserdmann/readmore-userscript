@@ -24,8 +24,11 @@ function Miscellaneous($) {
      */
     this.makeContentWider = function() {
         var maxWidth = 1200,
-            sidebarsWidth = 466,
-            padding = 4;
+            leftSidebarWidth = $("#c_left").outerWidth(),
+            rightSidebarWidth = $("#c_right").outerWidth(),
+            sidebarsWidth = (leftSidebarWidth ? leftSidebarWidth + rightSidebarWidth : 1 + rightSidebarWidth),
+            padding = 4,
+            siteLocation = new SiteLocation($);
 
         $("#header > div > div").css({
             "width": maxWidth + "px"
@@ -42,6 +45,37 @@ function Miscellaneous($) {
         $("#c_content").css({
             "width": (maxWidth - sidebarsWidth - padding) + "px"
         });
+
+        // fixt den Livestream Bereich
+        if(siteLocation.getLocation("livestreams")) {
+            // vergroessert die Livestream Thumbnails im Highlight Bereich um 30%
+            $("#c_content > .livestream_highlights").find(".livestream_cap > img").each(function() {
+                $(this).css("height", $(this).height() * 1.3 + "px");
+                $(this).css("width", $(this).width() * 1.3 + "px");
+            });
+        }
+
+        // fixt den VOD Bereich
+        if(siteLocation.getLocation("vods")) {
+            //vergroessert die VOD Thumbnails im Highlight Bereich um 30%
+            $("#c_content > .vod_highlights").find(".vod_thumb > img").each(function() {
+                $(this).css("height", $(this).height() * 1.3 + "px");
+                $(this).css("width", $(this).width() * 1.3 + "px");
+            });
+
+            // veraendert die Margins der VOD Thumbnails, damit sie sauber in einer Reihe angezeigt werden
+            $("#c_content > .vod_videos_list > li").each(function() {
+                $(this).css("margin", "0px 10px 10px 10px");
+            });
+        }
+
+        // fixt den Gallery Bereich
+        if(siteLocation.getLocation("gallery")) {
+            // verandert die Margins der Thumbnails, damit sie saber in einer Reihe angezeigt werden
+            $("#c_content > .gallery_albums > li").each(function() {
+                $(this).css("margin", "0px 5px 5px 10px");
+            });
+        }
     };
 
     /**

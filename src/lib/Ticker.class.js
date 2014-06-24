@@ -5,7 +5,7 @@
  * Klasse für Funktionen die den Ticker betreffen.
  */
 
-function Ticker() {
+function Ticker($) {
 
     /**
      * Blendent den Ticker komplett aus
