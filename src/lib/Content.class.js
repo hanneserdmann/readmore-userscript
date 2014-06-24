@@ -2,7 +2,7 @@
  * Blablabla kommt Morgen, bin müde und will gleich pennen :D
  */
 
-function Content(){
+function Content($){
 
     /**
      * Hier werden die verschiedenen Möglichkeiten zum Abfragen definiert.

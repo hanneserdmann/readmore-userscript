@@ -3,7 +3,7 @@
  * ==============
  */
 
-function ReloadPageData() {
+function ReloadPageData($) {
 
     var _self = this;
     var _pageData = "";

@@ -10,7 +10,7 @@
  * @constructor
  */
 
-function ReloadPosts(_options, _content) {
+function ReloadPosts($, _options, _content) {
     var _postcount      = 0;
     var _finishedPages  = 0;
     var _currentPage    = 1;

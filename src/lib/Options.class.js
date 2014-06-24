@@ -6,7 +6,7 @@
  * Parameter, ruft direkt die _init() Methode auf um die Settings auszulesen.
  */
 
-function Options() {
+function Options($) {
     /**
      * Name der benutzt wird um die Optionen im Localstorage zu speichern.
      * @type {string}

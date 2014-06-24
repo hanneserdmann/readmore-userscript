@@ -5,7 +5,7 @@
  * Sorgt für das Umsortieren (TODO) und das Neuladen der Forumnavigation.
  */
 
-function ForumNavigation(_options, _reloadPageData, _misc, _content) {
+function ForumNavigation($, _options, _reloadPageData, _misc, _content) {
 
     var _self = this;
 

@@ -5,7 +5,7 @@
  * Methoden um die Schlagezeilen auszublenden.
  */
 
-function Headlines(_options, _content) {
+function Headlines($, _options, _content) {
 
     var _self = this,
         _headlineElements = [],
@@ -113,18 +113,23 @@ function Headlines(_options, _content) {
      * Ein normaler Click-Listener auf den Buttons hat durch die asynchrone Natur nicht funktioniert.
      */
     _catchHeadlineChange = function() {
-        MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+        try{
+            MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
 
-        _observer = new MutationObserver(function(mutations, observer) {
-            _readHeadlineElements();
-            _hideHeadlines();
-        });
+            _observer = new MutationObserver(function(mutations, observer) {
+                _readHeadlineElements();
+                _hideHeadlines();
+            });
 
-        _observer.observe(_content.get('headlines')[0], {
-            attributes: true,
-            childList: true,
-            characterData: true
-        });
+            _observer.observe(_content.get('headlines')[0], {
+                attributes: true,
+                childList: true,
+                characterData: true
+            });
+        }
+        catch(e){
+            console.log('Der MutationObserver konnte nicht initialisiert werden. Nachladen von Headlines kann Fehler verursachen!');
+        }
     };
 
     _hideHeadlines = function() {
