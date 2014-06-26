@@ -1,5 +1,3 @@
-/*global module */
-
 module.exports = function (grunt) {
     // Read package
     grunt.pkg = grunt.file.readJSON('package.json');
@@ -21,5 +19,17 @@ module.exports = function (grunt) {
     /**
      * Erzeugt das Userscript und erstallt auf desses Basis die Extension(s)
      */
-    grunt.registerTask('extension', ['clean:dist', 'generate-script', 'generate-chrome-extension'])
+    grunt.registerTask('extension', ['clean:dist', 'generate-script', 'generate-chrome-extension']);
+
+    /**
+     * Lädt die Fonts neu runter, Konfiguration durch in der vendor/fontello/config.json
+     */
+    grunt.registerTask('font', ['generate-font']);
+
+    /**
+     * Alle Taks nacheinander ausführen
+     * 1. Fonts neu generieren
+     * 2. Extensions generieren (schließt die Generierung des Scriptes mit ein)
+     */
+    grunt.registerTask('complete', ['font', 'extension']);
 };

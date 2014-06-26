@@ -1,39 +1,53 @@
 {
-  "name":       "readmore-userscript",
-  "version":    "4.0.2",
+    "name":       "readmore-userscript",
+    "version":    "4.0.2",
 
-  "paths":{
-      "source":         "src/",
-      "lib":            "src/lib/",
-      "vendor":         "vendor/",
-      "jquery":         "vendor/jquery/",
-      "build":          "build/",
-      "dist":           "build/dist/",
-      "extensions":     "build/extensions/",
-      "chrome":         "build/extensions/chrome/",
-      "chromeunpacked": "build/extensions/chrome/unpacked/",
-      "chrometemp":     "build/temp/chrome/",
-      "temp":           "build/temp/"
-  },
+    "repository": {
+        "type": "git",
+        "url":  "git://github.com/thextor/readmore-userscript.git"
+    },
 
-  "filenames":{
-    "script":           "readmore-userscript.user.js",
-    "scriptmin":        "readmore-userscript.min.user.js",
-    "options":          "options.html",
-    "chromemanifest":   "manifest.json",
-    "chromezip":        "chromeExtension.zip"
-  },
+    "paths":{
+        "source":           "src/",
+        "lib":              "src/lib/",
+        "css":              "src/css/",
+        "vendor":           "vendor/",
+        "jquery":           "vendor/jquery/",
+        "fontello":         "vendor/fontello/",
+        "fontellotemp":     "build/temp/fontello/",
+        "build":            "build/",
+        "dist":             "build/dist/",
+        "extensions":       "build/extensions/",
+        "chrome":           "build/extensions/chrome/",
+        "chromeunpacked":   "build/extensions/chrome/unpacked/",
+        "chrometemp":       "build/temp/chrome/",
+        "temp":             "build/temp/"
+    },
 
-  "devDependencies": {
-    "grunt":                    "~0.4.5",
-    "grunt-contrib-concat":     "~0.4.0",
-    "grunt-contrib-uglify":     "~0.5.0",
-    "grunt-contrib-htmlmin":    "~0.3.0",
-    "grunt-string-replace":     "~0.2.7",
-    "grunt-contrib-clean":      "~0.5.0",
-    "grunt-contrib-compress":   "~0.9.1",
-    "grunt-contrib-copy":       "~0.5.0",
-    "load-grunt-tasks":         "~0.6.0",
-    "load-grunt-configs":       "~0.4.0"
-  }
+    "filenames":{
+        "script":           "readmore-userscript.user.js",
+        "scriptmin":        "readmore-userscript.min.user.js",
+        "options":          "options.html",
+        "chromemanifest":   "manifest.json",
+        "chromezip":        "chromeExtension.zip",
+        "fontelloconfig":   "config.json",
+        "fontellocssemb":   "rmus-embedded.css",
+        "cssmain":          "rmus.css",
+        "cssicons":         "rmus-icons.css"
+    },
+
+    "devDependencies": {
+        "grunt":                    "~0.4.5",
+        "grunt-contrib-concat":     "~0.4.0",
+        "grunt-contrib-uglify":     "~0.5.0",
+        "grunt-contrib-htmlmin":    "~0.3.0",
+        "grunt-string-replace":     "~0.2.7",
+        "grunt-contrib-clean":      "~0.5.0",
+        "grunt-contrib-compress":   "~0.9.1",
+        "grunt-contrib-copy":       "~0.5.0",
+        "load-grunt-tasks":         "~0.6.0",
+        "load-grunt-configs":       "~0.4.0",
+        "grunt-fontello":           "~0.1.3",
+        "grunt-contrib-cssmin":     "~0.10.0"
+    }
 }

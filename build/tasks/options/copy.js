@@ -43,6 +43,19 @@ module.exports = function(grunt){
             cwd:    grunt.pkg.paths.chrometemp,
             src:    '**/*',
             dest:   grunt.pkg.paths.chromeunpacked
+        },
+
+    /**
+     * generate-font Task
+     * ==================
+     */
+
+        /**
+         * Kopiert die Fonts in den CSS Ordner
+         */
+        'generate-font-copy-font': {
+            src:    grunt.pkg.paths.fontellotemp + grunt.pkg.filenames.fontellocssemb,
+            dest:   grunt.pkg.paths.css + grunt.pkg.filenames.cssicons
         }
     };
 };

@@ -37,7 +37,7 @@ function ReadmoreUserscript($) {
         // Prüfen ob die Übersicht überhaupt vorhanden ist
         if (_content.get('forumNavigation').length) {
             // Button ums Forum nachzuladen einbauen
-            _forumNavigation.addReloadImage().click(function() {
+            _forumNavigation.addReloadBtn().click(function() {
                 _forumNavigation.reloadForumManually();
             });
         }

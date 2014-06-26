@@ -76,7 +76,7 @@ function Options($) {
         $('body').append('{{optionshtml}}');
 
         // Link einfügen
-        $('div#header li.ucp').after('<li class="userscriptOptionsLi" style="margin-left: 20px; color: #dadada; font-size: 16px; padding-top: 0;margin-right: 5px;"><a id="openUserscriptOptions" href="" title="Userscript" style="margin-right: 3px;"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAABuklEQVR42n2Sv09TURTHvyCgQkKEgcWFhNHVEA1LYwQHEweSxjBgYFBjjLUlLZba99iMrDq5+S8wMTlJ0xAWSXTAxMGoiRJCE42WQvsOn3v7bEqbcJPzzrvnfL/n1z3S/5OxiwrsnsLog0I7RH/kfl2r1qesjemZXVHeRiTr0amzYBf03LKQKoANHUFc07Jd1YrN4nuDzOuRI7uzagNKENURA0uRac8TPTn6piB6T5Ad7jWv83ZXSThESWJ4rKLdB7TO/78WsVOcr2gvKX1IgLeIvI/xB/oPgAb/To6QWvwfeaLDFu0GGc+pK4MDFe0LlaTRd7hvenLTV8Z+rTmg0L52EOt+KK4cFzm020g19v1EXkFeFFFvAnyN41dMPsb2Qg9skMi9DGOmu6rotwD0M+4pX3/rGaJdyA9VsFvY3vkqTg+qJD2xYUAJLuUWsTmQGvdq3F/DZw2pKrAD8E+lnE34nkL7e+YzBNEGvaWQJeSylLZLftUCv2LuCT6hS8j3tp72fJYka+laa64dn4yNAlzA+ZZoc8hkXEU9zlih3xxtnVfXcUa3h36dCFawacifkW0CrjDd8fYFPwEUiX/TL0OkfAAAAABJRU5ErkJggg==" style="width: 15px; margin-top: 4px;"/></a> | </li>');
+        $('div#header li.ucp').after('<li class="userscriptOptionsLi"><a id="openUserscriptOptions" href="" title="Userscript"><i class="rmus-icon rmus-icon-cog"></i></a> | </li>');
         $('div#header li.socials').css('margin-left', '0px');
 
         // Eventhandler
@@ -133,7 +133,7 @@ function Options($) {
     this.showOptions = function() {
         _writeOptionsToHTML();
 
-        $('div#userscriptOptionsOverlay').css('height', $(document).height()).fadeIn(200, function() {
+        $('div#userscriptOptionsOverlay').fadeIn(200, function() {
             // Reset scroll
             $('div#userscriptOptions div.rmus-options-content').animate({
                 scrollTop: 0
@@ -322,27 +322,28 @@ function Options($) {
             }
         });
 
-        var plusLink = "http://readmore.thextor.de/userscript/img/plus_alt_16x16.png",
-            minusLink = "http://readmore.thextor.de/userscript/img/minus_alt_16x16.png";
+        var toggleBtn = function ($el, opened) {
+            if (opened) {
+                $el.removeClass('rmus-icon-minus-circled').addClass('rmus-icon-plus-circled');
+            } else {
+                $el.removeClass('rmus-icon-plus-circled').addClass('rmus-icon-minus-circled');
+            }
+        }
 
         // Eventhandler für die +/- Buttons
         $('[id*=toggle_sub]').click(function() {
-            var img = $(this).attr('src').trim();
+            var $el = $(this);
 
-            if (img == plusLink) {
-                $(this).attr('src', minusLink);
-            } else {
-                $(this).attr('src', plusLink);
-            }
+            toggleBtn($el, $el.hasClass('rmus-icon-minus-circled'));
         });
 
         // Auf- und zuklappen der Unterkategorien
         $('#toggle_sub_middleColumn_forum_reloadPosts_readNewPosts').click(function() {
             $('.sub_middleColumn_forum_reloadPosts_readNewPosts').toggle();
-            $('.sub_middleColumn_forum_reloadPosts_markNewPosts').css('display', 'none');
-            $('.sub_middleColumn_forum_reloadPosts_endlessPage').css('display', 'none');
-            $("#toggle_sub_middleColumn_forum_reloadPosts_endlessPage").attr("src", plusLink);
-            $("#toggle_sub_middleColumn_forum_reloadPosts_markNewPosts").attr("src", plusLink);
+            $('.sub_middleColumn_forum_reloadPosts_markNewPosts').hide();
+            $('.sub_middleColumn_forum_reloadPosts_endlessPage').hide();
+            toggleBtn($("#toggle_sub_middleColumn_forum_reloadPosts_endlessPage"), true);
+            toggleBtn($("#toggle_sub_middleColumn_forum_reloadPosts_markNewPosts"), true);
         });
         $('#toggle_sub_middleColumn_forum_reloadPosts_endlessPage').click(function() {
             $('.sub_middleColumn_forum_reloadPosts_endlessPage').toggle();
