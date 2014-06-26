@@ -7,7 +7,11 @@
 module.exports = function(grunt) {
     var taskList = [
         'concat:generate-script-concat-js',
+        'cssmin:generate-script-cssmin-main',
+        'string-replace:generate-script-string-replace-escape-css-backslash',
+        'string-replace:generate-script-string-replace-escape-css-quote',
         'htmlmin:generate-script-htmlmin-options',
+        'string-replace:generate-script-string-replace-css',
         'string-replace:generate-script-string-replace-menu',
         'uglify:generate-script-uglify-js',
         'concat:generate-script-concat-js-userscripthead',
