@@ -4,6 +4,8 @@
 
 function Content($){
 
+    var _self = this;
+
     /**
      * Hier werden die verschiedenen Möglichkeiten zum Abfragen definiert.
      * Denke elements und selector sind selbsterklärend.
@@ -13,14 +15,27 @@ function Content($){
     var _content = {
         'forumNavigation': {
             'selector': 'div#forums_list',
+            'function': '',
             'elements': []
         },
         'forumPosts': {
             'selector': 'div.forum_post',
+            'function': '',
             'elements': []
         },
         'headlines': {
             'selector': '#headlines_list',
+            'function': '',
+            'elements': []
+        },
+        'tickerMatches': {
+            'selector': '#matches_list',
+            'function': '',
+            'elements': []
+        },
+        'tickerComplete': {
+            'selector': '',
+            'function': 'tickerComplete',
             'elements': []
         }
     };
@@ -42,8 +57,8 @@ function Content($){
         if (_content.hasOwnProperty(name)){
             // Falls das Array leer ist oder ein Kontext übergeben wurde
             if (!_content[name].elements.length || context !== ''){
-                // Daten auslesen
-                returnValue = _selectElement(name, context);
+                // Einfachen Selector oder Funktion nutzen
+                returnValue = (_content[name].function ? _selectElementFunction(name, context) : _selectElement(name, context));
 
                 // Kein Kontext -> Cachen
                 if (context === ''){
@@ -60,7 +75,28 @@ function Content($){
     };
 
     var _selectElement = function(name, context){
-        if (context === '')     return $(_content[name].selector);
-        else                    return $(context).find(_content[name].selector);
+        return (context === ''  ? $(_content[name].selector)
+                                : $(context).find(_content[name].selector));
+    };
+
+    var _selectElementFunction = function(name, context){
+        var $element = (context === '' ? $(document) : $.parseHTML(context));
+        return _functionContainer[_content[name].function]($element);
+    };
+
+    /**
+     * Container für die Funktionen.
+     * @type {{tickerComplete: tickerComplete}}
+     * @private
+     */
+    var _functionContainer = {
+        tickerComplete: function($element){
+            var returnValue = $element.find('#c_right').find('#matches_control, .matches_filter, #matches_list, a.control');
+            if (returnValue.length){
+                returnValue = $.merge(returnValue, returnValue.last().next());
+                returnValue = $.merge(returnValue, returnValue.first().next());
+            }
+            return returnValue;
+        }
     };
 };

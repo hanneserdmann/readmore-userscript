@@ -7,7 +7,7 @@ function ReadmoreUserscript($) {
         _misc = new Miscellaneous($),
         _headlines = new Headlines($, _options, _content),
         _reloadPageData = new ReloadPageData($),
-        _ticker = new Ticker($);
+        _ticker = new Ticker($, _content),
         _forumNavigation = new ForumNavigation($, _options, _reloadPageData, _misc, _content);
 
     this.start = function() {
@@ -44,7 +44,7 @@ function ReadmoreUserscript($) {
         }
 
         // Schlagzeilen ausblenden
-        if (_content.get('headlines').length) {
+        if (_content.get('headlines').length && _content.get('tickerMatches').length){
             _headlines.init();
         }
 
