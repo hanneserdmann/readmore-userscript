@@ -24,5 +24,7 @@ _(Genauere Installationsanweisungen zu den einzelnen Tools sind auf den oben ver
 
 * ```grunt``` erstellt readmore-userscript.user.js und readmore-userscript.min.user.js
 * ```grunt extension``` erstellt o.g. Dateien sowie die Browser Extension (Chrome)
+* ```grunt font``` lädt die Font-Files von [Fontello](http://fontello.com/) herunter und integriert sie in das Script
+* ```grunt complete``` führt die angegebenen Tasks aus
 
 Der erstellte Build ist danach in dem Ordner ```build/dist/``` zu finden
