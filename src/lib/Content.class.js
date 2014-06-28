@@ -1,5 +1,10 @@
 /**
- * Blablabla kommt Morgen, bin müde und will gleich pennen :D
+ * Content
+ * =======
+ *
+ * Klasse um zu prüfen ob bestimmte Bestandteile der Readmore.de Seite vorhanden sind
+ * und sie als jQuery-Object / Array zurückzugeben. Zum einen können die Elemente so gecached werden,
+ * zum anderen müssen die Selectoren / Funktionen nicht wiederholt implementiert werden.
  */
 
 function Content($){

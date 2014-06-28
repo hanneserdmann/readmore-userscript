@@ -11,25 +11,15 @@ module.exports = function (grunt) {
     // Load custom tasks
     grunt.loadTasks('build/tasks');
 
-    /**
-     * Der default Task leert das dist Verzeichniss und erzeugt das Userscript
-     */
+    //Der default Task leert das dist Verzeichniss und erzeugt das Userscript
     grunt.registerTask('default', ['clean:dist', 'generate-script']);
 
-    /**
-     * Erzeugt das Userscript und erstallt auf desses Basis die Extension(s)
-     */
+    // Erzeugt das Userscript und erstallt auf desses Basis die Extension(s)
     grunt.registerTask('extension', ['clean:dist', 'generate-script', 'generate-chrome-extension']);
 
-    /**
-     * Lädt die Fonts neu runter, Konfiguration durch in der vendor/fontello/config.json
-     */
+    // Lädt die Fonts neu runter, Konfiguration in der vendor/fontello/config.json
     grunt.registerTask('font', ['generate-font']);
 
-    /**
-     * Alle Taks nacheinander ausführen
-     * 1. Fonts neu generieren
-     * 2. Extensions generieren (schließt die Generierung des Scriptes mit ein)
-     */
+    // Alle Taks nacheinander ausführen
     grunt.registerTask('complete', ['font', 'extension']);
 };

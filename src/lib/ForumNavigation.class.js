@@ -1,6 +1,6 @@
 /**
  * ForumNavigation
- * ==============
+ * ===============
  *
  * Sorgt für das Umsortieren (TODO) und das Neuladen der Forumnavigation.
  */
