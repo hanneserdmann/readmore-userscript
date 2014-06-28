@@ -31,7 +31,7 @@ function ReadmoreUserscript($) {
         // Titel umsortieren
         if (_siteLocation.getLocation('forums')) {
             if (_options.getOption("miscellaneous_reSortTitle")) {
-                _forumNavigation.resortTitle();
+                _misc.resortTitle();
             }
         }
 
