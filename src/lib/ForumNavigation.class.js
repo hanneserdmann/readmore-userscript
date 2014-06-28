@@ -31,7 +31,7 @@ function ForumNavigation($, _options, _reloadPageData, _misc, _content) {
      */
     this.addReloadBtn = function() {
         return $("h3 > a[href$='/forums']").parent().append('<span style="float: right;"><i id="userscript_reloadForumButton" title="Forum aktualisieren" class="rmus-icon rmus-icon-arrows-cw" style="cursor: pointer;"></i></span>');
-    }
+    };
 
     /**
      * Lädt das Forum manuell neu, wenn auf den Button geklickt wird.
@@ -42,15 +42,5 @@ function ForumNavigation($, _options, _reloadPageData, _misc, _content) {
         setTimeout(function() {
             _self.reloadForum();
         }, 500);
-    }
-
-    /**
-     * Sortiert den Thread-Titel um, sodass dieser an erster Stelle steht.
-     */
-    this.resortTitle = function () {
-        var title = $('head').find('title').text();
-        var pieces = title.split(' \u00BB Thread: ');
-
-        document.title = pieces.reverse().join(' \u00BB ');
-    }
+    };
 }
