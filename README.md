@@ -24,12 +24,13 @@ Eine Rückmeldung, ob die Userscripte installiert sind, scheint es bei Opera lei
     * Neue Einträge markieren
         * Ungelesene Posts im Titel / Tab anzeigen
         * Favicon verändern
-    * Hinweis bei neuen Seiten einblenden
 * Fixierter Header
 * Titel / Tab umsortieren
 * Schlagzeilen ausblenden
 * Forennavigation aktualisieren
 * Last-Page-Pfeil springt zum letzten Post
+* Ticker ausblenden
+* Bereiteres Design
 
 ## Contributors
 
