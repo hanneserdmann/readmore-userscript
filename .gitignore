@@ -167,3 +167,4 @@ pip-log.txt
 /build/dist/
 /build/temp/
 /build/extensions/chrome/unpacked/
+/build/extensions/firefox/unpacked/

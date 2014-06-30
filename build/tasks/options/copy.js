@@ -46,6 +46,47 @@ module.exports = function(grunt){
         },
 
     /**
+     * generate-firefox-extension Task
+     * ===============================
+     */
+        /**
+         * Daten aus dem src Ordner in den temp Ordner kopieren
+         */
+        'generate-firefox-extension-copy-to-temp': {
+            expand: true,
+            cwd:    grunt.pkg.paths.firefoxsrc,
+            src:    '**/*',
+            dest:   grunt.pkg.paths.firefoxtemp
+        },
+
+        /**
+         * Kopiert das Script in den Data Order der Extension
+         */
+        'generate-firefox-extension-copy-js': {
+            options: {
+                replacements: [{
+                    pattern: /\{\{version\}\}/ig,
+                    replacement: grunt.pkg.version
+                }]
+            },
+            files: [{
+                src:    grunt.pkg.paths.dist + grunt.pkg.filenames.scriptmin,
+                dest:   grunt.pkg.paths.firefoxtempdata + grunt.pkg.filenames.scriptmin
+            }]
+        },
+
+        /**
+         * Daten aus dem temp Ordner in den unpacked Ordner kopieren
+         */
+        'generate-firefox-extension-copy-unpacked': {
+            expand: true,
+            flatten: false,
+            cwd:    grunt.pkg.paths.firefoxtemp,
+            src:    '**',
+            dest:   grunt.pkg.paths.firefoxunpacked
+        },
+
+    /**
      * generate-font Task
      * ==================
      */
