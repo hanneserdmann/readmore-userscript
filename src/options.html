@@ -4,11 +4,12 @@
         <div class="rmus-options-header">
             <h1>RM Userscript - Optionen</h1>
             <div class="rmus-links">
-                <a href="index.php?cont=forum/thread&threadid=111239&pagenum=1">Thread</a> | Version
+                <a href="/forums/91-technik/60-software/111239-readmore-userscript-chrome-extension">Thread</a> | Version
                 <span class="rmus-version">{{version}}</span>
             </div>
             <div style="clear: both;"></div>
         </div>
+        <div class="rmus-options-header-divider"></div>
         <div class="rmus-options-content">
             <table>
                 <tr class="headline">
@@ -64,7 +65,7 @@
                         Zeit zwischen zwei Spr&uuml;ngen
                     </td>
                     <td align="right">
-                        <input type="text" class="userscriptOptions" name="middleColumn_forum_reloadPosts_jumpToNewPosts_waitUntilNextJump" value="10" />
+                        <input type="number" class="userscriptOptions" name="middleColumn_forum_reloadPosts_jumpToNewPosts_waitUntilNextJump" value="10" />
                     </td>
                     <td align="right">
                         <i class="rmus-icon rmus-icon-search" title="Zeit in Sekunden, die zwischen 2 Spr&uuml;ngen mindestens vergehen muss."></i>
@@ -91,7 +92,7 @@
                         Farbe ausw&auml;hlen (HEX-Code)
                     </td>
                     <td align="right">
-                        <input type="text" class="userscriptOptions" name="middleColumn_forum_reloadPosts_markPostColor" value="#EEEEEE" />
+                        <input type="color" class="userscriptOptions" name="middleColumn_forum_reloadPosts_markPostColor" value="#EEEEEE" />
                     </td>
                     <td align="right">
                         <i class="rmus-icon rmus-icon-search" title="Bitte eine HEX Zahl eingeben. Beispiel: #FFEE11"></i>
@@ -145,7 +146,7 @@
                         Zeit zwischen dem Nachladen (Sekunden)
                     </td>
                     <td align="right">
-                        <input type="text" class="userscriptOptions" name="middleColumn_forum_reloadPosts_timeToWait" value="15" />
+                        <input type="number" class="userscriptOptions" name="middleColumn_forum_reloadPosts_timeToWait" value="15" />
                     </td>
                     <td align="right">
                         <i class="rmus-icon rmus-icon-search" title="Sekunden die zwischen dem Nachladen gewartet werden muss."></i>
