@@ -1,0 +1,51 @@
+{
+ "check_memory": false, 
+ "enable_e10s": false, 
+ "is-sdk-bundled": false, 
+ "jetpackID": "jid1-XcuVo5FI78kMbQ@jetpack", 
+ "loader": "addon-sdk/lib/sdk/loader/cuddlefish.js", 
+ "main": "main", 
+ "mainPath": "readmore-userscript/main", 
+ "manifest": {
+  "readmore-userscript/main": {
+   "docsSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", 
+   "jsSHA256": "db6a550e81d790eb82c3606160e56e8e145fb846c4db857c5faf4369493a9806", 
+   "moduleName": "main", 
+   "packageName": "readmore-userscript", 
+   "requirements": {
+    "sdk/page-mod": "sdk/page-mod", 
+    "sdk/self": "sdk/self"
+   }, 
+   "sectionName": "lib"
+  }
+ }, 
+ "metadata": {
+  "addon-sdk": {
+   "description": "Add-on development made easy.", 
+   "keywords": [
+    "javascript", 
+    "engine", 
+    "addon", 
+    "extension", 
+    "xulrunner", 
+    "firefox", 
+    "browser"
+   ], 
+   "license": "MPL 2.0", 
+   "name": "addon-sdk"
+  }, 
+  "readmore-userscript": {
+   "description": "a basic add-on", 
+   "license": "MPL 2.0", 
+   "main": "main", 
+   "name": "readmore-userscript", 
+   "version": "0.1"
+  }
+ }, 
+ "name": "readmore-userscript", 
+ "parseable": false, 
+ "preferencesBranch": "jid1-XcuVo5FI78kMbQ@jetpack", 
+ "sdkVersion": "1.16", 
+ "staticArgs": {}, 
+ "verbose": false
+}

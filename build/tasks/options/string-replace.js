@@ -109,8 +109,29 @@ module.exports = function(grunt){
                 }]
             },
             files: [{
-                src:    grunt.pkg.paths.chrome + grunt.pkg.filenames.chromemanifest,
+                src:    grunt.pkg.paths.chromesrc + grunt.pkg.filenames.chromemanifest,
                 dest:   grunt.pkg.paths.chrometemp + grunt.pkg.filenames.chromemanifest
+            }]
+        },
+
+    /**
+     * generate-firefox-extension Task
+     * ===============================
+     */
+        /**
+         * Ersetzt die Version im Manifest und kopiert es in den temp
+         * chrome ordner
+         */
+        'generate-firefox-extension-string-replace-version': {
+            options: {
+                replacements: [{
+                    pattern: /\{\{version\}\}/ig,
+                    replacement: grunt.pkg.version
+                }]
+            },
+            files: [{
+                src:    grunt.pkg.paths.firefoxtemp + grunt.pkg.filenames.firefoxrdf,
+                dest:   grunt.pkg.paths.firefoxtemp + grunt.pkg.filenames.firefoxrdf
             }]
         }
     };

@@ -11,7 +11,7 @@ module.exports = function(grunt){
          */
         "generate-chrome-extension-compress-zip": {
             options: {
-                archive:    grunt.pkg.paths.dist + grunt.pkg.filenames.chromezip,
+                archive:    grunt.pkg.paths.distextensions + grunt.pkg.filenames.chromezip,
                 mode:       'zip'
             },
             files: [{
@@ -19,6 +19,26 @@ module.exports = function(grunt){
                 expand:     true,
                 src:        [grunt.pkg.paths.chrometemp + '*'],
                 dest:       ''
+            }]
+        },
+
+    /**
+     * generate-chrome-extension Task
+     * ==============================
+     */
+
+        /**
+         * ZIP-Archiv für die Firefox Extension erstellen
+         */
+        "generate-firefox-extension-compress-zip": {
+            options: {
+                archive:    grunt.pkg.paths.distextensions + grunt.pkg.filenames.firefoxzip,
+                mode:       'zip'
+            },
+            files: [{
+                expand:     true,
+                cwd:        grunt.pkg.paths.firefoxtemp,
+                src:        ['**']
             }]
         }
     };

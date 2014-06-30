@@ -20,6 +20,13 @@ module.exports = function(grunt){
          */
         'chrome-unpacked': [
             grunt.pkg.paths.chromeunpacked + '*'
+        ],
+
+        /**
+         * Bereinigt den unpacked Ordner im Firefox Verzeichniss
+         */
+        'firefox-unpacked': [
+            grunt.pkg.paths.firefoxunpacked + '*'
         ]
     };
 };
