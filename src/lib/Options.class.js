@@ -209,7 +209,8 @@ function Options($) {
      * @private
      */
     var _writeOptionsToHTML = function() {
-        var type = '';
+        var type = '',
+            inputTypes = ['text', 'color', 'number'];
 
         if (!$.isEmptyObject(_options)) {
             $.each(_options, function(index, value) {
@@ -228,7 +229,7 @@ function Options($) {
                 }
 
                 // Textfelder auslesen und den Wert zuweisen
-                if (type == 'text' || type == null) {
+                if ($.inArray(type, inputTypes) || type == null) {
                     $('[name=' + index + ']').val(value);
                     return true;
                 }
