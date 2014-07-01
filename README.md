@@ -34,7 +34,7 @@ Eine Rückmeldung, ob die Userscripte installiert sind, scheint es bei Opera lei
 
 ## Contributors
 
-Eine Übersicht aller Beteiligten kann [hier](https://github.com/thextor/readmore-userscript/graphs/contributors) gefunden werden.
+Eine Übersicht aller Beteiligten kann [hier](https://github.com/thextor/readmore-userscript/graphs/contributors) gefunden werden. Details wie du mitarbeiten kannst und einige Informationen zu userem Build-Prozess können auf [dieser Seite](https://github.com/thextor/readmore-userscript/blob/master/CONTRIBUTING.md) nachgelesen werden.
 
 ## Credits
 
