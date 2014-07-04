@@ -218,3 +218,7 @@ div#userscriptOptionsOverlay {
     font-size: 18px !important;
     color: #19A1EC;
 }
+#icon_miscellaneous_buttonScrollDown, #icon_miscellaneous_buttonScrollUp{
+    float: right;
+    cursor: pointer;
+}
