@@ -8,10 +8,11 @@ function ReadmoreUserscript($) {
         _headlines = new Headlines($, _options, _content),
         _reloadPageData = new ReloadPageData($),
         _ticker = new Ticker($, _content),
-        _forumNavigation = new ForumNavigation($, _options, _reloadPageData, _misc, _content);
+        _forumNavigation = new ForumNavigation($, _options, _reloadPageData, _misc, _content),
+        _postWithoutReload = new PostWithoutReload($, _options,_reloadPosts);
 
     this.start = function() {
-        if (_options.getOption("miscellaneous_makeContentWider")) {
+        if (_options.getOption('miscellaneous_makeContentWider')) {
             _misc.makeContentWider();
         }
 
@@ -19,19 +20,25 @@ function ReadmoreUserscript($) {
         _options.insertOptions();
 
         // Header fixen
-        if (_options.getOption("miscellaneous_fixedToolbar")) {
+        if (_options.getOption('miscellaneous_fixedToolbar')) {
             _misc.createFixedToolbar();
         }
 
         // Pfeile anpassen
-        if (_options.getOption("miscellaneous_lastPageJumpToLastPost")) {
+        if (_options.getOption('miscellaneous_lastPageJumpToLastPost')) {
             _misc.changeForumArrowBehavior();
         }
 
-        // Titel umsortieren
+        // Im Forum
         if (_siteLocation.getLocation('forums')) {
-            if (_options.getOption("miscellaneous_reSortTitle")) {
+            // Titel umsortieren
+            if (_options.getOption('miscellaneous_reSortTitle')) {
                 _misc.resortTitle();
+            }
+
+            // Post ohne Reload
+            if (_options.getOption('middleColumn_forum_postPerAjax')){
+                _postWithoutReload.init();
             }
         }
 
@@ -56,7 +63,7 @@ function ReadmoreUserscript($) {
 
     this.startIntervalReloadPosts = function() {
         // Prüfen ob die Option gesetzt ist
-        if (_options.getOption('middleColumn_forum_reloadPosts_readNewPosts') === 'checked') {
+        if (_options.getOption('middleColumn_forum_reloadPosts_readNewPosts')) {
             // Prüfen ob wir uns im Forum befinden
             if (_siteLocation.getLocation('forums') && _content.get('forumPosts').length) {
                 // Nachladen von Posts vorbereiten und invervall setzen
@@ -68,11 +75,11 @@ function ReadmoreUserscript($) {
     this.startInvervalRapid = function() {
         setInterval(function() {
             // Posts unmarkieren
-            if (_options.getOption('middleColumn_forum_reloadPosts_markNewPosts') === 'checked') {
+            if (_options.getOption('middleColumn_forum_reloadPosts_markNewPosts')) {
                 if (_siteLocation.getLocation('forums') && _content.get('forumPosts').length) {
                     _reloadPosts.unmarkNewPosts();
-                    if (_options.getOption('middleColumn_forum_reloadPosts_changeFavicon') === 'checked') _reloadPosts.changeFavicon();
-                    if (_options.getOption('middleColumn_forum_reloadPosts_showNewPostsTitle') === 'checked') _reloadPosts.showNewPostsTitle();
+                    if (_options.getOption('middleColumn_forum_reloadPosts_changeFavicon'))     _reloadPosts.changeFavicon();
+                    if (_options.getOption('middleColumn_forum_reloadPosts_showNewPostsTitle')) _reloadPosts.showNewPostsTitle();
                 }
             }
         }, 333);
@@ -83,7 +90,7 @@ function ReadmoreUserscript($) {
             _reloadPageData.readPage();
 
             // Forum aktualisieren
-            if (_options.getOption("rightColumn_forum_reloadForum") === "checked" && _content.get('forumNavigation').length) {
+            if (_options.getOption('rightColumn_forum_reloadForum') && _content.get('forumNavigation').length) {
                 // Lag im FF verhindern
                 setTimeout(function() {
                     _forumNavigation.reloadForum();

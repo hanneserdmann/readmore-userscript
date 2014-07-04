@@ -134,29 +134,29 @@ function Headlines($, _options, _content) {
 
     _hideHeadlines = function() {
         // Schlagzeilen ausblenden
-        if (_options.getOption('rightColumn_headlines_hideHeadlines') === 'checked') {
+        if (_options.getOption('rightColumn_headlines_hideHeadlines')) {
             _self.hideAllHeadlines();
         } else {
             // Individuell
-            if (_options.getOption('rightColumn_headlines_hideCounterstrike') === 'checked') {
+            if (_options.getOption('rightColumn_headlines_hideCounterstrike')) {
                 _self.hideCounterstrike();
             }
-            if (_options.getOption('rightColumn_headlines_hideStarcraft') === 'checked') {
+            if (_options.getOption('rightColumn_headlines_hideStarcraft')) {
                 _self.hideStarcraft();
             }
-            if (_options.getOption('rightColumn_headlines_hideDefenseOfTheAncients') === 'checked') {
+            if (_options.getOption('rightColumn_headlines_hideDefenseOfTheAncients')) {
                 _self.hideDefenseOfTheAncients();
             }
-            if (_options.getOption('rightColumn_headlines_hideHearthstone') === 'checked') {
+            if (_options.getOption('rightColumn_headlines_hideHearthstone')) {
                 _self.hideHearthstone();
             }
-            if (_options.getOption('rightColumn_headlines_hideLeagueOfLegends') === 'checked') {
+            if (_options.getOption('rightColumn_headlines_hideLeagueOfLegends')) {
                 _self.hideLeagueOfLegends();
             }
-            if (_options.getOption('rightColumn_headlines_hideWarcraft3') === 'checked') {
+            if (_options.getOption('rightColumn_headlines_hideWarcraft3')) {
                 _self.hideWarcraft3();
             }
-            if (_options.getOption('rightColumn_headlines_hideSonstiges') === 'checked') {
+            if (_options.getOption('rightColumn_headlines_hideSonstiges')) {
                 _self.hideSonstiges();
             }
         }
@@ -164,7 +164,7 @@ function Headlines($, _options, _content) {
 
     this.init = function() {
         // Wenn NICHT alle headlines ausgeblendet werden sollen muss der Observer gestartet werden
-        if (_options.getOption('rightColumn_headlines_hideHeadlines') !== 'checked') {
+        if (!_options.getOption('rightColumn_headlines_hideHeadlines')) {
             _catchHeadlineChange();
         }
 
