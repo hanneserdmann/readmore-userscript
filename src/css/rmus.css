@@ -218,7 +218,12 @@ div#userscriptOptionsOverlay {
     font-size: 18px !important;
     color: #19A1EC;
 }
-#icon_miscellaneous_buttonScrollDown, #icon_miscellaneous_buttonScrollUp{
+#icon_miscellaneous_buttonScrollDown, #icon_miscellaneous_buttonScrollUp {
     float: right;
     cursor: pointer;
+    border: 1px solid #E9E9E9;
+}
+
+#icon_miscellaneous_buttonScrollDown:hover, #icon_miscellaneous_buttonScrollUp:hover {
+    color: #FFB400;
 }
