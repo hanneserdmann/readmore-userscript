@@ -14,7 +14,7 @@ div#userscriptOptionsOverlay {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 1337;
+    z-index: 2147483646;
     display: none;
     background-color: #fff;
     opacity: 0.8;
@@ -30,7 +30,7 @@ div#userscriptOptionsOverlay {
     border: 1px solid #C0C0C0;
     border-radius: 3px;
     background-color: #fff;
-    z-index: 1338;
+    z-index: 2147483647;
 }
 #userscriptOptions .rmus-options-header {
     border-bottom: 3px solid #007BFF;
@@ -90,7 +90,9 @@ div#userscriptOptionsOverlay {
 }
 #userscriptOptions .rmus-options-content table tr.menufirstchild td {
     background-color: #f1f1f1 !important;
-    padding-left: 10px;
+}
+#userscriptOptions .rmus-options-content table tr.menufirstchild td:nth-child(2):before{
+    content: "\00a0\00a0\00a0\00a0\00a0";
 }
 #userscriptOptions .rmus-options-content table tr.menusecondchild {
     display: none;
@@ -99,7 +101,9 @@ div#userscriptOptionsOverlay {
 }
 #userscriptOptions .rmus-options-content table tr.menusecondchild td {
     background-color: #e2e2e2 !important;
-    padding-left: 20px;
+}
+#userscriptOptions .rmus-options-content table tr.menusecondchild td:nth-child(2):before{
+    content: "\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0";
 }
 #userscriptOptions .rmus-options-content table .headline td {
     color: #7A7A7A;
@@ -116,6 +120,23 @@ div#userscriptOptionsOverlay {
     background: -o-linear-gradient(top, #f2f5f6 0%, #e3eaed 100%);
     background: -ms-linear-gradient(top, #f2f5f6 0%, #e3eaed 100%);
     background: linear-gradient(to bottom, #f2f5f6 0%, #e3eaed 100%);
+}
+#userscriptOptions td{
+    padding-left: 0px;
+    padding-right: 0px;
+    height: 35px;
+}
+#userscriptOptions td:nth-child(1){
+    width: 10%;
+}
+#userscriptOptions td:nth-child(2){
+    width: 65%;
+}
+#userscriptOptions td:nth-child(3){
+    width: 15%;
+}
+#userscriptOptions td:nth-child(4){
+    width: 10%;
 }
 #userscriptOptions .rmus-options-footer {
     text-align: right;
@@ -144,7 +165,7 @@ div#userscriptOptionsOverlay {
     font-size: 10px;
     padding: 5px;
     margin: 5px 0 3px;
-    height: 21px;
+    height: 40px;
 }
 #userscriptOptions input[type=checkbox], #userscriptOptions input[type=select], #userscriptOptions input[type=text] {
     margin: 0;
@@ -163,7 +184,10 @@ div#userscriptOptionsOverlay {
     text-align: right;
     padding: 1px 5px;
 }
-
+#userscriptOptions input[type=number],
+#userscriptOptions input[type=color]{
+    width: 80%;
+}
 .btn-rm {
     border: 1px solid #ccccce;
     color: #222222;
