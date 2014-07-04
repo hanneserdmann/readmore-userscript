@@ -2,7 +2,7 @@
  * [Miscellaneous description]
  */
 
-function Miscellaneous($) {
+function Miscellaneous($, _content) {
 
     /**
      * [createFixedToolbar description]
@@ -100,4 +100,22 @@ function Miscellaneous($) {
 
         document.title = pieces.reverse().join(' \u00BB ');
     };
+
+    this.buttonScrollUp = function(){
+        $('#c_content h2:last').append('<i id="icon_miscellaneous_buttonScrollUp" class="rmus-icon rmus-icon-angle-double-up" title="Nach oben scrollen"></i>')
+            .find('#icon_miscellaneous_buttonScrollUp')
+            .css('float', 'right')
+            .on('click', function(){
+                window.scrollTo(0, _content.get('forumPosts').first().offset().top - 100);
+            });
+    };
+
+    this.buttonScrollDown = function(){
+        $('#c_content h1:first').append('<i id="icon_miscellaneous_buttonScrollDown" class="rmus-icon rmus-icon-angle-double-down" title="Nach unten scrollen"></i>')
+            .find('#icon_miscellaneous_buttonScrollDown')
+            .css('float', 'right')
+            .on('click', function(){
+                window.scrollTo(0, _content.get('forumPosts').last().offset().top - 100);
+            });
+    }
 }

@@ -4,7 +4,7 @@ function ReadmoreUserscript($) {
         _siteLocation = new SiteLocation($),
         _content = new Content($),
         _reloadPosts = new ReloadPosts($, _options, _content),
-        _misc = new Miscellaneous($),
+        _misc = new Miscellaneous($, _content),
         _headlines = new Headlines($, _options, _content),
         _reloadPageData = new ReloadPageData($),
         _ticker = new Ticker($, _content),
@@ -36,9 +36,22 @@ function ReadmoreUserscript($) {
                 _misc.resortTitle();
             }
 
-            // Post ohne Reload
-            if (_options.getOption('middleColumn_forum_postPerAjax')){
-                _postWithoutReload.init();
+            // Sind Posts verfügbar?
+            if ( _content.get('forumPosts').length){
+                // Post ohne Reload
+                if (_options.getOption('middleColumn_forum_postPerAjax')){
+                    _postWithoutReload.init();
+                }
+
+                // Hochscrollen
+                if (_options.getOption('miscellaneous_buttonScrollUp')){
+                    _misc.buttonScrollUp();
+                }
+
+                // Runterscrollen
+                if (_options.getOption('miscellaneous_buttonScrollDown')){
+                    _misc.buttonScrollDown();
+                }
             }
         }
 

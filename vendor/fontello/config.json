@@ -35,6 +35,18 @@
             "css": "arrows-cw",
             "code": 59396,
             "src": "fontawesome"
+        },
+        {
+            "uid": "63b3012c8cbe3654ba5bea598235aa3a",
+            "css": "angle-double-up",
+            "code": 59397,
+            "src": "fontawesome"
+        },
+        {
+            "uid": "dfec4ffa849d8594c2e4b86f6320b8a6",
+            "css": "angle-double-down",
+            "code": 59398,
+            "src": "fontawesome"
         }
     ]
 }
