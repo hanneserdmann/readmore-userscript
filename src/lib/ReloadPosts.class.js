@@ -34,8 +34,11 @@ function ReloadPosts($, _options, _content) {
 
     /**
      * Bereitet das Nachladen vor.
+     * @param enableIntervall {boolean}
      */
-    this.init = function () {
+    this.init = function (enableIntervall) {
+        enableIntervall = typeof enableIntervall === "undefinded" ? true : enableIntervall;
+
         var $insertElement  = $('div.pagination:last');
         _$postInsertElement = $insertElement.length ? $insertElement : $('div.forum_thread_reply:last');
 
@@ -48,17 +51,19 @@ function ReloadPosts($, _options, _content) {
         _readPostcount();
         _setMarkPostColor();
 
-        setInterval(function() {
-            _readNewPosts();
-        }, (parseInt(_options.getOption('middleColumn_forum_reloadPosts_timeToWait'), 10) > 2) ? parseInt(_options.getOption('middleColumn_forum_reloadPosts_timeToWait'), 10) * 1000 : 3000);
+        if (enableIntervall){
+            setInterval(function() {
+                _readNewPosts();
+            }, (parseInt(_options.getOption('middleColumn_forum_reloadPosts_timeToWait'), 10) > 2) ? parseInt(_options.getOption('middleColumn_forum_reloadPosts_timeToWait'), 10) * 1000 : 3000);
 
-        if (_options.getOption('middleColumn_forum_reloadPosts_jumpToNewPosts') === 'checked' && _options.getOption('middleColumn_forum_reloadPosts_endlessPage') === 'checked') {
-            if (_isLastpage()){
-                _jumpToNewPosts();
-
-                setInterval(function () {
+            if (_options.getOption('middleColumn_forum_reloadPosts_jumpToNewPosts') && _options.getOption('middleColumn_forum_reloadPosts_endlessPage')) {
+                if (_isLastpage()){
                     _jumpToNewPosts();
-                }, (parseInt(_options.getOption('middleColumn_forum_reloadPosts_jumpToNewPosts_waitUntilNextJump'), 10) > 1 ? parseInt(_options.getOption('middleColumn_forum_reloadPosts_jumpToNewPosts_waitUntilNextJump'), 10) : 1) * 1000);
+
+                    setInterval(function () {
+                        _jumpToNewPosts();
+                    }, (parseInt(_options.getOption('middleColumn_forum_reloadPosts_jumpToNewPosts_waitUntilNextJump'), 10) > 1 ? parseInt(_options.getOption('middleColumn_forum_reloadPosts_jumpToNewPosts_waitUntilNextJump'), 10) : 1) * 1000);
+                }
             }
         }
     };
@@ -88,13 +93,21 @@ function ReloadPosts($, _options, _content) {
     };
 
     /**
+     * Wird von der PostWithoutReload Klasse genutzt,
+     * falls möglich sonst vermeiden!
+     */
+    this.readPosts = function(){
+        _readNewPosts();
+    };
+
+    /**
      * Lädt die neuen Posts nach und führt anschließend eine ganze Reihe
      * an Funktionen aus (Favicon anpassen, Markieren der Posts, ...)
      */
     var _readNewPosts = function () {
         if (_isLastpage()) {
             // Seiten endlos erweitern
-            if (_options.getOption('middleColumn_forum_reloadPosts_endlessPage') == 'checked') {
+            if (_options.getOption('middleColumn_forum_reloadPosts_endlessPage')) {
                 _prepareEndlessPage();
             }
 
@@ -143,7 +156,7 @@ function ReloadPosts($, _options, _content) {
                         _oldLimit = window.pageYOffset + (window.innerHeight * 0.60);
 
                         // Ungelesene Posts makieren
-                        if (_options.getOption('middleColumn_forum_reloadPosts_markNewPosts') === 'checked') {
+                        if (_options.getOption('middleColumn_forum_reloadPosts_markNewPosts')) {
                             _markNewPosts();
                         }
                     }
