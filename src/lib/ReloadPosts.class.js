@@ -37,7 +37,7 @@ function ReloadPosts($, _options, _content) {
      * @param enableIntervall {boolean}
      */
     this.init = function (enableIntervall) {
-        enableIntervall = typeof enableIntervall === "undefinded" ? true : enableIntervall;
+        enableIntervall = (typeof enableIntervall === 'undefined' ? true : enableIntervall);
 
         var $insertElement  = $('div.pagination:last');
         _$postInsertElement = $insertElement.length ? $insertElement : $('div.forum_thread_reply:last');
