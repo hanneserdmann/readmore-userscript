@@ -2,104 +2,24 @@
  * Headlines
  * =========
  *
- * Methoden um die Schlagezeilen auszublenden.
+ * Sorgt für das Umsortieren und Ausblenden der Headlines.
  */
 
 function Headlines($, _options, _content) {
 
     var _self = this,
-        _headlineElements = [],
-        _observer = null;
-
-    /**
-     * Alle Headlines ausblenden
-     */
-    this.hideAllHeadlines = function() {
-        _content.get('headlines').hide().prev("h3").hide().prev("hr").hide();
-        $("a[href$='headlines/send']").hide().prev("br").remove();
-    };
-
-    /**
-     * Blendet Counterstrike aus
-     */
-    this.hideCounterstrike = function() {
-        if (_headlineElements.length === 0) {
-            _readHeadlineElements();
-        }
-        $(_headlineElements[0]).css('display', 'none').next("ul").hide();
-    };
-
-    /**
-     * Blendet Dota aus
-     */
-    this.hideDefenseOfTheAncients = function() {
-        if (_headlineElements.length === 0) {
-            _readHeadlineElements();
-        }
-        $(_headlineElements[1]).css('display', 'none').next("ul").hide();
-    };
-
-    /**
-     * Blendet LoL aus
-     */
-    this.hideLeagueOfLegends = function() {
-        if (_headlineElements.length === 0) {
-            _readHeadlineElements();
-        }
-        $(_headlineElements[2]).css('display', 'none').next("ul").hide();
-    };
-
-    /**
-     * Blendet Hearthstone aus
-     */
-    this.hideHearthstone = function() {
-        if (_headlineElements.length === 0) {
-            _readHeadlineElements();
-        }
-        $(_headlineElements[3]).css('display', 'none').next("ul").hide();
-    };
-
-    /**
-     * Blendet Starcraft aus
-     */
-    this.hideStarcraft = function() {
-        if (_headlineElements.length === 0) {
-            _readHeadlineElements();
-        }
-        $(_headlineElements[4]).css('display', 'none').next("ul").hide();
-    };
-
-    /**
-     * Blendet Warcraft aus
-     */
-    this.hideWarcraft3 = function() {
-        if (_headlineElements.length === 0) {
-            _readHeadlineElements();
-        }
-        $(_headlineElements[5]).css('display', 'none').next("ul").hide();
-    };
-
-    /**
-     * Blendet Sonstiges aus
-     */
-    this.hideSonstiges = function() {
-        if (_headlineElements.length === 0) {
-            _readHeadlineElements();
-        }
-        $(_headlineElements[6]).css('display', 'none').next("ul").hide();
-    };
-
-    /**
-     * Liest die Schlagzeilen ein, bereitet also das Ausblenden von
-     * einzelnen Kategorien vor.
-     * @private
-     */
-    _readHeadlineElements = function() {
-        _headlineElements = [];
-        _content.get('headlines').find('div.headlines_cat').each(function(index, value) {
-            _headlineElements.push(value);
-        });
-    };
+        _observer = null,
+        _section = null,
+        _sectionOpts = null,
+        _mappings = {
+            'cs': 'CS:GO',
+            'sc': 'Starcraft 2',
+            'dota': 'Dota 2',
+            'lol': 'League of Legends',
+            'hs': 'Hearthstone',
+            'wc3': 'Warcraft 3',
+            'other': 'Sonstiges'
+        };
 
     /**
      * Startet einen MutationObserver, der auf DOM-Änderungen im div#headlines_list listened.
@@ -112,62 +32,52 @@ function Headlines($, _options, _content) {
      * ich habe es aber nicht geschafft, mich in die originale Funktion "sidebar_headlines_setlimit" zu hooken.
      * Ein normaler Click-Listener auf den Buttons hat durch die asynchrone Natur nicht funktioniert.
      */
-    _catchHeadlineChange = function() {
-        try{
+    this._catchHeadlineChange = function() {
+        try {
+            var target = _content.get('headlines')[0],
+                config = {
+                    childList: true,
+                    attributes: false
+                };
+
             MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
 
-            _observer = new MutationObserver(function(mutations, observer) {
-                _readHeadlineElements();
-                _hideHeadlines();
+            _observer = new MutationObserver(function() {
+                // Temporär observer stoppen, sonst deadlock
+                _observer.disconnect();
+                _self._handleHeadlines();
+                _observer.observe(target, config);
             });
 
-            _observer.observe(_content.get('headlines')[0], {
-                attributes: true,
-                childList: true,
-                characterData: true
-            });
-        }
-        catch(e){
-            console.log('Der MutationObserver konnte nicht initialisiert werden. Nachladen von Headlines kann Fehler verursachen!');
+            _observer.observe(target, config);
+        } catch(e) {
+            console.warn('Der MutationObserver konnte nicht initialisiert werden. Nachladen von Headlines kann Fehler verursachen!');
         }
     };
 
-    _hideHeadlines = function() {
-        // Schlagzeilen ausblenden
+    this._handleHeadlines = function() {
         if (_options.getOption('rightColumn_headlines_hideHeadlines')) {
-            _self.hideAllHeadlines();
-        } else {
-            // Individuell
-            if (_options.getOption('rightColumn_headlines_hideCounterstrike')) {
-                _self.hideCounterstrike();
-            }
-            if (_options.getOption('rightColumn_headlines_hideStarcraft')) {
-                _self.hideStarcraft();
-            }
-            if (_options.getOption('rightColumn_headlines_hideDefenseOfTheAncients')) {
-                _self.hideDefenseOfTheAncients();
-            }
-            if (_options.getOption('rightColumn_headlines_hideHearthstone')) {
-                _self.hideHearthstone();
-            }
-            if (_options.getOption('rightColumn_headlines_hideLeagueOfLegends')) {
-                _self.hideLeagueOfLegends();
-            }
-            if (_options.getOption('rightColumn_headlines_hideWarcraft3')) {
-                _self.hideWarcraft3();
-            }
-            if (_options.getOption('rightColumn_headlines_hideSonstiges')) {
-                _self.hideSonstiges();
-            }
+            // Schlagzeilen ausblenden
+            _section.hideAll();
+            // "Schlagzeile einsenden" entfernen
+            _content.get('headlines').next('br').hide().next('a').hide();
+            return;
+        }
+
+        if (_options.getOption('rightColumn_headlines_sections')) {
+            _section.process(_sectionOpts, _mappings);
         }
     };
 
     this.init = function() {
-        // Wenn NICHT alle headlines ausgeblendet werden sollen muss der Observer gestartet werden
-        if (!_options.getOption('rightColumn_headlines_hideHeadlines')) {
-            _catchHeadlineChange();
-        }
+        _sectionOpts = _options.getOptionsFuzzy('rightColumn_headlines_item_');
+        _section = new SidebarSection($, _content.get('headlines'));
 
-        _hideHeadlines();
-    }
+        this._handleHeadlines();
+
+        // Wenn NICHT alle Headlines ausgeblendet werden sollen muss der Observer gestartet werden
+        if (!_options.getOption('rightColumn_headlines_hideHeadlines')) {
+            this._catchHeadlineChange();
+        }
+    };
 }

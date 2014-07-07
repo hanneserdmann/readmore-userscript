@@ -60,6 +60,23 @@ function Options($) {
     };
 
     /**
+     * Gibt alle Optionen zurück, die auf die "Wildcard" zutreffen.
+     * @param {String} what
+     */
+    this.getOptionsFuzzy = function(what) {
+        var options = {},
+            len = what.length;
+
+        for (var opt in _options) {
+            if (_options.hasOwnProperty(opt) && what === opt.substr(0, len)){
+                options[opt] = _options[opt];
+            }
+        }
+
+        return options;
+    };
+
+    /**
      * Gibt die aktuelle Version zurück.
      * @returns {string}
      */
@@ -354,13 +371,19 @@ function Options($) {
         });
         $('#toggle_sub_rightColumn_headlines_hideHeadlines').click(function() {
             $('.sub_rightColumn_headlines_hideHeadlines').toggle();
+            $(".sub_rightColumn_headlines_sections").hide();
+            toggleBtn($("#toggle_sub_rightColumn_headlines_sections"), true);
         });
         $('#toggle_sub_rightColumn_forum_hideForum').click(function() {
             $('.sub_rightColumn_forum_hideForum').toggle();
-            $('.sub_rightColumn_forum_sections').css('display', 'none');
+            $('.sub_rightColumn_forum_sections').hide();
+            toggleBtn($("#toggle_sub_rightColumn_forum_sections"), true);
         });
         $('#toggle_sub_rightColumn_forum_sections').click(function() {
             $('.sub_rightColumn_forum_sections').toggle();
+        });
+        $('#toggle_sub_rightColumn_headlines_sections').click(function() {
+            $('.sub_rightColumn_headlines_sections').toggle();
         });
         $('#toggle_sub_miscellaneous_reloadMessages').click(function() {
             $('.sub_miscellaneous_reloadMessages').toggle();
