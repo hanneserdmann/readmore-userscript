@@ -79,9 +79,8 @@ function Miscellaneous($, _content) {
 
         // fixt den verzerrten YouTube Player im Forum
         if(siteLocation.getLocation("forums")) {
-            $(".forum_ed_youtube").each(function() {
-                $(this).css("width", "516px");
-                $(this).css("display", "block");
+            $(".forum_ed_youtube embed").each(function() {
+                $(this).css("height", $(this).width() * (9 / 16) + "px");
             });
         }
 
@@ -89,9 +88,7 @@ function Miscellaneous($, _content) {
         if (siteLocation.getLocation("news")) {
             $("iframe").each(function () {
                 if ($(this).attr("src").match(/^http:\/\/(?:www\.)?youtube.com\/embed\/\w+(&\S*)?$/)) {
-                    $(this).css("width", "516px");
-                    $(this).css("display", "block");
-                    $(this).css("margin", "0 auto");
+                    $(this).css("height", $(this).width() * (9 / 16) + "px");
                 }
             })
         }
@@ -100,9 +97,7 @@ function Miscellaneous($, _content) {
         if (siteLocation.getLocation("headlines")) {
             $("iframe").each(function () {
                 if ($(this).attr("src").match(/^http:\/\/(?:www\.)?youtube.com\/embed\/\w+(&\S*)?$/)) {
-                    $(this).css("width", "516px");
-                    $(this).css("display", "block");
-                    $(this).css("margin", "0 auto");
+                    $(this).css("height", $(this).width() * (9 / 16) + "px");
                 }
             })
         }
