@@ -76,6 +76,14 @@ function Miscellaneous($, _content) {
                 $(this).css("margin", "0px 5px 5px 10px");
             });
         }
+
+        // fixt YouTube im Forum
+        if(siteLocation.getLocation("forums")) {
+            // skaliert die Höhe der YouTube Embeds um 30%
+            $(".forum_ed_youtube embed").each(function() {
+                $(this).css("height", $(this).height() * 1.3 + "px");
+            });
+        }
     };
 
     /**
