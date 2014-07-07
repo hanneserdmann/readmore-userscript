@@ -76,6 +76,36 @@ function Miscellaneous($, _content) {
                 $(this).css("margin", "0px 5px 5px 10px");
             });
         }
+
+        // fixt den verzerrten YouTube Player im Forum
+        if(siteLocation.getLocation("forums")) {
+            $(".forum_ed_youtube").each(function() {
+                $(this).css("width", "516px");
+                $(this).css("display", "block");
+            });
+        }
+
+        // fixt den verzerrten YouTube Player in den News
+        if (siteLocation.getLocation("news")) {
+            $("iframe").each(function () {
+                if ($(this).attr("src").match(/^http:\/\/(?:www\.)?youtube.com\/embed\/\w+(&\S*)?$/)) {
+                    $(this).css("width", "516px");
+                    $(this).css("display", "block");
+                    $(this).css("margin", "0 auto");
+                }
+            })
+        }
+
+        // fixt den verzerrten YouTube Player in den Schlagzeilen
+        if (siteLocation.getLocation("headlines")) {
+            $("iframe").each(function () {
+                if ($(this).attr("src").match(/^http:\/\/(?:www\.)?youtube.com\/embed\/\w+(&\S*)?$/)) {
+                    $(this).css("width", "516px");
+                    $(this).css("display", "block");
+                    $(this).css("margin", "0 auto");
+                }
+            })
+        }
     };
 
     /**
