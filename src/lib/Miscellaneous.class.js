@@ -26,7 +26,7 @@ function Miscellaneous($, _content) {
         var maxWidth = 1200,
             leftSidebarWidth = $("#c_left").outerWidth(),
             rightSidebarWidth = $("#c_right").outerWidth(),
-            sidebarsWidth = (leftSidebarWidth ? leftSidebarWidth + rightSidebarWidth : 1 + rightSidebarWidth),
+            sidebarsWidth = !leftSidebarWidth ? rightSidebarWidth + 1 : !rightSidebarWidth ? leftSidebarWidth + 1 : (leftSidebarWidth && rightSidebarWidth) ? leftSidebarWidth + rightSidebarWidth : 1200,
             padding = 4,
             siteLocation = new SiteLocation($);
 
