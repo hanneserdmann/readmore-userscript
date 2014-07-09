@@ -28,7 +28,8 @@ function SiteLocation($){
         betting: false,
         changes: false,
         staff: false,
-        statics: false
+        statics: false,
+        news: false
     };
 
     /**

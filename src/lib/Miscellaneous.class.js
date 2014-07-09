@@ -77,12 +77,29 @@ function Miscellaneous($, _content) {
             });
         }
 
-        // fixt Iframes in Schlagzeilen
-        if(siteLocation.getLocation("headlines")) {
-            // skaliert die Höhe der Iframes um 40%
-            $(".headline_content iframe").each(function() {
-                $(this).css("height", $(this).height() * 1.4 + "px");
+        // fixt den verzerrten YouTube Player im Forum
+        if(siteLocation.getLocation("forums")) {
+            $(".forum_ed_youtube embed").each(function() {
+                $(this).css("height", $(this).width() * (9 / 16) + "px");
             });
+        }
+
+        // fixt den verzerrten YouTube Player in den News
+        if (siteLocation.getLocation("news")) {
+            $("iframe").each(function () {
+                if ($(this).attr("src").match(/^http:\/\/(?:www\.)?youtube.com\/embed\/\w+(&\S*)?$/)) {
+                    $(this).css("height", $(this).width() * (9 / 16) + "px");
+                }
+            })
+        }
+
+        // fixt den verzerrten YouTube Player in den Schlagzeilen
+        if (siteLocation.getLocation("headlines")) {
+            $("iframe").each(function () {
+                if ($(this).attr("src").match(/^http:\/\/(?:www\.)?youtube.com\/embed\/\w+(&\S*)?$/)) {
+                    $(this).css("height", $(this).width() * (9 / 16) + "px");
+                }
+            })
         }
     };
 
