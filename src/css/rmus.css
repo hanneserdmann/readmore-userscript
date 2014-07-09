@@ -72,7 +72,6 @@ div#userscriptOptionsOverlay {
 }
 #userscriptOptions .rmus-options-content {
     overflow-y: scroll;
-    height: 400px;
 }
 #userscriptOptions .rmus-options-content table {
     border: none;

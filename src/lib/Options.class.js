@@ -142,6 +142,12 @@ function Options($) {
             // Im-/Export ausblenden
             $('div#rmus-options-imexport').hide();
             $('div#userscriptOptions').fadeIn(250);
+
+            // Dynamische Content-Höhe
+            $(window).ready(function() {
+                var height =  $(window).height()-250; $('div#userscriptOptions div.rmus-options-content').height(height);
+                $(window).resize(function(){var height =  $(window).height()-250; $('div#userscriptOptions div.rmus-options-content').height(height);});
+            });
         });
     };
 
