@@ -76,6 +76,14 @@ function Miscellaneous($, _content) {
                 $(this).css("margin", "0px 5px 5px 10px");
             });
         }
+
+        // fixt Iframes in Schlagzeilen
+        if(siteLocation.getLocation("headlines")) {
+            // skaliert die Höhe der Iframes um 40%
+            $(".headline_content iframe").each(function() {
+                $(this).css("height", $(this).height() * 1.4 + "px");
+            });
+        }
     };
 
     /**
