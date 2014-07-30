@@ -13,13 +13,23 @@ function Headlines($, _options, _content) {
         _sectionOpts = null,
         _mappings = {
             'cs': 'CS:GO',
-            'sc': 'Starcraft 2',
+            'sc': 'StarCraft 2',    // 30+ Minuten debuggt weil das C klein geschrieben war,
+                                    // immerhin kenne ich jetzt die SidebarSection Klasse gründlich ;D
             'dota': 'Dota 2',
             'lol': 'League of Legends',
             'hs': 'Hearthstone',
             'wc3': 'Warcraft 3',
             'other': 'Sonstiges'
         };
+
+
+    /**
+     * Öffentlich verfügbar machen, damit wir die Schlagzeilen in den Optionen auslesen können
+     * @returns {{cs: string, sc: string, dota: string, lol: string, hs: string, wc3: string, other: string}}
+     */
+    this.getMappings = function(){
+        return _mappings;
+    };
 
     /**
      * Startet einen MutationObserver, der auf DOM-Änderungen im div#headlines_list listened.

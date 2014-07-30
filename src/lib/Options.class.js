@@ -107,6 +107,7 @@ function Options($) {
      */
     this.saveOptions = function() {
         _readOptionsFromHTML();
+        _readSortableLists();
 
         try {
             localStorage.setItem(LOCALSTORAGE_NAME, JSON.stringify(_options));
@@ -149,6 +150,7 @@ function Options($) {
      */
     this.showOptions = function() {
         _writeOptionsToHTML();
+        _displaySortableLists();
 
         $('div#userscriptOptionsOverlay').fadeIn(200, function() {
             // Reset scroll
@@ -394,6 +396,76 @@ function Options($) {
         $('#toggle_sub_middleColumn_forum_scrollForNewPage').click(function() {
             $('.sub_middleColumn_forum_scrollForNewPage').toggle();
         });
+    };
+
+    /**
+     * Die Inhalte der Sortierbaren Listen werden ausgelesen
+     * @private
+     */
+    var _readSortableLists = function(){
+        var headlineMappings    = new Headlines($, this, '').getMappings(),
+            headlineDiv         = document.getElementById('sub_rightColumn_headlines_hideHeadlines_sortable'),
+            $headlineListUsed   = $(headlineDiv.children[1].children[1]);
+
+        // Headlines
+        for(var headline in headlineMappings){
+            var optionName  = 'rightColumn_headlines_item_' + headline,
+                $element    = $headlineListUsed.find('li[data-name="' + optionName + '"]');
+
+            // Da nur die Used Liste durchsucht wird, werden alle anderen Einträge auf 0 gesetzt
+            _options[optionName] = ($element.length) ? Number($headlineListUsed.children().index($element)) + 1 : 0;
+        }
+    };
+
+    /**
+     * Sortierbare Listen erstellen
+     * @private
+     */
+    var _displaySortableLists = function(){
+        var headlineMappings    = new Headlines($, this, '').getMappings(),
+            headlineDiv         = document.getElementById('sub_rightColumn_headlines_hideHeadlines_sortable'),
+            $headlineListUnused = $(headlineDiv.children[0].children[1]),
+            $headlineListUsed   = $(headlineDiv.children[1].children[1]);
+
+        // Headlines leeren
+        $headlineListUnused.children().add($headlineListUsed.children()).remove();
+
+        // Headline Listen auslesen
+        for(var headline in headlineMappings){
+            var optionName  = 'rightColumn_headlines_item_' + headline,
+                listElement = (typeof _options[optionName] === 'undefined' || Number(_options[optionName]) !== 0) ? $headlineListUsed : $headlineListUnused,
+                sortValue   = (typeof _options[optionName] === 'undefined') ? 1 : Number(_options[optionName]);
+
+            listElement.append('<li data-sort="' + sortValue + '" data-name="' + optionName + '">' + headlineMappings[headline] + '</li>')
+        }
+
+        // Elemente in die korrekte Reihenfolge bringen
+        $headlineListUsed.find('li').sort(_sortLiElementsByData).appendTo($headlineListUsed);
+
+        // Headline Listen sortierbar
+        $('.conncected.list.headlines').sortable({
+            connectWith: '.conncected.list.headlines'
+        });
+    };
+
+    /**
+     * Methode um die sortierbaren Listen bei der Initialisierung zu sortieren.
+     * @param elmOne
+     * @param elmTwo
+     * @returns {number}
+     * @private
+     */
+    var _sortLiElementsByData = function(elmOne, elmTwo){
+        var dataOne     = $(elmOne).data(),
+            dataTwo     = $(elmTwo).data(),
+            returnVal   = 0;
+
+        if (dataOne['sort'] === dataTwo['sort']){
+            returnVal = (dataOne['name'] > dataTwo['name']) ? 1 : -1;
+        }
+        else returnVal = (dataOne['sort'] > dataTwo['sort']) ? 1 : -1;
+
+        return returnVal;
     };
 
     /**

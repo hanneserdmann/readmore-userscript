@@ -18,7 +18,6 @@ function SidebarSection($, section) {
      */
     this._getTarget = function (name) {
         var target = $("div.headlines_cat a:contains('" + name + "')", _section);
-
         return target.length === 1 ? target : null;
     };
 
@@ -50,20 +49,21 @@ function SidebarSection($, section) {
      * @param sections
      */
     this.resortSections = function (sections) {
-        var html = '';
+        var html = '',
+            sections = $.extend({}, sections);
 
-        sections.forEach(function (sectionItem) {
-            var target = _self._getTarget(sectionItem.title);
+        // Habe die Funktion beim Debuggen etwas umgeschrieben. Macht letztendlich das selbe,
+        // bau sie deshalb nicht wieder zurück.
+        for (var sectionItem in sections){
+            var target = _self._getTarget(sections[sectionItem].title);
 
-            if (target === null) {
-                return;
+            if (target !== null) {
+                var headline = target.parents('div.headlines_cat:first'),
+                    content = headline.next('ul');
+
+                html += headline[0].outerHTML + content[0].outerHTML;
             }
-
-            var headline = target.parents('div.headlines_cat:first'),
-                content = headline.next('ul');
-
-            html += headline[0].outerHTML + content[0].outerHTML;
-        });
+        };
 
         _section.html(html);
     };
@@ -85,7 +85,7 @@ function SidebarSection($, section) {
             var raw = section.split('_').pop(),
                 mapped = mappings[raw];
 
-            if (optionSections[section] === '0') {
+            if (Number(optionSections[section]) === 0) {
                 this.hideSingle(mapped);
             } else {
                 var sort = parseInt(optionSections[section]);

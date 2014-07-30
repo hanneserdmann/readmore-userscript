@@ -188,6 +188,39 @@ div#userscriptOptionsOverlay {
 #userscriptOptions input[type=color]{
     width: 80%;
 }
+#sub_rightColumn_headlines_hideHeadlines_sortable{
+    width: 100%;
+}
+#sub_rightColumn_headlines_hideHeadlines_sortable > div > span{
+    display: block;
+    margin-bottom: 15px;
+}
+#sub_rightColumn_headlines_hideHeadlines_sortable ul{
+    width: 100%;
+    background: #fff;
+    min-height: 100px;
+    padding: 1px 0px;
+}
+#sub_rightColumn_headlines_hideHeadlines_sortable li{
+    width: 95%;
+    padding: 2%;
+    background: #e2e2e2;
+    outline: 1px solid #ccc;
+    list-style: none;
+    height: 22px;
+    margin: 8px 2.5%;
+}
+#sub_rightColumn_headlines_hideHeadlines_sortable > div:nth-child(1){
+    width: 50%;
+    float: left;
+}
+#sub_rightColumn_headlines_hideHeadlines_sortable > div:nth-child(2){
+    width: 50%;
+    float: right;
+}
+#sub_rightColumn_headlines_hideHeadlines_sortable > div:nth-child(3){
+    clear: both;
+}
 .btn-rm {
     border: 1px solid #ccccce;
     color: #222222;
