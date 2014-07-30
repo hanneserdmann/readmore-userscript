@@ -188,20 +188,20 @@ div#userscriptOptionsOverlay {
 #userscriptOptions input[type=color]{
     width: 80%;
 }
-#sub_rightColumn_headlines_hideHeadlines_sortable{
+#sub_rightColumn_headlines_hideHeadlines_sortable, #sub_rightColumn_forum_sections_sortable{
     width: 100%;
 }
-#sub_rightColumn_headlines_hideHeadlines_sortable > div > span{
+#sub_rightColumn_headlines_hideHeadlines_sortable > div > span, #sub_rightColumn_forum_sections_sortable > div > span{
     display: block;
     margin-bottom: 15px;
 }
-#sub_rightColumn_headlines_hideHeadlines_sortable ul{
+#sub_rightColumn_headlines_hideHeadlines_sortable ul, #sub_rightColumn_forum_sections_sortable ul{
     width: 100%;
     background: #fff;
     min-height: 100px;
     padding: 1px 0px;
 }
-#sub_rightColumn_headlines_hideHeadlines_sortable li{
+#sub_rightColumn_headlines_hideHeadlines_sortable li, #sub_rightColumn_forum_sections_sortable li{
     width: 95%;
     padding: 2%;
     background: #e2e2e2;
@@ -209,16 +209,17 @@ div#userscriptOptionsOverlay {
     list-style: none;
     height: 22px;
     margin: 8px 2.5%;
+    cursor: move;
 }
-#sub_rightColumn_headlines_hideHeadlines_sortable > div:nth-child(1){
+#sub_rightColumn_headlines_hideHeadlines_sortable > div:nth-child(1), #sub_rightColumn_forum_sections_sortable > div:nth-child(1){
     width: 50%;
     float: left;
 }
-#sub_rightColumn_headlines_hideHeadlines_sortable > div:nth-child(2){
+#sub_rightColumn_headlines_hideHeadlines_sortable > div:nth-child(2), #sub_rightColumn_forum_sections_sortable > div:nth-child(2){
     width: 50%;
     float: right;
 }
-#sub_rightColumn_headlines_hideHeadlines_sortable > div:nth-child(3){
+#sub_rightColumn_headlines_hideHeadlines_sortable > div:nth-child(3), #sub_rightColumn_forum_sections_sortable > div:nth-child(3){
     clear: both;
 }
 .btn-rm {

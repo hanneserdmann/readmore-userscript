@@ -405,7 +405,11 @@ function Options($) {
     var _readSortableLists = function(){
         var headlineMappings    = new Headlines($, this, '').getMappings(),
             headlineDiv         = document.getElementById('sub_rightColumn_headlines_hideHeadlines_sortable'),
-            $headlineListUsed   = $(headlineDiv.children[1].children[1]);
+            $headlineListUsed   = $(headlineDiv.children[1].children[1]),
+
+            forumMappigns       = new ForumNavigation($, this, '', '', '').getMappings(),
+            forumDiv            = document.getElementById('sub_rightColumn_forum_sections_sortable'),
+            $forumListUsed      = $(forumDiv.children[1].children[1]);
 
         // Headlines
         for(var headline in headlineMappings){
@@ -414,6 +418,15 @@ function Options($) {
 
             // Da nur die Used Liste durchsucht wird, werden alle anderen Einträge auf 0 gesetzt
             _options[optionName] = ($element.length) ? Number($headlineListUsed.children().index($element)) + 1 : 0;
+        }
+
+        // Forum
+        for(var forum in forumMappigns){
+            var optionName  = 'rightColumn_forums_item_' + forum,
+                $element    = $forumListUsed.find('li[data-name="' + optionName + '"]');
+
+            // Da nur die Used Liste durchsucht wird, werden alle anderen Einträge auf 0 gesetzt
+            _options[optionName] = ($element.length) ? Number($forumListUsed.children().index($element)) + 1 : 0;
         }
     };
 
@@ -425,10 +438,16 @@ function Options($) {
         var headlineMappings    = new Headlines($, this, '').getMappings(),
             headlineDiv         = document.getElementById('sub_rightColumn_headlines_hideHeadlines_sortable'),
             $headlineListUnused = $(headlineDiv.children[0].children[1]),
-            $headlineListUsed   = $(headlineDiv.children[1].children[1]);
+            $headlineListUsed   = $(headlineDiv.children[1].children[1]),
 
-        // Headlines leeren
+            forumMappigns       = new ForumNavigation($, this, '', '', '').getMappings(),
+            forumDiv            = document.getElementById('sub_rightColumn_forum_sections_sortable'),
+            $forumListUnused    = $(forumDiv.children[0].children[1]),
+            $forumListUsed      = $(forumDiv.children[1].children[1]);
+
+        // Listen leeren
         $headlineListUnused.children().add($headlineListUsed.children()).remove();
+        $forumListUnused.children().add($forumListUsed.children()).remove();
 
         // Headline Listen auslesen
         for(var headline in headlineMappings){
@@ -439,12 +458,27 @@ function Options($) {
             listElement.append('<li data-sort="' + sortValue + '" data-name="' + optionName + '">' + headlineMappings[headline] + '</li>')
         }
 
+        // Forum Listen auslesen
+        for(var forum in forumMappigns){
+            var optionName  = 'rightColumn_forums_item_' + forum,
+                listElement = (typeof _options[optionName] === 'undefined' || Number(_options[optionName]) !== 0) ? $forumListUsed : $forumListUnused,
+                sortValue   = (typeof _options[optionName] === 'undefined') ? 1 : Number(_options[optionName]);
+
+            listElement.append('<li data-sort="' + sortValue + '" data-name="' + optionName + '">' + forumMappigns[forum] + '</li>')
+        }
+
         // Elemente in die korrekte Reihenfolge bringen
         $headlineListUsed.find('li').sort(_sortLiElementsByData).appendTo($headlineListUsed);
+        $forumListUsed.find('li').sort(_sortLiElementsByData).appendTo($forumListUsed);
 
         // Headline Listen sortierbar
         $('.conncected.list.headlines').sortable({
             connectWith: '.conncected.list.headlines'
+        });
+
+        // Forum Listen sortierbar
+        $('.conncected.list.forum').sortable({
+            connectWith: '.conncected.list.forum'
         });
     };
 

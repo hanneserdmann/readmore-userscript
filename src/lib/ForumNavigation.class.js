@@ -19,6 +19,10 @@ function ForumNavigation($, _options, _reloadPageData, _misc, _content) {
             'readmore': 'readmore'
         };
 
+    this.getMappings = function(){
+        return _mappings;
+    };
+
     /**
      * Lädt die Forennavigation neu.
      * @return {[type]} [description]
