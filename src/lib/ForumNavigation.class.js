@@ -2,12 +2,26 @@
  * ForumNavigation
  * ===============
  *
- * Sorgt für das Umsortieren (TODO) und das Neuladen der Forumnavigation.
+ * Sorgt für das Umsortieren, Ausblenden und Neuladen der Forumnavigation.
  */
 
 function ForumNavigation($, _options, _reloadPageData, _misc, _content) {
 
-    var _self = this;
+    var _self = this,
+        _observer = null,
+        _section = null,
+        _sectionOpts = null,
+        _mappings = {
+            'esport': 'eSport',
+            'technik': 'Technik',
+            'offtopic': 'Offtopic',
+            'spiele': 'Spiele',
+            'readmore': 'readmore'
+        };
+
+    this.getMappings = function(){
+        return _mappings;
+    };
 
     /**
      * Lädt die Forennavigation neu.
@@ -23,6 +37,11 @@ function ForumNavigation($, _options, _reloadPageData, _misc, _content) {
         // Nachdem das Forum neugeladen wurde, müssen die Pfeile eventuell wieder angepasst werden
         if (_options.getOption("miscellaneous_lastPageJumpToLastPost")) {
             _misc.changeForumArrowBehavior();
+        }
+
+        // Neu sortieren/ausblenden
+        if (_options.getOption('rightColumn_forum_sections')) {
+            this._handleForums();
         }
     };
 
@@ -42,5 +61,68 @@ function ForumNavigation($, _options, _reloadPageData, _misc, _content) {
         setTimeout(function() {
             _self.reloadForum();
         }, 500);
+    };
+
+    /**
+     * Startet einen MutationObserver, der auf DOM-Änderungen im div#headlines_list listened.
+     * Bei Änderungen werden die Headlines neu eingelesen und wieder versteckt, da
+     * readmore.de bei einem Klick auf +/- die kompletten Headlines neu lädt.
+     *
+     * MutationObserver sind in allen modernen Browsern und IE ab v11 supported.
+     *
+     * Da die +/- Buttons einen Ajax-Request abschicken, müsste man irgendwie einen Callback übergeben,
+     * ich habe es aber nicht geschafft, mich in die originale Funktion "sidebar_headlines_setlimit" zu hooken.
+     * Ein normaler Click-Listener auf den Buttons hat durch die asynchrone Natur nicht funktioniert.
+     */
+    this._catchForumsChange = function() {
+        try {
+            var target = _content.get('forumNavigation')[0],
+                config = {
+                    childList: true,
+                    attributes: false
+                };
+
+            MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+
+            _observer = new MutationObserver(function() {
+                // Temporär observer stoppen, sonst deadlock
+                _observer.disconnect();
+                _self._handleForums();
+                _observer.observe(target, config);
+            });
+
+            _observer.observe(target, config);
+        } catch(e) {
+            console.warn('Der MutationObserver konnte nicht initialisiert werden. Nachladen von Foren kann Fehler verursachen!');
+        }
+    };
+
+    this._handleForums = function() {
+        if (_options.getOption('rightColumn_forum_hideForum')) {
+            // Foren ausblenden
+            _section.hideAll();
+            return;
+        }
+
+        if (_options.getOption('rightColumn_forum_sections')) {
+            _section.process(_sectionOpts, _mappings);
+        }
+    };
+
+    this.init = function () {
+        // Button ums Forum nachzuladen einbauen
+        this.addReloadBtn().click(function() {
+            _self.reloadForumManually();
+        });
+
+        _sectionOpts = _options.getOptionsFuzzy('rightColumn_forums_item_');
+        _section = new SidebarSection($, _content.get('forumNavigation'));
+
+        this._handleForums();
+
+        // Wenn NICHT alle Foren ausgeblendet werden sollen muss der Observer gestartet werden
+        if (!_options.getOption('rightColumn_forum_hideForum')) {
+            this._catchForumsChange();
+        }
     };
 }

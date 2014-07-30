@@ -57,14 +57,11 @@ function ReadmoreUserscript($) {
 
         // Prüfen ob die Übersicht überhaupt vorhanden ist
         if (_content.get('forumNavigation').length) {
-            // Button ums Forum nachzuladen einbauen
-            _forumNavigation.addReloadBtn().click(function() {
-                _forumNavigation.reloadForumManually();
-            });
+            _forumNavigation.init();
         }
 
         // Schlagzeilen ausblenden
-        if (_content.get('headlines').length && _content.get('tickerMatches').length){
+        if (_content.get('headlines').length && _content.get('tickerMatches').length) {
             _headlines.init();
         }
 
