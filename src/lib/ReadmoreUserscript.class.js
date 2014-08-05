@@ -9,7 +9,8 @@ function ReadmoreUserscript($) {
         _reloadPageData = new ReloadPageData($),
         _ticker = new Ticker($, _content),
         _forumNavigation = new ForumNavigation($, _options, _reloadPageData, _misc, _content),
-        _postWithoutReload = new PostWithoutReload($, _options,_reloadPosts);
+        _postWithoutReload = new PostWithoutReload($, _options,_reloadPosts),
+        _scrollForNewPage = new ScrollForNewPage($, _options, _content);
 
     this.start = function() {
         if (_options.getOption('miscellaneous_makeContentWider')) {
@@ -51,6 +52,10 @@ function ReadmoreUserscript($) {
                 // Runterscrollen
                 if (_options.getOption('miscellaneous_buttonScrollDown')){
                     _misc.buttonScrollDown();
+                }
+
+                if (_options.getOption('middleColumn_forum_scrollForNewPage')){
+                    _scrollForNewPage.init();
                 }
             }
         }

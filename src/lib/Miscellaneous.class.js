@@ -138,7 +138,7 @@ function Miscellaneous($, _content) {
         $('#c_content h1:first').append('<i id="icon_miscellaneous_buttonScrollDown" class="rmus-icon rmus-icon-angle-double-down" title="Nach unten scrollen"></i>')
             .find('#icon_miscellaneous_buttonScrollDown')
             .on('click', function(){
-                window.scrollTo(0, _content.get('forumPosts').last().offset().top - 100);
+                window.scrollTo(0, document.body.offsetHeight);
             });
     }
 }

@@ -251,12 +251,22 @@ div#userscriptOptionsOverlay {
     font-size: 18px !important;
     color: #19A1EC;
 }
-#icon_miscellaneous_buttonScrollDown, #icon_miscellaneous_buttonScrollUp {
+#icon_miscellaneous_buttonScrollDown, #icon_miscellaneous_buttonScrollUp, #moveTextareaTopTrigger {
     float: right;
     cursor: pointer;
     border: 1px solid #E9E9E9;
 }
 
+#moveTextareaTopTrigger{
+    margin-right: 10px;
+    padding: 2px;
+    font-size: 13px;
+}
+
 #icon_miscellaneous_buttonScrollDown:hover, #icon_miscellaneous_buttonScrollUp:hover {
     color: #FFB400;
+}
+
+.forum_thread_reply{
+    margin-bottom: 15px;
 }

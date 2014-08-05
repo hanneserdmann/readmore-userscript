@@ -31,7 +31,7 @@ module.exports = function(grunt){
          * Script in den temp Ordner kopieren
          */
         'generate-chrome-extension-copy-js': {
-            src:    grunt.pkg.paths.dist + grunt.pkg.filenames.scriptmin,
+            src:    grunt.pkg.paths.dist + grunt.pkg.filenames.script,
             dest:   grunt.pkg.paths.chrometemp + grunt.pkg.filenames.scriptmin
         },
 
@@ -70,7 +70,7 @@ module.exports = function(grunt){
                 }]
             },
             files: [{
-                src:    grunt.pkg.paths.dist + grunt.pkg.filenames.scriptmin,
+                src:    grunt.pkg.paths.dist + grunt.pkg.filenames.script,
                 dest:   grunt.pkg.paths.firefoxtempdata + grunt.pkg.filenames.scriptmin
             }]
         },

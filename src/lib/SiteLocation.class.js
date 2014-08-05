@@ -96,7 +96,7 @@ function SiteLocation($){
      */
     var _readCurrentLocation = function(){
         $.each(_siteLocation, function(name){
-            if (document.location.pathname.substring(1, ++(name.length)) === name){
+            if (document.location.pathname.substring(1, (name.length + 1)) === name){
                 _siteLocation[name] = true;
                 return false;
             }
