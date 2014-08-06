@@ -5,10 +5,9 @@
  * Beim Runterscrollen werden neue Seiten nachgeladen und angezeigt.
  */
 
-function ScrollForNewPage($, _options, _content){
+function ScrollForNewPage($, _options, _content, _ignoreUser){
     var _currentPage    = 0,
         _postCount      = 0,
-        _limit          = 0,
         _threadlink     = '',
         _currentlyLoading   = false,
         _lastPage           = false,
@@ -23,16 +22,16 @@ function ScrollForNewPage($, _options, _content){
 
         // 25 Posts geladen, es könnte also eine neue Seite geben
         if (_postCount === 25){
+            $(window).onL
             _readThreadLink();
             _readCurrentPage();
-            _readLimit();
 
             var $insertElement  = $('div.pagination:last');
             _$postInsertElement = $insertElement.length ? $insertElement : $('div.forum_thread_reply:last');
 
             setInterval(function() {
                 if (!_lastPage && !_currentlyLoading && (_postCount % 25 === 0)){
-                    if (window.pageYOffset + (window.innerHeight * 0.60) > _limit){
+                    if ((window.pageYOffset + $(window).height()) > document.body.offsetHeight){
                         _readNextPage();
                     }
                 }
@@ -56,10 +55,6 @@ function ScrollForNewPage($, _options, _content){
         var pageText = $('div.pagination li.active').first().find('a').text();
         // Empty String = Seite 1. Keine Page navigation vorhanden.
         _currentPage = pageText !== '' ? +pageText : 1;
-    };
-
-    var _readLimit = function(){
-        _limit = $('#c_content .forum_post:last').offset().top;
     };
 
     var _readNextPage = function(){
@@ -86,7 +81,11 @@ function ScrollForNewPage($, _options, _content){
                     _currentPage++;
                     _$postInsertElement.before(posts);
                     _readPostcount();
-                    _readLimit();
+
+                    // User Ignorieren
+                    if (_options.getOption('miscellaneous_ignoreUser')){
+                      _ignoreUser.ignore();
+                    }
                 }
             })
             .always(function(){

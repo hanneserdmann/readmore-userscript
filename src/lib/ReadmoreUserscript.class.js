@@ -3,14 +3,15 @@ function ReadmoreUserscript($) {
     var _options = new Options($),
         _siteLocation = new SiteLocation($),
         _content = new Content($),
-        _reloadPosts = new ReloadPosts($, _options, _content),
+        _ignoreUser = new IgnoreUser($, _options, _siteLocation, _content),
+        _reloadPosts = new ReloadPosts($, _options, _content, _ignoreUser),
         _misc = new Miscellaneous($, _content),
         _headlines = new Headlines($, _options, _content),
         _reloadPageData = new ReloadPageData($),
         _ticker = new Ticker($, _content),
         _forumNavigation = new ForumNavigation($, _options, _reloadPageData, _misc, _content),
         _postWithoutReload = new PostWithoutReload($, _options,_reloadPosts),
-        _scrollForNewPage = new ScrollForNewPage($, _options, _content);
+        _scrollForNewPage = new ScrollForNewPage($, _options, _content, _ignoreUser);
 
     this.start = function() {
         if (_options.getOption('miscellaneous_makeContentWider')) {
@@ -73,6 +74,11 @@ function ReadmoreUserscript($) {
         // Ticker ausblenden
         if (_options.getOption('rightColumn_ticker_hideTicker')) {
             _ticker.hideTicker();
+        }
+
+        // User Ignorieren
+        if (_options.getOption('miscellaneous_ignoreUser')){
+            _ignoreUser.ignore();
         }
     };
 
