@@ -250,19 +250,11 @@ function Options($) {
                     } else {
                         $('[name=' + index + ']').attr('checked', false);
                     }
-                    return true;
                 }
 
                 // Textfelder auslesen und den Wert zuweisen
-                if ($.inArray(type, inputTypes) || type == null) {
+                if (($.inArray(type, inputTypes) !== -1) || type == null) {
                     $('[name=' + index + ']').val(value);
-                    return true;
-                }
-
-                // Selectboxen auslesen und den Wert zuweisen
-                if (index.match('rightColumn_forum_hideForum_') != null) {
-                    $('[name=' + index + ']').val(value);
-                    return true;
                 }
             });
         }

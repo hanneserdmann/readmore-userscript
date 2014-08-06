@@ -10,7 +10,7 @@
  * @constructor
  */
 
-function ReloadPosts($, _options, _content) {
+function ReloadPosts($, _options, _content, _ignoreUser) {
     var _postcount      = 0;
     var _finishedPages  = 0;
     var _currentPage    = 1;
@@ -153,11 +153,16 @@ function ReloadPosts($, _options, _content) {
                             _postcount++;
                         }
 
-                        _oldLimit = window.pageYOffset + (window.innerHeight * 0.60);
+                        _oldLimit = (window.pageYOffset + $(window).height());
 
                         // Ungelesene Posts makieren
                         if (_options.getOption('middleColumn_forum_reloadPosts_markNewPosts')) {
                             _markNewPosts();
+                        }
+
+                        // User Ignorieren
+                        if (_options.getOption('miscellaneous_ignoreUser')){
+                            _ignoreUser.ignore();
                         }
                     }
                 }
@@ -174,7 +179,7 @@ function ReloadPosts($, _options, _content) {
      * Entfernt die Markierung und bereits gelesenen Posts.
      */
     this.unmarkNewPosts = function () {
-        var limit           = window.pageYOffset + (window.innerHeight * 0.60);
+        var limit           = (window.pageYOffset + $(window).height());
         var removeElements  = 0;
 
         // Nur wenn nach unten gescrollt wurde
@@ -364,7 +369,7 @@ function ReloadPosts($, _options, _content) {
                     success: function (data) {
                         var posts = data.match(/\<tr class=\"post\_[^"]+\"\>[^]+?\<\/tr\>/g);
                         if (posts != null) {
-                            $('table.elf.forum.p2:last').after('<br/><div id="userscriptNewPage" style="width:520px; height: 23px; background-color: #2B91FF; text-align: right; vertical-align:middle; display:table-cell"><a style="color: #fff; font-weight: bold; padding-right: 10px;" href="' + _threadlink + '&pagenum=' + (_currentPage + 1) + '">Zur n&auml;chsten Seite</a></div>');
+                            $('table.elf.forum.p2:last').after('<br/><div id="userscriptNewPage" style="width:520px; height: 23px; background-color: #2B91FF; text-align: right; vertical-align:middle; display:table-cell"><a style="color: #fff; font-weight: bold; padding-right: 10px;" href="' + _threadlink + '&pagenum=' + (_currentPage + 1) + '">Zur nächsten Seite</a></div>');
                         }
                     },
                     beforeSend: function (jqXHR) {

@@ -184,7 +184,8 @@ div#userscriptOptionsOverlay {
     padding: 1px 5px;
 }
 #userscriptOptions input[type=number],
-#userscriptOptions input[type=color]{
+#userscriptOptions input[type=color],
+#userscriptOptions input[type=text]{
     width: 80%;
 }
 #sub_rightColumn_headlines_hideHeadlines_sortable, #sub_rightColumn_forum_sections_sortable{
@@ -269,4 +270,17 @@ div#userscriptOptionsOverlay {
 
 .forum_thread_reply{
     margin-bottom: 15px;
+}
+
+.ignoreUserTrigger:after{
+    content: "\00a0\00a0|\00a0\00a0";
+    color: #7b7b7b;
+}
+
+.comment{
+    min-height: inherit!important;
+}
+
+.comment .comment_con{
+    min-height: inherit!important;
 }
