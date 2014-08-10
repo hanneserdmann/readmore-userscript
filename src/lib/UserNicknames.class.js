@@ -26,8 +26,15 @@ function UserNicknames($, _siteLocation, _content){
             nickHistoryLink = profileLink + '/nick_history';
 
         $.get(nickHistoryLink, null, function (content) {
-            var nicknameTable = $('div#c_content table', $($.parseHTML(content))),
-                nicknameRows = $('tr', nicknameTable),
+            var siteContent = $('div#c_content', $($.parseHTML(content))),
+                nicknameTable = $('table', siteContent);
+
+            if (nicknameTable.length === 0 && null !== siteContent.text().match(/Der ausgewählte Account wurde von einem Admin gesperrt/)) {
+                alert('Nicknames können nicht abgerufen werden, da der User gebannt wurde.');
+                return;
+            }
+
+            var nicknameRows = $('tr', nicknameTable),
                 nicknameCount = nicknameRows.length - 1, // - Header
                 nicks = 'Bisherige Nicknames:\n\n';
 
