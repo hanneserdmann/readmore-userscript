@@ -2,7 +2,7 @@
  * IgnoreUser
  * ==========
  *
- * Ermäglicht das Ignorieren von Usern. Angegeben wird die jeweilige User-ID. Der geschriebene Post im Forum,
+ * Ermöglicht das Ignorieren von Usern. Angegeben wird die jeweilige User-ID. Der geschriebene Post im Forum,
  * Kommentar im Ticker oder unter den News oder aber Gästebucheintrag wird versteckt.
  */
 
