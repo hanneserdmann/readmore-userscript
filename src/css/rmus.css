@@ -252,19 +252,20 @@ div#userscriptOptionsOverlay {
     font-size: 18px !important;
     color: #19A1EC;
 }
-#icon_miscellaneous_buttonScrollDown, #icon_miscellaneous_buttonScrollUp, #moveTextareaTopTrigger {
+#icon_miscellaneous_buttonScrollDown, #icon_miscellaneous_buttonScrollUp, #moveTextareaTopTrigger, #userscriptForumFavorites {
     float: right;
     cursor: pointer;
-    border: 1px solid #E9E9E9;
+    /*border: 1px solid #E9E9E9;*/
 }
 
 #moveTextareaTopTrigger{
     margin-right: 10px;
+    margin-top: -2px;
     padding: 2px;
     font-size: 13px;
 }
 
-#icon_miscellaneous_buttonScrollDown:hover, #icon_miscellaneous_buttonScrollUp:hover {
+#icon_miscellaneous_buttonScrollDown:hover, #icon_miscellaneous_buttonScrollUp:hover, #moveTextareaTopTrigger:hover, #userscriptForumFavorites:hover {
     color: #FFB400;
 }
 

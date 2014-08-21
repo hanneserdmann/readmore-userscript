@@ -10,7 +10,8 @@ function ReadmoreUserscript($) {
         _headlines = new Headlines($, _options, _content),
         _reloadPageData = new ReloadPageData($),
         _ticker = new Ticker($, _content),
-        _forumNavigation = new ForumNavigation($, _options, _reloadPageData, _misc, _content),
+        _forumFavorites = new ForumFavorites($, _options, _content),
+        _forumNavigation = new ForumNavigation($, _options, _reloadPageData, _misc, _content, _forumFavorites),
         _postWithoutReload = new PostWithoutReload($, _options,_reloadPosts),
         _scrollForNewPage = new ScrollForNewPage($, _options, _content, _ignoreUser, _userNicknames);
 
@@ -56,8 +57,14 @@ function ReadmoreUserscript($) {
                     _misc.buttonScrollDown();
                 }
 
+                // Runterscrollen für eine neue Seite
                 if (_options.getOption('middleColumn_forum_scrollForNewPage')){
                     _scrollForNewPage.init();
+                }
+
+                // Favoriten im Thread
+                if (_options.getOption('forumFavorites')){
+                    _forumFavorites.initThread();
                 }
             }
         }
@@ -86,6 +93,12 @@ function ReadmoreUserscript($) {
         if (_options.getOption('miscellaneous_nicknameHistoryLink')){
             _userNicknames.insertLink();
         }
+
+        // Favoriten Forennavi
+        if (_options.getOption('forumFavorites')){
+            _forumFavorites.initForumNavi();
+        }
+
     };
 
     this.startIntervalReloadPosts = function() {
