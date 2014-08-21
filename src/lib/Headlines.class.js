@@ -13,7 +13,7 @@ function Headlines($, _options, _content) {
         _sectionOpts = null,
         _mappings = {
             'cs': 'CS:GO',
-            'sc': 'StarCraft 2',    // 30+ Minuten debuggt weil das C klein geschrieben war,
+            'sc': 'StarCraft II',    // 30+ Minuten debuggt weil das C klein geschrieben war,
                                     // immerhin kenne ich jetzt die SidebarSection Klasse gründlich ;D
             'dota': 'Dota 2',
             'lol': 'League of Legends',
