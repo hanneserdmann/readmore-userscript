@@ -4,6 +4,7 @@ function ReadmoreUserscript($) {
         _siteLocation = new SiteLocation($),
         _content = new Content($),
         _ignoreUser = new IgnoreUser($, _options, _siteLocation, _content),
+        _userNicknames = new UserNicknames($, _siteLocation, _content),
         _reloadPosts = new ReloadPosts($, _options, _content, _ignoreUser),
         _misc = new Miscellaneous($, _content),
         _headlines = new Headlines($, _options, _content),
@@ -79,6 +80,11 @@ function ReadmoreUserscript($) {
         // User Ignorieren
         if (_options.getOption('miscellaneous_ignoreUser')){
             _ignoreUser.ignore();
+        }
+
+        // Nickname History Link
+        if (_options.getOption('miscellaneous_nicknameHistoryLink')){
+            _userNicknames.insertLink();
         }
     };
 
