@@ -35,7 +35,8 @@ function Miscellaneous($, _content) {
         });
 
         $("#monkey").css({
-            "maxWidth": maxWidth + "px"
+            "maxWidth": maxWidth + "px",
+            "width": maxWidth + "px"
         });
 
         $("#container").css({
