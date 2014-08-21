@@ -7,6 +7,7 @@ module.exports = function(grunt) {
     var taskList = [
         'fontello:generate-font-fontello-download',
         'copy:generate-font-copy-font',
+        'clean:fontello-temp',
         'clean:temp'
     ];
 

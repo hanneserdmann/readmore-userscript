@@ -22,16 +22,15 @@ function ScrollForNewPage($, _options, _content, _ignoreUser){
 
         // 25 Posts geladen, es könnte also eine neue Seite geben
         if (_postCount === 25){
-            $(window).onL
+
             _readThreadLink();
             _readCurrentPage();
-
             var $insertElement  = $('div.pagination:last');
             _$postInsertElement = $insertElement.length ? $insertElement : $('div.forum_thread_reply:last');
 
             setInterval(function() {
                 if (!_lastPage && !_currentlyLoading && (_postCount % 25 === 0)){
-                    if ((window.pageYOffset + $(window).height()) > document.body.offsetHeight){
+                    if ((window.pageYOffset + $(window).height()) >= (document.body.offsetHeight - 400)){
                         _readNextPage();
                     }
                 }

@@ -9,6 +9,13 @@ module.exports = function(grunt){
         ],
 
         /**
+         * Bereinigt den Fontello temp Ordner
+         */
+        'fontello-temp': [
+            grunt.pkg.paths.fontellotemp + '*'
+        ],
+
+        /**
          * Bereinigt den dist Ordner
          */
         'dist': [
