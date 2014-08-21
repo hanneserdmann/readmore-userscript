@@ -60,6 +60,23 @@ function Options($) {
     };
 
     /**
+     * Gibt das Data Object zurück
+     * @returns {*}
+     */
+    this.getData = function(key){
+        return _options['dataStorage'][key];
+    };
+
+    /**
+     * Setzt eine Value in dem Data Object
+     * @param key
+     * @param value
+     */
+    this.setData = function(key, value){
+        _options['dataStorage'][key] =  value;
+    };
+
+    /**
      * Gibt alle Optionen zurück, die auf die "Wildcard" zutreffen.
      * @param {String} what
      */
@@ -149,7 +166,7 @@ function Options($) {
      * Blendet das Fenster mit den Optionen ein.
      */
     this.showOptions = function() {
-        _writeOptionsToHTML();
+        _self.writeOptionsToHTML();
         _displaySortableLists();
 
         $('div#userscriptOptionsOverlay').fadeIn(200, function() {
@@ -210,6 +227,9 @@ function Options($) {
             userscriptOptions[$(this).attr('name')] = $(this).val();
         });
 
+        // Data Storage wieder hinzufügen, wird immer mit durchgeschliffen
+        userscriptOptions['dataStorage'] = _options['dataStorage'];
+
         // Nachdem alle Daten eingelesen wurden, werden die Settings in dem Attribut gesichert.
         _options = userscriptOptions;
     };
@@ -226,14 +246,17 @@ function Options($) {
         if (_options == null) {
             _options = {};
         }
+
+        if (typeof _options['dataStorage'] === 'undefined'){
+            _options['dataStorage'] = {};
+        }
     };
 
     /**
      * Private Methode um die Inputboxen im Menu zu setzen. Die Optionen werden aus dem
      * Attribut entnommen.
-     * @private
      */
-    var _writeOptionsToHTML = function() {
+    this.writeOptionsToHTML = function() {
         var type = '',
             inputTypes = ['text', 'color', 'number'];
 

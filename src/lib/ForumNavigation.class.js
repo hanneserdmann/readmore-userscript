@@ -5,7 +5,7 @@
  * Sorgt für das Umsortieren, Ausblenden und Neuladen der Forumnavigation.
  */
 
-function ForumNavigation($, _options, _reloadPageData, _misc, _content) {
+function ForumNavigation($, _options, _reloadPageData, _misc, _content, _forumFavorites) {
 
     var _self = this,
         _observer = null,
@@ -42,6 +42,11 @@ function ForumNavigation($, _options, _reloadPageData, _misc, _content) {
         // Neu sortieren/ausblenden
         if (_options.getOption('rightColumn_forum_sections')) {
             this._handleForums();
+        }
+
+        // Favoriten Forennavi
+        if (_options.getOption('forumFavorites')){
+            _forumFavorites.initForumNavi();
         }
     };
 
