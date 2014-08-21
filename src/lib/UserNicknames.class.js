@@ -12,7 +12,8 @@ function UserNicknames($, _siteLocation, _content){
     this.insertLink = function(){
         if (_siteLocation.getLocation('forums') && _content.get('forumPosts').length){
             // Wenn wir uns im Forum befinden und Posts vorhanden sind
-            _insertDOMLink('.forum_post span.user');
+            // :not falls der Post schon einmal selektiert und bearbeitet wurde (bei nachladen von Posts)
+            _insertDOMLink('.forum_post span.user:not(span:has(a.rmus-old-nicknames))');
         } else if (_siteLocation.getLocation('news') || _siteLocation.getLocation('users') || _siteLocation.getLocation('matches')){
             // News, Userprofile (Gästebuch) oder Ticker
             _insertDOMLink('div.comment div.comment_head');
@@ -67,6 +68,7 @@ function UserNicknames($, _siteLocation, _content){
         img.src = _nickIconUrl;
         img.alt = '';
         link.title = 'Bisherige Nicknames anzeigen';
+        link.className = 'rmus-old-nicknames';
         link.href = '';
         link.style.marginLeft = '3px';
         link.appendChild(img);

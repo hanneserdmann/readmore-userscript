@@ -5,14 +5,14 @@ function ReadmoreUserscript($) {
         _content = new Content($),
         _ignoreUser = new IgnoreUser($, _options, _siteLocation, _content),
         _userNicknames = new UserNicknames($, _siteLocation, _content),
-        _reloadPosts = new ReloadPosts($, _options, _content, _ignoreUser),
+        _reloadPosts = new ReloadPosts($, _options, _content, _ignoreUser, _userNicknames),
         _misc = new Miscellaneous($, _content),
         _headlines = new Headlines($, _options, _content),
         _reloadPageData = new ReloadPageData($),
         _ticker = new Ticker($, _content),
         _forumNavigation = new ForumNavigation($, _options, _reloadPageData, _misc, _content),
         _postWithoutReload = new PostWithoutReload($, _options,_reloadPosts),
-        _scrollForNewPage = new ScrollForNewPage($, _options, _content, _ignoreUser);
+        _scrollForNewPage = new ScrollForNewPage($, _options, _content, _ignoreUser, _userNicknames);
 
     this.start = function() {
         if (_options.getOption('miscellaneous_makeContentWider')) {

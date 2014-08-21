@@ -10,7 +10,7 @@
  * @constructor
  */
 
-function ReloadPosts($, _options, _content, _ignoreUser) {
+function ReloadPosts($, _options, _content, _ignoreUser, _userNicknames) {
     var _postcount      = 0;
     var _finishedPages  = 0;
     var _currentPage    = 1;
@@ -163,6 +163,11 @@ function ReloadPosts($, _options, _content, _ignoreUser) {
                         // User Ignorieren
                         if (_options.getOption('miscellaneous_ignoreUser')){
                             _ignoreUser.ignore();
+                        }
+
+                        // Nickname History Link
+                        if (_options.getOption('miscellaneous_nicknameHistoryLink')){
+                            _userNicknames.insertLink();
                         }
                     }
                 }

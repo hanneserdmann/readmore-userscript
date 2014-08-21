@@ -5,7 +5,7 @@
  * Beim Runterscrollen werden neue Seiten nachgeladen und angezeigt.
  */
 
-function ScrollForNewPage($, _options, _content, _ignoreUser){
+function ScrollForNewPage($, _options, _content, _ignoreUser, _userNicknames){
     var _currentPage    = 0,
         _postCount      = 0,
         _threadlink     = '',
@@ -84,6 +84,11 @@ function ScrollForNewPage($, _options, _content, _ignoreUser){
                     // User Ignorieren
                     if (_options.getOption('miscellaneous_ignoreUser')){
                       _ignoreUser.ignore();
+                    }
+
+                    // Nickname History Link
+                    if (_options.getOption('miscellaneous_nicknameHistoryLink')){
+                        _userNicknames.insertLink();
                     }
                 }
             })
