@@ -124,7 +124,7 @@ function Miscellaneous($, _content) {
         var title = $('head').find('title').text();
         var pieces = title.split(' \u00BB Thread: ');
 
-        document.title = pieces.reverse().join(' \u00BB ');
+        document.title = pieces.reverse().join(' \u00BB ').replace(/^Thread:\W+/, '');
     };
 
     this.buttonScrollUp = function(){
