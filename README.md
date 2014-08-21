@@ -1,6 +1,6 @@
 # Readmore.de Userscript
 
-Fügt der deutschen eSport-Webseite zusätzliche Funktionen hinzu.  
+Fügt der deutschen eSport-Webseite zusätzliche Funktionen hinzu.
 [Readmore Userscript Thread](http://www.readmore.de/forums/91-technik/60-software/111239-readmore-userscript-chrome-extension)
 
 ## Installation
@@ -9,7 +9,7 @@ Fügt der deutschen eSport-Webseite zusätzliche Funktionen hinzu.
 Der einfachste Weg ist die [Userscript-Extension](https://chrome.google.com/webstore/detail/readmore-userscript/ndfahefdmmghnnphhhbpcpdkifhdncef/details) über den Chrome Webstore zu installieren. Alternativ das Script herunterladen, danach in den Einstellungen _Erweiterungen_ auswählen und das Script per Drag and Drop in den Browser ziehen. Eventuell muss die Checkbox _Entwicklermodus_ aktiviert werden.
 
 #### Mozilla Firefox
-Auch für den Firefox Browser ist inzwischen ein [Addon im Store](https://addons.mozilla.org/de/firefox/addon/readmore-userscript/) verfügbar. Alternativ wird im Firefox zum ausführen von Userscripten eine Erweiterung benötigt. Die bekanntesten Vertreter sind [Greasemonkey](https://addons.mozilla.org/de/firefox/addon/greasemonkey/) und [Scriptish](https://addons.mozilla.org/de/firefox/addon/scriptish/) - wir empfehlen letzteres. Nachdem die Installation des Addons (inklusive Neustart des Browsers) abgeschlossen ist, kann wie im Chrome verfahren werden. 
+Auch für den Firefox Browser ist inzwischen ein [Addon im Store](https://addons.mozilla.org/de/firefox/addon/readmore-userscript/) verfügbar. Alternativ wird im Firefox zum ausführen von Userscripten eine Erweiterung benötigt. Die bekanntesten Vertreter sind [Greasemonkey](https://addons.mozilla.org/de/firefox/addon/greasemonkey/) und [Scriptish](https://addons.mozilla.org/de/firefox/addon/scriptish/) - wir empfehlen letzteres. Nachdem die Installation des Addons (inklusive Neustart des Browsers) abgeschlossen ist, kann wie im Chrome verfahren werden.
 
 #### Opera
 Opera kann Userscripte von Haus aus ausführen, allerdings ist die Installation etwas komplizierter als im Chrome. Zuerst muss sichergestellt werden, dass der Browser Cookies akzeptiert.
@@ -26,11 +26,19 @@ Eine Rückmeldung, ob die Userscripte installiert sind, scheint es bei Opera lei
         * Favicon verändern
 * Fixierter Header
 * Titel / Tab umsortieren
-* Schlagzeilen ausblenden
+* Umsortieren und Ausblenden von Schlagzeilen
+* Umsortieren und Ausblenden der Forumnavigation
 * Forennavigation aktualisieren
 * Last-Page-Pfeil springt zum letzten Post
 * Ticker ausblenden
 * Bereiteres Design
+* Posten ohne Reload
+* Pfeile um in einen Thread nach oben und unten zu springen
+* User im Forum, Ticker, News (Kommentar) und Gästebüchern ignorieren
+* Nach unten Scrollen lädt die nächste Seite
+    * Postbox nach oben verschieben
+* Alte Usernamen direkt im Thread einsehen
+* Threads als Favoriten speichern
 
 ## Contributors
 
