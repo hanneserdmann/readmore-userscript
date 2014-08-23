@@ -71,6 +71,12 @@ function ReadmoreUserscript($) {
 
         // Prüfen ob die Übersicht überhaupt vorhanden ist
         if (_content.get('forumNavigation').length) {
+
+            // Favoriten Forennavi
+            if (_options.getOption('forumFavorites')){
+                _forumFavorites.initForumNavi();
+            }
+
             _forumNavigation.init();
         }
 
@@ -93,12 +99,6 @@ function ReadmoreUserscript($) {
         if (_options.getOption('miscellaneous_nicknameHistoryLink')){
             _userNicknames.insertLink();
         }
-
-        // Favoriten Forennavi
-        if (_options.getOption('forumFavorites')){
-            _forumFavorites.initForumNavi();
-        }
-
     };
 
     this.startIntervalReloadPosts = function() {

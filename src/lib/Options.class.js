@@ -68,12 +68,19 @@ function Options($) {
     };
 
     /**
-     * Setzt eine Value in dem Data Object
+     * Setzt eine Value in dem Data Object.
      * @param key
      * @param value
      */
     this.setData = function(key, value){
         _options['dataStorage'][key] =  value;
+    };
+
+    /**
+     * Speichert die Optionen ohne sie neu aus dem HTML auszulesen.
+     */
+    this.saveCurrentOptions = function(){
+        localStorage.setItem(LOCALSTORAGE_NAME, JSON.stringify(_options));
     };
 
     /**
@@ -424,11 +431,11 @@ function Options($) {
      * @private
      */
     var _readSortableLists = function(){
-        var headlineMappings    = new Headlines($, this, '').getMappings(),
+        var headlineMappings    = new Headlines($, _self, '').getMappings(),
             headlineDiv         = document.getElementById('sub_rightColumn_headlines_hideHeadlines_sortable'),
             $headlineListUsed   = $(headlineDiv.children[1].children[1]),
 
-            forumMappigns       = new ForumNavigation($, this, '', '', '').getMappings(),
+            forumMappings       = new ForumNavigation($, _self, '', '', '').getMappings(),
             forumDiv            = document.getElementById('sub_rightColumn_forum_sections_sortable'),
             $forumListUsed      = $(forumDiv.children[1].children[1]);
 
@@ -442,7 +449,7 @@ function Options($) {
         }
 
         // Forum
-        for(var forum in forumMappigns){
+        for(var forum in forumMappings){
             var optionName  = 'rightColumn_forums_item_' + forum,
                 $element    = $forumListUsed.find('li[data-name="' + optionName + '"]');
 
@@ -456,12 +463,12 @@ function Options($) {
      * @private
      */
     var _displaySortableLists = function(){
-        var headlineMappings    = new Headlines($, this, '').getMappings(),
+        var headlineMappings    = new Headlines($, _self, '').getMappings(),
             headlineDiv         = document.getElementById('sub_rightColumn_headlines_hideHeadlines_sortable'),
             $headlineListUnused = $(headlineDiv.children[0].children[1]),
             $headlineListUsed   = $(headlineDiv.children[1].children[1]),
 
-            forumMappigns       = new ForumNavigation($, this, '', '', '').getMappings(),
+            forumMappings       = new ForumNavigation($, _self, '', '', '').getMappings(),
             forumDiv            = document.getElementById('sub_rightColumn_forum_sections_sortable'),
             $forumListUnused    = $(forumDiv.children[0].children[1]),
             $forumListUsed      = $(forumDiv.children[1].children[1]);
@@ -480,12 +487,12 @@ function Options($) {
         }
 
         // Forum Listen auslesen
-        for(var forum in forumMappigns){
+        for(var forum in forumMappings){
             var optionName  = 'rightColumn_forums_item_' + forum,
                 listElement = (typeof _options[optionName] === 'undefined' || Number(_options[optionName]) !== 0) ? $forumListUsed : $forumListUnused,
                 sortValue   = (typeof _options[optionName] === 'undefined') ? 1 : Number(_options[optionName]);
 
-            listElement.append('<li data-sort="' + sortValue + '" data-name="' + optionName + '">' + forumMappigns[forum] + '</li>')
+            listElement.append('<li data-sort="' + sortValue + '" data-name="' + optionName + '">' + forumMappings[forum] + '</li>')
         }
 
         // Elemente in die korrekte Reihenfolge bringen

@@ -26,6 +26,12 @@ function ForumFavorites($, _options, _content){
             .append(_itag)
             .find('#' + _itag.id)
             .on('click', function(){
+
+                // _favorites auf den aktuellen stand bringen
+                // Daten aus dem Localstorage auslesen
+                var options = JSON.parse(_options.getOptionsRaw());
+                _favorites = options['dataStorage'][OPTIONS_NAME];
+
                 if (typeof _favorites[_threadId] === 'undefined')
                     _favorites[_threadId] = _getThreadInfo();
                 else
@@ -40,58 +46,58 @@ function ForumFavorites($, _options, _content){
      * Zeigt die Favoriten in der Forennavigation an
      */
     this.initForumNavi = function(){
-        // Mindestens ein Favorit gesetzt
-        if (typeof _favorites !== 'undefined' && _favorites !== null && Object.keys(_favorites).length){
+        // Überschrift zusammenbauen
+        var header = document.createElement('div'),
+            headerSpan = document.createElement('span'),
+            headerSpanA = document.createElement('a');
 
-            // Überschrift zusammenbauen
-            var header = document.createElement('div'),
-                headerSpan = document.createElement('span');
+        header.className = 'headlines_cat';
+        headerSpanA.innerHTML = 'Favoriten';
+        headerSpanA.src = '#';
+        headerSpan.appendChild(headerSpanA);
+        header.appendChild(headerSpan);
 
-            header.className = 'headlines_cat';
-            headerSpan.innerHTML = 'Favoriten';
-            header.appendChild(headerSpan);
+        _content.get('forumNavigation').append(header);
 
-            _content.get('forumNavigation').append(header);
+        // Einträge zusammensetzen
+        var ul = document.createElement('ul');
 
-            // Einträge zusammensetzen
-            var ul = document.createElement('ul');
+        $.each(_favorites, function(threadid, threadInfo){
+           var li = document.createElement('li'),
+               aArrow = document.createElement('a'),
+               aArrowImage = document.createElement('img'),
+               aForum = document.createElement('a'),
+               aForumSpan = document.createElement('span'),
+               aThread = document.createElement('a'),
+               aThreadSpan = document.createElement('span');
 
-            $.each(_favorites, function(threadid, threadInfo){
-               var li = document.createElement('li'),
-                   aArrow = document.createElement('a'),
-                   aArrowImage = document.createElement('img'),
-                   aForum = document.createElement('a'),
-                   aForumSpan = document.createElement('span'),
-                   aThread = document.createElement('a'),
-                   aThreadSpan = document.createElement('span');
+            // Pfeil (letzte/ungelesene Seite)
+            aArrow.href = threadInfo.threadLink;
+            aArrow.className = 'r';
+            aArrowImage.src = '//cdn1.readmore.de/img/themes/readmore/arrow_last_item.gif';
+            aArrowImage.border = '0';
+            aArrow.appendChild(aArrowImage);
 
-                // Pfeil (letzte/ungelesene Seite)
-                aArrow.href = threadInfo.threadLink;
-                aArrow.className = 'r';
-                aArrowImage.src = '//cdn1.readmore.de/img/themes/readmore/arrow_last_item.gif';
-                aArrowImage.border = '0';
-                aArrow.appendChild(aArrowImage);
+            // Forum
+            aForum.href = threadInfo.forumLink;
+            aForumSpan.innerHTML = threadInfo.forumName + ': ';
+            aForumSpan.className = 'forum';
+            aForum.appendChild(aForumSpan);
 
-                // Forum
-                aForum.href = threadInfo.forumLink;
-                aForumSpan.innerHTML = threadInfo.forumName + ': ';
-                aForumSpan.className = 'forum';
-                aForum.appendChild(aForumSpan);
+            // Thread
+            aThread.href = threadInfo.threadLink.split('&page')[0];
+            aThreadSpan.innerHTML = threadInfo.threadName;
+            aThread.appendChild(aThreadSpan);
 
-                // Thread
-                aThread.href = threadInfo.threadLink.split('&page')[0];
-                aThreadSpan.innerHTML = threadInfo.threadName;
-                aThread.appendChild(aThreadSpan);
+            // Zusammenfügen
+            li.appendChild(aArrow);
+            li.appendChild(aForum);
+            li.appendChild(aThread);
+            ul.appendChild(li);
+        });
 
-                // Zusammenfügen
-                li.appendChild(aArrow);
-                li.appendChild(aForum);
-                li.appendChild(aThread);
-                ul.appendChild(li);
-            });
+        _content.get('forumNavigation').append(ul);
 
-            _content.get('forumNavigation').append(ul);
-        }
     };
 
     /**
@@ -125,7 +131,6 @@ function ForumFavorites($, _options, _content){
      */
     var _saveFavorites = function(){
         _options.setData(OPTIONS_NAME, _favorites);
-        _options.writeOptionsToHTML();
-        _options.saveOptions();
+        _options.saveCurrentOptions();
     };
 };

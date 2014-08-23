@@ -20,6 +20,11 @@ function ForumNavigation($, _options, _reloadPageData, _misc, _content, _forumFa
         };
 
     this.getMappings = function(){
+        // Eventuell die Favoriten hinzufügen
+        if (_options.getOption('forumFavorites')){
+            _mappings['favoriten'] = 'Favoriten';
+        }
+
         return _mappings;
     };
 
@@ -110,7 +115,7 @@ function ForumNavigation($, _options, _reloadPageData, _misc, _content, _forumFa
         }
 
         if (_options.getOption('rightColumn_forum_sections')) {
-            _section.process(_sectionOpts, _mappings);
+            _section.process(_sectionOpts, _self.getMappings());
         }
     };
 
