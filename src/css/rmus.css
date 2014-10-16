@@ -285,3 +285,8 @@ div#userscriptOptionsOverlay {
 .comment .comment_con{
     min-height: inherit!important;
 }
+
+#userscript_reloadForumButton{
+    color: #999999;
+    font-size: 17px!important;
+}
