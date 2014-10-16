@@ -108,12 +108,12 @@ function Miscellaneous($, _content) {
      * Ändert den Pfeil im Forum so, dass er zum letzten Post springt, nicht zum letzten gelesenen.
      */
     this.changeForumArrowBehavior = function() {
-        $("img[src$='arrow_last_item.gif']").each(function() {
-            var e = $(this).parent("a"),
-                url = e.attr("href"),
-                newLink = url.substring(0, url.lastIndexOf("/")) + "&page=last#plast";
+        _content.get('forumNavigation')
+            .find('img[src$=\'arrow_last_item2.gif\']')
+            .each(function() {
 
-            e.attr("href", newLink);
+                var parentA = this.parentElement;
+                parentA.href = parentA.href + '#plast';
         });
     };
 
