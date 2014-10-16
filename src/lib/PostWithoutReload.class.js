@@ -7,17 +7,18 @@
  */
 
 function PostWithoutReload($, _options,_reloadPosts){
-    var _$form          = [];
-    var _$inputField    = [];
-    var _$submitButton  = [];
+    var _$form              = [];
+    var _$inputField        = [];
+    var _$submitButton      = [];
+    var _$newSubmitButton   = [];
     var _crypt          = '';
 
 
     this.init = function(){
-        _$form           = $('#c_content form:last');
-        _$inputField     = _$form.find('#post_text_0');
-        _$submitButton   = _$form.find('input[type=submit]');
-        _crypt           = _$form.find('input[name=crypt]').val();
+        _$form          = $('#c_content form:last');
+        _$inputField    = _$form.find('#post_text_0');
+        _$submitButton  = _$form.find('input[type=submit]');
+        _crypt          = _$form.find('input[name=crypt]').val();
 
         // Prüfen ob input Feld und Submitbutton gefunden wurden
         if (_$inputField.length && _$submitButton.length){
@@ -31,13 +32,28 @@ function PostWithoutReload($, _options,_reloadPosts){
     };
 
     var _addEventListener = function(){
-        _$submitButton.on('click', function(e){
+        _$submitButton.hide();
+
+        // Bekomme es nicht geschissen den scheiß Reload zu
+        // unterdrücken.. Baue daher einfach meinen eigenen Submit-Button,
+        // mit Koks und Nutten!!!1
+
+        var newButton = document.createElement('input');
+        newButton.type = 'button';
+        newButton.value = 'Antwort erstellen';
+        newButton.setAttribute('data-koks', 'true');
+        newButton.setAttribute('data-nutten', 'true');
+
+        _$newSubmitButton = $(newButton);
+        _$submitButton.after(_$newSubmitButton);
+
+        _$newSubmitButton.on('click', function(e){
             e.preventDefault();
-            _postMEssage();
+            _postMessage();
         });
     };
 
-    var _postMEssage = function(){
+    var _postMessage = function(){
         var postData = {
             'post':         1,
             'crypt':        _crypt,
@@ -46,7 +62,7 @@ function PostWithoutReload($, _options,_reloadPosts){
 
         // Button und Field sperren, damit nicht versehentlich noch mehr abgeschickt wird
         _$inputField.prop('disabled', true);
-        _$submitButton.prop('disabled', true);
+        _$newSubmitButton.prop('disabled', true);
 
         // Posten
         var postRequest = $.post(document.location.pathname, postData);
@@ -76,7 +92,7 @@ function PostWithoutReload($, _options,_reloadPosts){
             // Elemente wieder entsperren
             postRequest.always(function(){
                 _$inputField.prop('disabled', false);
-                _$submitButton.prop('disabled', false);
+                _$newSubmitButton.prop('disabled', false);
             });
     };
 
