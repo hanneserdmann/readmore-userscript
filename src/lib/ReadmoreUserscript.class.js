@@ -28,11 +28,6 @@ function ReadmoreUserscript($) {
             _misc.createFixedToolbar();
         }
 
-        // Pfeile anpassen
-        if (_options.getOption('miscellaneous_lastPageJumpToLastPost')) {
-            _misc.changeForumArrowBehavior();
-        }
-
         // Im Forum
         if (_siteLocation.getLocation('forums')) {
             // Titel umsortieren
@@ -75,6 +70,11 @@ function ReadmoreUserscript($) {
             // Favoriten Forennavi
             if (_options.getOption('forumFavorites')){
                 _forumFavorites.initForumNavi();
+            }
+
+            // Pfeile anpassen
+            if (_options.getOption('miscellaneous_lastPageJumpToLastPost')) {
+                _misc.changeForumArrowBehavior();
             }
 
             _forumNavigation.init();

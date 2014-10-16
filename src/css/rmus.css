@@ -290,3 +290,8 @@ div#userscriptOptionsOverlay {
     color: #999999;
     font-size: 17px!important;
 }
+
+.favLastArrow{
+    margin-left: 12px;
+    margin-right: 4px;
+}

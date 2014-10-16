@@ -66,17 +66,28 @@ function ForumFavorites($, _options, _content){
            var li = document.createElement('li'),
                aArrow = document.createElement('a'),
                aArrowImage = document.createElement('img'),
+               aArrowLast = document.createElement('a'),
+               aArrowLastImage = document.createElement('img'),
                aForum = document.createElement('a'),
                aForumSpan = document.createElement('span'),
                aThread = document.createElement('a'),
                aThreadSpan = document.createElement('span');
 
-            // Pfeil (letzte/ungelesene Seite)
-            aArrow.href = threadInfo.threadLink;
+            // Pfeil (ungelesene Seite)
+            aArrow.href = threadInfo.threadLink.replace(/&page=last$/gi, '') + '/firstunread';
             aArrow.className = 'r';
+            aArrow.title = 'Zum ersten ungelesenen Beitrag des Themas';
             aArrowImage.src = '//cdn1.readmore.de/img/themes/readmore/arrow_last_item.gif';
             aArrowImage.border = '0';
             aArrow.appendChild(aArrowImage);
+
+            // Pfeil (letzte Seite)
+            aArrowLast.href = threadInfo.threadLink;
+            aArrowLast.className = 'r favLastArrow';
+            aArrowLast.title = 'Zur letzten Seite des Themas';
+            aArrowLastImage.src = '//cdn1.readmore.de/img/themes/readmore/arrow_last_item2.gif';
+            aArrowLastImage.border = '0';
+            aArrowLast.appendChild(aArrowLastImage);
 
             // Forum
             aForum.href = threadInfo.forumLink;
@@ -90,6 +101,7 @@ function ForumFavorites($, _options, _content){
             aThread.appendChild(aThreadSpan);
 
             // Zusammenfügen
+            li.appendChild(aArrowLast);
             li.appendChild(aArrow);
             li.appendChild(aForum);
             li.appendChild(aThread);
