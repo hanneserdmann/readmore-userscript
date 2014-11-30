@@ -86,8 +86,13 @@ function ReadmoreUserscript($) {
         }
 
         // Ticker ausblenden
-        if (_options.getOption('rightColumn_ticker_hideTicker')) {
+        if (_options.getOption('rightColumn_ticker_hideTicker')){
             _ticker.hideTicker();
+        }
+
+        // Wettkönig ausblenden
+        if (_options.getOption('rightColumn_hideBetKing')){
+            _misc.hideBetKing();
         }
 
         // User Ignorieren

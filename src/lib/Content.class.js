@@ -42,6 +42,11 @@ function Content($){
             'selector': '',
             'function': 'tickerComplete',
             'elements': []
+        },
+        'betKing': {
+            'selector': '',
+            'function': 'betKing',
+            'elements': []
         }
     };
 
@@ -102,6 +107,20 @@ function Content($){
                 returnValue = $.merge(returnValue, returnValue.first().next());
             }
             return returnValue;
+        },
+
+        betKing: function($element){
+            var headline = $('#c_right').find('h3>a[href*="betting/ranking"]').parent(),
+                returnValue = [];
+
+            if (headline.length){
+                returnValue.push(headline[0]);
+                returnValue.push(headline.next()[0]);
+                returnValue.push(headline.next().next()[0]);
+                returnValue.push(headline.next().next().next()[0]);
+            }
+
+            return $(returnValue);
         }
     };
 };

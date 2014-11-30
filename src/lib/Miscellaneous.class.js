@@ -141,5 +141,9 @@ function Miscellaneous($, _content) {
             .on('click', function(){
                 window.scrollTo(0, document.body.offsetHeight);
             });
-    }
+    };
+
+    this.hideBetKing = function(){
+        _content.get('betKing').hide();
+    };
 }
