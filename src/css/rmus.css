@@ -295,3 +295,11 @@ div#userscriptOptionsOverlay {
     margin-left: 12px;
     margin-right: 4px;
 }
+
+.userNicknames{
+    width: 5px;
+    height: 5px;
+    display: inline;
+    font-size: 11px !important;
+    color: grey;
+}

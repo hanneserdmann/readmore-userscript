@@ -6,8 +6,7 @@
  */
 
 function UserNicknames($, _siteLocation, _content){
-    var _$contentElm = $('#c_content'),
-        _nickIconUrl = 'http://themes.cdn.readmore.de/readmore/icon_history.gif';
+    var _$contentElm = $('#c_content');
 
     this.insertLink = function(){
         if (_siteLocation.getLocation('forums') && _content.get('forumPosts').length){
@@ -63,15 +62,14 @@ function UserNicknames($, _siteLocation, _content){
 
     var _createLink = function () {
         var link = document.createElement('a'),
-            img = document.createElement('img');
+            div = document.createElement('div');
 
-        img.src = _nickIconUrl;
-        img.alt = '';
+        div.className = 'userNicknames rmus-icon rmus-icon-list';
         link.title = 'Bisherige Nicknames anzeigen';
         link.className = 'rmus-old-nicknames';
         link.href = '';
         link.style.marginLeft = '3px';
-        link.appendChild(img);
+        link.appendChild(div);
 
         return link;
     };

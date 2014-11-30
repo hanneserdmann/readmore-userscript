@@ -59,6 +59,12 @@
             "css": "star",
             "code": 59400,
             "src": "fontawesome"
+        },
+        {
+            "uid": "48b87105bd38c20315f1b705b8c7b38c",
+            "css": "list",
+            "code": 59401,
+            "src": "fontawesome"
         }
     ]
 }
