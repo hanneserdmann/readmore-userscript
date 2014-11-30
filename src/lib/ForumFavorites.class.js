@@ -97,7 +97,7 @@ function ForumFavorites($, _options, _content){
 
             // Thread
             aThread.href = threadInfo.threadLink.split('&page')[0];
-            aThreadSpan.innerHTML = threadInfo.threadName;
+            aThreadSpan.innerHTML = (threadInfo.threadName.length <= 32) ? threadInfo.threadName : threadInfo.threadName.substring(0, 29) + "...";
             aThread.appendChild(aThreadSpan);
 
             // Zusammenfügen
