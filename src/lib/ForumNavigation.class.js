@@ -16,7 +16,8 @@ function ForumNavigation($, _options, _reloadPageData, _misc, _content, _forumFa
             'technik': 'Technik',
             'offtopic': 'Offtopic',
             'spiele': 'Spiele',
-            'readmore': 'readmore'
+            'readmore': 'readmore',
+            'trashtalk': 'Trashtalk'
         };
 
     this.getMappings = function(){
