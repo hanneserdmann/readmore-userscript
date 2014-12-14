@@ -13,7 +13,8 @@ function ReadmoreUserscript($) {
         _forumFavorites = new ForumFavorites($, _options, _content),
         _forumNavigation = new ForumNavigation($, _options, _reloadPageData, _misc, _content, _forumFavorites),
         _postWithoutReload = new PostWithoutReload($, _options,_reloadPosts),
-        _scrollForNewPage = new ScrollForNewPage($, _options, _content, _ignoreUser, _userNicknames);
+        _scrollForNewPage = new ScrollForNewPage($, _options, _content, _ignoreUser, _userNicknames),
+        _checkUpdate = new CheckUpdate($, _options);
 
     this.start = function() {
         if (_options.getOption('miscellaneous_makeContentWider')) {
@@ -104,6 +105,9 @@ function ReadmoreUserscript($) {
         if (_options.getOption('miscellaneous_nicknameHistoryLink')){
             _userNicknames.insertLink();
         }
+
+        // Update prüfen
+        _checkUpdate.checkUpdate();
     };
 
     this.startIntervalReloadPosts = function() {
@@ -117,7 +121,7 @@ function ReadmoreUserscript($) {
         }
     };
 
-    this.startInvervalRapid = function() {
+    this.startIntervalRapid = function() {
         setInterval(function() {
             // Posts unmarkieren
             if (_options.getOption('middleColumn_forum_reloadPosts_markNewPosts')) {
@@ -130,7 +134,7 @@ function ReadmoreUserscript($) {
         }, 333);
     };
 
-    this.startInvervalSlow = function() {
+    this.startIntervalSlow = function() {
         setInterval(function() {
             _reloadPageData.readPage();
 
@@ -141,6 +145,9 @@ function ReadmoreUserscript($) {
                     _forumNavigation.reloadForum();
                 }, 1000);
             }
+
+            // Update prüfen
+            _checkUpdate.checkUpdate();
         }, 15000);
     };
 }
