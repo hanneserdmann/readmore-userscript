@@ -13,8 +13,8 @@
 
     readmoreUserscript.start();
     readmoreUserscript.startIntervalReloadPosts();
-    readmoreUserscript.startInvervalRapid();
-    readmoreUserscript.startInvervalSlow();
+    readmoreUserscript.startIntervalRapid();
+    readmoreUserscript.startIntervalSlow();
 })(jQuery.noConflict(true));
 
 /**

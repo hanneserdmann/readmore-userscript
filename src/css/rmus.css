@@ -303,3 +303,11 @@ div#userscriptOptionsOverlay {
     font-size: 11px !important;
     color: grey;
 }
+
+.userscriptOptionsLi .checkUpdate{
+    font-size: 11px;
+    vertical-align: top;
+    padding-top: 6px;
+    display: inline-block;
+    color: #f00;
+}
