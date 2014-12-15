@@ -311,3 +311,40 @@ div#userscriptOptionsOverlay {
     display: inline-block;
     color: #f00;
 }
+
+#userscript_realoadFavoritesButton{
+    cursor: pointer;
+    color: #999;
+    font-size: 16px !important;
+}
+
+#userscript_realoadFavoritesContainer{
+    box-shadow: 0 0 6px 1px #BEBEBE;
+    position: fixed;
+    width: 300px;
+    left: 50%;
+    margin-left: -180px;
+    margin-top: -50px;
+    top: 50%;
+    border: 1px solid silver;
+    border-radius: 3px;
+    background-color: #fff;
+    z-index: 2147483640;
+    height: 110px;
+}
+
+#userscript_realoadFavoritesContainer img{
+    margin-left: 120px;
+    margin-top: 10px;
+    padding-bottom: 20px;
+}
+
+#userscript_realoadFavoritesContainer span{
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+
+.newPostFavs{
+    font-weight: bold !important;
+}
