@@ -311,3 +311,41 @@ div#userscriptOptionsOverlay {
     display: inline-block;
     color: #f00;
 }
+
+#userscriptRealoadFavoritesButton{
+    cursor: pointer;
+    color: #999;
+    font-size: 16px !important;
+}
+
+#userscriptRealoadFavoritesContainer{
+    box-shadow: 0 0 6px 1px #BEBEBE;
+    position: fixed;
+    width: 300px;
+    left: 50%;
+    margin-left: -180px;
+    margin-top: -60px;
+    top: 50%;
+    border: 1px solid silver;
+    border-radius: 3px;
+    background-color: #fff;
+    z-index: 2147483640;
+    height: 115px;
+}
+
+#userscriptRealoadFavoritesContainer img{
+    margin-left: 120px;
+    margin-top: 10px;
+    padding-bottom: 20px;
+    width: 60px;
+}
+
+#userscriptRealoadFavoritesContainer span{
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+
+.newPostFavs{
+    font-weight: bold !important;
+}
