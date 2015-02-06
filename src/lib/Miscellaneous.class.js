@@ -81,7 +81,8 @@ function Miscellaneous($, _content) {
         // fixt den verzerrten YouTube Player im Forum
         if(siteLocation.getLocation("forums")) {
             $(".forum_ed_youtube embed").each(function() {
-                $(this).css("height", $(this).width() * (9 / 16) + "px");
+                $(this).css("height", $(this).parent().parent().width() * (9 / 16) + "px");
+                $(this).parent().css("height", $(this).parent().parent().width() * (9 / 16) + "px");
             });
         }
 
