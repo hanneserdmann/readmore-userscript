@@ -226,23 +226,32 @@ function ReloadPosts($, _options, _content, _ignoreUser, _userNicknames) {
     this.changeFavicon = function () {
         if (!_favIcons.length){
             _favIcons = $('link[rel="shortcut icon"], link[rel="icon"]');
+            _favIcons.addClass('noNewPosts');
         }
 
-        if (_unseenPosts.length > 0 && _favIcons.attr('type') === 'image/vnd.microsoft.icon') {
+
+
+        if (_unseenPosts.length > 0 && _favIcons.hasClass('noNewPosts')){
             _favIcons.remove();
 
             _favIcons
-                .attr('href', 'http://readmore.thextor.de/userscript/img/favicon.png')
-                .attr('type', 'image/png');
+                .attr('href', 'data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAB/ElEQVQ4y62STWtTQRSGnzMz9zZprLW4s+BKiFSDS/e6EBT8gJa46l7X7tSNXfoD/AeKdlEQWtxI8QMEoYgW7EJIoyBNSEsbuM29N5OZcRETbaMrPcvDnGde3veFfxw5vHj5saUbyX417djZTpqd9EFRiqVxfGpiabKoHl88N53+FbD87kulvsNiR/JyJ1EcixQKwSpL1ykmS4Vv01N2/ur58qsRwMrbemWj1X6j9NHJNGsTj4NOI3KxaKO5c+3sQekiMgSsrn/Vte/Zp700mhnLE25XK/1HzuF0AAy6f9W/DoHVja2JCzMnEgVQ392v1ppuZnO7zU5ucYDFkmuNxhPcqHm1ZnoLwAC8/tC80Wo0USZmy1uUP41hDMSCjzGSAsUDgPfr9SvAQwWwndhTOggiGbuuh1PjEDRIxPV7z8hUcURBay8tAyiA0E1cLxac1UyIJ/IQdIon4ERR8L0RgHW5HgK8d5vBQ1AFuqEEAhJilBNyU+DS3Sd/6tDnIQBYQoSgujid/MxJYzUUQkYkY0P3CYH+p375d8DTATFSEZCBBfFdrLXEpjgI/1eU8GgIWFmYc8BNoO2CpisGIo+RmCPGkHfSEf0rC3PJSJUv31+sgCwSfFmJIbhAEA8Klh/MHijSoInqEHUdwhlE5j3uedB+DcUa8OKwB/9tfgDWu9z+ndeArQAAAABJRU5ErkJggg==')
+                .attr('type', 'image/png')
+                .removeClass('noNewPosts')
+                .addClass('newPosts');
+
             _$headElm.append(_favIcons);
         }
         else {
-            if (_unseenPosts.length == 0 && _favIcons.attr('type') === 'image/png') {
+            if (_unseenPosts.length == 0 && _favIcons.hasClass('newPosts')) {
                 _favIcons.remove();
 
                 _favIcons
-                    .attr('href', 'http://themes.cdn.readmore.de/readmore/favicon.ico')
-                    .attr('type', 'image/vnd.microsoft.icon');
+                    .attr('href', '//cdn1.readmore.de/img/themes/readmore/favicon.ico')
+                    .attr('type', 'image/vnd.microsoft.icon')
+                    .removeClass('newPosts')
+                    .addClass('noNewPosts');
+
                 _$headElm.append(_favIcons);
             }
         }
