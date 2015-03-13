@@ -14,7 +14,8 @@ function ReadmoreUserscript($) {
         _forumNavigation = new ForumNavigation($, _options, _reloadPageData, _misc, _content, _forumFavorites),
         _postWithoutReload = new PostWithoutReload($, _options,_reloadPosts),
         _scrollForNewPage = new ScrollForNewPage($, _options, _content, _ignoreUser, _userNicknames),
-        _checkUpdate = new CheckUpdate($, _options);
+        _checkUpdate = new CheckUpdate($, _options),
+        _bettingOverview = new BettingOverview($, _options);
 
     this.start = function() {
         if (_options.getOption('miscellaneous_makeContentWider')) {
@@ -104,6 +105,11 @@ function ReadmoreUserscript($) {
         // Nickname History Link
         if (_options.getOption('miscellaneous_nicknameHistoryLink')){
             _userNicknames.insertLink();
+        }
+
+        // Betting Selection
+        if (_options.getOption('bettingOverview') && _siteLocation.getLocation('betting')){
+            _bettingOverview.init();
         }
 
         // Update prüfen
