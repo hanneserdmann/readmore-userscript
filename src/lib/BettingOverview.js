@@ -56,7 +56,6 @@ function BettingOverview($, _options){
 
         $(_controlElement).find('input').on('change', function(){
             $('.userscriptBettingControlNumber_' + this.value).toggle();
-            console.log('userscriptBettingControlNumber_' + this.value);
         });
     };
 }

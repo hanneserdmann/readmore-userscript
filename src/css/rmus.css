@@ -14,7 +14,7 @@ div#userscriptOptionsOverlay {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 2147483646;
+    z-index: 2147483645;
     display: none;
     background-color: #fff;
     opacity: 0.8;
@@ -30,7 +30,7 @@ div#userscriptOptionsOverlay {
     border: 1px solid #C0C0C0;
     border-radius: 3px;
     background-color: #fff;
-    z-index: 2147483647;
+    z-index: 2147483646;
 }
 #userscriptOptions .rmus-options-header {
     border-bottom: 3px solid #007BFF;
@@ -90,8 +90,8 @@ div#userscriptOptionsOverlay {
 #userscriptOptions .rmus-options-content table tr.menufirstchild td {
     background-color: #f1f1f1 !important;
 }
-#userscriptOptions .rmus-options-content table tr.menufirstchild td:nth-child(2):before{
-    content: "\00a0\00a0\00a0\00a0\00a0";
+#userscriptOptions .rmus-options-content table tr.menufirstchild td:nth-child(2){
+    padding-left: 20px;
 }
 #userscriptOptions .rmus-options-content table tr.menusecondchild {
     display: none;
@@ -101,8 +101,8 @@ div#userscriptOptionsOverlay {
 #userscriptOptions .rmus-options-content table tr.menusecondchild td {
     background-color: #e2e2e2 !important;
 }
-#userscriptOptions .rmus-options-content table tr.menusecondchild td:nth-child(2):before{
-    content: "\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0\00a0";
+#userscriptOptions .rmus-options-content table tr.menusecondchild td:nth-child(2){
+    padding-left: 40px;
 }
 #userscriptOptions .rmus-options-content table .headline td {
     color: #7A7A7A;
@@ -329,15 +329,18 @@ div#userscriptOptionsOverlay {
     border: 1px solid silver;
     border-radius: 3px;
     background-color: #fff;
-    z-index: 2147483640;
-    height: 115px;
+    z-index: 2147483647;
+    min-height: 115px;
+    padding: 10px;
+}
+
+#userscriptRealoadFavoritesContainer > div{
+    text-align: center;
 }
 
 #userscriptRealoadFavoritesContainer img{
-    margin-left: 120px;
     margin-top: 10px;
     padding-bottom: 20px;
-    width: 60px;
 }
 
 #userscriptRealoadFavoritesContainer span{

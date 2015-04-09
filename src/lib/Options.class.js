@@ -424,6 +424,9 @@ function Options($) {
         $('#toggle_sub_middleColumn_forum_scrollForNewPage').click(function() {
             $('.sub_middleColumn_forum_scrollForNewPage').toggle();
         });
+        $('#toggle_sub_miscellaneous_syncOptions').click(function() {
+            $('.sub_miscellaneous_syncOptions').toggle();
+        });
     };
 
     /**

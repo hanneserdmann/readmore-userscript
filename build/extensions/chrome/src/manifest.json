@@ -12,7 +12,7 @@
     ],
 
     "content_scripts": [{
-        "matches": ["http://readmore.de/*", "http://www.readmore.de/*"],
+        "matches": ["http://readmore.de/*", "http://www.readmore.de/*", "http://userscript.thextor.de/*"],
         "js": ["readmore-userscript.min.user.js"],
         "run_at": "document_end"
     }],
