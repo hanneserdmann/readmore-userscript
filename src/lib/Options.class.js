@@ -117,8 +117,7 @@ function Options($) {
         $('body').append('{{optionshtml}}');
 
         // Link einfügen
-        $('div#header li.ucp').after('<li class="userscriptOptionsLi"><a id="openUserscriptOptions" href="" title="Userscript"><i class="rmus-icon rmus-icon-cog"></i></a> | </li>');
-        $('div#header li.socials').css('margin-left', '0px');
+        $('div#header li.ucp ul .sep').before('<li><a id="openUserscriptOptions" href="" title="Userscript">Userscript</a></li>');
 
         // Eventhandler
         _addEventHandler();
