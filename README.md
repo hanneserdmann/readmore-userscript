@@ -9,7 +9,7 @@ Fügt der deutschen eSport-Webseite zusätzliche Funktionen hinzu.
 Der einfachste Weg ist die [Userscript-Extension](https://chrome.google.com/webstore/detail/readmore-userscript/ndfahefdmmghnnphhhbpcpdkifhdncef/details) über den Chrome Webstore zu installieren. Alternativ das Script herunterladen, danach in den Einstellungen _Erweiterungen_ auswählen und das Script per Drag and Drop in den Browser ziehen. Eventuell muss die Checkbox _Entwicklermodus_ aktiviert werden.
 
 #### Mozilla Firefox
-Auch für den Firefox Browser ist inzwischen ein [Addon im Store](https://addons.mozilla.org/de/firefox/addon/readmore-userscript/) verfügbar. Alternativ wird im Firefox zum ausführen von Userscripten eine Erweiterung benötigt. Die bekanntesten Vertreter sind [Greasemonkey](https://addons.mozilla.org/de/firefox/addon/greasemonkey/) und [Scriptish](https://addons.mozilla.org/de/firefox/addon/scriptish/) - wir empfehlen letzteres. Nachdem die Installation des Addons (inklusive Neustart des Browsers) abgeschlossen ist, kann wie im Chrome verfahren werden.
+Die Datei "firefoxExtension.xpi" in den Browser ziehen. Alternativ wird im Firefox zum ausführen von Userscripten eine Erweiterung benötigt. Die bekanntesten Vertreter sind [Greasemonkey](https://addons.mozilla.org/de/firefox/addon/greasemonkey/) und [Scriptish](https://addons.mozilla.org/de/firefox/addon/scriptish/) - wir empfehlen letzteres. Nachdem die Installation des Addons (inklusive Neustart des Browsers) abgeschlossen ist, kann wie im Chrome verfahren werden.
 
 #### Opera
 Opera kann Userscripte von Haus aus ausführen, allerdings ist die Installation etwas komplizierter als im Chrome. Zuerst muss sichergestellt werden, dass der Browser Cookies akzeptiert.
