@@ -115,7 +115,7 @@ function ForumFavorites($, _options, _content, _loadingScreen, _sync){
 
             // Thread
             aThread.href = threadInfo.threadLink.split('&page')[0];
-            aThreadSpan.innerHTML = (threadInfo.threadName.length <= 32) ? threadInfo.threadName : threadInfo.threadName.substring(0, 29) + "...";
+            aThreadSpan.innerHTML = (threadInfo.threadName.length <= 31) ? threadInfo.threadName : threadInfo.threadName.substring(0, 28) + "...";
             aThread.appendChild(aThreadSpan);
 
             if (_lastpostChanged.indexOf(threadInfo['id']) != -1){
@@ -212,13 +212,21 @@ function ForumFavorites($, _options, _content, _loadingScreen, _sync){
                                url: threadInfo['threadLink']
                            }).done(function(data) {
                                if (data != null) {
-                                   var lastPost = $(data).find('.forum_post:last').attr('id').match(/[0-9]+/)[0];
+                                   var lastPost   = $(data).find('.forum_post:last').attr('id').match(/[0-9]+/)[0],
+                                       threadName = $(data).find('#c_content > ul.breadcrumbs:first > li')[3].innerHTML;
+
                                    _loadingScreen.changeLoadingMessage(++i + ' / ' +  favCount + ' Favoriten ausgelesen');
 
                                    // Neuer Post
-                                   if (threadInfo['lastPost'] != lastPost){
-                                       threadInfo['lastPost'] = lastPost;
-                                       _lastpostChanged.push(threadid);
+                                   if (lastPost != null) {
+                                       if (threadInfo['lastPost'] != lastPost) {
+                                           threadInfo['lastPost'] =  lastPost;
+
+                                           _lastpostChanged.push(threadid);
+                                       }
+                                       if (threadInfo['threadName'] != threadName){
+                                           threadInfo['threadName'] =  threadName;
+                                       }
                                    }
 
                                    // Letzter Favorit
