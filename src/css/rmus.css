@@ -1,3 +1,8 @@
+#userscriptOptions{
+    color: black;
+    font-family: Verdana,sans-serif;
+    font-size: 12px;
+}
 a#openUserscriptOptions {
     margin-top: 4px;
     display: inline-block;
@@ -50,7 +55,9 @@ div#userscriptOptionsOverlay {
     float: left;
     text-shadow: 1px 1px #0063A5;
     color: #fff;
-    margin-bottom: 0;
+    margin-bottom: 0 !important;
+    font-family: Arial,sans-serif !important;
+    font-weight: normal !important;
 }
 #userscriptOptions .rmus-options-header a {
     color: #fff;
@@ -105,10 +112,10 @@ div#userscriptOptionsOverlay {
     padding-left: 40px;
 }
 #userscriptOptions .rmus-options-content table .headline td {
-    color: #7A7A7A;
+    color: #7A7A7A !important;
     font-size: 14px;
     margin: 0;
-    padding: 5px 0 5px 50px;
+    padding: 5px 0 5px 50px !important;
     width: 100%;
     border-top: 1px solid #ccc;
     border-bottom: 1px solid #ccc;
@@ -118,7 +125,7 @@ div#userscriptOptionsOverlay {
     background: -webkit-linear-gradient(top, #f2f5f6 0%, #e3eaed 100%);
     background: -o-linear-gradient(top, #f2f5f6 0%, #e3eaed 100%);
     background: -ms-linear-gradient(top, #f2f5f6 0%, #e3eaed 100%);
-    background: linear-gradient(to bottom, #f2f5f6 0%, #e3eaed 100%);
+    background: linear-gradient(to bottom, #f2f5f6 0%, #e3eaed 100%) !important;
 }
 #userscriptOptions td{
     padding-left: 0px;
@@ -176,9 +183,9 @@ div#userscriptOptionsOverlay {
 #userscriptOptions textarea,
 #userscriptOptions select {
     display: block;
-    background: #fdfdfd;
+    background: #fdfdfd !important;
     font-size: 11px;
-    color: #7b7b7b;
+    color: #7b7b7b !important;
     border: 1px solid #ccc;
     text-align: right;
     padding: 1px 5px;
@@ -187,6 +194,12 @@ div#userscriptOptionsOverlay {
 #userscriptOptions input[type=color],
 #userscriptOptions input[type=text]{
     width: 80%;
+}
+#userscriptOptions .rmus-options-footer input[type=button]{
+    color: black !important;
+}
+#userscriptOptions .rmus-options-footer #saveUserscriptOptions{
+    color: white !important;
 }
 #sub_rightColumn_headlines_hideHeadlines_sortable, #sub_rightColumn_forum_sections_sortable{
     width: 100%;
@@ -197,7 +210,7 @@ div#userscriptOptionsOverlay {
 }
 #sub_rightColumn_headlines_hideHeadlines_sortable ul, #sub_rightColumn_forum_sections_sortable ul{
     width: 100%;
-    background: #fff;
+    background: #fff !important;;
     min-height: 100px;
     padding: 1px 0px;
 }
@@ -224,7 +237,7 @@ div#userscriptOptionsOverlay {
 }
 .btn-rm {
     border: 1px solid #ccccce;
-    color: #222222;
+    color: #222222  !important;
     font-family: Verdana;
     font-size: 10px;
     min-height: 14px;
@@ -238,7 +251,7 @@ div#userscriptOptionsOverlay {
     background: linear-gradient(to bottom, #ffffff 0%,#e4e4e4 100%);
 }
 .btn-rm.primary {
-    color: #fff;
+    color: #fff !important;;
     border-color: #006DE4;
     background: #2890ff;
     background: -moz-linear-gradient(top, #2890ff 0%, #1d7add 100%);
@@ -250,12 +263,11 @@ div#userscriptOptionsOverlay {
 }
 .rmus-icon {
     font-size: 18px !important;
-    color: #19A1EC;
+    color: #19A1EC !important;
 }
 #icon_miscellaneous_buttonScrollDown, #icon_miscellaneous_buttonScrollUp, #moveTextareaTopTrigger, #userscriptForumFavorites {
     float: right;
     cursor: pointer;
-    /*border: 1px solid #E9E9E9;*/
 }
 
 #moveTextareaTopTrigger{
@@ -266,7 +278,7 @@ div#userscriptOptionsOverlay {
 }
 
 #icon_miscellaneous_buttonScrollDown:hover, #icon_miscellaneous_buttonScrollUp:hover, #moveTextareaTopTrigger:hover, #userscriptForumFavorites:hover {
-    color: #FFB400;
+    color: #FFB400 !important;
 }
 
 .forum_thread_reply{
@@ -332,6 +344,7 @@ div#userscriptOptionsOverlay {
     z-index: 2147483647;
     min-height: 115px;
     padding: 10px;
+    color: #000000;
 }
 
 #userscriptRealoadFavoritesContainer > div{
