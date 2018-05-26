@@ -11,7 +11,7 @@ function Miscellaneous($, _content) {
     this.createFixedToolbar = function() {
         $("div#header").css({
             "position": "fixed",
-            "zIndex": 10,
+            "zIndex": 200,
             "top": 0
         });
         $("div#monkey").css("margin-top", "88px");
@@ -102,6 +102,21 @@ function Miscellaneous($, _content) {
                     $(this).css("height", $(this).width() * (9 / 16) + "px");
                 }
             })
+        }
+
+        // vergrößert die Bilder in den Topnews
+        if (siteLocation.getLocation("start")) {
+            $(".topnews-img").each(function() {
+                $(this).css(
+                    // 730px width => 304px height
+                    // Seitenverhältnis wird beibehalten
+                    "height", "304px"
+                );
+            });
+
+            $("#topnews").css({
+                "height": "304px"
+            });
         }
     };
 
