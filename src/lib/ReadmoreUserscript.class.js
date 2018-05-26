@@ -11,8 +11,8 @@ function ReadmoreUserscript($) {
         _headlines = new Headlines($, _options, _content),
         _reloadPageData = new ReloadPageData($),
         _ticker = new Ticker($, _content),
-        _sync = new Sync($, _options, _loadingScreen),
-        _forumFavorites = new ForumFavorites($, _options, _content, _loadingScreen, _sync),
+        //_sync = new Sync($, _options, _loadingScreen),
+        _forumFavorites = new ForumFavorites($, _options, _content, _loadingScreen/*, _sync*/),
         _forumNavigation = new ForumNavigation($, _options, _reloadPageData, _misc, _content, _forumFavorites),
         _postWithoutReload = new PostWithoutReload($, _options,_reloadPosts),
         _scrollForNewPage = new ScrollForNewPage($, _options, _content, _ignoreUser, _userNicknames),
@@ -115,7 +115,7 @@ function ReadmoreUserscript($) {
         }
 
         // Sync anschalten
-        _sync.init();
+        //_sync.init();
 
         // Update prüfen
         _checkUpdate.checkUpdate();

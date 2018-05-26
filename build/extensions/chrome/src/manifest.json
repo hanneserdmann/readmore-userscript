@@ -6,13 +6,13 @@
     "version": "{{version}}",
 
     "permissions": [
-        "http://readmore.de/",
-        "http://www.readmore.de/",
-        "http://readmore.thextor.de/"
+        "https://readmore.de/",
+        "https://www.readmore.de/",
+        "https://readmore.thextor.de/"
     ],
 
     "content_scripts": [{
-        "matches": ["http://readmore.de/*", "http://www.readmore.de/*", "http://userscript.thextor.de/*"],
+        "matches": ["https://readmore.de/*", "https://www.readmore.de/*", "https://userscript.thextor.de/*"],
         "js": ["readmore-userscript.min.user.js"],
         "run_at": "document_end"
     }],

@@ -1,4 +1,4 @@
-
+/*
 function Sync($, _options, _loadingScreen) {
 
     var _self = this;
@@ -175,3 +175,4 @@ function Sync($, _options, _loadingScreen) {
             });
     }
 }
+*/

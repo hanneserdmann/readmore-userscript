@@ -1,4 +1,4 @@
-function ForumFavorites($, _options, _content, _loadingScreen, _sync){
+function ForumFavorites($, _options, _content, _loadingScreen/*, _sync*/){
     var OPTIONS_NAME = 'forumFavoritesData';
     var ICON_FAVORITE = 'rmus-icon-star';
     var ICON_NOT_FAVORITE = 'rmus-icon-star-empty';
@@ -187,9 +187,9 @@ function ForumFavorites($, _options, _content, _loadingScreen, _sync){
         _options.setData(OPTIONS_NAME, _favorites);
         _options.saveCurrentOptions();
 
-        if (_options.getOption('miscellaneous_syncOptions')){
+        /*if (_options.getOption('miscellaneous_syncOptions')){
             _sync.sendOptionsToServer();
-        }
+        }*/
     };
 
     var _addRefreshEvent = function(){

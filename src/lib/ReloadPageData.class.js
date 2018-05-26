@@ -24,7 +24,7 @@ function ReloadPageData($) {
         $.ajax({
             type: "POST",
             cache: false,
-            url: "http://www.readmore.de/start",
+            url: "https://www.readmore.de/start",
             timeout: 10000
         }).done(function(data) {
             if (data != null) {

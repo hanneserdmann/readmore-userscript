@@ -8,10 +8,10 @@
 function CheckUpdate($, _options){
     var self = this;
 
-    var updateUrl = 'http://www.readmore.de/forums/91-technik/60-software/111239-readmore-userscript',
+    var updateUrl = 'https://www.readmore.de/forums/91-technik/60-software/111239-readmore-userscript',
         lastCheck = 0,
         lastVersion = '',
-        timeBetweenChecks = 2*60*60*1000, // 2 Stunden
+        timeBetweenChecks = 24*60*60*1000, // 24 Stunden
         notificationActive = false;
 
     this.checkUpdate = function(){

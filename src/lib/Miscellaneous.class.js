@@ -89,7 +89,7 @@ function Miscellaneous($, _content) {
         // fixt den verzerrten YouTube Player in den News
         if (siteLocation.getLocation("news")) {
             $("iframe").each(function () {
-                if ($(this).attr("src").match(/^http:\/\/(?:www\.)?youtube.com\/embed\/\w+(&\S*)?$/)) {
+                if ($(this).attr("src").match(/^http[s]?:\/\/(?:www\.)?youtube.com\/embed\/\w+(&\S*)?$/)) {
                     $(this).css("height", $(this).width() * (9 / 16) + "px");
                 }
             })
@@ -98,7 +98,7 @@ function Miscellaneous($, _content) {
         // fixt den verzerrten YouTube Player in den Schlagzeilen
         if (siteLocation.getLocation("headlines")) {
             $("iframe").each(function () {
-                if ($(this).attr("src").match(/^http:\/\/(?:www\.)?youtube.com\/embed\/\w+(&\S*)?$/)) {
+                if ($(this).attr("src").match(/^http[s]?:\/\/(?:www\.)?youtube.com\/embed\/\w+(&\S*)?$/)) {
                     $(this).css("height", $(this).width() * (9 / 16) + "px");
                 }
             })
